@@ -19,7 +19,7 @@
     <div class="col-sm-4">
 	<form>
 	<br><br> <!--abrindo espaço para visualizar cabeçalho-->
-	<img src="imagens/CD.png" class="img-responsive" style="width:100%;"/>
+	<img src="http://cidadesdigitais.c3sl.ufpr.br/wp-content/uploads/sites/6/2018/04/marca-01.png" class="img-responsive" style="width:100%;"/>
 	
 	<br><br>
 	<p>Fazer Login:</p>
@@ -27,11 +27,14 @@
         <label for="submitLogin">&nbsp&nbspLogin:</label>
         <input name="dados.dado3" type="text" class="form-control" id="submitLogin" placeholder="ex: abc123">
       </div>
+	  
       <div class="form-group">
         <label for="submitSenha">&nbsp&nbspSenha: </label>
         <input name="dados.dado4" type="password" class="form-control" id="submitSenha" placeholder="********">
       </div>
+	  
         <button type="submit" class="btn btn-primary">Enviar</button>
+		
     </form>
 	</div>
   </div>
@@ -42,8 +45,6 @@ var dados,ligar, text, obj;
 var dados = {dado3, dado4,};
 var ligar = JSON.stringify(dados);
 localStorage.setItem("jason", ligar);
-
-
 
 text = localStorage.getItem("jason");
 obj = JSON.parse(text);
