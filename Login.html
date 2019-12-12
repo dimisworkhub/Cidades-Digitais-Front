@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html>
+
+<title>Login Cidades Digitais</title>
+
+ <head>
+<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+</head>
+
+
+
+<body>
+<br><br>
+<div class="container">
+  <div class="row">
+  <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+	<form>
+	<br><br> <!--abrindo espaço para visualizar cabeçalho-->
+	<img src="imagens/CD.png" class="img-responsive" style="width:100%;"/>
+	
+	<br><br>
+	<p>Fazer Login:</p>
+      <div class="form-group">
+        <label for="submitLogin">&nbsp&nbspLogin:</label>
+        <input name="dados.dado3" type="text" class="form-control" id="submitLogin" placeholder="ex: abc123">
+      </div>
+      <div class="form-group">
+        <label for="submitSenha">&nbsp&nbspSenha: </label>
+        <input name="dados.dado4" type="password" class="form-control" id="submitSenha" placeholder="********">
+      </div>
+        <button type="submit" class="btn btn-primary">Enviar</button>
+    </form>
+	</div>
+  </div>
+</div>
+<script>
+var dados,ligar, text, obj;
+
+var dados = {dado3, dado4,};
+var ligar = JSON.stringify(dados);
+localStorage.setItem("jason", ligar);
+
+
+
+text = localStorage.getItem("jason");
+obj = JSON.parse(text);
+document.getElementById("demo").innerHTML = dados.dado3;
+</script>
+
+</body>
+
+
+</html>

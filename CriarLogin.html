@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html>
+
+<title>Login Cidades Digitais</title>
+
+<head>
+<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+</head>
+
+
+
+<body>
+<div class="container">
+  <div class="row">
+  <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+	<form>
+	<br><br> <!--abrindo espaço para visualizar cabeçalho-->
+	<img src="imagens/CD.png" class="img-responsive" style="width:100%;"/>
+	<br><br>
+	<h5>Cadastro de Login:</h5>
+	  <div class="form-group">
+        <label for="submitName">&nbsp&nbspNome:</label>
+        <input type="text" class="form-control" id="submitName" placeholder="Nome completo"> <!--check if it needs to be the complete name-->
+      </div>
+	  <div class="form-group">
+        <label for="submitEmail">&nbsp&nbspEmail:</label>
+        <input type="email" class="form-control" id="submitEmail" placeholder="ex: email@mctic.br">
+      </div>
+      <div class="form-group">
+        <label for="submitLogin">&nbsp&nbspLogin:</label>
+        <input type="text" class="form-control" id="submitLogin" placeholder="ex: abc123">
+      </div>
+      <div class="form-group">
+        <label for="submitSenha">&nbsp&nbspSenha: </label>
+        <input type="password" class="form-control" id="submitSenha" placeholder="*********">
+      </div>
+        <button type="submit" class="btn btn-primary">Enviar</button>
+    </form>
+	</div>
+  </div>
+</div>
+
+<script>
+var dados = {dado1: , dado2: ,dado3: ,dado4: ,};
+var ligar = JSON.stringify(dados);
+window.location = "CriarLogin.json" + ligar;
+</script>
+
+
+</body>
+
+
+</html>
