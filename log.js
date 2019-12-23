@@ -1,16 +1,19 @@
-var info = {login: "", senha: ""};
-function changer(){
-  
-var x = document.getElementById("submitLogin") ;
-info.login = x.value;
+    	var info = {login: "", senha: ""};
+        function changer(){
 
-var y = document.getElementById("submitSenha") ;
-info.senha = y.value;
+        var x = document.getElementById("submitLogin") ;
+		info.login = x.value;
 
-}
+		var y = document.getElementById("submitSenha") ;
+		info.senha = y.value;
+		}
 
-function envio(){ 
-  
-   var objetivo = JSON.stringify(info);
-  
-}
+		function envio(){   
+		var objetivo = JSON.stringify(info);
+		
+		fetch("/login", {
+			method: "POST",
+			body: objetivo
+		});
+		}	
+    
