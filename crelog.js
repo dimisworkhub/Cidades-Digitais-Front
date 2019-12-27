@@ -17,7 +17,7 @@ info.senha = y.value;
 
 function envio(){
    var objetivo = JSON.stringify(info);
-   fetch("", {
+   fetch("http://localhost:8000", {
       method: "POST",
       body: objetivo
    })

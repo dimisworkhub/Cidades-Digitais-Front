@@ -9,15 +9,15 @@
 		}
 
 		function envio(){
-			//AQUI TEM QUE SER GET
 		    var objetivo = JSON.stringify(info);
 		    fetch("http://localhost:8000", {
-			    method: "POST",
-			    body: objetivo
+			    method: "GET"
 			})
-			.then(function() {
-				console.log("ok");
-			})
+			.then(function(response) {
+				response.json().then(function(user){
+				console.log(user.name);
+				});
+			  })
 		    .catch(function(error){
 			    console.log("Ao menos aqui eu vejo o erro: " + error.message);
 		    });
