@@ -16,7 +16,7 @@ info.senha = y.value;
 }
 
 function CheckError(response) {
-   if (response.status >= 200 && response.status <= 299) {
+   if (response.status >= 200 && response.status < 300) {
      return response.json();
    } else {
      throw Error(response.statusText);
@@ -25,7 +25,7 @@ function CheckError(response) {
    
 
 function envio(){
-   fetch("http://localhost:8080", {
+   fetch("http://localhost:8080/test", {
       method: "POST",
       mode: 'no-cors',
       body: JSON.stringify(info)
