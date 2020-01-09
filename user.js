@@ -1,6 +1,7 @@
-var info = {nome: "", email: "", login: "", senha: ""};
-var valoErro = 0;
+var info = {"nome" : "", "email" : "", "login" : "", "senha" : ""};
+
 function changer(){
+
 var z = document.getElementById("submitNome");
 info.nome = z.value;
 
@@ -16,23 +17,25 @@ info.senha = y.value;
 }
 
 function CheckError(response) {
-   if (response.status >= 200 && response.status < 300) {
-     return response.json();
-   } else {
-     throw Error(response.statusText);
-   }
- }
-   
+	if (response.status >= 200 && response.status < 300) {
+	  return console.log(response);
+	} else {
+	  throw ("Erro encontrado: " + response.status);
+          /*switch(response.status){
+          case '403': ;break;
+          case '404': ;break;
+          case '412': ;break;
+          case '500': ;break;
+          case '504': ;break;
+          }*/
+  }
 
-function envio(){
-   fetch("http://localhost:8080/test", {
-      method: "POST",
-      mode: 'no-cors',
-      body: JSON.stringify(info)
-   })
-   .then(CheckError)
-   .then((jsonResponse) => {
-   }).catch((error) => {
-      console.log(error);
-   });
+function entrar(){
+    var objetivo = JSON.stringify(info);
+    fetch("file:///home/mctic/Desktop/MCTIC-master/login.html", {
+		method: "POST",
+		mode: 'no-cors',
+		body: objetivo
+	})
+    .then(CheckError);
 }
