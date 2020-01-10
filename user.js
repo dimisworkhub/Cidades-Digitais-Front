@@ -29,7 +29,7 @@ function CheckError(response) {
           case '504': ;break;
           }*/
   }
-
+}
 function entrar(){
     var objetivo = JSON.stringify(info);
     fetch("file:///home/mctic/Desktop/MCTIC-master/login.html", {
