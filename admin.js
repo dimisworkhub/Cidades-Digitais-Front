@@ -1,9 +1,18 @@
+function CheckError(response) {
+	if (response.status >= 200 && response.status < 300) {
+	  return console.log(response);
+	} else {
+	  throw ("Erro encontrado: " + response.status);
+  }
+}
+
 function deletar(item) {
-	return fetch("http://localhost:8080/test", {
+	return fetch("localhost:8080/read/usuario/deleteuser", {
 	  method: 'delete',
-	  headers: {'content-type': 'application/json'},
+	  mode: 'no-cors',
+	  headers: {'content-type' : 'application/json'},
 	  body: JSON.stringify(/*put something here*/)
 	})
-	.then(res => res.json())
-	.then(res => console.log(res))
+	.then(CheckError)
+	.then(response => console.log("ok"))
 }

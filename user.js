@@ -32,10 +32,12 @@ function CheckError(response) {
 }
 function entrar(){
     var objetivo = JSON.stringify(info);
-    fetch("file:///home/mctic/Desktop/MCTIC-master/login.html", {
+    fetch("localhost:8080/read/usuario/createuser", {
 		method: "POST",
-		mode: 'no-cors',
+    mode: 'no-cors',
+    headers: {'content-type' : 'application/json'},
 		body: objetivo
 	})
-    .then(CheckError);
+    .then(CheckError)
+    .then(response => console.log("ok") );
 }
