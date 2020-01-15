@@ -1,0 +1,127 @@
+﻿<!doctype html>
+<html lang="en" class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
+	<link href='https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="css/reset.css"> <!-- CSS reset -->
+	<link rel="stylesheet" href="css/style.css"> <!-- Resource style -->
+	<script src="js/modernizr.js"></script> <!-- Modernizr -->
+
+	<title>Home cidades digitais</title>
+</head>
+<body>	  
+	<header class="cd-header">
+		<div id="cd-logo"><a href="https://www.gov.br/pt-br"><img src="img\brasil.png" alt="Logo"></a></div>
+	</header>
+		
+	<header class="cd-primary-nav">
+			<ul>
+				<!-- inser more links here -->
+				<li><a href="#0">Login</a><i class="fa fa-user-circle"aria-hidden="true"></i></li>	
+			</ul>
+	</header> <!-- cd-primary-nav -->
+
+	<section id="cd-intro">
+		<div id="cd-intro-tagline">
+			<h1><img  src=img\CD.png style="max-width: 52%;></h1>
+			<a href="https://cidadesdigitais.c3sl.ufpr.br/" class="cd-btn">Projetos</a>
+		</div> <!-- #cd-intro-tagline -->
+	</section> <!-- #cd-intro -->
+
+	<div class="cd-secondary-nav">
+		<a href="#0" class="cd-secondary-nav-trigger">Menu<span></span></a> <!-- button visible on small devices -->
+		<nav>
+			<ul>
+				<li>
+					<a href="#cd-placeholder-1">
+						<b>Sobre</b>
+						<span></span><!-- icon -->
+					</a>
+				</li>
+				<li>
+					<a href="#cd-placeholder-2">
+						<b>Localização</b>
+						<span></span><!-- icon -->
+					</a>
+				</li>
+				<li>
+					<a href="#cd-placeholder-3">
+						<b>Fale Conosco</b>
+						<span></span><!-- icon -->
+					</a>
+				</li>
+				<li>
+					<a href="#cd-placeholder-4">
+						<b>Notícias</b>
+						<span></span><!-- icon -->
+					</a>
+				</li>
+				<li>
+					<a href="#cd-placeholder-5">
+						<b>Legislação</b>
+						<span></span><!-- icon -->
+					</a>
+				</li>
+			</ul>
+		</nav>
+	</div> <!-- .cd-secondary-nav -->
+	<main class="cd-main-content">
+		<section id="cd-placeholder-1" class="cd-section cd-container">
+			<h2>O que é </h2>
+			<p><br>
+				O projeto Cidades Digitais foi planejado para modernizar a gestão e ampliar o acesso ao serviço público, bem como promover o desenvolvimento dos municípios brasileiros através da tecnologia.Com o objetivo de dar acesso às informações públicas e para que todos possam utilizar estes dados, em cumprimento ao Plano de Dados Abertos do MCTIC, disponibilizamos aqui informações relevantes sobre o andamento deste programa.Dados como quantidade de pontos atendidos no município, população, status da implantação de cada cidade contemplada, valor total previsto para a implantação e quanto foi investido até o momento, podem ser encontrados no arquivo disponível para download.Formato: csv. Periodicidade de atualização: Mensal. Responsável Setorial: Secretaria de Inclusão Digital. <br><br>
+				<a href="https://www.mctic.gov.br/mctic/opencms/comunicacao/SETEL/inclusao_digital/Cidades_Inteligentes/paginas/Cidades-Inteligentes.html"><u><i>Acesse aqui</i></u></a>
+			</p>
+			
+		</section> <!-- #cd-placeholder-1 -->
+
+		<section id="cd-placeholder-2" class="cd-section cd-container">
+			<h2>Localização</h2>
+			<p><br>
+				Endereço: <br>
+				Esplanada dos Ministérios, Bloco E, Zona Cívico-Administrativa, 
+				Brasília - DF, 70067-900	
+			</p>
+		</section> <!-- #cd-placeholder-2 -->
+
+		<section id="cd-placeholder-3" class="cd-section cd-container">
+			<h2>Atendimento ao Usuário</h2>
+			<p><br>
+				Contato: +55 61 20276005<br>
+				Email: idigital@mctic.gov.br<br><br>
+				Secretária de Inclusão Digital<br><br>
+
+				Horário de funcionamento:<br>
+				Segunda á Sexta<br>
+				08:00 - 12:00 / 14:00 - 18:00
+			</p>
+		</section> <!-- #cd-placeholder-3 -->
+
+		<section id="cd-placeholder-4" class="cd-section cd-container">
+			<h2>Notícias</h2>
+			<p><br>
+			    <a href="https://www.mctic.gov.br/mctic/opencms/comunicacao/SETEL/inclusao_digital/"> <u><i> Acesse aqui:</i></u><i> -Inclusão Digital-</i></a>
+			</p><br>
+			<p>
+			    <a href="http://www.mctic.gov.br/portal"> <u><i> Acesse aqui:</i></u><i> -MCTIC-</i></a>
+			</p>
+		</section> <!-- #cd-placeholder-4 -->
+
+		<section id="cd-placeholder-5" class="cd-section cd-container">
+			<h2>Portal da Legislação</h2>
+			<p><br>
+				<a href="http://www4.planalto.gov.br/legislacao/"><u><i>Acesse aqui</i></u></a>
+			</p>
+			<p>
+				<span><img src="img\logo_mctic_horizontal.jpg" style=" margin-top: 50px;"></span>
+			</p>
+		</section> <!-- #cd-placeholder-5 -->
+	</main> <!-- .cd-main-content -->
+	
+<script src="js/jquery-2.1.1.js"></script>
+<script src="js/main.js"></script> <!-- Resource jQuery -->
+</body>
+</html>
