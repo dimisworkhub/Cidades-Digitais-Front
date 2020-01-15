@@ -2,10 +2,10 @@ var info = {"login" : " ","senha" : " "};
 
 function changer(){
 
-var x = document.getElementById("submitLogin") ;
+var x = document.getElementById("submitLogin");
 info.login = x.value;
 
-var y = document.getElementById("submitSenha") ;
+var y = document.getElementById("submitSenha");
 info.senha = y.value;
 }
 
@@ -14,24 +14,25 @@ function CheckError(response) {
 	  return console.log(response);
 	} else {
 	  throw ("Erro encontrado: " + response.status);
-	  /*switch(response.status){
-          case '403': ;break;
-          case '404': ;break;
-          case '412': ;break;
-          case '500': ;break;
-          case '504': ;break;
-          }*/
+	  switch(response.status){
+          case '403': window.location.replace("file:///home/mctic/Desktop/dimi%20was%20here/403.html");break;
+          case '404': window.location.replace("file:///home/mctic/Desktop/dimi%20was%20here/404.html");break;
+          case '412': alert("Usuario ou senha incorretos.") ;break;
+          case '500': window.location.replace("file:///home/mctic/Desktop/dimi%20was%20here/500.html");break;
+          case '504': window.location.replace("file:///home/mctic/Desktop/dimi%20was%20here/504.html");break;
+          }
 	}
   }
 
 function entrar(){
     var objetivo = JSON.stringify(info);
-    fetch("localhost:8080/read/usuario/login", {
+    //ja com o site para testes
+    fetch("http://localhost:8080/read/usuario", {
 		method: "POST",
     mode: 'no-cors',
     headers: {'content-type' : 'application/json'},
 		body: objetivo
 	})
     .then(CheckError)
-    .then(response => console.log("ok") );
+    .then(response => console.log("ok?") );
 }
