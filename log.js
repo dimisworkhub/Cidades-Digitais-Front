@@ -27,7 +27,7 @@ function CheckError(response) {
 function entrar(){
     var objetivo = JSON.stringify(info);
     //ja com o site para testes
-    fetch("http://localhost:8080/read/usuario", {
+    fetch("localhost:8080/read/usuario", {
 		method: "POST",
     mode: 'no-cors',
     headers: {'content-type' : 'application/json'},

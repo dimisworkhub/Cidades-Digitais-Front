@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+
+<html>
+
+<title>Cadastro de Entidade</title>
+
+<head>
+<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+</head>
+
+<body>
+<br><br>
+<h1><center>Criação de Entidade</center></h1>
+<br><br>
+  <div class="container">
+
+    <div class="row">
+          
+      <form enctype='application/json'>
+        <div class="form-row">
+          
+              <div class="form-group col-md-4">
+                <label for="submitCNPJ">CNPJ:</label>
+                <input type="text" class="form-control" id="submitCNPJ" maxlength="18" OnKeyPress="formatar('##.###.###/####-##', this)" value="" onchange="changer()">
+              </div>
+            
+              <div class="form-group col-md-8">
+                <label for="submitNome">Nome:</label>
+                <input type="text" class="form-control" id="submitNome" placeholder="ex: josé" maxlength="50" value="" onchange="changer()">
+              </div>
+
+              <div class="form-group col-md-10">
+                <label for="submitEndereco">Endereço:</label>
+                <input type="text" class="form-control" id="submitEndereco" maxlength="100" value="" onchange="changer()">
+              </div>
+
+              <div class="form-group col-md-2">
+                <label for="submitNumero">Número:</label>
+                <input type="text" class="form-control" id="submitNumero" maxlength="10" value="" onchange="changer()">
+              </div>
+
+              <div class="form-group col-md-7">
+                <label for="submitBairro">Bairro:</label>
+                <input type="text" class="form-control" id="submitBairro" maxlength="100" value="" onchange="changer()">
+              </div>
+
+              <div class="form-group col-md-5">
+                <label for="submitCEP">CEP:</label>
+                <input type="text" class="form-control" id="submitCEP" maxlength="9" OnKeyPress="formatar('#####-###', this)" value="" onchange="changer()">
+              </div>
+
+              <div class="form-group col-md-2">
+                <label for="submitUF">UF:</label>
+                <select type="text" class="form-control" id="submitUF" value="" onchange="changer()">
+                  <p id="estados"></p>
+                </select>
+              </div>
+
+              <div class="form-group col-md-10">
+                <label for="submitNomeMun">Nome do Município:</label>
+                <select type="text" class="form-control" id="submitNomeMun" value="" onchange="changer()">
+                  <p id="municipios"></p>
+                </select>
+              </div>
+
+              <div class="form-group col-md-12">
+                <label for="submitObs">Observação:</label>
+                <input type="text" class="form-control" id="submitObs"  maxlength="1000" value="" onchange="changer()">
+              </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12"><button type="button" class="btn btn-primary" onclick="enviar()" >Salvar</button></div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<script src="criarent.js"></script>
+
+</body>
+
+</html>
+
+<!--
+Data:
+OnKeyPress="formatar('##/##/####', this)" 
+Tel.:
+OnKeyPress="formatar('##-####-####', this)"
+Cep:
+OnKeyPress="formatar('#####-###', this)"
+CPF:
+OnKeyPress="formatar('###.###.###-##', this)"
+Hora:
+OnKeyPress="formatar('##:##', this)"
+-->
+
+<!--<img src="http://cidadesdigitais.c3sl.ufpr.br/wp-content/uploads/sites/6/2018/04/marca-01.png" class="img-responsive" style="width:50%;"/>-->
