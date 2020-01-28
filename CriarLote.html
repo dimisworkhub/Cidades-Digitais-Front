@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<html>
+
+<title>Cadastro de Entidade</title>
+
+<head>
+<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+</head>
+
+<body>
+<br><br>
+<h1><center>Criação de Entidade</center></h1>
+<br><br>
+  <div class="container">
+
+    <div class="row">
+          
+      <form enctype='application/json'>
+        <div class="form-row">
+          
+              <div class="form-group col-md-4">
+                <label for="submitCodigo">Código:</label>
+                <input type="text" class="form-control" id="submitCodigo" value="" onchange="changer()">
+              </div>
+            
+              <div class="form-group col-md-8">
+                <label for="submitCNPJ">CNPJ:</label>
+                <select type="text" class="form-control" id="submitCNPJ" maxlength="18" OnKeyPress="formatar('##.###.###/####-##', this)" value="" onchange="changer()">
+                    <p id="CNPJ"></p>
+                  </select>
+                </div>
+
+              <div class="form-group col-md-10">
+                <label for="submitCotrato">Contrato:</label>
+                <input type="text" class="form-control" id="submitCotrato" maxlength="10" value="" onchange="changer()">
+              </div>
+
+              <div class="form-group col-md-2">
+                <label for="submitDatai">Data de Início:</label>
+                <input type="date" class="form-control" id="submitDatai" value="" onchange="changer()">
+              </div>
+
+              <div class="form-group col-md-7">
+                <label for="submitDataf">Data de Término:</label>
+                <input type="date" class="form-control" id="submitDataf" value="" onchange="changer()">
+              </div>
+
+              <div class="form-group col-md-5">
+                <label for="submitReajuste">Reajuste:</label>
+                <input type="date" class="form-control" id="submitReajuste" value="" onchange="changer()">
+              </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <center>
+    <button type="button" class="btn btn-primary" onclick="enviar()" >Salvar</button>
+    <a type="button" class="btn btn-primary" href="file:///home/mctic/Documentos/Digital%20Cities%20Project/Entidade.html" >Cancelar</a>
+  </center>
+
+<script src="./Js/criarentidade.js"></script>
+
+</body>
+
+</html>

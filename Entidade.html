@@ -11,7 +11,7 @@
 
 <body>
 
-    <table class="table table-bordered">
+    <table class="table-responsive table-bordered">
         <thead class="thead-light">
           <tr>
             <th scope="col">CNPJ</th>
@@ -21,7 +21,7 @@
             <th scope="col">Bairro</th>
             <th scope="col">CEP</th>
             <th scope="col">UF</th>
-            <th scope="col">Nome do Município</th>
+            <th scope="col">Município</th>
             <th scope="col">Observações</th>
           </tr>
         </thead>
@@ -30,7 +30,12 @@
         </tbody>
       </table>
 
-<script src="entidade.js"></script>
+      <center>
+        <a type="button" class="btn btn-primary" href="file:///home/mctic/Documentos/Digital%20Cities%20Project/Entidade.html" >Criar Nova Entidade</a>
+        <button type="button" class="btn btn-primary" onclick="deletar()">Apagar Entidade</button>
+      </center>
+
+<script src="./Js/entidade.js"></script>
 
 </body>
 
