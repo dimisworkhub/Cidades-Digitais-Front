@@ -11,6 +11,47 @@ Hora:
 maxlength="5" OnKeyPress="formatar('##:##', this)"
 CNPJ:
 maxlength="18" OnKeyPress="formatar('##.###.###/####-##', this)"
+
+
+incluir a.html em b.html:
+a.html:
+
+<html> 
+  <head> 
+    <script src="jquery.js"></script> 
+    <script> 
+    $(function(){
+      $("#includedContent").load("b.html"); 
+    });
+    </script> 
+  </head> 
+
+  <body> 
+     <div id="includedContent"></div>
+  </body> 
+</html>
+b.html:
+
+<p>This is my include file</p>
+
+ou, se funcionar:
+
+<object type="text/html" data="file.html"></object>
+
+e se nada funcionar:
+
+<SCRIPT LANGUAGE="JavaScript" src="http://yourdomain.com/header.js">
+then create a file called "header.js" and enter the content of the file you want to include ! like so....
+
+
+document.write('<center>');
+document.write('<a href="http://alinktosomewhere.co.za">a link 1</a>');
+document.write('<a href="http://alinktosomewhere.co.za">a link 1</a>');
+document.write('<a href="http://alinktosomewhere.co.za">a link 1</a>');
+document.write('<a href="http://alinktosomewhere.co.za">a link 1</a>');
+document.write('<hr>');
+document.write('</center>');
+
 -->
 
 <!--<img src="http://cidadesdigitais.c3sl.ufpr.br/wp-content/uploads/sites/6/2018/04/marca-01.png" class="img-responsive" style="width:50%;"/>-->

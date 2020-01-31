@@ -13,73 +13,51 @@ let y = document.getElementById("submitSenha");
 info.senha = y.value;
 }
 
-(function() {
-  'use strict';
-  window.addEventListener('load', function() {
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    let forms = document.getElementsByClassName('needs-validation');
-    // Loop over them and prevent submission
-    let validation = Array.prototype.filter.call(forms, function(form) {
-      form.addEventListener('submit', function(event) {
-        if (form.checkValidity() === false) {
-          event.preventDefault();
-          event.stopPropagation();
-        }
-        form.classList.add('was-validated');
-      }, false);
-    });
-  }, false);
-})();
-
 function envio(){
+  //pega o token do login
   let meuToken = sessionStorage.getItem("Token");
-  let final=JSON.parse(meuToken);
-  console.log(final);
-  //transforma as informações do login em json
+
+  //transforma as informações do token em json
   let corpo = JSON.stringify(info);
-  
-  //cria o header e as funções necessarias
-  let head = new Headers();
-  head.append("Accept", "application/json");
-  head.append('Authorization', 'Bearer ' + final);
-  //checar o header
-for (let value of head.values()) {
-  console.log(value); 
-}
+  console.log(corpo);
 
   //função fetch para mandar o login e receber o token
   fetch('http://localhost:8080/read/usuario/createuser', {
     method: 'POST',
     body: corpo,
-    header: head,
-    cache: 'default',
+    headers: {'Authorization': 'Bearer ' + meuToken},
   }).then(function(response){
+
     //checar o status do pedido
     console.log(response);
+
     //tratamento dos erros
     if(response.status == 200){
+    window.location = "./Menu CD/index.html";
     }
     else if(response.status ==201){
-      alert("Login criado com sucesso");
+        alert("Usuário criado com sucesso");
+    window.location = "./Menu CD/index.html";
     }
     else if(response.status == 202){
-      alert("Login efetuado com sucesso");
+        alert("Login efetivado com sucesso");
+    window.location = "./Menu CD/index.html";
     }
     else if(response.status ==204){
-      //no caso de deletar algo
-      alert("Apagado com sucesso.");
+        alert("Apagado com sucesso.");
+    window.location = "./Menu CD/index.html";
     }
     else if(response.status ==400){
-      //window.location.href = "http://localhost:8080/400";
+    window.location = "./400.html";
     }
     else if(response.status ==401){
-      //window.location.href = "http://localhost:8080/401";
+    window.location = "./401.html";
     }
     else if(response.status ==403){
-      //window.location.href = "http://localhost:8080/403";
+    window.location = "./403.html";
     }
     else if(response.status ==404){
-      //window.location.href = "http://localhost:8080/404";
+    window.location = "./404.html";
     }
     else if(response.status ==409){
       alert("Erro: Login já existente.");
@@ -88,13 +66,13 @@ for (let value of head.values()) {
       alert("Erro: Informação colocada é incorreta.");
     }
     else if(response.status == 422){
-      alert("Erro: Informação colocada é invalida.");
+      alert("Erro: Informação colocada é invalida. Siga as instruções abaixo.");
     }
     else if(response.status == 500){
-      //window.location.href = "http://localhost:8080/500";
+      window.location = "./500.html";
     }
     else if(response.status == 504){
-      //window.location.href = "http://localhost:8080/504";
+      window.location = "./504.html";
     }
     else{
       alert("ERRO DESCONHECIDO");

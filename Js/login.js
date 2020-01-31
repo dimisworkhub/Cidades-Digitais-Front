@@ -12,67 +12,66 @@ info.senha = y.value;
 function entrar(){
   //transforma as informações do login em json
   let corpo = JSON.stringify(info);
-  //headers usados:
-  let head = new Headers();
+
   //função fetch para mandar o login e receber o token
-  fetch('http://localhost:8080/read/usuario/login', {
+  fetch('http://localhost:8080/read/usuario/login',{
     method: 'POST',
+    //headers: {'redirect': 'follow'},
     body: corpo,
-    headers: {head},
   }).then(function(response){
+
     //checar o status do pedido
     console.log(response.status);
+
     //tratamento dos erros
     if(response.status == 200){
-      alert("Status: OK");
+    window.location = "./Menu CD/index.html";
     }
     else if(response.status ==201){
-      alert("Login criado com sucesso");
+      alert("Usuário criado com sucesso");
+    window.location = "./Menu CD/index.html";
     }
     else if(response.status == 202){
-      response.json().then(function(json){
-        sessionStorage.setItem("Token", json);
-        console.log(json);
-        head.append("Authorization", "Bearer "+sessionStorage.getItem("Token"))
-        fetch("http://localhost:8080/1", {
-        method: 'GET',
-        headers: {head},
-        })
-      });
+      alert("Login efetivado com sucesso");
+      window.location = "./Menu CD/index.html";
     }
     else if(response.status ==204){
       alert("Apagado com sucesso.");
+      window.location = "./Menu CD/index.html";
     }
     else if(response.status ==400){
-      //window.location.href = "http://localhost:8080/400";
+      window.location = "./400.html";
     }
     else if(response.status ==401){
-      //window.location.href = "http://localhost:8080/401";
+      window.location = "./401.html";
     }
     else if(response.status ==403){
-      //window.location.href = "http://localhost:8080/403";
+      window.location = "./403.html";
     }
     else if(response.status ==404){
-      //window.location.href = "http://localhost:8080/404";
+      window.location = "./404.html";
     }
     else if(response.status ==409){
       alert("Erro: Login já existente.");
     }
     else if(response.status == 412){
+      //no caso a senha
       alert("Erro: Informação colocada é incorreta.");
     }
     else if(response.status == 422){
       alert("Erro: Informação colocada é invalida. Siga as instruções abaixo.");
     }
     else if(response.status == 500){
-      //window.location.href = "http://localhost:8080/500";
+      window.location = "./500.html";
     }
     else if(response.status == 504){
-      //window.location.href = "http://localhost:8080/504";
+      window.location = "./504.html";
     }
     else{
       alert("ERRO DESCONHECIDO");
     }
-  
+      response.json().then(function(json){
+      sessionStorage.setItem("Token", json);
+    });
   })
-} 
+}
