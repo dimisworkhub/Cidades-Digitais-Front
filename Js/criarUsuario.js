@@ -33,26 +33,14 @@ info.senha = y.value;
 
 function envio(){
   let meuToken = sessionStorage.getItem("Token");
-  let final=JSON.parse(meuToken);
-  console.log(final);
   //transforma as informações do login em json
   let corpo = JSON.stringify(info);
-  
-  //cria o header e as funções necessarias
-  let head = new Headers();
-  head.append("Accept", "application/json");
-  head.append('Authorization', 'Bearer ' + final);
-  //checar o header
-for (let value of head.values()) {
-  console.log(value); 
-}
 
   //função fetch para mandar o login e receber o token
   fetch('http://localhost:8080/read/usuario/createuser', {
     method: 'POST',
     body: corpo,
-    header: head,
-    cache: 'default',
+    headers: {'Authorization': 'Bearer ' + meuToken},
   }).then(function(response){
     //checar o status do pedido
     console.log(response);
