@@ -19,7 +19,7 @@ function entrar(){
   fetch('http://localhost:8080/read/usuario/login', {
     method: 'POST',
     body: corpo,
-    header: head,
+    headers: {head},
     cache: 'default',
   }).then(function(response){
     //checar o status do pedido
@@ -32,7 +32,15 @@ function entrar(){
       alert("Login criado com sucesso");
     }
     else if(response.status == 202){
-      alert("Login efetuado com sucesso");
+      response.json().then(function(json){
+        sessionStorage.setItem("Token", json);
+        console.log(json);
+        head.append("Authorization", "Bearer "+sessionStorage.getItem("Token"))
+        fetch("http://localhost:8080/1", {
+        method: 'GET',
+        headers: {head},
+        })
+      });
     }
     else if(response.status ==204){
       alert("Apagado com sucesso.");
@@ -67,12 +75,6 @@ function entrar(){
     else{
       alert("ERRO DESCONHECIDO");
     }
-    //faz a resposta, que é o token, ser legivel em json
-    console.log(response);
-    return response.json();
-  }).then(function(response){
-    sessionStorage.setItem("Token", response);
-    console.log(response);
-   //window.location.href="./createuser.html";
-  });
-}
+  
+  })
+} 
