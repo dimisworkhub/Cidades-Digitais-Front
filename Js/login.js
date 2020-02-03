@@ -2,11 +2,22 @@
 let info = {"login" : " ","senha" : " "};
 
 //função que altera as informações do json, capturando do html
-function changer(){
+function changer(a){
+  //captura o valor
 let x = document.getElementById("submitLogin");
+  //guarda o valor no JSON
 info.login = x.value;
+  //captura o valor
 let y = document.getElementById("submitSenha");
+  //guarda o valor no JSON
 info.senha = y.value;
+
+var nomeInput = document.getElementById(a);
+  if (!nomeInput.checkValidity()) {
+    document.getElementById(a + "2").innerHTML = nomeInput.validationMessage;
+  } else {
+    document.getElementById(a + "2").innerHTML = "Valor Aceito";
+  }
 }
 
 function entrar(){
@@ -14,9 +25,8 @@ function entrar(){
   let corpo = JSON.stringify(info);
 
   //função fetch para mandar o login e receber o token
-  fetch('http://localhost:8080/read/usuario/login',{
+  fetch('https://httpstat.us/400',{
     method: 'POST',
-    //headers: {'redirect': 'follow'},
     body: corpo,
   }).then(function(response){
 
@@ -25,31 +35,31 @@ function entrar(){
 
     //tratamento dos erros
     if(response.status == 200){
-    window.location = "./Menu CD/index.html";
+    location.replace = "./Menu CD/index.html";
     }
     else if(response.status ==201){
       alert("Usuário criado com sucesso");
-    window.location = "./Menu CD/index.html";
+    location.replace = "./Menu CD/index.html";
     }
     else if(response.status == 202){
       alert("Login efetivado com sucesso");
-      window.location = "./Menu CD/index.html";
+      location.replace = "./Menu CD/index.html";
     }
     else if(response.status ==204){
       alert("Apagado com sucesso.");
-      window.location = "./Menu CD/index.html";
+      location.replace = "./Menu CD/index.html";
     }
     else if(response.status ==400){
-      window.location = "./400.html";
+      location.replace = "./400.html";
     }
     else if(response.status ==401){
-      window.location = "./401.html";
+      location.replace = "./401.html";
     }
     else if(response.status ==403){
-      window.location = "./403.html";
+      location.replace = "./403.html";
     }
     else if(response.status ==404){
-      window.location = "./404.html";
+      location.replace = "./404.html";
     }
     else if(response.status ==409){
       alert("Erro: Login já existente.");
@@ -62,10 +72,10 @@ function entrar(){
       alert("Erro: Informação colocada é invalida. Siga as instruções abaixo.");
     }
     else if(response.status == 500){
-      window.location = "./500.html";
+      location.replace = "./500.html";
     }
     else if(response.status == 504){
-      window.location = "./504.html";
+      location.replace = "./504.html";
     }
     else{
       alert("ERRO DESCONHECIDO");
