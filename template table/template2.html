@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tabela</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/style2.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="table-wrapper">
+            <!--Header-->
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <h2>Tabela <b>User</b></h2>
+                    </div>
+                    <div class="col-sm-8">
+                        <a href="#" class="btn btn-primary"><i class="material-icons">&#xE863;</i> <span>Atualizar
+                                Lista
+                            </span></a>
+                        <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i
+                                class="material-icons">&#xE147;</i> <span>Adicionar</span></a>
+                        <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i
+                                class="material-icons">&#xE15C;</i> <span>Deletar</span></a>
+                    </div>
+                </div>
+            </div>
+            <!--Filtro-->
+            <div class="table-filter">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="show-entries">
+                            <span>Mostrando</span>
+                            <select class="form-control">
+                                <option>5</option>
+                                <option>10</option>
+                                <option>15</option>
+                                <option>20</option>
+                            </select>
+                            <span>Itens</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-9">
+                        <button type="button" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                        <div class="filter-group">
+                            <label>Nome</label>
+                            <input type="text" class="form-control">
+                        </div>
+
+                        <div class="filter-group">
+                            <label>Status</label>
+                            <select class="form-control">
+                                <option>Todos</option>
+                                <option>Ativo</option>
+                                <option>Inativo</option>
+                            </select>
+                        </div>
+                        <span class="filter-icon"><i class="fa fa-filter"></i></span>
+                    </div>
+                </div>
+            </div>
+            <!--Table header-->
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th> <span class="custom-checkbox">
+                                <input type="checkbox" id="selectAll">
+                                <label for="selectAll"></label>
+                            </span></th>
+                        <th>#</th>
+                        <th>Usuário</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Login</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <!--Table Body-->
+                <tbody>
+                    <tr>
+                        <td>
+                            <span class="custom-checkbox">
+                                <input type="checkbox" id="checkbox1" name="options[]" value="1">
+                                <label for="checkbox1"></label>
+                            </span>
+                        </td>
+                        <td>1</td>
+                        <td><a href="#">Michael
+                                Holz</a></td>
+                        <td>London</td>
+                        <td><span class="status text-success">&bull;</span> Ativo</td>
+                        <td>lorem</td>
+                        <td> <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons"
+                                    data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                            <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons"
+                                    data-toggle="tooltip" title="Delete">&#xE872;</i></a></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="custom-checkbox">
+                                <input type="checkbox" id="checkbox2" name="options[]" value="1">
+                                <label for="checkbox2"></label>
+                            </span>
+                        </td>
+                        <td>2</td>
+                        <td><a href="#">Paula
+                                Wilson</a></td>
+                        <td>Madrid</td>
+                        <td><span class="status text-info">&bull;</span> Shipped</td>
+                        <td>lorem60</td>
+                        <td> <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons"
+                                    data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                            <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons"
+                                    data-toggle="tooltip" title="Delete">&#xE872;</i></a></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="custom-checkbox">
+                                <input type="checkbox" id="checkbox3" name="options[]" value="1">
+                                <label for="checkbox3"></label>
+                            </span>
+                        </td>
+                        <td>3</td>
+                        <td><a href="#">Antonio
+                                Moreno</a></td>
+                        <td>Berlin</td>
+                        <td><span class="status text-danger">&bull;</span> Inativo</td>
+                        <td>Lorem2</td>
+                        <td> <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons"
+                                    data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                            <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons"
+                                    data-toggle="tooltip" title="Delete">&#xE872;</i></a></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="custom-checkbox">
+                                <input type="checkbox" id="checkbox4" name="options[]" value="1">
+                                <label for="checkbox4"></label>
+                            </span>
+                        </td>
+                        <td>4</td>
+                        <td><a href="#">Mary
+                                Saveley</a></td>
+                        <td>New York</td>
+                        <td><span class="status text-warning">&bull;</span> Pending</td>
+                        <td>Lorem3</td>
+                        <td> <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons"
+                                    data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                            <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons"
+                                    data-toggle="tooltip" title="Delete">&#xE872;</i></a></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="custom-checkbox">
+                                <input type="checkbox" id="checkbox5" name="options[]" value="1">
+                                <label for="checkbox5"></label>
+                            </span>
+                        </td>
+                        <td>5</td>
+                        <td><a href="#">Martin
+                                Sommer</a></td>
+                        <td>Paris</td>
+                        <td><span class="status text-success">&bull;</span>Ativo </td>
+                        <td>lorem</td>
+                        <td> <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons"
+                                    data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                            <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons"
+                                    data-toggle="tooltip" title="Delete">&#xE872;</i></a></td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- ADD Modal HTML -->
+            <div id="addEmployeeModal" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form>
+                            <div class="modal-header">
+                                <h4 class="modal-title">Add Employee</h4>
+                                <button type="button" class="close" data-dismiss="modal"
+                                    aria-hidden="true">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label>Name</label>
+                                    <input type="text" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="email" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Address</label>
+                                    <textarea class="form-control" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone</label>
+                                    <input type="text" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                                <input type="submit" class="btn btn-success" value="Add">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Edit Modal HTML -->
+            <div id="editEmployeeModal" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form>
+                            <div class="modal-header">
+                                <h4 class="modal-title">Edit Employee</h4>
+                                <button type="button" class="close" data-dismiss="modal"
+                                    aria-hidden="true">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label>Name</label>
+                                    <input type="text" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="email" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Address</label>
+                                    <textarea class="form-control" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone</label>
+                                    <input type="text" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                                <input type="submit" class="btn btn-info" value="Save">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Delete Modal HTML -->
+            <div id="deleteEmployeeModal" class="modal fade">
+                <div class="modal-dialog modal-confirm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="icon-box">
+                                <i class="material-icons">&#xE5CD;</i>
+                            </div>
+                            <h4 class="modal-title">Are you sure?</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Do you really want to delete these records? This process cannot be undone.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-danger">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Footer-->
+            <div class="clearfix">
+                <div class="hint-text">Mostrando <b>5</b> de <b>25</b> Itens</div>
+                <ul class="pagination">
+                    <li class="page-item disabled"><a href="#">Anterior</a></li>
+                    <li class="page-item"><a href="#" class="page-link">1</a></li>
+                    <li class="page-item"><a href="#" class="page-link">2</a></li>
+                    <li class="page-item"><a href="#" class="page-link">3</a></li>
+                    <li class="page-item"><a href="#" class="page-link">4</a></li>
+                    <li class="page-item"><a href="#" class="page-link">5</a></li>
+                    <li class="page-item"><a href="#" class="page-link">6</a></li>
+                    <li class="page-item"><a href="#" class="page-link">7</a></li>
+                    <li class="page-item"><a href="#" class="page-link">Próximo</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        // Select/Deselect checkboxes
+        var checkbox = $('table tbody input[type="checkbox"]');
+        $("#selectAll").click(function () {
+            if (this.checked) {
+                checkbox.each(function () {
+                    this.checked = true;
+                });
+            } else {
+                checkbox.each(function () {
+                    this.checked = false;
+                });
+            }
+        });
+        checkbox.click(function () {
+            if (!this.checked) {
+                $("#selectAll").prop("checked", false);
+            }
+        });
+    });
+</script>
+
+</html>

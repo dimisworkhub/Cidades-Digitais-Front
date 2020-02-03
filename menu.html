@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<link href='http://fonts.googleapis.com/css?family=Ubuntu:400,700' rel='stylesheet' type='text/css'>
-	
+
 	<link rel="stylesheet" href="bootstrap4\css\bootstrap.css"> <!-- CSS bootstrap -->
 	<link rel="stylesheet" href="css/reset.css"> <!-- CSS reset -->
 	<link rel="stylesheet" href="css/style.css"> <!-- Resource style -->
@@ -16,25 +16,47 @@
 </head>
 
 <body>
+
+
+	<div class="wrap">
+		<div class="loading">
+			<div class='loader'>
+				<div class='loader--dot'></div>
+				<div class='loader--dot'></div>
+				<div class='loader--dot'></div>
+				<div class='loader--dot'></div>
+				<div class='loader--dot'></div>
+				<div class='loader--dot'></div>
+				<div class='loader--text'></div>
+			</div>
+		</div>
+	</div>
+
 	<main id="cd-main-content">
-		<section id="cd-intro"><!--imagem de fundo-->
+
+		<section id="cd-intro">
+			<!--imagem de fundo-->
+
+
 			<div class="container p-4 " style="height: 90%;">
+
 				<div class="row" style=" height: 100%; ">
-				
-						<iframe style="width: 100%; height: 100%; margin: 0 auto; "
-							src="https://app.powerbi.com/view?r=eyJrIjoiMjUxYzY3MTItY2M1OC00MDNjLWJkNjQtYjVlOGNiYzFjODY2IiwidCI6Ijg4MGRkN2YxLWQwMmMtNGUxOS04MTVmLTQ2NDlkMzNmNWM2MyJ9"></iframe>
-						</iframe>
-					
-				</div>   
+
+					<iframe style="width: 100%; height: 100%; margin: 0 auto; "
+						src="https://app.powerbi.com/view?r=eyJrIjoiMjUxYzY3MTItY2M1OC00MDNjLWJkNjQtYjVlOGNiYzFjODY2IiwidCI6Ijg4MGRkN2YxLWQwMmMtNGUxOS04MTVmLTQ2NDlkMzNmNWM2MyJ9"></iframe>
+					</iframe>
+
+				</div>
 			</div>
 
 			<div class="container-fluid">
-				<header class="cd-header"><!--Barra Menu-->
-		
-            <div id="cd-logo">
-				<a href="#0"><img src="img/cd-logo.svg" alt="Logo"></a>
-			</div>
-				 <a class="cd-menu-trigger" href="#main-nav">Menu<span></span></a>
+				<header class="cd-header">
+					<!--Barra Menu-->
+
+					<div id="cd-logo">
+						<a href="#0"><img src="img/cd-logo.svg" alt="Logo"></a>
+					</div>
+					<a class="cd-menu-trigger" href="#main-nav">Menu<span></span></a>
 				</header>
 			</div>
 
@@ -57,11 +79,19 @@
 		</ul>
 		<a href="#0" class="cd-close-menu">Close<span></span></a>
 	</nav>
-	
-    
 
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-	<script src="Js/main.js"></script> <!-- Resource jQuery -->
+
+
+
 </body>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="Js/main.js"></script> <!-- Resource jQuery -->
+<script>
+    //after window is loaded completely 
+    window.onload = function(){
+        //hide the preloader
+        document.querySelector(".wrap").style.display = "none";
+    }
+</script>
 
 </html>

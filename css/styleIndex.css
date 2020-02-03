@@ -11,7 +11,7 @@ Primary style
 
 body {
   font-size: 100%;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Varela Round', sans-serif;
   color: #030d18;
   background-color: #f0eee1;
 }
@@ -19,6 +19,11 @@ body {
 a {
   color: #110f0f;
   text-decoration: none; 
+}
+
+a:hover{
+  color:#110f0f;
+  text-decoration: none;
 }
 
 img {
@@ -222,8 +227,7 @@ Intro
 #cd-intro {
   position: relative;
   height: 100%;
-  background: url("../img/international-network-4k-wallpaper.jpg") no-repeat center center;
-  background-size: cover; 
+  
 }
 #cd-intro li {
   display: block;
@@ -275,9 +279,17 @@ Intro
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: white;
+  transition: all 0.5s;
+  cursor: pointer;
 }
+
+
+
 .no-touch .cd-btn:hover {
-  background-color: #f5484a;
+  background-color: #c53e40;
+  padding: 18px 50px;
+  color: #f0eee1;
+  
 }
 @media only screen and (min-width: 1170px) {
   .cd-btn.is-hidden {
@@ -589,4 +601,88 @@ Placeholder Sections
     font-size: 20px;
     font-size: 1.25rem;
   }
+}
+
+/* Modal Login CSS */
+
+.modal-login {		
+  color: #636363;
+  width: 350px;
+}
+.modal-login .modal-content {
+  padding: 20px;
+  border-radius: 5px;
+  border: none;
+}
+.modal-login .modal-header {
+  border-bottom: none;   
+      position: relative;
+      justify-content: center;
+}
+.modal-login h4 {
+  text-align: center;
+  font-size: 26px;
+  margin: 30px 0 -15px;
+}
+.modal-login .form-control:focus {
+  border-color: #70c5c0;
+}
+.modal-login .form-control, .modal-login .btn {
+  min-height: 40px;
+  border-radius: 3px; 
+}
+.modal-login .close {
+      position: absolute;
+  top: -5px;
+  right: -5px;
+}	
+.modal-login .modal-footer {
+  background: #ecf0f1;
+  border-color: #dee4e7;
+  text-align: center;
+      justify-content: center;
+  margin: 0 -20px -20px;
+  border-radius: 5px;
+  font-size: 13px;
+}
+.modal-login .modal-footer a {
+  color: #999;
+}		
+.modal-login .avatar {
+  position: absolute;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  top: -70px;
+  width: 95px;
+  height: 95px;
+  border-radius: 50%;
+  z-index: 9;
+  background: rgb(235, 81, 84);
+  padding: 15px;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+}
+.modal-login .avatar img {
+  width: 100%;
+  margin-top: -4px;
+}
+.modal-login.modal-dialog {
+  margin-top: 80px;
+}
+  .modal-login .btn {
+      color: #fff;
+      border-radius: 4px;
+  background:rgba(245, 72, 74, 0.9);
+  text-decoration: none;
+  transition: all 0.4s;
+      line-height: normal;
+      border: none;
+  }
+.modal-login .btn:hover, .modal-login .btn:focus {
+  background: #c53e40;
+  outline: none;
+}
+.trigger-btn {
+  display: inline-block;
+  margin: 100px auto;
 }
