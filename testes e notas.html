@@ -1,0 +1,111 @@
+<!--
+Data:
+maxlength="10" OnKeyPress="formatar('##/##/####', this)" 
+Tel.:
+maxlength="12" OnKeyPress="formatar('##-####-####', this)"
+Cep:
+maxlength="9" OnKeyPress="formatar('#####-###', this)"
+CPF:
+maxlength="14" OnKeyPress="formatar('###.###.###-##', this)"
+Hora:
+maxlength="5" OnKeyPress="formatar('##:##', this)"
+CNPJ:
+maxlength="18" OnKeyPress="formatar('##.###.###/####-##', this)"
+
+
+incluir a.html em b.html:
+a.html:
+
+<html> 
+  <head> 
+    <script src="jquery.js"></script> 
+    <script> 
+    $(function(){
+      $("#includedContent").load("b.html"); 
+    });
+    </script> 
+  </head> 
+
+  <body> 
+     <div id="includedContent"></div>
+  </body> 
+</html>
+b.html:
+
+<p>This is my include file</p>
+
+ou, se funcionar:
+
+<object type="text/html" data="file.html"></object>
+
+e se nada funcionar:
+
+<SCRIPT LANGUAGE="JavaScript" src="http://yourdomain.com/header.js">
+then create a file called "header.js" and enter the content of the file you want to include ! like so....
+
+
+document.write('<center>');
+document.write('<a href="http://alinktosomewhere.co.za">a link 1</a>');
+document.write('<a href="http://alinktosomewhere.co.za">a link 1</a>');
+document.write('<a href="http://alinktosomewhere.co.za">a link 1</a>');
+document.write('<a href="http://alinktosomewhere.co.za">a link 1</a>');
+document.write('<hr>');
+document.write('</center>');
+
+-->
+
+<!--<img src="http://cidadesdigitais.c3sl.ufpr.br/wp-content/uploads/sites/6/2018/04/marca-01.png" class="img-responsive" style="width:50%;"/>-->
+
+  <!DOCTYPE html>
+
+<html>
+
+<title>Entidade</title>
+
+ <head>
+<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+</head>
+
+<body>
+
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Handle</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr id="lista">
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td>@mdo</td>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td>@fat</td>
+          </tr>
+          <tr>
+            <th scope="row">3</th>
+            <td>Larry</td>
+            <td>the Bird</td>
+            <td>@twitter</td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <center>
+        <button type="button" class="btn btn-primary" onclick="">Apagar Entidade</button>
+      </center>
+
+<script src="entidade.js"></script>
+
+</body>
+
+</html>

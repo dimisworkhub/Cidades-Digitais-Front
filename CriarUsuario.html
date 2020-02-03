@@ -19,7 +19,7 @@
         <div class="col-sm-4"></div>
     <div class="col-sm-4">
 	
-	<form enctype='application/json'>
+	<form enctype='application/json' class="needs-validation" novalidate>
 	
 	 <!--abrindo espaço para visualizar cabeçalho-->
 	
@@ -32,21 +32,30 @@
         <label for="submitNome">&nbsp&nbspNome:</label>
         <input type="text" class="form-control" id="submitNome" placeholder="Nome completo"value="" onchange="changer()"> 
     </div>
-	  
+    <div class="invalid-feedback">
+          Please choose a username.
+    </div>
 	  <div class="form-group">
         <label for="submitEmail">&nbsp&nbspEmail:</label>
         <input type="email" class="form-control" id="submitEmail" placeholder="ex: email@mctic.br"value="" onchange="changer()">
-      </div>
-	  
-      <div class="form-group">
+    </div>
+    <div class="invalid-feedback">
+          Please choose a username.
+    </div>
+    <div class="form-group">
         <label for="submitLogin">&nbsp&nbspUsuário:</label>
         <input type="text" class="form-control" id="submitLogin" placeholder="ex: abc123" value="" onchange="changer()">
-      </div>
-	  
-      <div class="form-group">
+    </div>
+    <div class="invalid-feedback">
+          Please choose a username.
+    </div>
+    <div class="form-group">
         <label for="submitSenha">&nbsp&nbspSenha: </label>
         <input type="password" class="form-control" id="submitSenha" placeholder="********" value="" onchange="changer()">
-      </div>
+    </div>
+    <div class="invalid-feedback">
+          Please choose a username.
+    </div>
         <button type="button" class="btn btn-primary" onclick="envio()" >Enviar</button>
         <button type="reset" class="btn btn-secundary" >Limpar</button>
     </form>
@@ -54,7 +63,7 @@
   </div>
 </div>
 
-<script src="./Js/user.js"></script>
+<script src="./Js/criarUsuario.js"></script>
 
 </body>
 
