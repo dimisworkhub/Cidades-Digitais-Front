@@ -22,11 +22,13 @@
 	  <h5><center>Entrar:</center></h5><br>
     <div class="form-group">
       <label for="submitLogin">&nbsp&nbspUsuário:</label>
-      <input type="text" class="form-control" id="submitLogin" placeholder="ex: abc123" value="" onchange="changer()">
+      <input type="text" class="form-control" id="submitLogin" placeholder="ex: abc123" onchange="changer(submitLogin)">
+      <p id="submitLogin2"></p>
     </div>
     <div class="form-group">
       <label for="submitSenha">&nbsp&nbspSenha: </label>
-      <input type="password" class="form-control" id="submitSenha" placeholder="********" value="" onchange="changer()">
+      <input type="password" class="form-control" id="submitSenha" placeholder="********" minLenght="8" onchange="changer(submitSenha)">
+      <p id="submitSenha2"></p>
     </div>
     <!-- torne em um submit depois -->
     <center><button type="button" class="btn btn-primary" onclick="entrar()" >Enviar</button></center>

@@ -19,7 +19,6 @@ function envio(){
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
-  console.log(corpo);
 
   //função fetch para mandar o login e receber o token
   fetch('http://localhost:8080/read/usuario/createuser', {
