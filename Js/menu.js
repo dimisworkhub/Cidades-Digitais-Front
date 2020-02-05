@@ -15,7 +15,7 @@ document.write(`
 					<li><a href="./home.html"><span>Home</span></a></li>	
                     <li><a href="./entidade.html"><span>Entidade</span></a></li>
                     <li><a href="#0"><span>CD</span></a></li>
-                    <li><a href="#0"><span>About</span></a></li>
+                    <li><a href="./criarUsuario.html"><span>Criação de Usuários</span></a></li>
                     <li><a href="#0"><span>Contact us</span></a></li>
 					</ul>
 					<a href="#0" class="cd-close-menu">Close<span></span></a>
