@@ -16,3 +16,6 @@ function deletar(item) {
 	.then(CheckError)
 	.then(response => console.log("ok"))
 }
+
+
+document.getElementById("b").innerHTML = a;

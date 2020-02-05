@@ -20,8 +20,8 @@ function envio(){
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
 
-  //função fetch para mandar o login e receber o token
-  fetch('http://localhost:8080/read/usuario/createuser', {
+  //função fetch para mandar
+  fetch('http://localhost:8080/read/', {
     method: 'POST',
     body: corpo,
     headers: {'Authorization': 'Bearer ' + meuToken},
@@ -32,46 +32,47 @@ function envio(){
 
     //tratamento dos erros
     if(response.status == 200){
-    window.location = "./Menu CD/index.html";
+      window.location.replace("./menu.html");
     }
     else if(response.status ==201){
-        alert("Usuário criado com sucesso");
-    window.location = "./Menu CD/index.html";
+      alert("Usuário criado com sucesso");
+      window.location.replace("./menu.html");
     }
     else if(response.status == 202){
-        alert("Login efetivado com sucesso");
-    window.location = "./Menu CD/index.html";
+      alert("Login efetivado com sucesso");
+      window.location.replace("./menu.html");
     }
     else if(response.status ==204){
-        alert("Apagado com sucesso.");
-    window.location = "./Menu CD/index.html";
+      alert("Apagado com sucesso.");
+      window.location.replace("./menu.html");
     }
     else if(response.status ==400){
-    window.location = "./400.html";
+      window.location.replace("./errors/400.html");
     }
     else if(response.status ==401){
-    window.location = "./401.html";
+      window.location.replace("./errors/403.html");//fazer 401
     }
     else if(response.status ==403){
-    window.location = "./403.html";
+      window.location.replace("./errors/403.html");
     }
     else if(response.status ==404){
-    window.location = "./404.html";
+      window.location.replace("./errors/404.html");
     }
     else if(response.status ==409){
-      alert("Erro: Login já existente.");
+      alert("Erro: Usuário já existente.");
     }
     else if(response.status == 412){
+      //no caso a senha
       alert("Erro: Informação colocada é incorreta.");
     }
     else if(response.status == 422){
-      alert("Erro: Informação colocada é invalida. Siga as instruções abaixo.");
+      alert("Erro: Usuário ou senha inválidos.");
     }
     else if(response.status == 500){
-      window.location = "./500.html";
+      window.location.replace("./errors/500.html");
     }
     else if(response.status == 504){
-      window.location = "./504.html";
+      window.location.replace("./errors/504.html");
     }
     else{
       alert("ERRO DESCONHECIDO");
