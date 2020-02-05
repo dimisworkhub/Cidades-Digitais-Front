@@ -67,7 +67,7 @@ function formatar(mascara, documento){
 
 
 //testar se funciona depois
-window.onload=function estados(){
+window.onload=function(){
   var i = 0;
   var x;
   //ja com o site para testes
@@ -90,7 +90,7 @@ window.onload=function estados(){
 
 
 
-window.onload=function cnpj(){
+window.onload=function(){
   var i = 0;
   var x;
   //ja com o site para testes
