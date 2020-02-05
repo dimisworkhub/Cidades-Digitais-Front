@@ -1,83 +1,109 @@
-<!DOCTYPE html>
-
-<html>
-
-<title>Cadastro de Entidade</title>
+<!doctype html>
+<html lang="en" class="no-js">
 
 <head>
-<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<link href='http://fonts.googleapis.com/css?family=Ubuntu:400,700' rel='stylesheet' type='text/css'>
+	
+	<link rel="stylesheet" href="bootstrap4\css\bootstrap.css"> <!-- CSS bootstrap -->
+	<link rel="stylesheet" href="css/reset.css"> <!-- CSS reset -->
+	<link rel="stylesheet" href="css/style.css"> <!--Resource style -->
+	<script src="Js/modernizr.js"></script> <!-- Modernizr -->
+	<title>Criar Entidade</title>
 </head>
 
-<body>
-<br><br>
-<h1><center>Criação de Entidade</center></h1>
-<br><br>
-  <div class="container">
+	<main id="cd-main-content">
+			
+		<section id="cd-intro"><!--imagem de fundo-->
+			<div class="container p-4 " style="height: 90%;">
+				<div class="row" style=" height: 100%; ">
+						
+					<div >
+						<div style="background-color: white;"	>
+						<div class="p-4" style= "width:100%; text-align: center;">
+								<h3 style="font-size: 35px">Criar Entidade</h3>
+							</div>
+							<form enctype='application/json'>
+                <div class="form-row" style=" padding: 30px;">
+                      
+                    <div class="form-group col-md-8">
+                        <label class="progress" for="submitNome"></label>
+                        <input type="text" class="form-control" id="submitNome" placeholder="Nome:" maxlength="50" value="" onchange="changer()">
+                      </div>
+                  
+                      <div class="form-group col-md-2">
+                        <label class="progress" for="submitCNPJ"></label>
+                        <input type="text" class="form-control" id="submitCNPJ" placeholder="CNPJ:" maxlength="19" OnKeyPress="formatar('##.###.###/####-##', this)" value="" onchange="changer()">
+                      </div>
+                    
+                      <div class="form-group col-md-2">
+                        <label class="progress" for="submitCEP"></label>
+                        <input type="text" class="form-control" id="submitCEP" placeholder="CEP:" maxlength="9" OnKeyPress="formatar('#####-###', this)" value="" onchange="changer()">
+                      </div>
 
-    <div class="row">
-          
-      <form enctype='application/json'>
-        <div class="form-row">
-          
-              <div class="form-group col-md-4">
-                <label for="submitCNPJ">CNPJ:</label>
-                <input type="text" class="form-control" id="submitCNPJ" maxlength="18" OnKeyPress="formatar('##.###.###/####-##', this)" value="" onchange="changer()">
-              </div>
-            
-              <div class="form-group col-md-8">
-                <label for="submitNome">Nome:</label>
-                <input type="text" class="form-control" id="submitNome" placeholder="ex: josé" maxlength="50" value="" onchange="changer()">
-              </div>
+                      <div class="form-group col-md-6">
+                        <label class="progress" for="submitEndereco"></label>
+                        <input type="text" class="form-control" id="submitEndereco" placeholder="Endereço:" maxlength="100" value="" onchange="changer()">
+                      </div>
+        
+                      <div class="form-group col-md-2">
+                        <label class="progress" for="submitNumero"></label>
+                        <input type="text" class="form-control" id="submitNumero" placeholder="Número:" maxlength="10" value="" onchange="changer()">
+                      </div>
+        
+                      <div class="form-group col-md-4">
+                        <label class="progress" for="submitBairro"></label>
+                        <input type="text" class="form-control" id="submitBairro" placeholder="Bairro:" maxlength="100" value="" onchange="changer()">
+                      </div>
+        
+                      <div class="form-group col-md-1">
+                        <label class="progress" for="submitUF"></label>
+                        <select type="text" class="form-control" id="submitUF" value="" onchange="changer()">
+                          <p id="estados"></p>
+                        </select>
+                      </div>
+        
+                      <div class="form-group col-md-5">
+                        <label class="progress" for="submitNomeMun"></label>
+                        <select type="text" class="form-control" id="submitNomeMun" value="" onchange="changer()">
+                          <p id="municipios"></p>
+                        </select>
+                      </div>
+        
+                      <div class="form-group col-md-6">
+                        <label class="progress" for="submitObs"></label>
+                        <input type="text" class="form-control" id="submitObs" placeholder="Observação:" maxlength="1000" value="" onchange="changer()">
+                      </div>
 
-              <div class="form-group col-md-10">
-                <label for="submitEndereco">Endereço:</label>
-                <input type="text" class="form-control" id="submitEndereco" maxlength="100" value="" onchange="changer()">
-              </div>
+                      <div style= "width:100%; text-align: right;" class="row">
+                        <div class="col-sm-12"><button style="background-color:#3a3a3a" type="button" class="btn btn-primary" onclick="enviar()" >Salvar</button></div>
+                      </div>
+                </div>
+                
+              </form>
+            </div>
+				</div>
+				
+			  
+			</div>  	
+			
+			</div>
+			<!-- <include data="menu.html"></include> -->
+			<div >   
+					<script height="100%" width="100%" src="Js/menu.js"></script>	
+			</div>
+		</section> <!-- cd-intro -->
+		
+		<body>
+				
 
-              <div class="form-group col-md-2">
-                <label for="submitNumero">Número:</label>
-                <input type="text" class="form-control" id="submitNumero" maxlength="10" value="" onchange="changer()">
-              </div>
+	</main>
+	
+	
 
-              <div class="form-group col-md-7">
-                <label for="submitBairro">Bairro:</label>
-                <input type="text" class="form-control" id="submitBairro" maxlength="100" value="" onchange="changer()">
-              </div>
-
-              <div class="form-group col-md-5">
-                <label for="submitCEP">CEP:</label>
-                <input type="text" class="form-control" id="submitCEP" maxlength="9" OnKeyPress="formatar('#####-###', this)" value="" onchange="changer()">
-              </div>
-
-              <div class="form-group col-md-2">
-                <label for="submitUF">UF:</label>
-                <select type="text" class="form-control" id="submitUF" value="" onchange="changer()">
-                  <p id="estados"></p>
-                </select>
-              </div>
-
-              <div class="form-group col-md-10">
-                <label for="submitNomeMun">Nome do Município:</label>
-                <select type="text" class="form-control" id="submitNomeMun" value="" onchange="changer()">
-                  <p id="municipios"></p>
-                </select>
-              </div>
-
-              <div class="form-group col-md-12">
-                <label for="submitObs">Observação:</label>
-                <input type="text" class="form-control" id="submitObs"  maxlength="1000" value="" onchange="changer()">
-              </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12"><button type="button" class="btn btn-primary" onclick="enviar()" >Salvar</button></div>
-        </div>
-      </form>
-    </div>
-  </div>
-
-<script src="criarEntidade.js"></script>
-
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="Js/main.js"></script> <!-- Resource jQuery -->
 </body>
-
 </html>
