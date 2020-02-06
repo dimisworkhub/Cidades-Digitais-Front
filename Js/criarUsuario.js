@@ -14,6 +14,7 @@ info.senha = y.value;
 }
 
 function envio(){
+
   //pega o token do login
   let meuToken = sessionStorage.getItem("Token");
 
@@ -21,7 +22,7 @@ function envio(){
   let corpo = JSON.stringify(info);
 
   //função fetch para mandar
-  fetch('http://localhost:8080/read/', {
+  fetch('http://localhost:8080/read/usuario/createuser', {
     method: 'POST',
     body: corpo,
     headers: {'Authorization': 'Bearer ' + meuToken},
@@ -32,19 +33,19 @@ function envio(){
 
     //tratamento dos erros
     if(response.status == 200){
-      window.location.replace("./menu.html");
+      window.location.replace("./home.html");
     }
     else if(response.status ==201){
       alert("Usuário criado com sucesso");
-      window.location.replace("./menu.html");
+      window.location.replace("./home.html");
     }
     else if(response.status == 202){
       alert("Login efetivado com sucesso");
-      window.location.replace("./menu.html");
+      window.location.replace("./home.html");
     }
     else if(response.status ==204){
       alert("Apagado com sucesso.");
-      window.location.replace("./menu.html");
+      window.location.replace("./home.html");
     }
     else if(response.status ==400){
       window.location.replace("./errors/400.html");
@@ -62,6 +63,7 @@ function envio(){
       alert("Erro: Usuário já existente.");
     }
     else if(response.status == 412){
+      
       //no caso a senha
       alert("Erro: Informação colocada é incorreta.");
     }
@@ -77,8 +79,8 @@ function envio(){
     else{
       alert("ERRO DESCONHECIDO");
     }
-    return response.json();
-  }).then(function(response){
+    return response.json().then(function(response){
     console.log(response)
+    });
   });
 }
