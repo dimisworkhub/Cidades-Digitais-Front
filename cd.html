@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Entidade</title>
+    <title>Tabela</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -28,7 +28,7 @@
             <div class="table-title">
                 <div class="row">
                     <div class="col-sm-4">
-                        <h2>Tabela <b>Entidade</b></h2>
+                        <h2>Tabela <b>Cidades Digitais</b></h2>
                     </div>
                     <div class="col-sm-8">
                         <a href="#" class="btn btn-primary"><i class="material-icons">&#xE863;</i> <span>Atualizar
@@ -38,6 +38,7 @@
                             class="material-icons">&#xE15C;</i> <span>Deletar</span></a>
                         <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i
                                 class="material-icons">&#xE147;</i> <span>Adicionar</span></a>
+                        
                     </div>
                 </div>
             </div>
@@ -83,15 +84,12 @@
                                 <input type="checkbox" id="selectAll">
                                 <label for="selectAll"></label>
                             </span></th>
-                        <th>CNPJ</th>
-                        <th>Nome</th>
-                        <th>Endereço</th>
-                        <th>Número</th>
-                        <th>Bairro</th>
-                        <th>CEP</th>
-                        <th>UF</th>
+                        <th>Código IBGE do Município</th>
                         <th>Município</th>
-                        <th>Observações</th>
+                        <th>Código Lote</th>
+                        <th>O.S. Projeto Executivo</th>
+                        <th>O.S. Implementação</th>
+                        <th>Data de Implementação</th>
                         <th>Acao</th>
                     </tr>
                 </thead>
@@ -104,15 +102,12 @@
                                 <label for="checkbox1"></label>
                             </span>
                         </td>
+                        <td>1</td>
                         <td>45.829.798/0001-17</td>
-                        <td><a href="#">Levi e Pietra Financeira ME</a></td>
-                        <td>Rua Jacira Bertoldi Antonioli</td>
-                        <td>12</td>
-                        <td>Saltinho</td>
-                        <td>13145-547</td>
-                        <td>SP</td>
-                        <td>Paulínia</td>
-                        <td>Saltinho</td>
+                        <td>2020NE1</td>
+                        <td>23/10/2000</td>
+                        <td>23/10/2085</td>
+                        <td>2090</td>
                         <td> <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons"
                                     data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                             <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons"
@@ -125,15 +120,12 @@
                                 <label for="checkbox1"></label>
                             </span>
                         </td>
+                        <td>2</td>
                         <td>50.340.170/0001-93</td>
-                        <td><a href="#">Luan e Carlos Pães e Doces Ltda</a></td>
-                        <td>Quadra Quadra 5 Conjunto B</td>
-                        <td>44</td>
-                        <td>Setor Sul (Gama)</td>
-                        <td>72410-302</td>
-                        <td>DF</td>
-                        <td>Brasilia</td>
-                        <td>Santinho</td>
+                        <td>2020NE2</td>
+                        <td>12/04/1986</td>
+                        <td>10/11/1991</td>
+                        <td>2000</td>
                         <td> <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons"
                                     data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                             <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons"
@@ -148,46 +140,34 @@
                     <div class="modal-content">
                         <form>
                             <div class="modal-header">
-                                <h4 class="modal-title">Adicionar Entidade</h4>
+                                <h4 class="modal-title">Adicionar Cidades Digitais</h4>
                                 <button type="button" class="close" data-dismiss="modal"
                                     aria-hidden="true">&times;</button>
                             </div>
                             <div class="modal-body">
                                 <div class="form-group">
+                                    <label>Código de Lote</label>
+                                    <input name="cod_lote" type="number" class="form-control" required>
+                                </div>
+                                <div class="form-group">
                                     <label>CNPJ</label>
                                     <input name="cnpj" type="text" class="form-control" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Name</label>
-                                    <input name="nome" type="text" class="form-control" required>
+                                    <label>Contrato</label>
+                                    <input name="contrato" type="text" class="form-control" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Endereço</label>
-                                    <textarea name="endereco" class="form-control" required></textarea>
+                                    <label>Data de Inicio</label>
+                                    <input name="dt_inicio_vig" type="date" class="form-control" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Numero</label>
-                                    <input name="numero" type="text" class="form-control" required>
+                                    <label>Data Final</label>
+                                    <input name="dt_final_vig" type="date" class="form-control" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Bairro</label>
-                                    <input name="bairro" type="text" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>CEP</label>
-                                    <input name="cep" type="text" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>UF</label>
-                                    <input name="uf" type="text" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Município</label>
-                                    <input name="nome_municipio" type="text" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Observações</label>
-                                    <textarea name="observacao" class="form-control" required></textarea>
+                                    <label>Data de Reajuste</label>
+                                    <input name="dt_reajuste" type="text" class="form-control" required>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -204,46 +184,34 @@
                     <div class="modal-content">
                         <form>
                             <div class="modal-header">
-                                <h4 class="modal-title">Editar Entidade</h4>
+                                <h4 class="modal-title">Editar Cidades Digitais</h4>
                                 <button type="button" class="close" data-dismiss="modal"
                                     aria-hidden="true">&times;</button>
                             </div>
                             <div class="modal-body">
                                 <div class="form-group">
+                                    <label>Código de Lote</label>
+                                    <input name="cod_lote" value="" type="number" class="form-control" required>
+                                </div>
+                                <div class="form-group">
                                     <label>CNPJ</label>
                                     <input name="cnpj" value="" type="text" class="form-control" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Name</label>
-                                    <input name="nome" value="" type="text" class="form-control" required>
+                                    <label>Contrato</label>
+                                    <input name="contrato" type="text" value="" class="form-control" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Endereço</label>
-                                    <textarea name="endereco" value="" class="form-control" required></textarea>
+                                    <label>Data de Inicio</label>
+                                    <input name="dt_inicio_vig" value="" type="date" class="form-control" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Numero</label>
-                                    <input name="numero" value="" type="text" class="form-control" required>
+                                    <label>Data Final</label>
+                                    <input name="dt_final_vig" value="" type="date" class="form-control" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Bairro</label>
-                                    <input name="bairro" value="" type="text" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>CEP</label>
-                                    <input name="cep" value="" type="text" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>UF</label>
-                                    <input name="uf" value="" type="text" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Município</label>
-                                    <input name="nome_municipio" value="" type="text" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Observações</label>
-                                    <textarea name="observacao" value="" class="form-control" required></textarea>
+                                    <label>Data de Reajuste</label>
+                                    <input name="dt_reajuste" value="" type="text" class="form-control" required>
                                 </div>
                             </div>
                             <div class="modal-footer">
