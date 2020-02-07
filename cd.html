@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Tabela</title>
+    <title>Cidades Digitais</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -24,14 +24,14 @@
 <body>
     <main id="cd-main-content">
             <section id="cd-intro"><!--imagem de fundo-->
-                <div class="row" >
-                    <div class="container">
+                    <div class="row" >
+                        <div class="container">
                             <div class="table-wrapper">
                                 <!--Header-->
                                 <div class="table-title">
                                     <div class="row">
                                         <div class="col-sm-4">
-                                            <h2>Tabela <b>Lote</b></h2>
+                                            <h2>Tabela <b>Cidades Digitais</b></h2>
                                         </div>
                                         <div class="col-sm-8">
                                             <a href="#" class="btn btn-primary"><i class="material-icons">&#xE863;</i> <span>Atualizar
@@ -87,12 +87,13 @@
                                                     <input type="checkbox" id="selectAll">
                                                     <label for="selectAll"></label>
                                                 </span></th>
-                                            <th>Lote</th>
-                                            <th>CNPJ</th>
-                                            <th>Contrato</th>
-                                            <th>Data de Inicio</th>
-                                            <th>Data Final</th>
-                                            <th>Data de Reajuste</th>
+                                            <th>Código IBGE do Município</th>
+                                            <th>Município</th>
+                                            <th>Código Lote</th>
+                                            <th>O.S. Projeto Executivo</th>
+                                            <th>Data de Projeto Executivo</th>
+                                            <th>O.S. Implementação</th>
+                                            <th>Data de Implementação</th>
                                             <th>Acao</th>
                                         </tr>
                                     </thead>
@@ -105,13 +106,14 @@
                                                     <label for="checkbox1"></label>
                                                 </span>
                                             </td>
-                                            <td>1</td>
-                                            <td>45.829.798/0001-17</td>
-                                            <td>2020NE1</td>
-                                            <td>23/10/2000</td>
-                                            <td>23/10/2085</td>
-                                            <td>2090</td>
-                                            <td> <a href="gerenciaLote.html"><i class="material-icons"
+                                            <td>1200013</td>
+                                            <td>Acrelândia - AC	</td>
+                                            <td>3</td>
+                                            <td>10/2017</td>
+                                            <td>2018</td>
+                                            <td>5/2017</td>
+                                            <td>2020</td>
+                                            <td> <a href="gerenciaCd.html"><i class="material-icons"
                                                         data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                                                 <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons"
                                                         data-toggle="tooltip" title="Delete">&#xE872;</i></a></td>
@@ -123,13 +125,14 @@
                                                     <label for="checkbox1"></label>
                                                 </span>
                                             </td>
-                                            <td>2</td>
-                                            <td>50.340.170/0001-93</td>
-                                            <td>2020NE2</td>
-                                            <td>12/04/1986</td>
-                                            <td>10/11/1991</td>
-                                            <td>2000</td>
-                                            <td> <a href="gerenciaLote.html"><i class="material-icons"
+                                            <td>4101101</td>
+                                            <td>Andirá - PR	</td>
+                                            <td>1</td>
+                                            <td>7/2015</td>
+                                            <td>2018</td>
+                                            <td>10/2016</td>
+                                            <td>2018</td>
+                                            <td> <a href="gerenciaCd.html"><i class="material-icons"
                                                         data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                                                 <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons"
                                                         data-toggle="tooltip" title="Delete">&#xE872;</i></a></td>
@@ -137,46 +140,47 @@
                                         
                                     </tbody>
                                 </table>
-                            </section> <!-- cd-intro -->
+
+                </section> <!-- cd-intro -->
 		
-                        </div>
-                    </div>
-                </main>
+            </div>
+        </div>
+    </main>
                                 <!-- ADD Modal HTML -->
                                 <div id="addEmployeeModal" class="modal fade">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <form>
                                                 <div class="modal-header">
-                                                    <h4 class="modal-title">Adicionar Lote</h4>
+                                                    <h4 class="modal-title">Adicionar Cidades Digitais</h4>
                                                     <button type="button" class="close" data-dismiss="modal"
                                                         aria-hidden="true">&times;</button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <div class="form-group">
-                                                        <label>Código de Lote</label>
-                                                        <input name="cod_lote" type="number" class="form-control" required>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>CNPJ</label>
-                                                        <input name="cnpj" type="text" class="form-control" required>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Contrato</label>
-                                                        <input name="contrato" type="text" class="form-control" required>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Data de Inicio</label>
-                                                        <input name="dt_inicio_vig" type="date" class="form-control" required>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Data Final</label>
-                                                        <input name="dt_final_vig" type="date" class="form-control" required>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Data de Reajuste</label>
-                                                        <input name="dt_reajuste" type="text" class="form-control" required>
-                                                    </div>
+                                                        <div class="form-group">
+                                                            <label>Código IBGE</label>
+                                                            <input name="cod_ibge" type="number" class="form-control" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Código de Lote</label>
+                                                            <input name="cod_lote" type="number" class="form-control" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>O.S. Projeto Executivo</label>
+                                                            <input name="os_pe" type="text" class="form-control" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Data de Projeto Executivo</label>
+                                                            <input name="data_pe" type="date" class="form-control" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>O.S. Implementação</label>
+                                                            <input name="os_imp" type="text" class="form-control" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Data de Implementação</label>
+                                                            <input name="data_imp" type="date" class="form-control" required>
+                                                        </div>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
@@ -192,34 +196,34 @@
                                         <div class="modal-content">
                                             <form>
                                                 <div class="modal-header">
-                                                    <h4 class="modal-title">Editar Lote</h4>
+                                                    <h4 class="modal-title">Editar Cidades Digitais</h4>
                                                     <button type="button" class="close" data-dismiss="modal"
                                                         aria-hidden="true">&times;</button>
                                                 </div>
                                                 <div class="modal-body">
                                                     <div class="form-group">
+                                                        <label>Código IBGE</label>
+                                                        <input name="cod_ibge" value="" type="number" class="form-control" required>
+                                                    </div>
+                                                    <div class="form-group">
                                                         <label>Código de Lote</label>
                                                         <input name="cod_lote" value="" type="number" class="form-control" required>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label>CNPJ</label>
-                                                        <input name="cnpj" value="" type="text" class="form-control" required>
+                                                        <label>O.S. Projeto Executivo</label>
+                                                        <input name="os_pe" value="" type="text" class="form-control" required>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label>Contrato</label>
-                                                        <input name="contrato" type="text" value="" class="form-control" required>
+                                                        <label>Data de Projeto Executivo</label>
+                                                        <input name="data_pe" value="" type="date" class="form-control" required>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label>Data de Inicio</label>
-                                                        <input name="dt_inicio_vig" value="" type="date" class="form-control" required>
+                                                        <label>O.S. Implementação</label>
+                                                        <input name="os_imp" type="text" value="" class="form-control" required>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label>Data Final</label>
-                                                        <input name="dt_final_vig" value="" type="date" class="form-control" required>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Data de Reajuste</label>
-                                                        <input name="dt_reajuste" value="" type="text" class="form-control" required>
+                                                        <label>Data de Implementação</label>
+                                                        <input name="data_imp" value="" type="date" class="form-control" required>
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
@@ -271,7 +275,6 @@
                         <div class="fixed-bottom" >   
                             <script height="100%" width="100%" src="/home/mctic/go/src/Cidades-Digitais-Front/Js/menu.js"></script>	
                     </div>
-                
 </body>
 <script type="text/javascript">
     $(document).ready(function () {
