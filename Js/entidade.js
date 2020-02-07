@@ -52,8 +52,12 @@ window.onload=function(){
       //pegar o json que possui a tabela
       return response.json().then(function(json){
         console.log(json);
-        let tabela = (`<thead class="thead-dark">
+        let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
+          <th> <span class="custom-checkbox">
+          <input type="checkbox" id="selectAll">
+          <label for="selectAll"></label>
+          </span></th>
           <th scope="col">CNPJ</th>
           <th scope="col">Nome</th>
           <th scope="col">Endereço</th>
@@ -66,8 +70,14 @@ window.onload=function(){
           <th scope="col">Opções</th>
           </tr>
           </thead>`);
-        tabela += (`<tbody style="background-color: #ffffff;" class="display: inline-block;  margin:0;"> <tr>`);
+        tabela += (`<tbody> <tr>`);
         for(let i=0;i<json.length;i++){
+        tabela += (`<td>
+                    <span class="custom-checkbox">
+                    <input type="checkbox" id="checkbox1" name="options[]" value="1">
+                    <label for="checkbox1"></label>
+                    </span>
+                    </td>`);
         tabela += (`<td>`);
         tabela += json[i]["cnpj"]; 
         tabela += (`</td> <td>`);
@@ -89,8 +99,10 @@ window.onload=function(){
         tabela += (`</td>
                   <td> 
 					        <span class="d-flex">
-						      <a href="http://localhost:8080/read/entidade/cnpj" class="btn btn-warning mr-1">Editar</a>
-						      <button onclick="apagarDados()" class="btn btn-danger">Excluir</button> 
+						      <a href="./gerenciaEntidade.html" class="btn btn-warning mr-1"><i class="material-icons"
+                  data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+						      <button onclick="apagarDados()" class="btn btn-danger"><i class="material-icons"
+                  data-toggle="tooltip" title="Delete">&#xE872;</i></button> 
                   </span>
                   </td>`);
         tabela += (`</tr><tr>`);          
