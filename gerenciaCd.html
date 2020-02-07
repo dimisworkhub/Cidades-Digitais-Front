@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gerencia Cidades Digitais</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="bootstrap4\css\bootstrap.css"> <!-- CSS bootstrap -->
+	<link rel="stylesheet" href="css/reset.css"> <!-- CSS reset -->
+	<link rel="stylesheet" href="css/style.css"> <!--Resource style -->
+    <link rel="stylesheet" href="./css/style2.css">
+    <script src="Js/modernizr.js"></script> <!-- Modernizr -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+
+</head>
+
+<body>
+    <main id="cd-main-content">
+        <section id="cd-intro"><!--imagem de fundo-->
+                <div class="row" >
+                    <div class="container">
+                        <div class="table-wrapper">
+                            <!--Header-->
+                            <div class="table-title">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <h2 class="text-align:center">Gerencia <b>Cidades Digitais</b></h2>
+                                    </div>
+                                    <!-- <div class="col-sm-8">
+                                            <a href="#" class="btn btn-primary"><i class="material-icons">&#xE863;</i> <span>Atualizar
+                                                    Lista
+                                                </span></a>
+                                            <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i
+                                                class="material-icons">&#xE15C;</i> <span>Lote</span></a>
+                                            <a href="#addContatoModal" class="btn btn-success" data-toggle="modal"><i
+                                                class="material-icons">&#xE147;</i> <span>Contato</span></a>
+                                        </div> -->
+                                </div>
+                            </div>
+                            <!--Filtro-->
+                            <!-- <div class="table-filter">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <div class="show-entries">
+                                            <span>Mostrando</span>
+                                            <select class="form-control">
+                                                <option>5</option>
+                                                <option>10</option>
+                                                <option>15</option>
+                                                <option>20</option>
+                                            </select>
+                                            <span>Itens</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <button type="button" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                                        <div class="filter-group">
+                                            <label>Nome</label>
+                                            <input type="text" class="form-control">
+                                        </div>
+
+                                        <div class="filter-group">
+                                            <label>Status</label>
+                                            <select class="form-control">
+                                                <option>Todos</option>
+                                                <option>Ativo</option>
+                                                <option>Inativo</option>
+                                            </select>
+                                        </div>
+                                        <span class="filter-icon"><i class="fa fa-filter"></i></span>
+                                    </div>
+                                </div>
+                            </div> -->
+                            <!--Table header-->
+                            <form enctype='application/json'>
+                                <div class="form-row" style=" padding: 30px;">
+
+                                    <div class="form-group col-md-5">
+                                        <label class="progress" for="submitCod_ibge"></label>
+                                        <input type="text" class="form-control" id="submitCod_ibge" placeholder="Código IBGE:" maxlength="19" value="" onchange="changer()">
+                                    </div>
+                                    
+                                    <div class="form-group col-md-5">
+                                        <label class="progress" for="submitCod_lote"></label>
+                                        <input type="text" class="form-control" id="submitCod_lote" placeholder="Código do Lote:" maxlength="19" value="" onchange="changer()">
+                                    </div>
+                                
+                                
+                                    <div class="form-group col-md-3">
+                                        <label class="progress" for="submitOs_pe"></label>
+                                        <input type="text" class="form-control" id="submitOs_pe" placeholder="O.S. Projeto Executivo:" maxlength="9"  value="" onchange="changer()">
+                                    </div>
+            
+                                    <div class="form-group col-md-3">
+                                        <label class="progress" for="submitData_pe"></label>
+                                        <input type="text" class="form-control" id="submitData_pe" placeholder="Data de Projeto Executivo:" maxlength="100" value="" onchange="changer()">
+                                    </div>
+                    
+                                    <div class="form-group col-md-3">
+                                        <label class="progress" for="submitOs_imp"></label>
+                                        <input type="text" class="form-control" id="submitOs_imp" placeholder="O.S. Implementação:" maxlength="9"  value="" onchange="changer()">
+                                    </div>
+                    
+                                    <div class="form-group col-md-3">
+                                        <label class="progress" for="submitData_imp"></label>
+                                        <input type="text" class="form-control" id="submitData_imp" placeholder="Data de Implementação:" maxlength="100" value="" onchange="changer()">
+                                    </div>
+                    
+                                    
+            
+                                    <div style= "width:100%; text-align: center;">
+                                        <div class="col-sm-12"><button style="background-color:#3a3a3a" type="button" class="btn btn-primary" onclick="enviar()" >Salvar</button>
+                                    </div>
+                                    <div class="p-5" style= "width:150vh">
+                                        <a href="#ponto" class="btn btn-success" data-toggle="modal"><i
+                                            class="material-icons">&#xE147;</i> <span>Ponto</span></a>
+                                        <a href="#itens" class="btn btn-success" data-toggle="modal"><i
+                                            class="material-icons">&#xE147;</i> <span>Itens</span></a>
+                                        <a href="#previsaoEmpenho" class="btn btn-success" data-toggle="modal"><i
+                                            class="material-icons">&#xE147;</i> <span>Previsao de Empenho</span></a>
+                                        <a href="#empenho" class="btn btn-success" data-toggle="modal"><i
+                                            class="material-icons">&#xE147;</i> <span>Empenho</span></a>
+                                        <a href="#pagamento" class="btn btn-success" data-toggle="modal"><i
+                                            class="material-icons">&#xE147;</i> <span>Pagamento</span></a>
+                                        <a href="#faturado" class="btn btn-success" data-toggle="modal"><i
+                                            class="material-icons">&#xE147;</i> <span>Faturado</span></a>
+                                        <a href="#glosa" class="btn btn-success" data-toggle="modal"><i
+                                            class="material-icons">&#xE147;</i> <span>Glosa</span></a>
+                                        <a href="#contatos" class="btn btn-success" data-toggle="modal"><i
+                                            class="material-icons">&#xE147;</i> <span>Contatos</span></a>
+                                        <a href="#processos" class="btn btn-success" data-toggle="modal"><i
+                                            class="material-icons">&#xE147;</i> <span>Processos</span></a>
+                                        <a href="#acompanhamento" class="btn btn-success" data-toggle="modal"><i
+                                            class="material-icons">&#xE147;</i> <span>Acompanhamento</span></a>
+                                                
+                                    </div>
+
+                                        
+                                    </div>
+                                </div>
+
+                                
+                            </form>
+
+                </section> <!-- cd-intro -->
+		
+            </div>
+        </div>
+    </main>
+                            <!-- ADD Contato HTML -->
+                            <div id="addContatoModal">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <form>
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Adicionar Contato</h4>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-hidden="true">&times;</button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label>Nome</label>
+                                                    <input name="nome" type="text" class="form-control" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>E-mail</label>
+                                                    <input name="email" type="text" class="form-control" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Função</label>
+                                                    <input name="funcao" type="text" class="form-control" required>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <input type="button" class="btn btn-danger" data-dismiss="modal" value="Cancelar">
+                                                <input style="background-color:#3a3a3a" type="submit" class="btn btn-success" value="Adicionar">
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fixed-bottom" >   
+                        <script height="100%" width="100%" src="/home/mctic/go/src/Cidades-Digitais-Front/Js/menu.js"></script>	
+                    </div>
+</body>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        // Select/Deselect checkboxes
+        var checkbox = $('table tbody input[type="checkbox"]');
+        $("#selectAll").click(function () {
+            if (this.checked) {
+                checkbox.each(function () {
+                    this.checked = true;
+                });
+            } else {
+                checkbox.each(function () {
+                    this.checked = false;
+                });
+            }
+        });
+        checkbox.click(function () {
+            if (!this.checked) {
+                $("#selectAll").prop("checked", false);
+            }
+        });
+    });
+</script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="Js/main.js"></script> <!-- Resource jQuery -->
+</html>
