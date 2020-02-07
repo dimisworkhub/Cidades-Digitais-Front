@@ -18,10 +18,10 @@ a.html:
 
 <html> 
   <head> 
-    <script src="jquery.js"></script> 
+    <script src="jquery.js"></script>
     <script> 
     $(function(){
-      $("#includedContent").load("b.html"); 
+      $("#includedContent").load("b.html");
     });
     </script> 
   </head> 
@@ -48,54 +48,22 @@ document.write('</center>');
 
 <!--<img src="http://cidadesdigitais.c3sl.ufpr.br/wp-content/uploads/sites/6/2018/04/marca-01.png" class="img-responsive" style="width:50%;"/>-->
 
-  <!DOCTYPE html>
-
+<!DOCTYPE html>
 <html>
-
-<title>Testes</title>
-
- <head>
-<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-</head>
-
 <body>
 
-    <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr id="lista">
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td>Larry</td>
-            <td>the Bird</td>
-            <td>@twitter</td>
-          </tr>
-        </tbody>
-      </table>
-      
-      <center>
-        <button type="button" class="btn btn-primary" onclick="">Apagar Entidade</button>
-      </center>
+<p>List all array items, with keys and values:</p>
+
+<p id="demo"></p>
+
+<script>
+var fruits = ["apple", "orange", "cherry"];
+fruits.forEach(myFunction);
+
+function myFunction(item) {
+  document.getElementById("demo").innerHTML += item + "<br>"; 
+}
+</script>
 
 </body>
-
 </html>

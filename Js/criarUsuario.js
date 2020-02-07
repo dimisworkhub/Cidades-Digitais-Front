@@ -63,7 +63,6 @@ function envio(){
       alert("Erro: Usuário já existente.");
     }
     else if(response.status == 412){
-      
       //no caso a senha
       alert("Erro: Informação colocada é incorreta.");
     }
