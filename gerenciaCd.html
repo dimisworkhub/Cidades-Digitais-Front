@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Gerencia Entidade</title>
+    <title>Gerencia Cidades Digitais</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -31,7 +31,7 @@
                             <div class="table-title">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        <h2 class="text-align:center">Gerencia <b>Entidade</b></h2>
+                                        <h2 class="text-align:center">Gerencia <b>Cidades Digitais</b></h2>
                                     </div>
                                     <!-- <div class="col-sm-8">
                                             <a href="#" class="btn btn-primary"><i class="material-icons">&#xE863;</i> <span>Atualizar
@@ -81,66 +81,66 @@
                             <!--Table header-->
                             <form enctype='application/json'>
                                 <div class="form-row" style=" padding: 30px;">
-                                        
-                                        <div class="form-group col-md-4">
-                                            <label class="progress" for="submitCNPJ"></label>
-                                            <input type="text" class="form-control" id="submitCNPJ" placeholder="CNPJ:" maxlength="19" OnKeyPress="formatar('##.###.###/####-##', this)" value="" onchange="changer()">
-                                        </div>
 
-                                        <div class="form-group col-md-8">
-                                            <label class="progress" for="submitNome"></label>
-                                            <input type="text" class="form-control" id="submitNome" placeholder="Nome:" maxlength="50" value="" onchange="changer()">
-                                        </div>
-                                        
+                                    <div class="form-group col-md-5">
+                                        <label class="progress" for="submitCod_ibge"></label>
+                                        <input type="text" class="form-control" id="submitCod_ibge" placeholder="Código IBGE:" maxlength="19" value="" onchange="changer()">
+                                    </div>
                                     
-                                        <div class="form-group col-md-3">
-                                        <label class="progress" for="submitCEP"></label>
-                                        <input type="text" class="form-control" id="submitCEP" placeholder="CEP:" maxlength="9" OnKeyPress="formatar('#####-###', this)" value="" onchange="changer()">
-                                        </div>
-                
-                                        <div class="form-group col-md-6">
-                                        <label class="progress" for="submitEndereco"></label>
-                                        <input type="text" class="form-control" id="submitEndereco" placeholder="Endereço:" maxlength="100" value="" onchange="changer()">
-                                        </div>
-                        
-                                        <div class="form-group col-md-3">
-                                        <label class="progress" for="submitNumero"></label>
-                                        <input type="text" class="form-control" id="submitNumero" placeholder="Número:" maxlength="10" value="" onchange="changer()">
-                                        </div>
-                        
-                                        <div class="form-group col-md-5">
-                                        <label class="progress" for="submitBairro"></label>
-                                        <input type="text" class="form-control" id="submitBairro" placeholder="Bairro:" maxlength="100" value="" onchange="changer()">
-                                        </div>
-                        
-                                        <div class="form-group col-md-2">
-                                        <label class="progress" for="submitUF"></label>
-                                        <select type="text" class="form-control" id="submitUF" value="" onchange="changer()">
-                                            <p id="estados"></p>
-                                        </select>
-                                        </div>
-                        
-                                        <div class="form-group col-md-5">
-                                        <label class="progress" for="submitNomeMun"></label>
-                                        <select type="text" class="form-control" id="submitNomeMun" value="" onchange="changer()">
-                                            <p id="municipios"></p>
-                                        </select>
-                                        </div>
-                        
-                                        <div class="form-group col-md-12">
-                                        <label class="progress" for="submitObs"></label>
-                                        <textarea type="text" class="form-control" id="submitObs" placeholder="Observação:" maxlength="1000" value="" onchange="changer()"></textarea>
-                                        </div>
-                
-                                        <div style= "width:100%; text-align: center;">
-                                            <div class="col-sm-12"><button style="background-color:#3a3a3a" type="button" class="btn btn-primary" onclick="enviar()" >Salvar</button>
-                                        </div>
-                                        <div class="p-5" style= "width:65%; text-align: center;">
-                                            <a href="#deleteEmployeeModal" class="btn btn-success" data-toggle="modal"><i
-                                                class="material-icons">&#xE147;</i> <span>Lote</span></a>
-                                            <a href="#addContatoModal" class="btn btn-success" data-toggle="modal"><i
-                                                class="material-icons">&#xE147;</i> <span>Contato</span></a>
-                                        </div>
+                                    <div class="form-group col-md-5">
+                                        <label class="progress" for="submitCod_lote"></label>
+                                        <input type="text" class="form-control" id="submitCod_lote" placeholder="Código do Lote:" maxlength="19" value="" onchange="changer()">
+                                    </div>
+                                
+                                
+                                    <div class="form-group col-md-3">
+                                        <label class="progress" for="submitOs_pe"></label>
+                                        <input type="text" class="form-control" id="submitOs_pe" placeholder="O.S. Projeto Executivo:" maxlength="9"  value="" onchange="changer()">
+                                    </div>
+            
+                                    <div class="form-group col-md-3">
+                                        <label class="progress" for="submitData_pe"></label>
+                                        <input type="text" class="form-control" id="submitData_pe" placeholder="Data de Projeto Executivo:" maxlength="100" value="" onchange="changer()">
+                                    </div>
+                    
+                                    <div class="form-group col-md-3">
+                                        <label class="progress" for="submitOs_imp"></label>
+                                        <input type="text" class="form-control" id="submitOs_imp" placeholder="O.S. Implementação:" maxlength="9"  value="" onchange="changer()">
+                                    </div>
+                    
+                                    <div class="form-group col-md-3">
+                                        <label class="progress" for="submitData_imp"></label>
+                                        <input type="text" class="form-control" id="submitData_imp" placeholder="Data de Implementação:" maxlength="100" value="" onchange="changer()">
+                                    </div>
+                    
+                                    
+            
+                                    <div style= "width:100%; text-align: center;">
+                                        <div class="col-sm-12"><button style="background-color:#3a3a3a" type="button" class="btn btn-primary" onclick="enviar()" >Salvar</button>
+                                    </div>
+                                    <div class="p-5" style= "width:150vh">
+                                        <a href="#ponto" class="btn btn-success" data-toggle="modal"><i
+                                            class="material-icons">&#xE147;</i> <span>Ponto</span></a>
+                                        <a href="#itens" class="btn btn-success" data-toggle="modal"><i
+                                            class="material-icons">&#xE147;</i> <span>Itens</span></a>
+                                        <a href="#previsaoEmpenho" class="btn btn-success" data-toggle="modal"><i
+                                            class="material-icons">&#xE147;</i> <span>Previsao de Empenho</span></a>
+                                        <a href="#empenho" class="btn btn-success" data-toggle="modal"><i
+                                            class="material-icons">&#xE147;</i> <span>Empenho</span></a>
+                                        <a href="#pagamento" class="btn btn-success" data-toggle="modal"><i
+                                            class="material-icons">&#xE147;</i> <span>Pagamento</span></a>
+                                        <a href="#faturado" class="btn btn-success" data-toggle="modal"><i
+                                            class="material-icons">&#xE147;</i> <span>Faturado</span></a>
+                                        <a href="#glosa" class="btn btn-success" data-toggle="modal"><i
+                                            class="material-icons">&#xE147;</i> <span>Glosa</span></a>
+                                        <a href="#contatos" class="btn btn-success" data-toggle="modal"><i
+                                            class="material-icons">&#xE147;</i> <span>Contatos</span></a>
+                                        <a href="#processos" class="btn btn-success" data-toggle="modal"><i
+                                            class="material-icons">&#xE147;</i> <span>Processos</span></a>
+                                        <a href="#acompanhamento" class="btn btn-success" data-toggle="modal"><i
+                                            class="material-icons">&#xE147;</i> <span>Acompanhamento</span></a>
+                                                
+                                    </div>
 
                                         
                                     </div>
@@ -155,7 +155,7 @@
         </div>
     </main>
                             <!-- ADD Contato HTML -->
-                            <div id="addContatoModal" class="modal fade">
+                            <div id="addContatoModal">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <form>
