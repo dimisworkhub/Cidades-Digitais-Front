@@ -40,17 +40,15 @@
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 						</div>
 						<div class="modal-body">
-							<form action="/examples/actions/confirmation.php" method="post">
+							<form enctype='application/json'>
 								<div class="form-group">
-									<input type="text" class="form-control" name="username" placeholder="Login"
-										required="required">
+									<input type="text" class="form-control" placeholder="Login" id="submitLogin"  onchange="changer()" required>
 								</div>
 								<div class="form-group">
-									<input type="password" class="form-control" name="password" placeholder="Senha"
-										required="required">
+									<input type="password" class="form-control" placeholder="Senha" id="submitSenha" minLenght="8" onchange="changer()" required>
 								</div>
 								<div class="form-group">
-									<button type="submit" class="btn btn-primary btn-lg btn-block login-btn">Login</button>
+									<button type="button" class="btn btn-primary btn-lg btn-block login-btn" onclick="entrar()">Login</button>
 								</div>
 							</form>
 						</div>
@@ -165,7 +163,7 @@
 		</section> <!-- #cd-placeholder-5 -->
 	
 	</main>
-
+	<script src="./Js/login.js"></script>
 </body>
 
 </html>
