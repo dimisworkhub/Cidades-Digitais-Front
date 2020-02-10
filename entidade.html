@@ -34,7 +34,7 @@
                                         <h2>Tabela <b>Entidade</b></h2>
                                     </div>
                                     <div class="col-sm-8">
-                                        <a href="#" class="btn btn-primary"><i class="material-icons">&#xE863;</i> <span>Atualizar
+                                        <a href="./entidade.html" class="btn btn-primary"><i class="material-icons">&#xE863;</i> <span>Atualizar
                                                 Lista
                                             </span></a>
                                         <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i
@@ -97,7 +97,7 @@
                                             <div class="modal-body">
                                                 <div class="form-group">
                                                     <label>CNPJ</label>
-                                                    <input name="cnpj" type="text" class="form-control" required>
+                                                    <input name="cnpj" type="text" class="form-control" id="submitCNPJ" placeholder="CNPJ:" maxlength="19" OnKeyPress="formatar('##.###.###/####-##', this)" value="" onchange="changer()" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Name</label>
@@ -134,7 +134,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
-                                                <input type="submit" class="btn btn-success" value="Adicionar">
+                                                <input type="submit" style="background-color: #3a3a3a;" class="btn btn-success" value="Adicionar">
                                             </div>
                                         </form>
                                     </div>
@@ -183,29 +183,6 @@
     <script height="100%" width="100%" src="./Js/menu.js"></script>	
 </div>
 <script src="./Js/entidade.js"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
-
-        // Select/Deselect checkboxes
-        var checkbox = $('table tbody input[type="checkbox"]');
-        $("#selectAll").click(function () {
-            if (this.checked) {
-                checkbox.each(function () {
-                    this.checked = true;
-                });
-            } else {
-                checkbox.each(function () {
-                    this.checked = false;
-                });
-            }
-        });
-        checkbox.click(function () {
-            if (!this.checked) {
-                $("#selectAll").prop("checked", false);
-            }
-        });
-    });
-</script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="./Js/main.js"></script> <!-- Resource jQuery -->
 

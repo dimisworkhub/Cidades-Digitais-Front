@@ -46,7 +46,7 @@ function entrar(){
       window.location.replace("./errors/400.html");
     }
     else if(response.status ==401){
-      window.location.replace("./errors/403.html");//fazer 401
+      window.location.replace("./errors/401.html");
     }
     else if(response.status ==403){
       window.location.replace("./errors/403.html");
