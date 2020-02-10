@@ -156,7 +156,7 @@ Main components
   left: 0;
   width: 100%;
   height: 100%;
-  background: url("../img/international-network-4k-wallpaper.jpg") no-repeat center center;
+  background-color: #f0eee1;
   background-size: cover;
   -webkit-filter: blur(4px);
   filter: blur(4px);
