@@ -34,7 +34,6 @@ window.onload=function(){
         console.log("Erro: Usuário já existente.");
       }
       else if(response.status == 412){
-        //no caso a senha
         console.log("Erro: Informação colocada é incorreta.");
       }
       else if(response.status == 422){
@@ -53,6 +52,7 @@ window.onload=function(){
       //pegar o json que possui a tabela
       return response.json().then(function(json){
         console.log(json);
+
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
           <th> <span class="custom-checkbox">
@@ -72,6 +72,9 @@ window.onload=function(){
           </tr>
           </thead>`);
         tabela += (`<tbody> <tr>`);
+
+
+
             for(let i=0;i<json.length;i++){
               cnpjQuery[i]=json[i]["cnpj"]; 
             tabela += (`<td>
@@ -109,34 +112,38 @@ window.onload=function(){
                       </span> </td>`);
             tabela += (`</tr> <tr>`);          
             }
-            tabela += (`</tr> </tbody>`);
-            document.getElementById("tabela").innerHTML= tabela;
+
+
+        tabela += (`</tr> </tbody>`);
+        document.getElementById("tabela").innerHTML= tabela;
             
-                $(document).ready(function () {
-                // Select/Deselect checkboxes
-                var checkbox = $('table tbody input[type="checkbox"]');
-                $("#selectAll").click(function () {
-                  if (this.checked) {
-                    checkbox.each(function () {
-                      this.checked = true;
-                    });
-                  }else {
-                    checkbox.each(function () {
-                      this.checked = false;
-                    });
-                  }
-                });
-                checkbox.click(function () {
-                  if (!this.checked) {
-                    $("#selectAll").prop("checked", false);
-                  }
-                });
+            $(document).ready(function () {
+            // Select/Deselect checkboxes
+            var checkbox = $('table tbody input[type="checkbox"]');
+            $("#selectAll").click(function () {
+              if (this.checked) {
+                checkbox.each(function () {
+                   this.checked = true;
+                 });
+              }else {
+                checkbox.each(function () {
+                  this.checked = false;
+                 });
+               }
+             });
+            checkbox.click(function () {
+              if (!this.checked) {
+                 $("#selectAll").prop("checked", false);
+              }
             });
+          });
+
+
         });
       });
 }
 
 function editarEntidade(valor){
-  sessionStorage.setItem("CNPJ", cnpjQuery[valor]);
+sessionStorage.setItem("CNPJ", cnpjQuery[valor]);
 window.location.href = "./gerenciaEntidade.html";
 }

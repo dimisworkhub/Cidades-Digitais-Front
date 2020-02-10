@@ -28,29 +28,31 @@ function formatar(mascara, documento){
   var texto = mascara.substring(i)
   
   if (texto.substring(0,1) != saida){
-            documento.value += texto.substring(0,1);
+    documento.value += texto.substring(0,1);
   }
   
 }
 
-function envio(){
+function enviar(){
 
   //pega o token do login
   let meuToken = sessionStorage.getItem("Token");
   //pega o CNPJ escolhido anteriormente
-  //let meuCNPJ = sessionStorage.getItem("CNPJ");
+  let meuCNPJ = sessionStorage.getItem("CNPJ");
+
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
 
   //função fetch para mandar
-  fetch('http://localhost:8080/read/entidade', {
-    method: 'EDIT',
+  fetch('http://localhost:8080/read/entidade/'+meuCNPJ, {
+    method: 'PUT',
     body: corpo,
     headers: {'Authorization': 'Bearer ' + meuToken},
   }).then(function(response){
 
     //checar o status do pedido
-    console.log(response.status);
+    console.log(response);
+
 
     //tratamento dos erros
     if(response.status == 200){
@@ -84,7 +86,6 @@ function envio(){
       alert("Erro: Usuário já existente.");
     }
     else if(response.status == 412){
-      //no caso a senha
       alert("Erro: Informação colocada é incorreta.");
     }
     else if(response.status == 422){
@@ -99,8 +100,8 @@ function envio(){
     else{
       alert("ERRO DESCONHECIDO");
     }
-    return response.json().then(function(response){
-    console.log(response)
+    return response.json().then(function(json){
+    console.log(json);
       });
     });
 }
@@ -146,16 +147,13 @@ window.onload=function(){
     else if(response.status ==403){
       window.location.replace("./errors/403.html");
     }
-
-    //remover comentação quando municipio for adcionado
-    //else if(response.status ==404){
-    //  window.location.replace("./errors/404.html");
-    //}
+    else if(response.status ==404){
+      window.location.replace("./errors/404.html");
+    }
     else if(response.status ==409){
       alert("Erro: Usuário já existente.");
     }
     else if(response.status == 412){
-      //no caso a senha
       alert("Erro: Informação colocada é incorreta.");
     }
     else if(response.status == 422){
@@ -217,16 +215,13 @@ window.onload=function(){
     else if(response.status ==403){
       window.location.replace("./errors/403.html");
     }
-
-    //remover comentação quando municipio for adcionado
-    //else if(response.status ==404){
-    //  window.location.replace("./errors/404.html");
-    //}
+    else if(response.status ==404){
+      window.location.replace("./errors/404.html");
+    }
     else if(response.status ==409){
       alert("Erro: Usuário já existente.");
     }
     else if(response.status == 412){
-      //no caso a senha
       alert("Erro: Informação colocada é incorreta.");
     }
     else if(response.status == 422){
@@ -242,7 +237,7 @@ window.onload=function(){
       alert("ERRO DESCONHECIDO");
     }
     return response.json().then(function(json){
-      for (let i=0;i<json.length;i++) {
+      for (let i=0;i<json.length;i++){
         x += "<option>" + response.nome_municipio[i] + "</option>"
       }
         document.getElementById("municipios").innerHTML = x;
