@@ -1,6 +1,6 @@
-//Fazer Tabela
+//capturar chave primaria
 let cnpjQuery=[];
-
+//Fazer Tabela
 window.onload=function(){
     //pega o token do login
     let meuToken = sessionStorage.getItem("Token");
