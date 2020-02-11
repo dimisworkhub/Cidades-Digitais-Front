@@ -72,39 +72,42 @@ window.onload=function(){
         tabela += (`<tbody> <tr>`);
 
             for(let i=0;i<json.length;i++){
-              loteQuery[i]=json[i]["cnpj"]; 
-              tabela += (`<td>
-              <span class="custom-checkbox">
-              <input type="checkbox" id="checkbox1" name="options[]" value="1">
-              <label for="checkbox1"></label>
-              </span>
-              </td>`);
-              tabela += (`<td>`);
-              tabela += json[i]["cod_lote"]; 
-              tabela += (`</td> <td>`);
-              tabela += json[i]["cnpj"]; 
-              tabela += (`</td> <td>`);
-              tabela += json[i]["contrato"];
-              tabela += (`</td> <td>`);
+                loteQuery[i]=json[i]["cnpj"]; 
+                tabela += (`<td>
+                <span class="custom-checkbox">
+                <input type="checkbox" id="checkbox1" name="options[]" value="1">
+                <label for="checkbox1"></label>
+                </span>
+                </td>`);
+                tabela += (`<td>`);
+                tabela += json[i]["cod_lote"]; 
+                tabela += (`</td> <td>`);
+                tabela += json[i]["cnpj"]; 
+                tabela += (`</td> <td>`);
+                tabela += json[i]["contrato"];
+                tabela += (`</td> <td>`);
+                let data1=json[i]["dt_inicio_vig"];
 
-              tabela += json[i]["dt_inicio_vig"];
-              tabela += (`</td> <td>`);
-                let data2=json[i]["dt_final_vig"]
-              tabela += data2;
-              tabela += (`</td> <td>`);
-              let data3=json[i]["dt_reajuste"];
-              tabela += data3;
-              tabela += (`</td> <td> 
-              <span class="d-flex">
-              <button onclick="editarLote(`+ i +`)" class="btn btn-success">
-              <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
-              </button>
-              <button onclick="apagarLote()" class="btn btn-danger">
-              <i class="material-icons"data-toggle="tooltip" title="Delete">&#xE872;</i>
-              </button> 
-              </span> </td>`);
-              tabela += (`</tr> <tr>`);
-            }
+                tabela += data1;
+                tabela += (`</td> <td>`);
+                let data2=json[i]["dt_final_vig"];
+
+                tabela += data2;
+                tabela += (`</td> <td>`);
+                let data3=json[i]["dt_reajuste"];
+
+                tabela += data3;
+                tabela += (`</td> <td> 
+                <span class="d-flex">
+                <button onclick="editarLote(`+ i +`)" class="btn btn-success">
+                <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
+                </button>
+                <button onclick="apagarLote()" class="btn btn-danger">
+                <i class="material-icons"data-toggle="tooltip" title="Delete">&#xE872;</i>
+                </button> 
+                </span> </td>`);
+                tabela += (`</tr> <tr>`);
+                }
 
 
         tabela += (`</tr> </tbody>`);
@@ -143,8 +146,6 @@ window.location.href = "./gerenciaEntidade.html";
 
 
 
-
-
 //Fazer Entidade
 var info = {"cnpj" : " ","nome" : " ","endereco" : " ","numero" : " ","bairro" : " ","cep" : " ","nome_municipio" : " ","uf" : " ","observacao" : " "};
 
@@ -161,17 +162,6 @@ var e = document.getElementById("submitDataF");
 info.bairro = e.value;
 var f = document.getElementById("submitDataR");
 info.cep = f.value;
-}
-
-function formatar(mascara, documento){
-  var i = documento.value.length;
-  var saida = mascara.substring(0,1);
-  var texto = mascara.substring(i)
-  
-  if (texto.substring(0,1) != saida){
-    documento.value += texto.substring(0,1);
-  }
-  
 }
 
 function enviar(){

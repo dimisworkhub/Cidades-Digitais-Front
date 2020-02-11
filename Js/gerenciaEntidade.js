@@ -22,17 +22,6 @@ var i = document.getElementById("submitObs");
 info.observacao = i.value;
 }
 
-function formatar(mascara, documento){
-  var i = documento.value.length;
-  var saida = mascara.substring(0,1);
-  var texto = mascara.substring(i)
-  
-  if (texto.substring(0,1) != saida){
-    documento.value += texto.substring(0,1);
-  }
-  
-}
-
 function enviar(){
 
   //pega o token do login
@@ -56,19 +45,19 @@ function enviar(){
 
     //tratamento dos erros
     if(response.status == 200){
-      window.location.replace("./home.html");
+      window.location.replace("./entidade.html");
     }
     else if(response.status ==201){
       alert("Usuário criado com sucesso");
-      window.location.replace("./home.html");
+      window.location.replace("./entidade.html");
     }
     else if(response.status == 202){
       alert("Login efetivado com sucesso");
-      window.location.replace("./home.html");
+      window.location.replace("./entidade.html");
     }
     else if(response.status ==204){
       alert("Apagado com sucesso.");
-      window.location.replace("./home.html");
+      window.location.replace("./entidade.html");
     }
     else if(response.status ==400){
       window.location.replace("./errors/400.html");
@@ -124,19 +113,19 @@ window.onload=function(){
 
     //tratamento dos erros
     if(response.status == 200){
-      window.location.replace("./home.html");
+      window.location.replace("./entidade.html");
     }
     else if(response.status ==201){
       alert("Usuário criado com sucesso");
-      window.location.replace("./home.html");
+      window.location.replace("./entidade.html");
     }
     else if(response.status == 202){
       alert("Login efetivado com sucesso");
-      window.location.replace("./home.html");
+      window.location.replace("./entidade.html");
     }
     else if(response.status ==204){
       alert("Apagado com sucesso.");
-      window.location.replace("./home.html");
+      window.location.replace("./entidade.html");
     }
     else if(response.status ==400){
       window.location.replace("./errors/400.html");
@@ -192,19 +181,19 @@ window.onload=function(){
 
     //tratamento dos erros
     if(response.status == 200){
-      window.location.replace("./home.html");
+      window.location.replace("./entidade.html");
     }
     else if(response.status ==201){
       alert("Usuário criado com sucesso");
-      window.location.replace("./home.html");
+      window.location.replace("./entidade.html");
     }
     else if(response.status == 202){
       alert("Login efetivado com sucesso");
-      window.location.replace("./home.html");
+      window.location.replace("./entidade.html");
     }
     else if(response.status ==204){
       alert("Apagado com sucesso.");
-      window.location.replace("./home.html");
+      window.location.replace("./entidade.html");
     }
     else if(response.status ==400){
       window.location.replace("./errors/400.html");

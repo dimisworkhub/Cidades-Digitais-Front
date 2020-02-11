@@ -1,10 +1,20 @@
+if(navigator.cookieEnabled==false){
+	alert("Os cookies estão desabilitados, o que é um problema para a navegação nesse site. Por favor acione os cookies.");
+}
 
+var input = document.getElementById("submitSenha");
+input.addEventListener("keyup", function(event){
+  if (event.keyCode === 13){
+   event.preventDefault();
+   document.getElementById("botao").click();
+  }
+});
 
 //o json usado para mandar as informações pelo fetch
 let info = {"login" : " ","senha" : " "};
 
 //função que altera as informações do json, capturando do html
-function changer(a){
+function changer(){
   //captura o valor
 let x = document.getElementById("submitLogin");
   //guarda o valor no JSON
