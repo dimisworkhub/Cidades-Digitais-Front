@@ -33,53 +33,6 @@
                                     <div class="col-sm-4">
                                         <h2 class="text-align:center">Gerencia <b>Entidade</b></h2>
                                     </div></div></div> 
-                                    <!-- <div class="col-sm-8">
-                                            <a href="#" class="btn btn-primary"><i class="material-icons">&#xE863;</i> <span>Atualizar
-                                                    Lista
-                                                </span></a>
-                                            <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i
-                                                class="material-icons">&#xE15C;</i> <span>Lote</span></a>
-                                            <a href="#addContatoModal" class="btn btn-success" data-toggle="modal"><i
-                                                class="material-icons">&#xE147;</i> <span>Contato</span></a>
-                                        </div>
-                                </div>
-                            </div>
-
-                            <!-Filtro->
-
-                            <div class="table-filter">
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <div class="show-entries">
-                                            <span>Mostrando</span>
-                                            <select class="form-control">
-                                                <option>5</option>
-                                                <option>10</option>
-                                                <option>15</option>
-                                                <option>20</option>
-                                            </select>
-                                            <span>Itens</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <button type="button" class="btn btn-primary"><i class="fa fa-search"></i></button>
-                                        <div class="filter-group">
-                                            <label>Nome</label>
-                                            <input type="text" class="form-control">
-                                        </div>
-
-                                        <div class="filter-group">
-                                            <label>Status</label>
-                                            <select class="form-control">
-                                                <option>Todos</option>
-                                                <option>Ativo</option>
-                                                <option>Inativo</option>
-                                            </select>
-                                        </div>
-                                        <span class="filter-icon"><i class="fa fa-filter"></i></span>
-                                    </div>
-                                </div>
-                            </div> -->
 
                             <!--Table header-->
                             <form enctype='application/json'>
@@ -92,28 +45,28 @@
 
                                         <div class="form-group col-md-8">
                                             <label class="progress" for="submitNome"></label>
-                                            <input type="text" class="form-control" id="submitNome" placeholder="Nome:" maxlength="50" value="" onchange="changer()">
+                                            <input type="text" class="form-control" id="submitNome" maxlength="50" value="" onchange="changer()">
                                         </div>
                                         
                                     
                                         <div class="form-group col-md-3">
                                         <label class="progress" for="submitCEP"></label>
-                                        <input type="text" class="form-control" id="submitCEP" placeholder="CEP:" maxlength="9" OnKeyPress="formatar('#####-###', this)" value="" onchange="changer()">
+                                        <input type="text" class="form-control" id="submitCEP" maxlength="9" OnKeyPress="formatar('#####-###', this)" value="" onchange="changer()">
                                         </div>
                 
                                         <div class="form-group col-md-6">
                                         <label class="progress" for="submitEndereco"></label>
-                                        <input type="text" class="form-control" id="submitEndereco" placeholder="Endereço:" maxlength="100" value="" onchange="changer()">
+                                        <input type="text" class="form-control" id="submitEndereco" maxlength="100" value="" onchange="changer()">
                                         </div>
                         
                                         <div class="form-group col-md-3">
                                         <label class="progress" for="submitNumero"></label>
-                                        <input type="text" class="form-control" id="submitNumero" placeholder="Número:" maxlength="10" value="" onchange="changer()">
+                                        <input type="text" class="form-control" id="submitNumero" maxlength="10" value="" onchange="changer()">
                                         </div>
                         
                                         <div class="form-group col-md-5">
                                         <label class="progress" for="submitBairro"></label>
-                                        <input type="text" class="form-control" id="submitBairro" placeholder="Bairro:" maxlength="100" value="" onchange="changer()">
+                                        <input type="text" class="form-control" id="submitBairro" maxlength="100" value="" onchange="changer()">
                                         </div>
                         
                                         <div class="form-group col-md-2">
@@ -134,7 +87,7 @@
                         
                                         <div class="form-group col-md-12">
                                         <label class="progress" for="submitObs"></label>
-                                        <textarea type="text" class="form-control" id="submitObs" placeholder="Observação:" maxlength="1000" value="" onchange="changer()"></textarea>
+                                        <textarea type="text" class="form-control" id="submitObs" maxlength="1000" value="" onchange="changer()"></textarea>
                                         </div>
                 
                                         <div style= "width:100%; text-align: center;">
