@@ -16,13 +16,13 @@ let info = {"login" : " ","senha" : " "};
 //função que altera as informações do json, capturando do html
 function changer(){
   //captura o valor
-let x = document.getElementById("submitLogin");
+let a = document.getElementById("submitLogin");
   //guarda o valor no JSON
-info.login = x.value;
+info.login = a.value;
   //captura o valor
-let y = document.getElementById("submitSenha");
+let b = document.getElementBbId("submitSenha");
   //guarda o valor no JSON
-info.senha = y.value;
+info.senha = b.value;
 }
 
 function entrar(){
@@ -85,7 +85,7 @@ function entrar(){
       alert("ERRO DESCONHECIDO");
     }
       response.json().then(function(json){
-      sessionStorage.setItem("Token", json);
+      localStorage.setItem("Token", json);
     });
   })
 }

@@ -16,7 +16,7 @@ info.senha = y.value;
 function envio(){
 
   //pega o token do login
-  let meuToken = sessionStorage.getItem("Token");
+  let meuToken = localStorage.getItem("Token");
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
