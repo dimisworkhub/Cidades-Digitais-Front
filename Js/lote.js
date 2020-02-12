@@ -3,7 +3,7 @@ let loteQuery=[];
 //Fazer Tabela
 window.onload=function(){
     //pega o token do login
-    let meuToken = sessionStorage.getItem("Token");
+    let meuToken = localStorage.getItem("Token");
     //função fetch para mandar
     fetch('http://localhost:8080/read/lote', {
       method: 'GET',
@@ -86,17 +86,21 @@ window.onload=function(){
                 tabela += (`</td> <td>`);
                 tabela += json[i]["contrato"];
                 tabela += (`</td> <td>`);
-                let data1=json[i]["dt_inicio_vig"];
 
-                tabela += data1;
+                let data1=new Date(json[i]["dt_inicio_vig"]);
+                let dataf1=data1.getDate()+'/'+data1.getMonth()+'/'+data1.getFullYear();
+                tabela += dataf1;
                 tabela += (`</td> <td>`);
-                let data2=json[i]["dt_final_vig"];
 
-                tabela += data2;
+                let data2=new Date(json[i]["dt_final_vig"]);
+                let dataf2=data2.getDate()+'/'+data2.getMonth()+'/'+data2.getFullYear();
+                tabela += dataf2;
                 tabela += (`</td> <td>`);
-                let data3=json[i]["dt_reajuste"];
 
-                tabela += data3;
+                let data3=new Date(json[i]["dt_reajuste"]);
+                let dataf3=data3.getDate()+'/'+data3.getMonth()+'/'+data3.getFullYear();
+                tabela += dataf3;
+
                 tabela += (`</td> <td> 
                 <span class="d-flex">
                 <button onclick="editarLote(`+ i +`)" class="btn btn-success">
@@ -108,7 +112,6 @@ window.onload=function(){
                 </span> </td>`);
                 tabela += (`</tr> <tr>`);
                 }
-
 
         tabela += (`</tr> </tbody>`);
         document.getElementById("tabela").innerHTML= tabela;
@@ -140,7 +143,7 @@ window.onload=function(){
 }
 
 function editarEntidade(valor){
-sessionStorage.setItem("CNPJ", cnpjQuery[valor]);
+localStorage.setItem("CNPJ", cnpjQuery[valor]);
 window.location.href = "./gerenciaEntidade.html";
 }
 
@@ -167,7 +170,7 @@ info.cep = f.value;
 function enviar(){
 
   //pega o token do login
-  let meuToken = sessionStorage.getItem("Token");
+  let meuToken = localStorage.getItem("Token");
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);

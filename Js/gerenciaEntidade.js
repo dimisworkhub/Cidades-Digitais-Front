@@ -1,9 +1,20 @@
-var info = {"cnpj" : " ","nome" : " ","endereco" : " ","numero" : " ","bairro" : " ","cep" : " ","nome_municipio" : " ","uf" : " ","observacao" : " "};
-var a = document.getElementById("CNPJ");
-a.value=sessionStorage.getItem("CNPJ");
+//pega o token do login
+let meuToken = localStorage.getItem("Token");
 
+//pega o CNPJ escolhido anteriormente
+let meuCNPJ = localStorage.getItem("CNPJ");
+
+//JSON usado para mandar as informações no fetch
+var info = {"cnpj" : " ","nome" : " ","endereco" : " ","numero" : " ","bairro" : " ","cep" : " ","nome_municipio" : " ","uf" : " ","observacao" : " "};
+
+
+//captura o cnpj para usar como chave na edição
+var a = document.getElementById("CNPJ");
+a.value=localStorage.getItem("CNPJ");
+
+//captura as informações do input e coloca no JSON
 function changer(){
-info.cnpj = sessionStorage.getItem("CNPJ");
+info.cnpj = localStorage.getItem("CNPJ");
 var b = document.getElementById("submitNome");
 info.nome = b.value;
 var c = document.getElementById("submitEndereco");
@@ -22,15 +33,10 @@ var i = document.getElementById("submitObs");
 info.observacao = i.value;
 }
 
+//transforma as informações do token em json
+let corpo = JSON.stringify(info);
+
 function enviar(){
-
-  //pega o token do login
-  let meuToken = sessionStorage.getItem("Token");
-  //pega o CNPJ escolhido anteriormente
-  let meuCNPJ = sessionStorage.getItem("CNPJ");
-
-  //transforma as informações do token em json
-  let corpo = JSON.stringify(info);
 
   //função fetch para mandar
   fetch('http://localhost:8080/read/entidade/'+meuCNPJ, {
@@ -41,7 +47,6 @@ function enviar(){
 
     //checar o status do pedido
     console.log(response);
-
 
     //tratamento dos erros
     if(response.status == 200){
@@ -96,12 +101,7 @@ function enviar(){
 }
 
 /*
-
-//testar se funciona depois
 window.onload=function(){
-
-  //pega o token do login
-  let meuToken = sessionStorage.getItem("Token");
 
   fetch('http://localhost:8080/read/municipio', {
     method: 'GET',
@@ -167,9 +167,6 @@ window.onload=function(){
 }
 
 window.onload=function(){
-
-  //pega o token do login
-  let meuToken = sessionStorage.getItem("Token");
 
   fetch('http://localhost:8080/read/municipio', {
     method: 'GET',

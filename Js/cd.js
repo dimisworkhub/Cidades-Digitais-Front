@@ -1,9 +1,9 @@
 //Fazer Tabela
 let cod_ibgeQuery=[];
+//pega o token do login
+let meuToken = localStorage.getItem("Token");
 
 window.onload=function(){
-    //pega o token do login
-    let meuToken = sessionStorage.getItem("Token");
     //função fetch para mandar
     fetch('http://localhost:8080/read/cd', {
       method: 'GET',
@@ -139,7 +139,7 @@ window.onload=function(){
 }
 
 function editarCd(valor){
-sessionStorage.setItem("COD_IBGE", cod_ibgeQuery[valor]);
+localStorage.setItem("COD_IBGE", cod_ibgeQuery[valor]);
 window.location.href = "./gerenciaCd.html";
 }
 
@@ -179,7 +179,7 @@ function formatar(mascara, documento){
 function enviar(){
 
   //pega o token do login
-  let meuToken = sessionStorage.getItem("Token");
+  let meuToken = localStorage.getItem("Token");
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);

@@ -1,9 +1,10 @@
 //capturar chave primaria
 let cnpjQuery=[];
+//pega o token do login
+let meuToken = localStorage.getItem("Token");
 //Fazer Tabela
 window.onload=function(){
-    //pega o token do login
-    let meuToken = sessionStorage.getItem("Token");
+    
     //função fetch para mandar
     fetch('http://localhost:8080/read/entidade', {
       method: 'GET',
@@ -145,13 +146,9 @@ window.onload=function(){
 }
 
 function editarEntidade(valor){
-sessionStorage.setItem("CNPJ", cnpjQuery[valor]);
+localStorage.setItem("CNPJ", cnpjQuery[valor]);
 window.location.href = "./gerenciaEntidade.html";
 }
-
-
-
-
 
 //Fazer Entidade
 var info = {"cnpj" : " ","nome" : " ","endereco" : " ","numero" : " ","bairro" : " ","cep" : " ","nome_municipio" : " ","uf" : " ","observacao" : " "};
@@ -178,9 +175,6 @@ info.observacao = i.value;
 }
 
 function enviar(){
-
-  //pega o token do login
-  let meuToken = sessionStorage.getItem("Token");
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
