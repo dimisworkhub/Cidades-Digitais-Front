@@ -20,7 +20,7 @@ let a = document.getElementById("submitLogin");
   //guarda o valor no JSON
 info.login = a.value;
   //captura o valor
-let b = document.getElementBbId("submitSenha");
+let b = document.getElementById("submitSenha");
   //guarda o valor no JSON
 info.senha = b.value;
 }
