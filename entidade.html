@@ -116,50 +116,50 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label>CNPJ</label>
-                            <input name="cnpj" type="text" class="form-control" id="submitCNPJ" maxlength="14" value="" onchange="changer()" required>
+                            <input type="text" class="form-control" id="cnpj" maxlength="14" value="" onchange="changer()" required>
                         </div>
                         <div class="form-group">
                             <label>Name</label>
-                            <input name="nome" type="text" class="form-control" id="submitName" maxlength="50" value="" onchange="changer()">
+                            <input type="text" class="form-control" id="nome" maxlength="50" value="" onchange="changer()">
                         </div>
                         <div class="form-group">
                             <label>Endereço</label>
-                            <textarea name="endereco" class="form-control" id="submitEndereço" maxlength="100" value="" onchange="changer()"></textarea>
+                            <textarea class="form-control" id="endereço" maxlength="100" value="" onchange="changer()"></textarea>
                         </div>
                         <div class="form-group">
                             <label>Numero</label>
-                            <input name="numero" type="text" class="form-control" id="submitNumero" maxlength="10" value="" onchange="changer()">
+                            <input type="text" class="form-control" id="numero" maxlength="10" value="" onchange="changer()">
                         </div>
                         <div class="form-group">
                             <label>Bairro</label>
-                            <input name="bairro" type="text" class="form-control" id="submitBairro" maxlength="100" value="" onchange="changer()">
+                            <input type="text" class="form-control" id="bairro" maxlength="100" value="" onchange="changer()">
                         </div>
                         <div class="form-group">
                             <label>CEP</label>
-                            <input name="cep" type="text" class="form-control" id="submitCEP" maxlength="8" value="" onchange="changer()">
+                            <input type="text" class="form-control" id="cep" maxlength="8" value="" onchange="changer()">
                         </div>
                         <div class="form-group">
                             <label>UF</label>
-                            <select type="text" class="form-control" id="submitUF" value="" onchange="changer()">
+                            <select type="text" class="form-control" id="uf" value="" onchange="changer()">
                                 <option value="DF" selected>UF:</option>
                                 <option id="estados"></option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label>Município</label>
-                            <select type="text" class="form-control" id="submitNomeMun" value="" onchange="changer()">
+                            <select type="text" class="form-control" id="nomeMun" value="" onchange="changer()">
                                 <option value="12345" selected>Município:</option>
                                 <option id="municipios"></option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label>Observações</label>
-                            <textarea name="observacao" class="form-control" id="submitObs" maxlength="1000" value="" onchange="changer()"></textarea>
+                            <textarea class="form-control" id="obs" maxlength="1000" value="" onchange="changer()"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
-                        <input type="button" style="background-color: #3a3a3a;" class="btn btn-success" onclick="enviar()">
+                        <input type="button" style="background-color: #3a3a3a;" class="btn btn-success" value="Adicionar" onclick="enviar()">
                     </div>
                 </form>
             </div>
@@ -181,12 +181,11 @@
                 </div>
                 <div style="width:100%; text-align: center;" class="modal-footer">
                     <button type="button" class="btn btn-info" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger">Deletar</button>
+                    <button type="button" class="btn btn-danger" onclick="enviar()">Deletar</button>
                 </div>
             </div>
         </div>
     </div>
-
 
     </div>
 

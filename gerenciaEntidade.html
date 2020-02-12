@@ -39,65 +39,69 @@
                                 <div class="form-row" style=" padding: 30px;">
                                         
                                         <div class="form-group col-md-4">
-                                            <label  for="submitCNPJ"></label>
-                                            <input type="text" class="form-control" id="CNPJ" readonly>
+                                            <label  for="cnpj">CNPJ</label>
+                                            <input type="text" class="form-control" id="cnpj" readonly>
                                         </div>
 
                                         <div class="form-group col-md-8">
-                                            <label  for="submitNome"></label>
-                                            <input type="text" class="form-control" id="submitNome" maxlength="50" value="" onchange="changer()">
+                                            <label  for="nome">Nome</label>
+                                            <input type="text" class="form-control" id="nome" maxlength="50" value="" onchange="changer()" required>
                                         </div>
                                         
                                     
                                         <div class="form-group col-md-3">
-                                        <label  for="submitCEP"></label>
-                                        <input type="text" class="form-control" id="submitCEP" maxlength="8" value="" onchange="changer()">
+                                        <label  for="cep">CEP</label>
+                                        <input type="text" class="form-control" id="cep" maxlength="8" value="" onchange="changer()" required>
                                         </div>
                 
                                         <div class="form-group col-md-6">
-                                        <label  for="submitEndereco"></label>
-                                        <input type="text" class="form-control" id="submitEndereco" maxlength="100" value="" onchange="changer()">
+                                        <label  for="endereco">Endereço</label>
+                                        <input type="text" class="form-control" id="endereco" maxlength="100" value="" onchange="changer()" required>
                                         </div>
                         
                                         <div class="form-group col-md-3">
-                                        <label  for="submitNumero"></label>
-                                        <input type="text" class="form-control" id="submitNumero" maxlength="10" value="" onchange="changer()">
+                                        <label  for="numero">Número</label>
+                                        <input type="text" class="form-control" id="numero" maxlength="10" value="" onchange="changer()" required>
                                         </div>
                         
                                         <div class="form-group col-md-5">
-                                        <label  for="submitBairro"></label>
-                                        <input type="text" class="form-control" id="submitBairro" maxlength="100" value="" onchange="changer()">
+                                        <label  for="bairro">Bairro</label>
+                                        <input type="text" class="form-control" id="bairro" maxlength="100" value="" onchange="changer()" required>
                                         </div>
                         
                                         <div class="form-group col-md-2">
-                                        <label  for="submitUF"></label>
-                                        <select type="text" class="form-control" id="submitUF" value="" onchange="changer()">
+                                        <label  for="uf">UF</label>
+                                        <select type="text" class="form-control" id="uf" value="" onchange="changer()" required>
                                             <option value="DF" selected>UF:</option>
                                             <option id="estados"></option>
                                         </select>
                                         </div>
                         
                                         <div class="form-group col-md-5">
-                                        <label  for="submitNomeMun"></label>
-                                        <select type="text" class="form-control" id="submitNomeMun" value="" onchange="changer()">
+                                        <label  for="nomeMun">Nome do Município</label>
+                                        <select type="text" class="form-control" id="nomeMun" value="" onchange="changer()" required>
                                             <option value="12345" selected>Município:</option>
                                             <option id="municipios"></option>
                                         </select>
                                         </div>
                         
                                         <div class="form-group col-md-12">
-                                        <label  for="submitObs"></label>
-                                        <textarea type="text" class="form-control" id="submitObs" maxlength="1000" value="" onchange="changer()"></textarea>
+                                        <label  for="obs">Observações</label>
+                                        <textarea type="text" class="form-control" id="obs" maxlength="1000" value="" onchange="changer()" required></textarea>
                                         </div>
                 
                                         <div style= "width:100%; text-align: center;">
                                             <div class="col-sm-12"><button style="background-color:#3a3a3a" type="button" class="btn btn-primary" onclick="enviar()" >Salvar</button>
                                         </div>
                                         <div class="p-5" style= "width:65%; text-align: center;">
-                                            <a href="#deleteEmployeeModal" class="btn btn-success" data-toggle="modal"><i
-                                                class="material-icons"></i> <span>Lote</span></a>
+                                            <a href="#addLoteModal" class="btn btn-success" data-toggle="modal"><i
+                                                class="material-icons"></i> <span>Criar Lote</span></a>
+                                            <a href="#" class="btn btn-danger" data-toggle="modal"><i
+                                                class="material-icons"></i> <span>Apagar Lote</span></a>
                                             <a href="#addContatoModal" class="btn btn-success" data-toggle="modal"><i
-                                                class="material-icons"></i> <span>Contato</span></a>
+                                                class="material-icons"></i> <span>Criar Contato</span></a>
+                                            <a href="#" class="btn btn-danger" data-toggle="modal"><i
+                                                class="material-icons"></i> <span>Apagar Lote</span></a>
                                         </div>
 
                                         
@@ -138,7 +142,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <input type="button" class="btn btn-danger" data-dismiss="modal" value="Cancelar">
-                                                <input style="background-color:#3a3a3a" type="submit" class="btn btn-success" value="Adicionar">
+                                                <input style="background-color:#3a3a3a" type="button" class="btn btn-success" value="Adicionar">
                                             </div>
                                         </form>
                                     </div>

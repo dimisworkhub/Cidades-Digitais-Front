@@ -1,18 +1,18 @@
 //pega o token do login
-let meuToken = localStorage.getItem("Token");
+let meuToken = localStorage.getItem("token");
 
 //o json usado para mandar as informações pelo fetch
 let info = {"nome" : "", "email" : "", "login" : "", "senha" : ""};
 
 //função que altera as informações do json, capturando do html
 function changer(){
-let z = document.getElementById("submitNome");
+let z = document.getElementById("nome");
 info.nome = z.value;
-let w = document.getElementById("submitEmail");
+let w = document.getElementById("email");
 info.email = w.value;
-let x = document.getElementById("submitLogin");
+let x = document.getElementById("login");
 info.login = x.value;
-let y = document.getElementById("submitSenha");
+let y = document.getElementById("senha");
 info.senha = y.value;
 }
 

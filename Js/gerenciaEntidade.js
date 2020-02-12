@@ -2,42 +2,43 @@
 let meuToken = localStorage.getItem("Token");
 
 //pega o CNPJ escolhido anteriormente
-let meuCNPJ = localStorage.getItem("CNPJ");
+let meuCNPJ = localStorage.getItem("cnpj");
 
 //JSON usado para mandar as informações no fetch
 var info = {"cnpj" : " ","nome" : " ","endereco" : " ","numero" : " ","bairro" : " ","cep" : " ","nome_municipio" : " ","uf" : " ","observacao" : " "};
 
 
-//captura o cnpj para usar como chave na edição
-var a = document.getElementById("CNPJ");
-a.value=localStorage.getItem("CNPJ");
+//captura o CNPJ para usar como chave na edição
+var a = document.getElementById("cnpj");
+a.value=localStorage.getItem("cnpj");
 
 //captura as informações do input e coloca no JSON
 function changer(){
-info.cnpj = localStorage.getItem("CNPJ");
-var b = document.getElementById("submitNome");
+info.cnpj = localStorage.getItem("cnpj");
+var b = document.getElementById("nome");
 info.nome = b.value;
-var c = document.getElementById("submitEndereco");
+var c = document.getElementById("endereco");
 info.endereco = c.value;
-var d = document.getElementById("submitNumero");
+var d = document.getElementById("numero");
 info.numero = d.value;
-var e = document.getElementById("submitBairro");
+var e = document.getElementById("bairro");
 info.bairro = e.value;
-var f = document.getElementById("submitCEP");
+var f = document.getElementById("cep");
 info.cep = f.value;
-var g = document.getElementById("submitNomeMun");
+var g = document.getElementById("nomeMun");
 info.nome_municipio = g.value;
-var h = document.getElementById("submitUF");
+var h = document.getElementById("uf");
 info.uf = h.value;
-var i = document.getElementById("submitObs");
+var i = document.getElementById("obs");
 info.observacao = i.value;
 }
 
-//transforma as informações do token em json
-let corpo = JSON.stringify(info);
+
 
 function enviar(){
 
+  //transforma as informações do token em json
+  let corpo = JSON.stringify(info);
   //função fetch para mandar
   fetch('http://localhost:8080/read/entidade/'+meuCNPJ, {
     method: 'PUT',

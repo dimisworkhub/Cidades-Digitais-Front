@@ -1,7 +1,7 @@
 //Fazer Tabela
 let cod_ibgeQuery=[];
 //pega o token do login
-let meuToken = localStorage.getItem("Token");
+let meuToken = localStorage.getItem("token");
 
 window.onload=function(){
     //função fetch para mandar
@@ -151,17 +151,17 @@ window.location.href = "./gerenciaCd.html";
 var info = {"cod_ibge" : " ","cod_lote" : " ","os_pe" : " ","data_pe" : " ","os_imp" : " ","data_imp" : " "};
 
 function changer(){
-var a = document.getElementById("submitCod_ibge");
+var a = document.getElementById("cod_ibge");
 info.cod_ibge = a.value;
-var b = document.getElementById("submitCod_lote");
+var b = document.getElementById("cod_lote");
 info.cod_lote = b.value;
-var c = document.getElementById("submitOs_pe");
+var c = document.getElementById("os_pe");
 info.os_pe = c.value;
-var d = document.getElementById("submitData_pe");
+var d = document.getElementById("data_pe");
 info.data_pe = d.value;
-var e = document.getElementById("submitOs_imp");
+var e = document.getElementById("os_imp");
 info.os_imp = e.value;
-var f = document.getElementById("submitData_imp");
+var f = document.getElementById("data_imp");
 info.data_imp = f.value;
 }
 
@@ -179,7 +179,7 @@ function formatar(mascara, documento){
 function enviar(){
 
   //pega o token do login
-  let meuToken = localStorage.getItem("Token");
+  let meuToken = localStorage.getItem("token");
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
@@ -196,19 +196,19 @@ function enviar(){
 
     //tratamento dos erros
     if(response.status == 200){
-      window.location.replace("./home.html");
+      window.location.replace("./cd.html");
     }
     else if(response.status ==201){
       alert("Usuário criado com sucesso");
-      window.location.replace("./home.html");
+      window.location.replace("./cd.html");
     }
     else if(response.status == 202){
       alert("Login efetivado com sucesso");
-      window.location.replace("./home.html");
+      window.location.replace("./cd.html");
     }
     else if(response.status ==204){
       alert("Apagado com sucesso.");
-      window.location.replace("./home.html");
+      window.location.replace("./cd.html");
     }
     else if(response.status ==400){
       window.location.replace("./errors/400.html");

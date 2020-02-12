@@ -3,7 +3,7 @@ let loteQuery=[];
 //Fazer Tabela
 window.onload=function(){
     //pega o token do login
-    let meuToken = localStorage.getItem("Token");
+    let meuToken = localStorage.getItem("token");
     //função fetch para mandar
     fetch('http://localhost:8080/read/lote', {
       method: 'GET',
@@ -143,7 +143,7 @@ window.onload=function(){
 }
 
 function editarEntidade(valor){
-localStorage.setItem("CNPJ", cnpjQuery[valor]);
+localStorage.setItem("cnpj", cnpjQuery[valor]);
 window.location.href = "./gerenciaEntidade.html";
 }
 
@@ -153,24 +153,24 @@ window.location.href = "./gerenciaEntidade.html";
 var info = {"cnpj" : " ","nome" : " ","endereco" : " ","numero" : " ","bairro" : " ","cep" : " ","nome_municipio" : " ","uf" : " ","observacao" : " "};
 
 function changer(){
-var a = document.getElementById("submitLote");
+var a = document.getElementById("lote");
 info.cnpj = a.value;
-var b = document.getElementById("submitCNPJ");
+var b = document.getElementById("cnpj");
 info.nome = b.value;
-var c = document.getElementById("submitContrato");
+var c = document.getElementById("contrato");
 info.endereco = c.value;
-var d = document.getElementById("submitDataI");
+var d = document.getElementById("dataI");
 info.numero = d.value;
-var e = document.getElementById("submitDataF");
+var e = document.getElementById("dataF");
 info.bairro = e.value;
-var f = document.getElementById("submitDataR");
+var f = document.getElementById("dataR");
 info.cep = f.value;
 }
 
 function enviar(){
 
   //pega o token do login
-  let meuToken = localStorage.getItem("Token");
+  let meuToken = localStorage.getItem("token");
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);

@@ -2,7 +2,7 @@ if(navigator.cookieEnabled==false){
 	alert("Os cookies estão desabilitados, o que é um problema para a navegação nesse site. Por favor acione os cookies.");
 }
 
-var input = document.getElementById("submitSenha");
+var input = document.getElementById("senha");
 input.addEventListener("keyup", function(event){
   if (event.keyCode === 13){
    event.preventDefault();
@@ -16,11 +16,11 @@ let info = {"login" : " ","senha" : " "};
 //função que altera as informações do json, capturando do html
 function changer(){
   //captura o valor
-let a = document.getElementById("submitLogin");
+let a = document.getElementById("login");
   //guarda o valor no JSON
 info.login = a.value;
   //captura o valor
-let b = document.getElementById("submitSenha");
+let b = document.getElementById("senha");
   //guarda o valor no JSON
 info.senha = b.value;
 }
@@ -85,7 +85,7 @@ function entrar(){
       alert("ERRO DESCONHECIDO");
     }
       response.json().then(function(json){
-      localStorage.setItem("Token", json);
+      localStorage.setItem("token", json);
     });
   })
 }

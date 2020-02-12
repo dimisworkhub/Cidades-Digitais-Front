@@ -53,6 +53,7 @@ window.onload=function(){
       //pegar o json que possui a tabela
       return response.json().then(function(json){
         console.log(json);
+        console.log(response.text);
 
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
@@ -76,7 +77,8 @@ window.onload=function(){
               cod_usuarioQuery[i]=json[i]["cod_usuario"]; 
               tabela += (`<td>
               <span class="custom-checkbox">
-              <input type="checkbox" id="checkbox1" name="options[]" value="1">
+              <input type="checkbox" id="checkbox1" name="o
+              console.log(response.text);ptions[]" value="1">
               <label for="checkbox1"></label>
               </span>
               </td>`);
@@ -142,11 +144,9 @@ window.location.href = "./gerenciaUsuario.html";
 
 
 //Fazer Entidade
-var info = {"cod_usuario" : " ","nome" : " ","email" : " ","status" : " ","login" : " ","senha" : " "};
+var info = {"nome" : "name","email" : "email@email.com","status" : true,"login" : "login","senha" : "senha"};
 
-function changer(){
-var a = document.getElementById("submitCod_usuario");
-info.cod_usuario = a.value;
+/*function changer(){
 var b = document.getElementById("submitNome");
 info.nome = b.value;
 var c = document.getElementById("submitEmail");
@@ -157,18 +157,7 @@ var e = document.getElementById("submitLogin");
 info.login = e.value;
 var f = document.getElementById("submitSenha");
 info.senha = f.value;
-}
-
-function formatar(mascara, documento){
-  var i = documento.value.length;
-  var saida = mascara.substring(0,1);
-  var texto = mascara.substring(i)
-  
-  if (texto.substring(0,1) != saida){
-    documento.value += texto.substring(0,1);
-  }
-  
-}
+}*/
 
 function enviar(){
 
@@ -179,7 +168,7 @@ function enviar(){
   let corpo = JSON.stringify(info);
 
   //função fetch para mandar
-  fetch('http://localhost:8080/read/usuario', {
+  fetch('http://localhost:8080/read/usuario/createuser', {
     method: 'POST',
     body: corpo,
     headers: {'Authorization': 'Bearer ' + meuToken},
@@ -234,8 +223,5 @@ function enviar(){
     else{
       alert("ERRO DESCONHECIDO");
     }
-    return response.json().then(function(json){
-    console.log(json);
-      });
-    });
+  });
 }
