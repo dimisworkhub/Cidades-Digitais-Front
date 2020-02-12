@@ -20,7 +20,7 @@ body {
     color: rgba(108, 117, 125, 0.7);
     text-indent: -9999px;
     border: none;
-    background-color: transparent;
+    background-color: white;
     outline: none !important;
     cursor: pointer;
 }
@@ -72,7 +72,7 @@ body {
 }
 
 .multisteps-form__progress-btn.js-active {
-    color: rgba(245, 72, 74, 0.9);
+    color: rgba(100, 100, 100, 0.9);
 }
 
 .multisteps-form__progress-btn.js-active:before {
@@ -117,12 +117,12 @@ body {
 }
 
 .multi-button{
-   background-color: rgba(245, 72, 74, 0.9); 
+   background-color: rgba(29, 29, 29, 0.9); 
    border: none;
 }
 
 .multi-button:hover, .multi-button:focus, .multi-button:active{
-    background-color: rgba(207, 64, 66, 0.9)!important; 
+    background-color: rgba(61, 61, 61, 0.9)!important; 
     border: none;
     outline: none !important;
     box-shadow: none;
