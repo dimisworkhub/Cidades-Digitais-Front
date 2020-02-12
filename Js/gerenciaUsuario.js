@@ -1,3 +1,6 @@
+//pega o token do login
+let meuToken = localStorage.getItem("Token");
+
 //o json usado para mandar as informações pelo fetch
 let info = {"nome" : "", "email" : "", "login" : "", "senha" : ""};
 
@@ -15,9 +18,6 @@ info.senha = y.value;
 
 function envio(){
 
-  //pega o token do login
-  let meuToken = localStorage.getItem("Token");
-
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
 
@@ -33,19 +33,19 @@ function envio(){
 
     //tratamento dos erros
     if(response.status == 200){
-      window.location.replace("./home.html");
+      window.location.replace("./criarUsuario.html");
     }
     else if(response.status ==201){
       alert("Usuário criado com sucesso");
-      window.location.replace("./home.html");
+      window.location.replace("./criarUsuario.html");
     }
     else if(response.status == 202){
       alert("Login efetivado com sucesso");
-      window.location.replace("./home.html");
+      window.location.replace("./criarUsuario.html");
     }
     else if(response.status ==204){
       alert("Apagado com sucesso.");
-      window.location.replace("./home.html");
+      window.location.replace("./criarUsuario.html");
     }
     else if(response.status ==400){
       window.location.replace("./errors/400.html");
@@ -78,7 +78,7 @@ function envio(){
       alert("ERRO DESCONHECIDO");
     }
     return response.json().then(function(response){
-    console.log(response)
+    console.log("Resultado: "+response.status);
     });
   });
 }

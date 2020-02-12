@@ -150,6 +150,8 @@ localStorage.setItem("CNPJ", cnpjQuery[valor]);
 window.location.href = "./gerenciaEntidade.html";
 }
 
+
+
 //Fazer Entidade
 var info = {"cnpj" : " ","nome" : " ","endereco" : " ","numero" : " ","bairro" : " ","cep" : " ","nome_municipio" : " ","uf" : " ","observacao" : " "};
 
@@ -174,10 +176,10 @@ var i = document.getElementById("submitObs");
 info.observacao = i.value;
 }
 
-function enviar(){
+//transforma as informações do token em json
+let corpo = JSON.stringify(info);
 
-  //transforma as informações do token em json
-  let corpo = JSON.stringify(info);
+function enviar(){
 
   //função fetch para mandar
   fetch('http://localhost:8080/read/entidade', {
