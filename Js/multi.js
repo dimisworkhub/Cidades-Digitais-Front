@@ -68,6 +68,8 @@
 
                 activePanel = elem;
 
+                
+               
             }
 
         });
@@ -88,27 +90,12 @@
 
                 elem.classList.add('js-active');
 
-                setFormHeight(elem);
-
             }
         });
 
     };
 
-    //set form height equal to current panel height
-    const formHeight = activePanel => {
-
-        const activePanelHeight = activePanel.offsetHeight;
-
-        DOMstrings.stepsForm.style.height = `${activePanelHeight}px`;
-
-    };
-
-    const setFormHeight = () => {
-        const activePanel = getActivePanel();
-
-        formHeight(activePanel);
-    };
+    
 
     //STEPS BAR CLICK FUNCTION
     DOMstrings.stepsBar.addEventListener('click', e => {
@@ -161,8 +148,4 @@
 
     });
 
-    //SETTING PROPER FORM HEIGHT ONLOAD
-    window.addEventListener('load', setFormHeight, false);
-
-    //SETTING PROPER FORM HEIGHT ONRESIZE
-    window.addEventListener('resize', setFormHeight, false);
+  
