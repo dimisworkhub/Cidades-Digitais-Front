@@ -147,8 +147,6 @@ localStorage.setItem("cnpj", cnpjQuery[valor]);
 window.location.href = "./gerenciaEntidade.html";
 }
 
-
-
 //Fazer Entidade
 var info = {"cnpj" : " ","nome" : " ","endereco" : " ","numero" : " ","bairro" : " ","cep" : " ","nome_municipio" : " ","uf" : " ","observacao" : " "};
 

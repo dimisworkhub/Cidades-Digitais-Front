@@ -1,7 +1,7 @@
 //Fazer Tabela
 let cod_usuarioQuery=[];
 //pega o token do login
-let meuToken = localStorage.getItem("Token");
+let meuToken = localStorage.getItem("token");
 
 window.onload=function(){
     //função fetch para mandar

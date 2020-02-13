@@ -1,7 +1,7 @@
 //capturar chave primaria
 let cnpjQuery=[];
 //pega o token do login
-let meuToken = localStorage.getItem("Token");
+let meuToken = localStorage.getItem("token");
 
 
 

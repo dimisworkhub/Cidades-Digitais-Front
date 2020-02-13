@@ -1,5 +1,5 @@
 //pega o token do login
-let meuToken = localStorage.getItem("Token");
+let meuToken = localStorage.getItem("token");
 
 //pega o CNPJ escolhido anteriormente
 let meuCNPJ = localStorage.getItem("cnpj");
