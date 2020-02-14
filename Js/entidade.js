@@ -7,7 +7,6 @@ let meuToken = localStorage.getItem("token");
 
 //Fazer Entidade
 
-
 let info = {"cnpj" : " ","nome" : " ","endereco" : " ","numero" : " ","bairro" : " ","cep" : " ","nome_municipio" : " ","uf" : " ","observacao" : " "};
 
 function changer(){
