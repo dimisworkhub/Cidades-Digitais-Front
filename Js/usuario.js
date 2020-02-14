@@ -134,7 +134,7 @@ function editarUsuario(valor) {
 
 
 
-//Fazer Entidade
+//Fazer Usuário
 var info = {
   "nome": "",
   "email": "",
