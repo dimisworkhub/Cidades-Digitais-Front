@@ -7,7 +7,6 @@ let meuToken = localStorage.getItem("token");
 
 //Fazer Entidade
 
-
 let info = {"cnpj" : " ","nome" : " ","endereco" : " ","numero" : " ","bairro" : " ","cep" : " ","nome_municipio" : " ","uf" : " ","observacao" : " "};
 
 function changer(){
@@ -104,6 +103,71 @@ let corpo = JSON.stringify(info);
 
 //Fazer Tabela
 window.onload=function(){
+
+  fetch('http://localhost:8080/read/municipio', {
+      method: 'GET',
+      headers: {'Authorization': 'Bearer ' + meuToken},
+    }).then(function(response){
+  
+      //checar o status do pedido
+      console.log(response);
+    
+      //tratamento dos erros
+      if(response.status == 200){
+        console.log("200 ok.");
+      }
+      else if(response.status ==201){
+        alert("Usuário criado com sucesso");
+        window.location.replace("./entidade.html");
+      }
+      else if(response.status ==400){
+        window.location.replace("./errors/400.html");
+      }
+      else if(response.status ==401){
+        window.location.replace("./errors/401.html");
+      }
+      else if(response.status ==403){
+        window.location.replace("./errors/403.html");
+      }
+      else if(response.status ==404){
+        window.location.replace("./errors/404.html");
+      }
+      else if(response.status ==409){
+        alert("Erro: Usuário já existente.");
+      }
+      else if(response.status == 412){
+        alert("Erro: Informação colocada é incorreta.");
+      }
+      else if(response.status == 422){
+        alert("Erro: Usuário ou senha inválidos.");
+      }
+      else if(response.status == 500){
+        window.location.replace("./errors/500.html");
+      }
+      else if(response.status == 504){
+        window.location.replace("./errors/504.html");
+      }
+      else{
+        alert("ERRO DESCONHECIDO");
+      }
+      return response.json().then(function(json){
+        let x,y,i;
+        x = "<option>" + json["0"].uf + "</option>"
+        for (i=0;i<json.length;i++) {
+          x += "<option>" + json[i].uf + "</option>"
+        }
+          document.getElementById("uf").innerHTML = x;
+  
+        y = "<option>" + json["0"].nome_municipio + "</option>"
+        for (i=0;i<json.length;i++){
+          y += "<option>" + json[i].nome_municipio + "</option>"
+        }
+          document.getElementById("nomeMun").innerHTML = y;
+        })
+  
+      });
+
+      
     
     //função fetch para mandar
     fetch('http://localhost:8080/read/entidade', {
