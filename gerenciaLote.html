@@ -33,89 +33,48 @@
                                     <div class="col-sm-4">
                                         <h2 class="text-align:center">Gerencia <b>Lote</b></h2>
                                     </div>
-                                    <!-- <div class="col-sm-8">
-                                            <a href="#" class="btn btn-primary"><i class="material-icons">&#xE863;</i> <span>Atualizar
-                                                    Lista
-                                                </span></a>
-                                            <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i
-                                                class="material-icons">&#xE15C;</i> <span>Lote</span></a>
-                                            <a href="#addContatoModal" class="btn btn-success" data-toggle="modal"><i
-                                                class="material-icons">&#xE147;</i> <span>Contato</span></a>
-                                        </div> -->
                                 </div>
                             </div>
-                            <!--Filtro-->
-                            <!-- <div class="table-filter">
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <div class="show-entries">
-                                            <span>Mostrando</span>
-                                            <select class="form-control">
-                                                <option>5</option>
-                                                <option>10</option>
-                                                <option>15</option>
-                                                <option>20</option>
-                                            </select>
-                                            <span>Itens</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <button type="button" class="btn btn-primary"><i class="fa fa-search"></i></button>
-                                        <div class="filter-group">
-                                            <label>Nome</label>
-                                            <input type="text" class="form-control">
-                                        </div>
-
-                                        <div class="filter-group">
-                                            <label>Status</label>
-                                            <select class="form-control">
-                                                <option>Todos</option>
-                                                <option>Ativo</option>
-                                                <option>Inativo</option>
-                                            </select>
-                                        </div>
-                                        <span class="filter-icon"><i class="fa fa-filter"></i></span>
-                                    </div>
-                                </div>
-                            </div> -->
                             <!--Table header-->
                             <form enctype='application/json'>
                                 <div class="form-row" style=" padding: 30px;">
                                         
                                      <div class="form-group col-md-4">
                                             <label class="progress" for="cod_lote"></label>
-                                            <input type="text" class="form-control" id="cod_lote" placeholder="Código do Lote:" maxlength="19" value="" onchange="changer()">
+                                            <input type="text" class="form-control" id="cod_lote" placeholder="Código do Lote:" maxlength="19" onchange="changer()">
                                         </div>
                                     
                                         <div class="form-group col-md-4">
                                             <label class="progress" for="cnpj"></label>
-                                            <input type="text" class="form-control" id="cnpj" placeholder="CNPJ:" maxlength="19" OnKeyPress="formatar('##.###.###/####-##', this)" value="" onchange="changer()">
+                                            <input type="text" class="form-control" id="cnpj" placeholder="CNPJ:" maxlength="19" onchange="changer()">
                                         </div>
                                     
                                         <div class="form-group col-md-4">
                                             <label class="progress" for="contrato"></label>
-                                            <input type="text" class="form-control" id="contrato" placeholder="Contrato:" maxlength="9" OnKeyPress="formatar('#####-###', this)" value="" onchange="changer()">
+                                            <input type="text" class="form-control" id="contrato" placeholder="Contrato:" maxlength="9" onchange="changer()">
                                         </div>
                 
                                         <div class="form-group col-md-4">
                                             <label class="progress" for="dataI"></label>
-                                            <input type="text" class="form-control" id="dataI" placeholder="Data de Inicio de Vigencia:" maxlength="100" value="" onchange="changer()">
+                                            <input type="text" class="form-control" id="dataI" placeholder="Data de Inicio de Vigencia:" maxlength="100" onchange="changer()">
                                         </div>
                         
                                         <div class="form-group col-md-4">
                                             <label class="progress" for="dataF"></label>
-                                            <input type="text" class="form-control" id="dataF" placeholder="Data Final de Vigencia:" maxlength="100" value="" onchange="changer()">
+                                            <input type="text" class="form-control" id="dataF" placeholder="Data Final de Vigencia:" maxlength="100" onchange="changer()">
                                         </div>
                         
                                         <div class="form-group col-md-4">
                                             <label class="progress" for="dataR"></label>
-                                            <input type="text" class="form-control" id="dataR" placeholder="Data de Reajuste:" maxlength="100" value="" onchange="changer()">
+                                            <input type="text" class="form-control" id="dataR" placeholder="Data de Reajuste:" maxlength="100" onchange="changer()">
                                         </div>
                         
                                         
                 
                                         <div style= "width:100%; text-align: center;">
-                                            <div class="col-sm-12"><button style="background-color:#3a3a3a" type="button" class="btn btn-primary" onclick="enviar()" >Salvar</button>
+                                            <div class="col-sm-12">
+                                                <button style="background-color:#3a3a3a" type="button" class="btn btn-primary" onclick="enviar()" >Salvar</button>
+                                            </div>
                                         </div>
                                         <div class="p-5" style= "width:100%; text-align: center;">
                                             <a href="#itens" class="btn btn-success" data-toggle="modal"><i
@@ -166,7 +125,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <input type="button" class="btn btn-danger" data-dismiss="modal" value="Cancelar">
-                                                <input style="background-color:#3a3a3a" type="submit" class="btn btn-success" value="Adicionar">
+                                                <input style="background-color:#3a3a3a" type="button" class="btn btn-success" value="Adicionar">
                                             </div>
                                         </form>
                                     </div>
@@ -175,32 +134,9 @@
                         </div>
                     </div>
                     <div class="fixed-bottom" >   
-                        <script height="100%" width="100%" src="/home/mctic/go/src/Cidades-Digitais-Front/Js/menu.js"></script>	
+                        <script height="100%" width="100%" src="./Js/menu.js"></script>	
                     </div>
 </body>
-<script type="text/javascript">
-    $(document).ready(function () {
-
-        // Select/Deselect checkboxes
-        var checkbox = $('table tbody input[type="checkbox"]');
-        $("#selectAll").click(function () {
-            if (this.checked) {
-                checkbox.each(function () {
-                    this.checked = true;
-                });
-            } else {
-                checkbox.each(function () {
-                    this.checked = false;
-                });
-            }
-        });
-        checkbox.click(function () {
-            if (!this.checked) {
-                $("#selectAll").prop("checked", false);
-            }
-        });
-    });
-</script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="Js/main.js"></script> <!-- Resource jQuery -->
 </html>

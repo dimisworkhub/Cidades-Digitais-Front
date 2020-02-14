@@ -48,18 +48,22 @@ var opts = {
 // Gulp task definitions
 // ----------------------------
 
-gulp.task('createCSS', function() {
+gulp.task('createCSS', function () {
   return gulp
     .src(activatedAnimations)
     .pipe(concat(opts.concatName))
     .pipe(postcss([autoprefixer(opts.autoprefixer)]))
     .pipe(gulp.dest(opts.destPath))
-    .pipe(postcss([cssnano({reduceIdents: {keyframes: false}})]))
+    .pipe(postcss([cssnano({
+      reduceIdents: {
+        keyframes: false
+      }
+    })]))
     .pipe(rename(opts.minRename))
     .pipe(gulp.dest(opts.destPath));
 });
 
-gulp.task('addHeader', function() {
+gulp.task('addHeader', function () {
   return gulp
     .src('*.css')
     .pipe(header(opts.banner, pkg))
