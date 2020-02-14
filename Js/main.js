@@ -1,13 +1,13 @@
-jQuery(document).ready(function($){
+jQuery(document).ready(function ($) {
 	//open menu
-	$('.cd-menu-trigger').on('click', function(event){
+	$('.cd-menu-trigger').on('click', function (event) {
 		event.preventDefault();
 		$('#cd-main-content').addClass('move-out');
 		$('#main-nav').addClass('is-visible');
 		$('.cd-shadow-layer').addClass('is-visible');
 	});
 	//close menu
-	$('.cd-close-menu').on('click', function(event){
+	$('.cd-close-menu').on('click', function (event) {
 		event.preventDefault();
 		$('#cd-main-content').removeClass('move-out');
 		$('#main-nav').removeClass('is-visible');
@@ -16,7 +16,7 @@ jQuery(document).ready(function($){
 
 	//clipped image - blur effect
 	set_clip_property();
-	$(window).on('resize', function(){
+	$(window).on('resize', function () {
 		set_clip_property();
 	});
 
@@ -25,6 +25,6 @@ jQuery(document).ready(function($){
 			$window_height = $(window).height(),
 			$header_top = $window_height - $header_height,
 			$window_width = $(window).width();
-		$('.cd-blurred-bg').css('clip', 'rect('+$header_top+'px, '+$window_width+'px, '+$window_height+'px, 0px)');
+		$('.cd-blurred-bg').css('clip', 'rect(' + $header_top + 'px, ' + $window_width + 'px, ' + $window_height + 'px, 0px)');
 	}
 });

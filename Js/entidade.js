@@ -1,5 +1,5 @@
 //capturar chave primaria
-let cnpjQuery=[];
+let cnpjQuery = [];
 //pega o token do login
 let meuToken = localStorage.getItem("token");
 
@@ -7,219 +7,200 @@ let meuToken = localStorage.getItem("token");
 
 //Fazer Entidade
 
-let info = {"cnpj" : " ","nome" : " ","endereco" : " ","numero" : " ","bairro" : " ","cep" : " ","nome_municipio" : " ","uf" : " ","observacao" : " "};
+let info = {
+  "cnpj": " ",
+  "nome": " ",
+  "endereco": " ",
+  "numero": " ",
+  "bairro": " ",
+  "cep": " ",
+  "nome_municipio": " ",
+  "uf": " ",
+  "observacao": " "
+};
 
-function changer(){
-let a = document.getElementById("cnpj");
-info.cnpj = a.value;
-let b = document.getElementById("nome");
-info.nome = b.value;
-let c = document.getElementById("endereco");
-info.endereco = c.value;
-let d = document.getElementById("numero");
-info.numero = d.value;
-let e = document.getElementById("bairro");
-info.bairro = e.value;
-let f = document.getElementById("cep");
-info.cep = f.value;
-let g = document.getElementById("nomeMun");
-info.nome_municipio = g.value;
-let h = document.getElementById("uf");
-info.uf = h.value;
-let i = document.getElementById("obs");
-info.observacao = i.value;
+function changer() {
+  let a = document.getElementById("cnpj");
+  info.cnpj = a.value;
+  let b = document.getElementById("nome");
+  info.nome = b.value;
+  let c = document.getElementById("endereco");
+  info.endereco = c.value;
+  let d = document.getElementById("numero");
+  info.numero = d.value;
+  let e = document.getElementById("bairro");
+  info.bairro = e.value;
+  let f = document.getElementById("cep");
+  info.cep = f.value;
+  let g = document.getElementById("nomeMun");
+  info.nome_municipio = g.value;
+  let h = document.getElementById("uf");
+  info.uf = h.value;
+  let i = document.getElementById("obs");
+  info.observacao = i.value;
 }
 
 
 
-function enviar(){
+function enviar() {
 
-//transforma as informações do token em json
-let corpo = JSON.stringify(info);
+  //transforma as informações do token em json
+  let corpo = JSON.stringify(info);
 
   //função fetch para mandar
   fetch('http://localhost:8080/read/entidade', {
     method: 'POST',
     body: corpo,
-    headers: {'Authorization': 'Bearer ' + meuToken},
-  }).then(function(response){
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
 
     //checar o status do pedido
     console.log(response);
 
     //tratamento dos erros
-    if(response.status == 200){
+    if (response.status == 200) {
       window.location.replace("./entidade.html");
-    }
-    else if(response.status ==201){
+    } else if (response.status == 201) {
       alert("Usuário criado com sucesso");
       window.location.replace("./entidade.html");
-    }
-    else if(response.status == 202){
+    } else if (response.status == 202) {
       alert("Login efetivado com sucesso");
       window.location.replace("./entidade.html");
-    }
-    else if(response.status ==204){
+    } else if (response.status == 204) {
       alert("Apagado com sucesso.");
       window.location.replace("./entidade.html");
-    }
-    else if(response.status ==400){
+    } else if (response.status == 400) {
       window.location.replace("./errors/400.html");
-    }
-    else if(response.status ==401){
+    } else if (response.status == 401) {
       window.location.replace("./errors/401.html");
-    }
-    else if(response.status ==403){
+    } else if (response.status == 403) {
       window.location.replace("./errors/403.html");
-    }
-    else if(response.status ==404){
+    } else if (response.status == 404) {
       window.location.replace("./errors/404.html");
-    }
-    else if(response.status ==409){
+    } else if (response.status == 409) {
       alert("Erro: Usuário já existente.");
-    }
-    else if(response.status == 412){
+    } else if (response.status == 412) {
       alert("Erro: Informação colocada é incorreta.");
-    }
-    else if(response.status == 422){
+    } else if (response.status == 422) {
       alert("Erro: Usuário ou senha inválidos.");
-    }
-    else if(response.status == 500){
+    } else if (response.status == 500) {
       window.location.replace("./errors/500.html");
-    }
-    else if(response.status == 504){
+    } else if (response.status == 504) {
       window.location.replace("./errors/504.html");
-    }
-    else{
+    } else {
       alert("ERRO DESCONHECIDO");
     }
-    return response.json().then(function(json){
-    console.log(json);
-      });
+    return response.json().then(function (json) {
+      console.log(json);
     });
+  });
 }
 
 
 
-//Fazer Tabela
-window.onload=function(){
+
+window.onload = function () {
 
   fetch('http://localhost:8080/read/municipio', {
-      method: 'GET',
-      headers: {'Authorization': 'Bearer ' + meuToken},
-    }).then(function(response){
-  
-      //checar o status do pedido
-      console.log(response);
-    
-      //tratamento dos erros
-      if(response.status == 200){
-        console.log("200 ok.");
-      }
-      else if(response.status ==201){
-        alert("Usuário criado com sucesso");
-        window.location.replace("./entidade.html");
-      }
-      else if(response.status ==400){
-        window.location.replace("./errors/400.html");
-      }
-      else if(response.status ==401){
-        window.location.replace("./errors/401.html");
-      }
-      else if(response.status ==403){
-        window.location.replace("./errors/403.html");
-      }
-      else if(response.status ==404){
-        window.location.replace("./errors/404.html");
-      }
-      else if(response.status ==409){
-        alert("Erro: Usuário já existente.");
-      }
-      else if(response.status == 412){
-        alert("Erro: Informação colocada é incorreta.");
-      }
-      else if(response.status == 422){
-        alert("Erro: Usuário ou senha inválidos.");
-      }
-      else if(response.status == 500){
-        window.location.replace("./errors/500.html");
-      }
-      else if(response.status == 504){
-        window.location.replace("./errors/504.html");
-      }
-      else{
-        alert("ERRO DESCONHECIDO");
-      }
-      return response.json().then(function(json){
-        let x,y,i;
-        x = "<option>" + json["0"].uf + "</option>"
-        for (i=0;i<json.length;i++) {
-          x += "<option>" + json[i].uf + "</option>"
-        }
-          document.getElementById("uf").innerHTML = x;
-  
-        y = "<option>" + json["0"].nome_municipio + "</option>"
-        for (i=0;i<json.length;i++){
-          y += "<option>" + json[i].nome_municipio + "</option>"
-        }
-          document.getElementById("nomeMun").innerHTML = y;
-        })
-  
-      });
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
 
-      
-    
-    //função fetch para mandar
-    fetch('http://localhost:8080/read/entidade', {
-      method: 'GET',
-      headers: {'Authorization': 'Bearer ' + meuToken},
-    }).then(function(response){
-      //tratamento dos erros
-      if(response.status == 200){
-        console.log("ok");
-      }
-      else if(response.status ==201){
-        console.log("Entidade criada com sucesso");
-      }
-      else if(response.status ==204){
-        console.log("Apagado com sucesso.");
-      }
-      else if(response.status ==400){
-        window.location.replace("./errors/400.html");
-      }
-      else if(response.status ==401){
-        window.location.replace("./errors/401.html");
-      }
-      else if(response.status ==403){
-        window.location.replace("./errors/403.html");
-      }
-      else if(response.status ==404){
-        window.location.replace("./errors/404.html");
-      }
-      else if(response.status ==409){
-        console.log("Erro: Usuário já existente.");
-      }
-      else if(response.status == 412){
-        console.log("Erro: Informação colocada é incorreta.");
-      }
-      else if(response.status == 422){
-        console.log("Erro: Usuário ou senha inválidos.");
-      }
-      else if(response.status == 500){
-        window.location.replace("./errors/500.html");
-      }
-      else if(response.status == 504){
-        window.location.replace("./errors/504.html");
-      }
-      //caso seja um dos erros não listados
-      else{
-        console.log("ERRO DESCONHECIDO");
-      }
-      //pegar o json que possui a tabela
-      return response.json().then(function(json){
-        console.log(json);
+    //checar o status do pedido
+    console.log(response);
 
-        let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
+    //tratamento dos erros
+    if (response.status == 200) {
+      console.log("200 ok.");
+    } else if (response.status == 201) {
+      alert("Usuário criado com sucesso");
+      window.location.replace("./entidade.html");
+    } else if (response.status == 400) {
+      window.location.replace("./errors/400.html");
+    } else if (response.status == 401) {
+      window.location.replace("./errors/401.html");
+    } else if (response.status == 403) {
+      window.location.replace("./errors/403.html");
+    } else if (response.status == 404) {
+      window.location.replace("./errors/404.html");
+    } else if (response.status == 409) {
+      alert("Erro: Usuário já existente.");
+    } else if (response.status == 412) {
+      alert("Erro: Informação colocada é incorreta.");
+    } else if (response.status == 422) {
+      alert("Erro: Usuário ou senha inválidos.");
+    } else if (response.status == 500) {
+      window.location.replace("./errors/500.html");
+    } else if (response.status == 504) {
+      window.location.replace("./errors/504.html");
+    } else {
+      alert("ERRO DESCONHECIDO");
+    }
+    return response.json().then(function (json) {
+      let x, y, i;
+      x = "<option>" + json["0"].uf + "</option>"
+      for (i = 0; i < json.length; i++) {
+        x += "<option>" + json[i].uf + "</option>"
+      }
+      document.getElementById("uf").innerHTML = x;
+
+      y = "<option>" + json["0"].nome_municipio + "</option>"
+      for (i = 0; i < json.length; i++) {
+        y += "<option>" + json[i].nome_municipio + "</option>"
+      }
+      document.getElementById("nomeMun").innerHTML = y;
+    })
+
+  });
+
+  //Fazer Tabela
+
+  //função fetch para mandar itens 
+  fetch('http://localhost:8080/read/entidade', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+    //tratamento dos erros
+    if (response.status == 200) {
+      console.log("ok");
+    } else if (response.status == 201) {
+      console.log("Entidade criada com sucesso");
+    } else if (response.status == 204) {
+      console.log("Apagado com sucesso.");
+    } else if (response.status == 400) {
+      window.location.replace("./errors/400.html");
+    } else if (response.status == 401) {
+      window.location.replace("./errors/401.html");
+    } else if (response.status == 403) {
+      window.location.replace("./errors/403.html");
+    } else if (response.status == 404) {
+      window.location.replace("./errors/404.html");
+    } else if (response.status == 409) {
+      console.log("Erro: Usuário já existente.");
+    } else if (response.status == 412) {
+      console.log("Erro: Informação colocada é incorreta.");
+    } else if (response.status == 422) {
+      console.log("Erro: Usuário ou senha inválidos.");
+    } else if (response.status == 500) {
+      window.location.replace("./errors/500.html");
+    } else if (response.status == 504) {
+      window.location.replace("./errors/504.html");
+    }
+    //caso seja um dos erros não listados
+    else {
+      console.log("ERRO DESCONHECIDO");
+    }
+    //pegar o json que possui a tabela
+    return response.json().then(function (json) {
+      console.log(json);
+
+      let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
           <th> <span class="custom-checkbox">
           <input type="checkbox" id="selectAll">
@@ -237,145 +218,134 @@ window.onload=function(){
           <th scope="col">Opções</th>
           </tr>
           </thead>`);
-        tabela += (`<tbody> <tr>`);
+      tabela += (`<tbody> <tr>`);
 
 
 
-            for(let i=0;i<json.length;i++){
-              cnpjQuery[i]=json[i]["cnpj"]; 
-              tabela += (`<td>
+      for (let i = 0; i < json.length; i++) {
+        cnpjQuery[i] = json[i]["cnpj"];
+        tabela += (`<td>
               <span class="custom-checkbox">
               <input type="checkbox" id="checkbox1" name="options[]" value="1">
               <label for="checkbox1"></label>
               </span>
               </td>`);
-              tabela += (`<td>`);
-              tabela += json[i]["cnpj"]; 
-              tabela += (`</td> <td>`);
-              tabela += json[i]["nome"] 
-              tabela += (`</td> <td>`);
-              tabela += json[i]["endereco"] 
-              tabela += (`</td> <td>`);
-              tabela += json[i]["numero"] 
-              tabela += (`</td> <td>`);
-              tabela += json[i]["bairro"] 
-              tabela += (`</td> <td>`);
-              tabela += json[i]["cep"] 
-              tabela += (`</td> <td>`);
-              tabela += json[i]["uf"] 
-              tabela += (`</td> <td>`);
-              tabela += json[i]["nome_municipio"] 
-              tabela += (`</td> <td>`);
-              tabela += json[i]["observacao"] 
-              tabela += (`</td> <td> 
+        tabela += (`<td>`);
+        tabela += json[i]["cnpj"];
+        tabela += (`</td> <td>`);
+        tabela += json[i]["nome"]
+        tabela += (`</td> <td>`);
+        tabela += json[i]["endereco"]
+        tabela += (`</td> <td>`);
+        tabela += json[i]["numero"]
+        tabela += (`</td> <td>`);
+        tabela += json[i]["bairro"]
+        tabela += (`</td> <td>`);
+        tabela += json[i]["cep"]
+        tabela += (`</td> <td>`);
+        tabela += json[i]["uf"]
+        tabela += (`</td> <td>`);
+        tabela += json[i]["nome_municipio"]
+        tabela += (`</td> <td>`);
+        tabela += json[i]["observacao"]
+        tabela += (`</td> <td> 
               <span class="d-flex">
-              <button onclick="editarEntidade(`+ i +`)" class="btn btn-success">
+              <button onclick="editarEntidade(` + i + `)" class="btn btn-success">
               <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
               </button>
-              <button onclick="apagarEntidade(`+ i +`)" class="btn btn-danger">
+              <button onclick="apagarEntidade(` + i + `)" class="btn btn-danger">
               <i class="material-icons"data-toggle="tooltip" title="Delete">&#xE872;</i>
               </button> 
               </span> </td>`);
-              tabela += (`</tr> <tr>`);          
-            }
+        tabela += (`</tr> <tr>`);
+      }
 
 
-        tabela += (`</tr> </tbody>`);
-        document.getElementById("tabela").innerHTML= tabela;
-            
-            $(document).ready(function () {
-            // Select/Deselect checkboxes
-            let checkbox = $('table tbody input[type="checkbox"]');
-            $("#selectAll").click(function () {
-              if (this.checked) {
-                checkbox.each(function () {
-                   this.checked = true;
-                 });
-              }else {
-                checkbox.each(function () {
-                  this.checked = false;
-                 });
-               }
-             });
-            checkbox.click(function () {
-              if (!this.checked) {
-                 $("#selectAll").prop("checked", false);
-              }
+      tabela += (`</tr> </tbody>`);
+      document.getElementById("tabela").innerHTML = tabela;
+
+      $(document).ready(function () {
+        // Select/Deselect checkboxes
+        let checkbox = $('table tbody input[type="checkbox"]');
+        $("#selectAll").click(function () {
+          if (this.checked) {
+            checkbox.each(function () {
+              this.checked = true;
             });
-          });
-
-
+          } else {
+            checkbox.each(function () {
+              this.checked = false;
+            });
+          }
+        });
+        checkbox.click(function () {
+          if (!this.checked) {
+            $("#selectAll").prop("checked", false);
+          }
         });
       });
+
+
+    });
+  });
 }
 
-function editarEntidade(valor){
-localStorage.setItem("cnpj", cnpjQuery[valor]);
-window.location.href = "./gerenciaEntidade.html";
+function editarEntidade(valor) {
+  localStorage.setItem("cnpj", cnpjQuery[valor]);
+  window.location.href = "./gerenciaEntidade.html";
 }
 
-function apagarEntidade(valor){
-  
+function apagarEntidade(valor) {
+
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
 
   //função fetch para mandar
-  fetch('http://localhost:8080/read/entidade/'+cnpjQuery[valor], {
+  fetch('http://localhost:8080/read/entidade/' + cnpjQuery[valor], {
     method: 'DELETE',
-    headers: {'Authorization': 'Bearer ' + meuToken},
-  }).then(function(response){
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
 
     //checar o status do pedido
     console.log(response);
 
     //tratamento dos erros
-    if(response.status == 200){
+    if (response.status == 200) {
       window.location.replace("./entidade.html");
-    }
-    else if(response.status ==201){
+    } else if (response.status == 201) {
       alert("Usuário criado com sucesso");
       window.location.replace("./entidade.html");
-    }
-    else if(response.status == 202){
+    } else if (response.status == 202) {
       alert("Login efetivado com sucesso");
       window.location.replace("./entidade.html");
-    }
-    else if(response.status ==204){
+    } else if (response.status == 204) {
       alert("Apagado com sucesso.");
       window.location.replace("./entidade.html");
-    }
-    else if(response.status ==400){
+    } else if (response.status == 400) {
       window.location.replace("./errors/400.html");
-    }
-    else if(response.status ==401){
+    } else if (response.status == 401) {
       window.location.replace("./errors/401.html");
-    }
-    else if(response.status ==403){
+    } else if (response.status == 403) {
       window.location.replace("./errors/403.html");
-    }
-    else if(response.status ==404){
+    } else if (response.status == 404) {
       window.location.replace("./errors/404.html");
-    }
-    else if(response.status ==409){
+    } else if (response.status == 409) {
       alert("Erro: Usuário já existente.");
-    }
-    else if(response.status == 412){
+    } else if (response.status == 412) {
       alert("Erro: Informação colocada é incorreta.");
-    }
-    else if(response.status == 422){
+    } else if (response.status == 422) {
       alert("Erro: Usuário ou senha inválidos.");
-    }
-    else if(response.status == 500){
+    } else if (response.status == 500) {
       window.location.replace("./errors/500.html");
-    }
-    else if(response.status == 504){
+    } else if (response.status == 504) {
       window.location.replace("./errors/504.html");
-    }
-    else{
+    } else {
       alert("ERRO DESCONHECIDO");
     }
-    return response.json().then(function(json){
-    console.log(json);
-      });
+    return response.json().then(function (json) {
+      console.log(json);
     });
-  }
+  });
+}

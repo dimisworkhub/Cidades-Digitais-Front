@@ -68,8 +68,8 @@
 
                 activePanel = elem;
 
-                
-               
+
+
             }
 
         });
@@ -95,7 +95,7 @@
 
     };
 
-    
+
 
     //STEPS BAR CLICK FUNCTION
     DOMstrings.stepsBar.addEventListener('click', e => {
@@ -147,5 +147,3 @@
         setActivePanel(activePanelNum);
 
     });
-
-  
