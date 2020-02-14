@@ -11,8 +11,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="bootstrap4\css\bootstrap.css"> <!-- CSS bootstrap -->
-    <link rel="stylesheet" href="css/reset.css"> <!-- CSS reset -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="./css/reset.css"> <!-- CSS reset -->
+    <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/multi.css">
     <!--Resource style -->
     <link rel="stylesheet" href="./css/style2.css">
@@ -85,7 +85,9 @@
                             </div>
                         </div>
                         <!--Tabela por JS-->
-                        <table class="table table-striped table-bordered table-hover" id="tabela"></table>
+                        <div style="overflow-x:auto;">
+                            <table class="table table-striped table-bordered table-hover" role="table" id="tabela"></table>
+                        </div>
                         <!--Footer-->
                         <div class="clearfix">
                             <div class="hint-text">Mostrando <b>5</b> de <b>25</b> Itens</div>
@@ -107,204 +109,205 @@
         </div>
         </div>
     </main>
-  
-     <!-- ADD Modal HTML -->
-   <div id="addEmployeeModal" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
 
-            <div class="modal-header">
-                <h4 class="modal-title">Add Employee</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="multisteps-form">
-                    <!--progress bar-->
-                    <div class="row">
-                        <div class="col-12 col-lg-12 ml-auto mr-auto mb-4">
-                            <div class="multisteps-form__progress">
-                                <button class="multisteps-form__progress-btn js-active" type="button"
-                                    title="User Info">Informações do Usuário</button>
-                                <button class="multisteps-form__progress-btn" type="button"
-                                    title="Address">Address</button>
-                                <button class="multisteps-form__progress-btn" type="button" title="Order Info">Order
-                                    Info</button>
-                                <button class="multisteps-form__progress-btn" type="button"
-                                    title="Comments">Comments </button>
+    <!-- ADD Modal HTML -->
+    <div id="addEmployeeModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Employee</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="multisteps-form">
+                        <!--progress bar-->
+                        <div class="row">
+                            <div class="col-12 col-lg-12 ml-auto mr-auto mb-4">
+                                <div class="multisteps-form__progress">
+                                    <button class="multisteps-form__progress-btn js-active" type="button"
+                                        title="User Info">Informações do Usuário</button>
+                                    <button class="multisteps-form__progress-btn" type="button"
+                                        title="Address">Address</button>
+                                    <button class="multisteps-form__progress-btn" type="button" title="Order Info">Order
+                                        Info</button>
+                                    <button class="multisteps-form__progress-btn" type="button"
+                                        title="Comments">Comments </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <!--form panels-->
-                    <div class="row">
-                        <div class="col-12 col-lg-12 m-auto">
-                            <form class="multisteps-form__form" style="height: 307px;" >
-                                <!--single form panel-->
-                                <div class="multisteps-form__panel shadow p-4 rounded bg-white js-active"
-                                    data-animation="scaleIn">
-                                    <h3 class="multisteps-form__title">Informações do Usuário</h3>
+                        <!--form panels-->
+                        <div class="row">
+                            <div class="col-12 col-lg-12 m-auto">
+                                <form class="multisteps-form__form" style="height: 307px;">
+                                    <!--single form panel-->
+                                    <div class="multisteps-form__panel shadow p-4 rounded bg-white js-active"
+                                        data-animation="scaleIn">
+                                        <h3 class="multisteps-form__title">Informações do Usuário</h3>
 
-                                    <div class="multisteps-form__content">
-                                        <div class="form-row mt-4">
-                                            <div class="col-12 col-sm-6">
-                                                <input class="multisteps-form__input form-control" type="text"
-                                                    placeholder="First Name" />
-                                            </div>
-                                            <div class="col-12 col-sm-6 mt-4 mt-sm-0">
-                                                <input class="multisteps-form__input form-control" type="text"
-                                                    placeholder="Last Name" />
-                                            </div>
-                                        </div>
-                                        <div class="form-row mt-4">
-                                            <div class="col-12 col-sm-6">
-                                                <input class="multisteps-form__input form-control" type="text"
-                                                    placeholder="Login" />
-                                            </div>
-                                            <div class="col-12 col-sm-6 mt-4 mt-sm-0">
-                                                <input class="multisteps-form__input form-control" type="email"
-                                                    placeholder="Email" />
-                                            </div>
-                                        </div>
-                                        <div class="form-row mt-4">
-                                            <div class="col-12 col-sm-6">
-                                                <input class="multisteps-form__input form-control" type="password"
-                                                    placeholder="Password" />
-                                            </div>
-                                            <div class="col-12 col-sm-6 mt-4 mt-sm-0">
-                                                <input class="multisteps-form__input form-control" type="password"
-                                                    placeholder="Repeat Password" />
-                                            </div>
-                                        </div>
-                                        <div class="button-row d-flex mt-4">
-                                            <button class="btn btn-primary multi-button ml-auto js-btn-next"
-                                                type="button" title="Next">Next</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--single form panel-->
-                                <div class="multisteps-form__panel shadow p-4 rounded bg-white"
-                                    data-animation="scaleIn">
-                                    <h3 class="multisteps-form__title">Your Address</h3>
-                                    <div class="multisteps-form__content">
-                                        <div class="form-row mt-4">
-                                            <div class="col">
-                                                <input class="multisteps-form__input form-control" type="text"
-                                                    placeholder="Address 1" />
-                                            </div>
-                                        </div>
-                                        <div class="form-row mt-4">
-                                            <div class="col">
-                                                <input class="multisteps-form__input form-control" type="text"
-                                                    placeholder="Address 2" />
-                                            </div>
-                                        </div>
-                                        <div class="form-row mt-4">
-                                            <div class="col-12 col-sm-6">
-                                                <input class="multisteps-form__input form-control" type="text"
-                                                    placeholder="City" />
-                                            </div>
-                                            <div class="col-6 col-sm-3 mt-4 mt-sm-0">
-                                                <select class="multisteps-form__select form-control">
-                                                    <option selected="selected">State...</option>
-                                                    <option>...</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-6 col-sm-3 mt-4 mt-sm-0">
-                                                <input class="multisteps-form__input form-control" type="text"
-                                                    placeholder="Zip" />
-                                            </div>
-                                        </div>
-                                        <div class="button-row d-flex mt-4">
-                                            <button class="btn btn-primary multi-button js-btn-prev" type="button"
-                                                title="Prev">Prev</button>
-                                            <button class="btn btn-primary multi-button ml-auto js-btn-next"
-                                                type="button" title="Next">Next</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--single form panel-->
-                                <div class="multisteps-form__panel shadow p-4 rounded bg-white"
-                                    data-animation="scaleIn">
-                                    <h3 class="multisteps-form__title">Your Order Info</h3>
-                                    <div class="multisteps-form__content">
-                                        <div class="row">
-                                            <div class="col-12 col-md-6 mt-4">
-                                                <div class="card shadow-sm">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title">Item Title</h5>
-                                                        <p class="card-text">Small and nice item description</p><a
-                                                            class="btn btn-primary multi-button" href="#"
-                                                            title="Item Link">Item Link</a>
-                                                    </div>
+                                        <div class="multisteps-form__content">
+                                            <div class="form-row mt-4">
+                                                <div class="col-12 col-sm-6">
+                                                    <input class="multisteps-form__input form-control" type="text"
+                                                        placeholder="Nome" onchange="changer()" value="" id="nome" />
+                                                </div>
+                                                <div class="col-12 col-sm-6 mt-4 mt-sm-0">
+                                                    <input class="multisteps-form__input form-control" type="email"
+                                                        placeholder="Email" onchange="changer()" value="" id="email" />
                                                 </div>
                                             </div>
-                                            <div class="col-12 col-md-6 mt-4">
-                                                <div class="card shadow-sm">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title">Item Title</h5>
-                                                        <p class="card-text">Small and nice item description</p><a
-                                                            class="btn btn-primary multi-button" href="#"
-                                                            title="Item Link">Item Link</a>
-                                                    </div>
+                                            <div class="form-row mt-4">
+                                                <div class="col-12 col-sm-6">
+                                                    <input class="multisteps-form__input form-control" type="text"
+                                                        placeholder="Login" onchange="changer()" value="" id="login" />
+                                                </div>
+                                                <div class="col-12 col-sm-6">
+                                                    <input class="multisteps-form__input form-control" type="password"
+                                                        placeholder="Senha" onchange="changer()" value="" id="senha" />
                                                 </div>
                                             </div>
+                                            <!--
+                                            <div class="form-row mt-4">
+                                                <div class="col-12 col-sm-6">
+                                                    <select id="status" class="multisteps-form__select form-control">
+                                                        <option value="">Status</option>
+                                                        <option value=true>Ativo</option>
+                                                        <option value=false>Desativo</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            -->
+                                            <div class="button-row d-flex mt-4">
+                                                <button class="btn btn-primary multi-button ml-auto js-btn-next"
+                                                    type="button" title="Next" onclick="enviar()">Next</button>
+                                            </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="button-row d-flex mt-4 col-12">
-                                                <button class="btn btn-primary multi-button js-btn-prev"
-                                                    type="button" title="Prev">Prev</button>
+                                    </div>
+                                    <!--single form panel-->
+                                    <div class="multisteps-form__panel shadow p-4 rounded bg-white"
+                                        data-animation="scaleIn">
+                                        <h3 class="multisteps-form__title">Your Address</h3>
+                                        <div class="multisteps-form__content">
+                                            <div class="form-row mt-4">
+                                                <div class="col">
+                                                    <input class="multisteps-form__input form-control" type="text"
+                                                        placeholder="Address 1" />
+                                                </div>
+                                            </div>
+                                            <div class="form-row mt-4">
+                                                <div class="col">
+                                                    <input class="multisteps-form__input form-control" type="text"
+                                                        placeholder="Address 2" />
+                                                </div>
+                                            </div>
+                                            <div class="form-row mt-4">
+                                                <div class="col-12 col-sm-6">
+                                                    <input class="multisteps-form__input form-control" type="text"
+                                                        placeholder="City" />
+                                                </div>
+                                                <div class="col-6 col-sm-3 mt-4 mt-sm-0">
+                                                    <select class="multisteps-form__select form-control">
+                                                        <option selected="selected">State...</option>
+                                                        <option>...</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-6 col-sm-3 mt-4 mt-sm-0">
+                                                    <input class="multisteps-form__input form-control" type="text"
+                                                        placeholder="Zip" />
+                                                </div>
+                                            </div>
+                                            <div class="button-row d-flex mt-4">
+                                                <button class="btn btn-primary multi-button js-btn-prev" type="button"
+                                                    title="Prev">Prev</button>
                                                 <button class="btn btn-primary multi-button ml-auto js-btn-next"
                                                     type="button" title="Next">Next</button>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <!--single form panel-->
-                                <div class="multisteps-form__panel shadow p-4 rounded bg-white"
-                                    data-animation="scaleIn">
-                                    <h3 class="multisteps-form__title">Additional Comments</h3>
-                                    <div class="multisteps-form__content">
-                                        <div class="form-row mt-4">
-                                            <textarea class="multisteps-form__textarea form-control"
-                                                placeholder="Additional Comments and Requirements"></textarea>
-                                        </div>
-                                        <div class="button-row d-flex mt-4">
-                                            <button class="btn btn-primary multi-button js-btn-prev" type="button"
-                                                title="Prev">Prev</button>
-                                            <button class="btn btn-success ml-auto" type="button"
-                                                title="Send">Send</button>
+                                    <!--single form panel-->
+                                    <div class="multisteps-form__panel shadow p-4 rounded bg-white"
+                                        data-animation="scaleIn">
+                                        <h3 class="multisteps-form__title">Your Order Info</h3>
+                                        <div class="multisteps-form__content">
+                                            <div class="row">
+                                                <div class="col-12 col-md-6 mt-4">
+                                                    <div class="card shadow-sm">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title">Item Title</h5>
+                                                            <p class="card-text">Small and nice item description</p><a
+                                                                class="btn btn-primary multi-button" href="#"
+                                                                title="Item Link">Item Link</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-md-6 mt-4">
+                                                    <div class="card shadow-sm">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title">Item Title</h5>
+                                                            <p class="card-text">Small and nice item description</p><a
+                                                                class="btn btn-primary multi-button" href="#"
+                                                                title="Item Link">Item Link</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="button-row d-flex mt-4 col-12">
+                                                    <button class="btn btn-primary multi-button js-btn-prev"
+                                                        type="button" title="Prev">Prev</button>
+                                                    <button class="btn btn-primary multi-button ml-auto js-btn-next"
+                                                        type="button" title="Next">Next</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </form>
+                                    <!--single form panel-->
+                                    <div class="multisteps-form__panel shadow p-4 rounded bg-white"
+                                        data-animation="scaleIn">
+                                        <h3 class="multisteps-form__title">Additional Comments</h3>
+                                        <div class="multisteps-form__content">
+                                            <div class="form-row mt-4">
+                                                <textarea class="multisteps-form__textarea form-control"
+                                                    placeholder="Additional Comments and Requirements"></textarea>
+                                            </div>
+                                            <div class="button-row d-flex mt-4">
+                                                <button class="btn btn-primary multi-button js-btn-prev" type="button"
+                                                    title="Prev">Prev</button>
+                                                <button class="btn btn-success ml-auto" type="button"
+                                                    title="Send">Send</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
+
+
                 </div>
-
-
             </div>
         </div>
-    </div>
-    <!-- Delete Modal HTML -->
-    <div id="deleteEmployeeModal" class="modal fade">
-        <div class="modal-dialog modal-confirm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="icon-box">
-                        <i class="material-icons">&#xE5CD;</i>
+        <!-- Delete Modal HTML -->
+        <div id="deleteEmployeeModal" class="modal fade">
+            <div class="modal-dialog modal-confirm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="icon-box">
+                            <i class="material-icons">&#xE5CD;</i>
+                        </div>
+                        <h4 class="modal-title">Esta certo disso?</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     </div>
-                    <h4 class="modal-title">Esta certo disso?</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <p>Deseja realmente excluir esses registros? Este processo não pode ser desfeito.</p>
-                </div>
-                <div style="width:100%; text-align: center;" class="modal-footer">
-                    <button type="button" class="btn btn-info" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger">Deletar</button>
+                    <div class="modal-body">
+                        <p>Deseja realmente excluir esses registros? Este processo não pode ser desfeito.</p>
+                    </div>
+                    <div style="width:100%; text-align: center;" class="modal-footer">
+                        <button type="button" class="btn btn-info" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-danger">Deletar</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
 
     </div>
