@@ -14,9 +14,11 @@ window.onload = function () {
       'Authorization': 'Bearer ' + meuToken
     },
   }).then(function (response) {
+    console.log(response)
     //tratamento dos erros
     if (response.status == 200) {
       console.log("ok");
+      
     } else if (response.status == 201) {
       console.log("Lote criado com sucesso");
     } else if (response.status == 204) {
@@ -137,34 +139,39 @@ window.onload = function () {
 }
 
 function editarLote(valor) {
-  localStorage.setItem("lote", loteQuery[valor]);
+  localStorage.setItem("cod_lote", loteQuery[valor]);
   window.location.href = "./gerenciaLote.html";
 }
 
-//Fazer Entidade
-var info = {
-  "lote": " ",
-  "cnpj": " ",
-  "contrato": " ",
-  "dt_inicio_vig": " ",
-  "dt_final_vig": " ",
-  "dt_reajuste": " "
-};
+
+
 
 function changer() {
-  var a = document.getElementById("lote");
-  info.cnpj = a.value;
+  var a = document.getElementById("cod_lote");
+  info.cod_lote = parseInt(a.value);
   var b = document.getElementById("cnpj");
-  info.nome = b.value;
+  info.cnpj = b.value;
   var c = document.getElementById("contrato");
-  info.endereco = c.value;
-  var d = document.getElementById("dataI");
-  info.numero = d.value;
-  var e = document.getElementById("dataF");
-  info.bairro = e.value;
-  var f = document.getElementById("dataR");
-  info.cep = f.value;
+  info.contrato = c.value;
+  var d = document.getElementById("dt_inicio_vig");
+  info.dt_inicio_vig = d.value;
+  var e = document.getElementById("dt_final_vig");
+  info.dt_final_vig = e.value;
+  var f = document.getElementById("dt_reajuste");
+  info.dt_reajuste = f.value;
+  console.log(info);
 }
+
+
+//Fazer Entidade
+let info = {
+  "cod_lote": "" ,
+  "cnpj": "",
+  "contrato": "",
+  "dt_inicio_vig": "",
+  "dt_final_vig": "",
+  "dt_reajuste": ""
+};
 
 function enviar() {
 
@@ -172,7 +179,7 @@ function enviar() {
   let corpo = JSON.stringify(info);
 
   //função fetch para mandar
-  fetch('http://localhost:8080/read/Lote', {
+  fetch('http://localhost:8080/read/lote', {
     method: 'POST',
     body: corpo,
     headers: {
@@ -187,7 +194,7 @@ function enviar() {
     if (response.status == 200) {
       window.location.replace("./home.html");
     } else if (response.status == 201) {
-      alert("Usuário criado com sucesso");
+      alert("Lote criado com sucesso");
       window.location.replace("./home.html");
     } else if (response.status == 202) {
       alert("Login efetivado com sucesso");
@@ -204,11 +211,9 @@ function enviar() {
     } else if (response.status == 404) {
       window.location.replace("./errors/404.html");
     } else if (response.status == 409) {
-      alert("Erro: Usuário já existente.");
+      alert("Erro: Lote já existente.");
     } else if (response.status == 412) {
       alert("Erro: Informação colocada é incorreta.");
-    } else if (response.status == 422) {
-      alert("Erro: Usuário ou senha inválidos.");
     } else if (response.status == 500) {
       window.location.replace("./errors/500.html");
     } else if (response.status == 504) {

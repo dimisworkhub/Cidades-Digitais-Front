@@ -124,7 +124,7 @@ window.onload = function () {
 
             //função fetch para mandar itens 
 
-            fetch('http://localhost:8080/read/modulos', {
+            fetch('http://localhost:8080/read/entidade', {
               method: 'GET',
               headers: {
                 'Authorization': 'Bearer ' + meuToken
