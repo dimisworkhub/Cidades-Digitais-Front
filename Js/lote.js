@@ -139,7 +139,7 @@ window.onload = function () {
 }
 
 function editarLote(valor) {
-  localStorage.setItem("cod_lote", loteQuery[valor]);
+  localStorage.setItem("lote", loteQuery[valor]);
   window.location.href = "./gerenciaLote.html";
 }
 
@@ -147,7 +147,7 @@ function editarLote(valor) {
 
 
 function changer() {
-  var a = document.getElementById("cod_lote");
+  var a = document.getElementById("lote");
   info.cod_lote = parseInt(a.value);
   var b = document.getElementById("cnpj");
   info.cnpj = b.value;

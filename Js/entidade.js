@@ -2,8 +2,8 @@
 let cnpjQuery = [];
 //pega o token do login
 let meuToken = localStorage.getItem("token");
-
-
+//pega o JSON de municípios para uso em "adicionar entidades"
+let cidades=[];
 
 //Fazer Entidade
 
@@ -34,14 +34,19 @@ function changer() {
   info.cep = f.value;
   let g = document.getElementById("nomeMun");
   info.nome_municipio = g.value;
-  let h = document.getElementById("uf");
-  info.uf = h.value;
-  let i = document.getElementById("obs");
-  info.observacao = i.value;
+  let h = document.getElementById("obs");
+  info.observacao = h.value;
 }
 
-
-
+function enabler() {
+  let a = document.getElementById("uf");
+  info.uf = a.value;
+  document.getElementById("nomeMun").disabled=false;
+  
+      for (i = 1; i < i; i++){
+        y[i] = "<option>" + cidades[i].nome_municipio + "</option>"
+      }
+}
 function enviar() {
 
   //transforma as informações do token em json
@@ -103,7 +108,7 @@ function enviar() {
 
 window.onload = function () {
 
-  fetch('http://localhost:8080/read/municipio', {
+  fetch('http://localhost:8080/read/municipios', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -115,10 +120,30 @@ window.onload = function () {
 
     //tratamento dos erros
     if (response.status == 200) {
-      console.log("200 ok.");
-    } else if (response.status == 201) {
-      alert("Usuário criado com sucesso");
-      window.location.replace("./entidade.html");
+      return response.json().then(function (json) {
+        cidades=json;
+        console.log(cidades);
+        //cria variaveis
+        let i,j=1;
+        let x=[],valorUF=[],valorFinalUF=[];
+        //faz a ligação entre variaveis e valores iniciais do banco
+        valorUF[0] = json["0"].uf;
+        valorFinalUF[0]=valorUF[0];
+        //faz a ligação com os outros valores do banco
+        for (i = 1; i < json.length; i++) {
+          valorUF[i] = json[i].uf;
+          if(valorUF[i] != valorUF[i-1]){
+            valorFinalUF[j] = valorUF[i];
+            j++;
+          }
+        }
+        console.log(j);
+        valorFinalUF.sort();
+        for(i = 0; i < j; i++){
+          x[i] += "<option>" + valorFinalUF[i] + "</option>";
+        }
+        document.getElementById("uf").innerHTML = x;
+      });
     } else if (response.status == 400) {
       window.location.replace("./errors/400.html");
     } else if (response.status == 401) {
@@ -126,7 +151,7 @@ window.onload = function () {
     } else if (response.status == 403) {
       window.location.replace("./errors/403.html");
     } else if (response.status == 404) {
-      window.location.replace("./errors/404.html");
+      //window.location.replace("./errors/404.html");
     } else if (response.status == 409) {
       alert("Erro: Usuário já existente.");
     } else if (response.status == 412) {
@@ -140,21 +165,6 @@ window.onload = function () {
     } else {
       alert("ERRO DESCONHECIDO");
     }
-    return response.json().then(function (json) {
-      let x, y, i;
-      x = "<option>" + json["0"].uf + "</option>"
-      for (i = 0; i < json.length; i++) {
-        x += "<option>" + json[i].uf + "</option>"
-      }
-      document.getElementById("uf").innerHTML = x;
-
-      y = "<option>" + json["0"].nome_municipio + "</option>"
-      for (i = 0; i < json.length; i++) {
-        y += "<option>" + json[i].nome_municipio + "</option>"
-      }
-      document.getElementById("nomeMun").innerHTML = y;
-    })
-
   });
 
   //Fazer Tabela
