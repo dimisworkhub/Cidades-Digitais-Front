@@ -1,12 +1,14 @@
-//capturar chave primaria
-let cnpjQuery = [];
+//capturar itens para mandar no gerenciaEstrutura
+let entQuery = [];
 //pega o token do login
 let meuToken = localStorage.getItem("token");
 //pega o JSON de municípios para uso em "adicionar entidades"
-let cidades=[];
+let cidades = [];
+document.getElementById("nomeMun").disabled = true;
 
-//Fazer Entidade
 
+
+//JSON usado para mandar as informações no fetch
 let info = {
   "cnpj": " ",
   "nome": " ",
@@ -32,21 +34,27 @@ function changer() {
   info.bairro = e.value;
   let f = document.getElementById("cep");
   info.cep = f.value;
-  let g = document.getElementById("nomeMun");
-  info.nome_municipio = g.value;
-  let h = document.getElementById("obs");
-  info.observacao = h.value;
+  let g = document.getElementById("obs");
+  info.observacao = g.value;
+  let h = document.getElementById("nomeMun");
+  info.nome_municipio = h.value;
 }
 
 function enabler() {
   let a = document.getElementById("uf");
   info.uf = a.value;
-  document.getElementById("nomeMun").disabled=false;
-  
-      for (i = 1; i < i; i++){
-        y[i] = "<option>" + cidades[i].nome_municipio + "</option>"
-      }
+  document.getElementById("nomeMun").disabled = false;
+  let i, y = [];
+  for (i = 1; i < cidades.length; i++) {
+    if (cidades[i].uf == a.value) {
+      y[i] = "<option>" + cidades[i].nome_municipio + "</option>"
+    }
+  }
+  document.getElementById("nomeMun").innerHTML = y;
 }
+
+
+
 function enviar() {
 
   //transforma as informações do token em json
@@ -60,9 +68,6 @@ function enviar() {
       'Authorization': 'Bearer ' + meuToken
     },
   }).then(function (response) {
-
-    //checar o status do pedido
-    console.log(response);
 
     //tratamento dos erros
     if (response.status == 200) {
@@ -108,38 +113,37 @@ function enviar() {
 
 window.onload = function () {
 
-  fetch('http://localhost:8080/read/municipios', {
+  fetch('http://localhost:8080/read/municipio', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
     },
   }).then(function (response) {
 
-    //checar o status do pedido
-    console.log(response);
-
     //tratamento dos erros
     if (response.status == 200) {
       return response.json().then(function (json) {
-        cidades=json;
-        console.log(cidades);
-        //cria variaveis
-        let i,j=1;
-        let x=[],valorUF=[],valorFinalUF=[];
-        //faz a ligação entre variaveis e valores iniciais do banco
+        //pegando valores para usar em municipios
+        cidades = json;
+        //cria letiaveis
+        let i, j = 1;
+        let x = [],
+          valorUF = [],
+          valorFinalUF = [];
+
+        //faz a ligação entre letiaveis e valores iniciais do banco
         valorUF[0] = json["0"].uf;
-        valorFinalUF[0]=valorUF[0];
+        valorFinalUF[0] = valorUF[0];
         //faz a ligação com os outros valores do banco
         for (i = 1; i < json.length; i++) {
           valorUF[i] = json[i].uf;
-          if(valorUF[i] != valorUF[i-1]){
+          if (valorUF[i] != valorUF[i - 1]) {
             valorFinalUF[j] = valorUF[i];
             j++;
           }
         }
-        console.log(j);
         valorFinalUF.sort();
-        for(i = 0; i < j; i++){
+        for (i = 0; i < j; i++) {
           x[i] += "<option>" + valorFinalUF[i] + "</option>";
         }
         document.getElementById("uf").innerHTML = x;
@@ -151,7 +155,7 @@ window.onload = function () {
     } else if (response.status == 403) {
       window.location.replace("./errors/403.html");
     } else if (response.status == 404) {
-      //window.location.replace("./errors/404.html");
+      window.location.replace("./errors/404.html");
     } else if (response.status == 409) {
       alert("Erro: Usuário já existente.");
     } else if (response.status == 412) {
@@ -166,6 +170,7 @@ window.onload = function () {
       alert("ERRO DESCONHECIDO");
     }
   });
+
 
   //Fazer Tabela
 
@@ -208,7 +213,6 @@ window.onload = function () {
     }
     //pegar o json que possui a tabela
     return response.json().then(function (json) {
-      console.log(json);
 
       let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
@@ -230,10 +234,8 @@ window.onload = function () {
           </thead>`);
       tabela += (`<tbody> <tr>`);
 
-
-
       for (let i = 0; i < json.length; i++) {
-        cnpjQuery[i] = json[i]["cnpj"];
+        entQuery[i] = json[i];
         tabela += (`<td>
               <span class="custom-checkbox">
               <input type="checkbox" id="checkbox1" name="options[]" value="1">
@@ -300,26 +302,35 @@ window.onload = function () {
   });
 }
 
+
+//leva para o editor da entidade selecionada
 function editarEntidade(valor) {
-  localStorage.setItem("cnpj", cnpjQuery[valor]);
+  localStorage.setItem("cnpj", entQuery[valor].cnpj);
+  localStorage.setItem("nome", entQuery[valor].nome);
+  localStorage.setItem("endereco", entQuery[valor].endereco);
+  localStorage.setItem("numero", entQuery[valor].numero);
+  localStorage.setItem("bairro", entQuery[valor].bairro);
+  localStorage.setItem("cep", entQuery[valor].cep);
+  localStorage.setItem("uf", entQuery[valor].uf);
+  localStorage.setItem("nome_municipio", entQuery[valor].nome_municipio);
+  localStorage.setItem("observacao", entQuery[valor].observacao);
   window.location.href = "./gerenciaEntidade.html";
 }
 
+
+//apaga a entidade selecionada
 function apagarEntidade(valor) {
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
 
   //função fetch para mandar
-  fetch('http://localhost:8080/read/entidade/' + cnpjQuery[valor], {
+  fetch('http://localhost:8080/read/entidade/' + entQuery[valor].cnpj, {
     method: 'DELETE',
     headers: {
       'Authorization': 'Bearer ' + meuToken
     },
   }).then(function (response) {
-
-    //checar o status do pedido
-    console.log(response);
 
     //tratamento dos erros
     if (response.status == 200) {
