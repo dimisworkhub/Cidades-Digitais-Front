@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="./css/multi.css">
     <!--Resource style -->
     <link rel="stylesheet" href="./css/style2.css">
-    
+
 
 
 </head>
@@ -123,23 +123,22 @@
 
                                         <div class="multisteps-form__content">
                                             <div class="form-row mt-4">
-                                                <div class="col-12 col-sm-6">
+                                                <div class="col-12 col-sm-12">
                                                     <input class="multisteps-form__input form-control" type="number"
                                                         placeholder="Código do Lote" onchange="changer()" value=""
                                                         id="cod_lote" />
                                                 </div>
-                                                <div class="col-12 col-sm-6 mt-4 mt-sm-0">
+                                                <div class="col-12 col-sm-12 mt-4">
                                                     <input class="multisteps-form__input form-control" type="text"
-                                                        placeholder="Cnpj" onchange="changer()" value="" id="cnpj" />
+                                                        placeholder="CNPJ" onchange="changer()" value="" id="cnpj" />
                                                 </div>
-                                            </div>
-                                            <div class="form-row mt-4">
-                                                <div class="col-12 col-sm-6">
+                                                <div class="col-12 col-sm-12 mt-4">
                                                     <input class="multisteps-form__input form-control" type="text"
                                                         placeholder="Número de contrato" onchange="changer()" value=""
                                                         id="contrato" />
                                                 </div>
                                             </div>
+
                                             <div class="button-row d-flex mt-4">
                                                 <button class="btn btn-primary multi-button ml-auto js-btn-next"
                                                     type="button" title="Next">Próximo</button>
@@ -154,40 +153,40 @@
                                         <div class="multisteps-form__content">
                                             <!--Tabela por JS-->
                                             <div style="overflow-x:auto;">
-                                                <div class="col-12 col-sm-12">
-                                                    <input class="multisteps-form__input form-control" type="date"
-                                                        placeholder="Data de Inicio" onchange="changer()" value=""
-                                                        id="dt_inicio_vig" />
-                                                </div>
-                                                <div class="col-12 col-sm-12">
-                                                    <input class="multisteps-form__input form-control" type="date"
-                                                        placeholder="Data Final" onchange="changer()" value=""
-                                                        id="dt_final_vig" />
-                                                </div>
+                                                <div class="col-12 col-sm-12 mt-4"">
+                                                    <input class=" multisteps-form__input form-control" type="date"
+                                                    placeholder="Data de Inicio" onchange="changer()" value=""
+                                                    id="dt_inicio_vig" />
                                             </div>
-                                                <div class="col-12 col-sm-12">
-                                                    <input class="multisteps-form__input form-control" type="date"
-                                                        placeholder="Data de Reajuste" onchange="changer()" value=""
-                                                        id="dt_reajuste" />
-                                                </div>
-                                            
-                                            <div class="button-row d-flex mt-4">
-                                                <input type="button" class="btn btn-default" data-dismiss="modal"
-                                                    value="Voltar">
-                                                <input type="button" class="btn btn-success" onclick="enviar()"
-                                                    value="Adicionar">
-                                            </div>
+                                            <div class="col-12 col-sm-12 mt-4"">
+                                                    <input class=" multisteps-form__input form-control" type="date"
+                                                placeholder="Data Final" onchange="changer()" value=""
+                                                id="dt_final_vig" />
                                         </div>
+                                        <div class="col-12 col-sm-12 mt-4"">
+                                                        <input class=" multisteps-form__input form-control" type="date"
+                                            placeholder="Data de Reajuste" onchange="changer()" value=""
+                                            id="dt_reajuste" />
                                     </div>
                             </div>
-                            </form>
+
+
+                            <div class="button-row d-flex mt-4">
+                                <input type="button" class="btn btn-default" data-dismiss="modal" value="Voltar">
+                                <button class="btn btn-primary multi-button ml-auto js-btn-next" type="button"
+                                    onclick="enviar()" title="Next">Cadastrar</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-
+                </form>
             </div>
         </div>
+    </div>
+
+
+    </div>
+    </div>
     </div>
     <!-- Delete Modal HTML -->
     <div id="deleteEmployeeModal" class="modal fade">
