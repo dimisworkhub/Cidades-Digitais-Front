@@ -150,9 +150,9 @@ var info = {
 
 function changer() {
   var a = document.getElementById("cod_ibge");
-  info.cod_ibge = a.value;
+  info.cod_ibge = parseInt(a.value);
   var b = document.getElementById("cod_lote");
-  info.cod_lote = b.value;
+  info.cod_lote = parseInt(b.value);
   var c = document.getElementById("os_pe");
   info.os_pe = c.value;
   var d = document.getElementById("data_pe");
@@ -178,7 +178,7 @@ function enviar() {
 
   //pega o token do login
   let meuToken = localStorage.getItem("token");
-
+console.log(info);
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
 
