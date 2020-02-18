@@ -315,8 +315,6 @@ function editarEntidade(valor) {
   localStorage.setItem("nome_municipio", entQuery[valor].nome_municipio);
   localStorage.setItem("observacao", entQuery[valor].observacao);
   window.location.href = "./gerenciaEntidade.html";
-  let m=localStorage.getItem("nome_municipio");
-  alert(m);
 }
 
 
