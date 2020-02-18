@@ -323,7 +323,7 @@ function apagarEntidade(valor) {
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
-
+  
   //função fetch para mandar
   fetch('http://localhost:8080/read/entidade/' + entQuery[valor].cnpj, {
     method: 'DELETE',
