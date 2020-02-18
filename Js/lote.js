@@ -147,6 +147,7 @@ function editarLote(valor) {
 
 
 function changer() {
+  console.log(info);
   var a = document.getElementById("lote");
   info.cod_lote = parseInt(a.value);
   var b = document.getElementById("cnpj");
@@ -159,7 +160,7 @@ function changer() {
   info.dt_final_vig = e.value;
   var f = document.getElementById("dt_reajuste");
   info.dt_reajuste = f.value;
-  console.log(info);
+  
 }
 
 
@@ -225,4 +226,10 @@ function enviar() {
       console.log(json);
     });
   });
+}
+
+document.getElementById("lote").oninput = function () {
+  if (this.value.length > 1) {
+      this.value = this.value.slice(0,10); 
+  }
 }

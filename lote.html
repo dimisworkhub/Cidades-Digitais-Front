@@ -125,16 +125,16 @@
                                             <div class="form-row mt-4">
                                                 <div class="col-12 col-sm-12">
                                                     <input class="multisteps-form__input form-control" type="number"
-                                                        placeholder="Código do Lote" onchange="changer()" value=""
-                                                        id="cod_lote" />
+                                                        placeholder="Código do Lote" min="0" maxlength="11" max="11" onchange="changer()" value=""
+                                                        id="lote" />
                                                 </div>
                                                 <div class="col-12 col-sm-12 mt-4">
                                                     <input class="multisteps-form__input form-control" type="text"
-                                                        placeholder="CNPJ" onchange="changer()" value="" id="cnpj" />
+                                                        placeholder="CNPJ" maxlength="14" onchange="changer()" value="" id="cnpj" />
                                                 </div>
                                                 <div class="col-12 col-sm-12 mt-4">
                                                     <input class="multisteps-form__input form-control" type="text"
-                                                        placeholder="Número de contrato" onchange="changer()" value=""
+                                                        placeholder="Número de contrato" maxlength="10" onchange="changer()" value=""
                                                         id="contrato" />
                                                 </div>
                                             </div>
