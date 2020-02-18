@@ -3,9 +3,6 @@ let meuToken = localStorage.getItem("token");
 
 //pega o CNPJ escolhido anteriormente
 let meuCNPJ = localStorage.getItem("cnpj");
-//pega o JSON de municípios para uso em "adicionar entidades"
-let cidades = [];
-document.getElementById("nomeMun").disabled = true;
 
 
 //JSON usado para mandar as informações no fetch
@@ -35,12 +32,14 @@ let e = document.getElementById("bairro");
 e.value = localStorage.getItem("bairro");
 let f = document.getElementById("cep");
 f.value = localStorage.getItem("cep");
-let g = document.getElementById("nome_municipio");
-g.value = localStorage.getItem("nome_municipio");
 let h = document.getElementById("uf");
 h.value = localStorage.getItem("uf");
-let i = document.getElementById("observacao");
+let g = document.getElementById("nomeMun");
+g.value = localStorage.getItem("nome_municipio");
+let i = document.getElementById("obs");
 i.value = localStorage.getItem("observacao");
+
+
 
 //captura as informações do input e coloca no JSON
 function changer() {
@@ -55,24 +54,14 @@ function changer() {
   info.bairro = bairro1.value;
   let cep1 = document.getElementById("cep");
   info.cep = cep1.value;
+  let uf1 = document.getElementById("uf");
+  info.uf = uf1.value;
   let nomeMun1 = document.getElementById("nomeMun");
   info.nome_municipio = nomeMun1.value;
   let obs1 = document.getElementById("obs");
   info.observacao = obs1.value;
 }
 
-function enabler() {
-  let uf1 = document.getElementById("uf");
-  info.uf = uf1.value;
-  document.getElementById("nomeMun").disabled = false;
-  let i, y = [];
-  for (i = 1; i < cidades.length; i++) {
-    if (cidades[i].uf == a.value) {
-      y[i] = "<option>" + cidades[i].nome_municipio + "</option>"
-    }
-  }
-  document.getElementById("nomeMun").innerHTML = y;
-}
 
 
 function enviar() {
@@ -142,6 +131,7 @@ window.onload = function () {
         //cria letiaveis
         let i, j = 1;
         let x = [],
+          y = [],
           valorUF = [],
           valorFinalUF = [];
 
@@ -161,6 +151,14 @@ window.onload = function () {
           x[i] += "<option>" + valorFinalUF[i] + "</option>";
         }
         document.getElementById("uf").innerHTML = x;
+
+        for (i = 1; i < json.length; i++) {
+          //h.value é o uf nesse caso
+          if (json[i].uf == h.value) {
+            y[i] = "<option>" + json[i].nome_municipio + "</option>"
+          }
+        }
+        document.getElementById("nomeMun").innerHTML = y;
       });
     } else if (response.status == 400) {
       window.location.replace("./errors/400.html");

@@ -223,6 +223,7 @@ function enviar() {
 
 document.getElementById("cod_lote").oninput = function () {
   if (this.value.length > 1) {
+
       this.value = this.value.slice(0,11); 
   }
 }

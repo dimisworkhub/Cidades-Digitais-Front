@@ -235,7 +235,7 @@ window.onload = function () {
       tabela += (`<tbody> <tr>`);
 
       for (let i = 0; i < json.length; i++) {
-        entQuery[i] = json[i];
+        entQuery[i]=json[i];
         tabela += (`<td>
               <span class="custom-checkbox">
               <input type="checkbox" id="checkbox1" name="options[]" value="1">
@@ -315,6 +315,8 @@ function editarEntidade(valor) {
   localStorage.setItem("nome_municipio", entQuery[valor].nome_municipio);
   localStorage.setItem("observacao", entQuery[valor].observacao);
   window.location.href = "./gerenciaEntidade.html";
+  let m=localStorage.getItem("nome_municipio");
+  alert(m);
 }
 
 
