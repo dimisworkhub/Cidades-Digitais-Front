@@ -192,29 +192,6 @@
                         <script height="100%" width="100%" src="/home/mctic/go/src/Cidades-Digitais-Front/Js/menu.js"></script>	
                     </div>
 </body>
-<script type="text/javascript">
-    $(document).ready(function () {
-
-        // Select/Deselect checkboxes
-        var checkbox = $('table tbody input[type="checkbox"]');
-        $("#selectAll").click(function () {
-            if (this.checked) {
-                checkbox.each(function () {
-                    this.checked = true;
-                });
-            } else {
-                checkbox.each(function () {
-                    this.checked = false;
-                });
-            }
-        });
-        checkbox.click(function () {
-            if (!this.checked) {
-                $("#selectAll").prop("checked", false);
-            }
-        });
-    });
-</script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="Js/main.js"></script> <!-- Resource jQuery -->
 </html>

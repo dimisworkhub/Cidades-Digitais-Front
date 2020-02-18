@@ -3,9 +3,13 @@ let meuToken = localStorage.getItem("token");
 
 //pega o CNPJ escolhido anteriormente
 let meuCNPJ = localStorage.getItem("cnpj");
+//pega o JSON de municípios para uso em "adicionar entidades"
+let cidades = [];
+document.getElementById("nomeMun").disabled = true;
+
 
 //JSON usado para mandar as informações no fetch
-var info = {
+let info = {
   "cnpj": " ",
   "nome": " ",
   "endereco": " ",
@@ -18,31 +22,57 @@ var info = {
 };
 
 
-//captura o CNPJ para usar como chave na edição
-var a = document.getElementById("cnpj");
+//captura o CNPJ para visualizar a chave na edição
+let a = document.getElementById("cnpj");
 a.value = localStorage.getItem("cnpj");
+let b = document.getElementById("nome");
+b.value = localStorage.getItem("nome");
+let c = document.getElementById("endereco");
+c.value = localStorage.getItem("endereco");
+let d = document.getElementById("numero");
+d.value = localStorage.getItem("numero");
+let e = document.getElementById("bairro");
+e.value = localStorage.getItem("bairro");
+let f = document.getElementById("cep");
+f.value = localStorage.getItem("cep");
+let g = document.getElementById("nome_municipio");
+g.value = localStorage.getItem("nome_municipio");
+let h = document.getElementById("uf");
+h.value = localStorage.getItem("uf");
+let i = document.getElementById("observacao");
+i.value = localStorage.getItem("observacao");
 
 //captura as informações do input e coloca no JSON
 function changer() {
   info.cnpj = localStorage.getItem("cnpj");
-  var b = document.getElementById("nome");
-  info.nome = b.value;
-  var c = document.getElementById("endereco");
-  info.endereco = c.value;
-  var d = document.getElementById("numero");
-  info.numero = d.value;
-  var e = document.getElementById("bairro");
-  info.bairro = e.value;
-  var f = document.getElementById("cep");
-  info.cep = f.value;
-  var g = document.getElementById("nomeMun");
-  info.nome_municipio = g.value;
-  var h = document.getElementById("uf");
-  info.uf = h.value;
-  var i = document.getElementById("obs");
-  info.observacao = i.value;
+  let nome1 = document.getElementById("nome");
+  info.nome = nome1.value;
+  let endereco1 = document.getElementById("endereco");
+  info.endereco = endereco1.value;
+  let numero1 = document.getElementById("numero");
+  info.numero = numero1.value;
+  let bairro1 = document.getElementById("bairro");
+  info.bairro = bairro1.value;
+  let cep1 = document.getElementById("cep");
+  info.cep = cep1.value;
+  let nomeMun1 = document.getElementById("nomeMun");
+  info.nome_municipio = nomeMun1.value;
+  let obs1 = document.getElementById("obs");
+  info.observacao = obs1.value;
 }
 
+function enabler() {
+  let uf1 = document.getElementById("uf");
+  info.uf = uf1.value;
+  document.getElementById("nomeMun").disabled = false;
+  let i, y = [];
+  for (i = 1; i < cidades.length; i++) {
+    if (cidades[i].uf == a.value) {
+      y[i] = "<option>" + cidades[i].nome_municipio + "</option>"
+    }
+  }
+  document.getElementById("nomeMun").innerHTML = y;
+}
 
 
 function enviar() {
@@ -104,15 +134,34 @@ window.onload = function () {
     },
   }).then(function (response) {
 
-    //checar o status do pedido
-    console.log(response);
-
     //tratamento dos erros
     if (response.status == 200) {
-      console.log("200 ok.");
-    } else if (response.status == 201) {
-      alert("Usuário criado com sucesso");
-      window.location.replace("./entidade.html");
+      return response.json().then(function (json) {
+        //pegando valores para usar em municipios
+        cidades = json;
+        //cria letiaveis
+        let i, j = 1;
+        let x = [],
+          valorUF = [],
+          valorFinalUF = [];
+
+        //faz a ligação entre letiaveis e valores iniciais do banco
+        valorUF[0] = json["0"].uf;
+        valorFinalUF[0] = valorUF[0];
+        //faz a ligação com os outros valores do banco
+        for (i = 1; i < json.length; i++) {
+          valorUF[i] = json[i].uf;
+          if (valorUF[i] != valorUF[i - 1]) {
+            valorFinalUF[j] = valorUF[i];
+            j++;
+          }
+        }
+        valorFinalUF.sort();
+        for (i = 0; i < j; i++) {
+          x[i] += "<option>" + valorFinalUF[i] + "</option>";
+        }
+        document.getElementById("uf").innerHTML = x;
+      });
     } else if (response.status == 400) {
       window.location.replace("./errors/400.html");
     } else if (response.status == 401) {
@@ -134,20 +183,5 @@ window.onload = function () {
     } else {
       alert("ERRO DESCONHECIDO");
     }
-    return response.json().then(function (json) {
-      let x, y, i;
-      x = "<option>" + json["0"].uf + "</option>"
-      for (i = 0; i < json.length; i++) {
-        x += "<option>" + json[i].uf + "</option>"
-      }
-      document.getElementById("uf").innerHTML = x;
-
-      y = "<option>" + json["0"].nome_municipio + "</option>"
-      for (i = 0; i < json.length; i++) {
-        y += "<option>" + json[i].nome_municipio + "</option>"
-      }
-      document.getElementById("nomeMun").innerHTML = y;
-    })
-
   });
 }
