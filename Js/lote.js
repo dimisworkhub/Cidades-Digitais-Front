@@ -142,7 +142,7 @@ window.onload = function () {
 function changer() {
   console.log(info);
   var a = document.getElementById("cod_lote");
-  info.cod_lote = parseInt(a.value);
+  info.cod_lote = parseFloat(a.value);
   var b = document.getElementById("cnpj");
   info.cnpj = b.value;
   var c = document.getElementById("contrato");
@@ -223,7 +223,6 @@ function enviar() {
 
 document.getElementById("cod_lote").oninput = function () {
   if (this.value.length > 1) {
-
       this.value = this.value.slice(0,11); 
   }
 }
