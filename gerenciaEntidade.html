@@ -45,44 +45,44 @@
 
                                         <div class="form-group col-md-8">
                                             <label  for="nome">Nome</label>
-                                            <input type="text" class="form-control" id="nome" maxlength="50" value="" onchange="changer()" required>
+                                            <input type="text" class="form-control" id="nome" maxlength="50" onchange="changer()" required>
                                         </div>
                                         
                                     
                                         <div class="form-group col-md-3">
                                         <label  for="cep">CEP</label>
-                                        <input type="text" class="form-control" id="cep" maxlength="8" value="" onchange="changer()" required>
+                                        <input type="text" class="form-control" id="cep" maxlength="8" onchange="changer()">
                                         </div>
                 
                                         <div class="form-group col-md-6">
                                         <label  for="endereco">Endereço</label>
-                                        <input type="text" class="form-control" id="endereco" maxlength="100" value="" onchange="changer()" required>
+                                        <input type="text" class="form-control" id="endereco" maxlength="100" onchange="changer()">
                                         </div>
                         
                                         <div class="form-group col-md-3">
                                         <label  for="numero">Número</label>
-                                        <input type="text" class="form-control" id="numero" maxlength="10" value="" onchange="changer()" required>
+                                        <input type="text" class="form-control" id="numero" maxlength="10" onchange="changer()">
                                         </div>
                         
                                         <div class="form-group col-md-5">
                                         <label  for="bairro">Bairro</label>
-                                        <input type="text" class="form-control" id="bairro" maxlength="100" value="" onchange="changer()" required>
+                                        <input type="text" class="form-control" id="bairro" maxlength="100" onchange="changer()">
                                         </div>
                         
                                         <div class="form-group col-md-2">
                                         <label  for="uf">UF</label>
-                                        <select type="text" class="form-control" id="uf" value="" onchange="enabler()" required></select>
+                                        <select type="text" class="form-control" id="uf" onchange="changer()"></select>
                                         </div>
                         
                                         <div class="form-group col-md-5">
                                         <label  for="nomeMun">Nome do Município</label>
-                                        <select type="text" class="form-control" id="nomeMun" value="" onchange="changer()" required>
+                                        <select type="text" class="form-control" id="nomeMun" onchange="changer()">
                                         </select>
                                         </div>
                         
                                         <div class="form-group col-md-12">
                                         <label  for="obs">Observações</label>
-                                        <textarea type="text" class="form-control" id="obs" maxlength="1000" value="" onchange="changer()" required></textarea>
+                                        <textarea type="text" class="form-control" id="obs" maxlength="1000" onchange="changer()"></textarea>
                                         </div>
                 
                                         <div style= "width:100%; text-align: center;">
@@ -90,12 +90,10 @@
                                         </div>
                                         <div class="p-5" style= "width:65%; text-align: center;">
                                             <a href="#addLoteModal" class="btn btn-success" data-toggle="modal"><i
-                                                class="material-icons"></i> <span>Criar Lote</span></a>
-                                            <a href="#" class="btn btn-danger" data-toggle="modal"><i
+                                                class="material-icons"></i> <span>Lote</span></a>
+                                            <a href="#addContatoModa" class="btn btn-danger" data-toggle="modal"><i
                                                 class="material-icons"></i> <span>Criar Contato</span></a>
-                                            <a href="#addContatoModal" class="btn btn-success" data-toggle="modal"><i
-                                                class="material-icons"></i> <span>Mostrar Contato</span></a>
-                                            <a href="#" class="btn btn-danger" data-toggle="modal"><i
+                                            <a href="#" class="btn btn-success" data-toggle="modal"><i
                                                 class="material-icons"></i> <span>Apagar Contato</span></a>
                                         </div>
 

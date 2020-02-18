@@ -229,7 +229,7 @@ function enviar() {
 }
 
 document.getElementById("lote").oninput = function () {
-  if (this.value.length > 1) {
-      this.value = this.value.slice(0,10); 
+  if (this.value.length > 10) {
+      this.value = this.value.slice(0,11); 
   }
 }
