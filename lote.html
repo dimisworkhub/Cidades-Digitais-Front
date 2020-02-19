@@ -13,9 +13,14 @@
     <link rel="stylesheet" href="bootstrap4\css\bootstrap.css"> <!-- CSS bootstrap -->
     <link rel="stylesheet" href="css/reset.css"> <!-- CSS reset -->
     <link rel="stylesheet" href="css/style.css">
+
     <link rel="stylesheet" href="./css/multi.css">
     <!--Resource style -->
     <link rel="stylesheet" href="./css/style2.css">
+    <script src="./Js/modernizr.js"></script> <!-- Modernizr -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
 
 
 
@@ -83,24 +88,24 @@
                         </div>
                         <!--Tabela por JS-->
                         <div style="overflow-x:auto;">
-                                <table class="table table-striped table-bordered table-hover" id="tabela"></table>
-                            </div>
-                            <!--Footer-->
-                            <div class="clearfix">
-                                <div class="hint-text">Mostrando <b>5</b> de <b>25</b> Itens</div>
-                                <ul class="pagination">
-                                    <li class="page-item disabled"><a href="#">Anterior</a></li>
-                                    <li class="page-item"><a href="#" class="page-link">1</a></li>
-                                    <li class="page-item"><a href="#" class="page-link">2</a></li>
-                                    <li class="page-item"><a href="#" class="page-link">3</a></li>
-                                    <li class="page-item"><a href="#" class="page-link">4</a></li>
-                                    <li class="page-item"><a href="#" class="page-link">5</a></li>
-                                    <li class="page-item"><a href="#" class="page-link">6</a></li>
-                                    <li class="page-item"><a href="#" class="page-link">7</a></li>
-                                    <li class="page-item"><a href="#" class="page-link">Próximo</a></li>
-                                </ul>
-                            </div>
+                            <table class="table table-striped table-bordered table-hover" id="tabela"></table>
                         </div>
+                        <!--Footer-->
+                        <div class="clearfix">
+                            <div class="hint-text">Mostrando <b>5</b> de <b>25</b> Itens</div>
+                            <ul class="pagination">
+                                <li class="page-item disabled"><a href="#">Anterior</a></li>
+                                <li class="page-item"><a href="#" class="page-link">1</a></li>
+                                <li class="page-item"><a href="#" class="page-link">2</a></li>
+                                <li class="page-item"><a href="#" class="page-link">3</a></li>
+                                <li class="page-item"><a href="#" class="page-link">4</a></li>
+                                <li class="page-item"><a href="#" class="page-link">5</a></li>
+                                <li class="page-item"><a href="#" class="page-link">6</a></li>
+                                <li class="page-item"><a href="#" class="page-link">7</a></li>
+                                <li class="page-item"><a href="#" class="page-link">Próximo</a></li>
+                            </ul>
+                        </div>
+                    </div>
         </section> <!-- cd-intro -->
         </div>
         </div>
@@ -114,7 +119,7 @@
                     <h4 class="modal-title">Adicionar Lote</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
-                <div class="modal-body" style="padding-bottom: 3rem;" >
+                <div class="modal-body" style="padding-bottom: 3rem;">
                     <div class="multisteps-form">
                         <!--progress bar-->
                         <div class="row">
@@ -140,8 +145,8 @@
                                             <div class="form-row mt-4">
                                                 <div class="col-12 col-sm-12">
                                                     <input class="multisteps-form__input form-control" type="number"
-                                                        placeholder="Código do Lote" 
-                                                        onchange="changer()" value="" name="cod_lote" id="cod_lote" required />
+                                                        placeholder="Código do Lote" onchange="changer()" value=""
+                                                        name="cod_lote" id="cod_lote" required />
                                                 </div>
                                                 <div class="col-12 col-sm-12 mt-4">
                                                     <input class="multisteps-form__input form-control" type="text"
@@ -151,7 +156,8 @@
                                                 <div class="col-12 col-sm-12 mt-4">
                                                     <input class="multisteps-form__input form-control" type="text"
                                                         placeholder="Número de contrato" maxlength="10"
-                                                        onchange="changer()" value="" name="contrato" id="contrato" required />
+                                                        onchange="changer()" value="" name="contrato" id="contrato"
+                                                        required />
                                                 </div>
                                             </div>
 
@@ -172,9 +178,9 @@
                                                 <div class="col-12 col-sm-12 mt-4">
                                                     <label for="dt_inicio_vig">Data de Início de Vigencia</label>
                                                     <input class=" multisteps-form__input form-control" type="date"
-                                                        placeholder="Data de Inicio"  onchange="changer()" value=""
+                                                        placeholder="Data de Inicio" onchange="changer()" value=""
                                                         name="dt_inicio_vig" id="dt_inicio_vig" required />
-                                                    
+
                                                 </div>
                                                 <div class="col-12 col-sm-12 mt-4">
                                                     <label for="dt_final_vig">Data Final de Vigencia</label>
@@ -183,7 +189,7 @@
                                                         name="dt_final_vig" id="dt_final_vig" required />
                                                 </div>
                                                 <div class="col-12 col-sm-12 mt-4">
-                                                        <label for="dt_reajuste">Data de Reajuste</label>
+                                                    <label for="dt_reajuste">Data de Reajuste</label>
                                                     <input class=" multisteps-form__input form-control" type="date"
                                                         placeholder="Data de Reajuste" onchange="changer()" value=""
                                                         name="dt_reajuste" id="dt_reajuste" required />
@@ -194,8 +200,8 @@
                                             <div class="button-row d-flex mt-4">
                                                 <!-- <input type="button" class="btn btn-default" data-dismiss="modal"
                                                     value="Voltar"> -->
-                                                <button class="btn btn-primary multi-button ml-auto"
-                                                    onsubmit="enviar()" type="submit">Cadastrar</button>
+                                                <button class="btn btn-primary multi-button ml-auto" onsubmit="enviar()"
+                                                    type="submit">Cadastrar</button>
                                             </div>
                                         </div>
                                     </div>
