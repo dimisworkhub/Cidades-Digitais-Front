@@ -1,6 +1,32 @@
 //pega o token do login
 let meuToken = localStorage.getItem("token");
 
+//tratamento de erros
+function erros(value){
+  if (value == 400) {
+    window.location.replace("./errors/400.html");
+  } else if (value == 401) {
+    window.location.replace("./errors/401.html");
+  } else if (value == 403) {
+    window.location.replace("./errors/403.html");
+  } else if (value == 404) {
+    window.location.replace("./errors/404.html");
+  } else if (value == 409) {
+    alert("Erro: Usuário já existente.");
+  } else if (value == 412) {
+    alert("Erro: Informação colocada é incorreta.");
+  } else if (value == 422) {
+    alert("Erro: Informação incorreta.");
+  } else if (value == 500) {
+    window.location.replace("./errors/500.html");
+  } else if (value == 504) {
+    window.location.replace("./errors/504.html");
+  } else {
+    alert("ERRO DESCONHECIDO");
+  }
+}
+
+
 //o json usado para mandar as informações pelo fetch
 let info = {
   "nome": "",
@@ -21,7 +47,7 @@ function changer() {
   info.senha = y.value;
 }
 
-function envio() {
+function enviar() {
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
@@ -50,26 +76,8 @@ function envio() {
     } else if (response.status == 204) {
       alert("Apagado com sucesso.");
       window.location.replace("./criarUsuario.html");
-    } else if (response.status == 400) {
-      window.location.replace("./errors/400.html");
-    } else if (response.status == 401) {
-      window.location.replace("./errors/401.html");
-    } else if (response.status == 403) {
-      window.location.replace("./errors/403.html");
-    } else if (response.status == 404) {
-      window.location.replace("./errors/404.html");
-    } else if (response.status == 409) {
-      alert("Erro: Usuário já existente.");
-    } else if (response.status == 412) {
-      alert("Erro: Informação colocada é incorreta.");
-    } else if (response.status == 422) {
-      alert("Erro: Usuário ou senha inválidos.");
-    } else if (response.status == 500) {
-      window.location.replace("./errors/500.html");
-    } else if (response.status == 504) {
-      window.location.replace("./errors/504.html");
     } else {
-      alert("ERRO DESCONHECIDO");
+      erros(response.status);
     }
     return response.json().then(function (response) {
       console.log("Resultado: " + response.status);

@@ -7,6 +7,32 @@ let cidades = [];
 document.getElementById("nomeMun").disabled = true;
 
 
+//tratamento de erros
+function erros(value) {
+  if (value == 400) {
+    window.location.replace("./errors/400.html");
+  } else if (value == 401) {
+    window.location.replace("./errors/401.html");
+  } else if (value == 403) {
+    window.location.replace("./errors/403.html");
+  } else if (value == 404) {
+    window.location.replace("./errors/404.html");
+  } else if (value == 409) {
+    alert("Erro: Entidade já existente.");
+  } else if (value == 412) {
+    alert("Erro: Informação colocada é incorreta.");
+  } else if (value == 422) {
+    alert("Erro: Informação incorreta.");
+  } else if (value == 500) {
+    window.location.replace("./errors/500.html");
+  } else if (value == 504) {
+    window.location.replace("./errors/504.html");
+  } else {
+    alert("ERRO DESCONHECIDO");
+  }
+}
+
+
 
 //JSON usado para mandar as informações no fetch
 let info = {
@@ -50,6 +76,7 @@ function enabler() {
       y[i] = "<option>" + cidades[i].nome_municipio + "</option>"
     }
   }
+  y.sort();
   document.getElementById("nomeMun").innerHTML = y;
 }
 
@@ -70,41 +97,15 @@ function enviar() {
   }).then(function (response) {
 
     //tratamento dos erros
-    if (response.status == 200) {
-      window.location.replace("./entidade.html");
-    } else if (response.status == 201) {
-      alert("Usuário criado com sucesso");
-      window.location.replace("./entidade.html");
-    } else if (response.status == 202) {
-      alert("Login efetivado com sucesso");
-      window.location.replace("./entidade.html");
-    } else if (response.status == 204) {
-      alert("Apagado com sucesso.");
-      window.location.replace("./entidade.html");
-    } else if (response.status == 400) {
-      window.location.replace("./errors/400.html");
-    } else if (response.status == 401) {
-      window.location.replace("./errors/401.html");
-    } else if (response.status == 403) {
-      window.location.replace("./errors/403.html");
-    } else if (response.status == 404) {
-      window.location.replace("./errors/404.html");
-    } else if (response.status == 409) {
-      alert("Erro: Usuário já existente.");
-    } else if (response.status == 412) {
-      alert("Erro: Informação colocada é incorreta.");
-    } else if (response.status == 422) {
-      alert("Erro: Usuário ou senha inválidos.");
-    } else if (response.status == 500) {
-      window.location.replace("./errors/500.html");
-    } else if (response.status == 504) {
-      window.location.replace("./errors/504.html");
+    if (response.status == 201) {
+      alert("Entidade criada com sucesso");
+      return response.json().then(function (json) {
+        console.log(json);
+        window.location.replace("./entidade.html");
+      });
     } else {
-      alert("ERRO DESCONHECIDO");
+      erros(response.status);
     }
-    return response.json().then(function (json) {
-      console.log(json);
-    });
   });
 }
 
@@ -142,32 +143,14 @@ window.onload = function () {
             j++;
           }
         }
-        valorFinalUF.sort();
         for (i = 0; i < j; i++) {
           x[i] += "<option>" + valorFinalUF[i] + "</option>";
         }
+        x.sort();
         document.getElementById("uf").innerHTML = x;
       });
-    } else if (response.status == 400) {
-      window.location.replace("./errors/400.html");
-    } else if (response.status == 401) {
-      window.location.replace("./errors/401.html");
-    } else if (response.status == 403) {
-      window.location.replace("./errors/403.html");
-    } else if (response.status == 404) {
-      window.location.replace("./errors/404.html");
-    } else if (response.status == 409) {
-      alert("Erro: Usuário já existente.");
-    } else if (response.status == 412) {
-      alert("Erro: Informação colocada é incorreta.");
-    } else if (response.status == 422) {
-      alert("Erro: Usuário ou senha inválidos.");
-    } else if (response.status == 500) {
-      window.location.replace("./errors/500.html");
-    } else if (response.status == 504) {
-      window.location.replace("./errors/504.html");
     } else {
-      alert("ERRO DESCONHECIDO");
+      erros(response.status);
     }
   });
 
@@ -184,32 +167,8 @@ window.onload = function () {
     //tratamento dos erros
     if (response.status == 200) {
       console.log("ok");
-    } else if (response.status == 201) {
-      console.log("Entidade criada com sucesso");
-    } else if (response.status == 204) {
-      console.log("Apagado com sucesso.");
-    } else if (response.status == 400) {
-      window.location.replace("./errors/400.html");
-    } else if (response.status == 401) {
-      window.location.replace("./errors/401.html");
-    } else if (response.status == 403) {
-      window.location.replace("./errors/403.html");
-    } else if (response.status == 404) {
-      window.location.replace("./errors/404.html");
-    } else if (response.status == 409) {
-      console.log("Erro: Usuário já existente.");
-    } else if (response.status == 412) {
-      console.log("Erro: Informação colocada é incorreta.");
-    } else if (response.status == 422) {
-      console.log("Erro: Usuário ou senha inválidos.");
-    } else if (response.status == 500) {
-      window.location.replace("./errors/500.html");
-    } else if (response.status == 504) {
-      window.location.replace("./errors/504.html");
-    }
-    //caso seja um dos erros não listados
-    else {
-      console.log("ERRO DESCONHECIDO");
+    } else {
+      erros(response.status);
     }
     //pegar o json que possui a tabela
     return response.json().then(function (json) {
@@ -235,7 +194,7 @@ window.onload = function () {
       tabela += (`<tbody> <tr>`);
 
       for (let i = 0; i < json.length; i++) {
-        entQuery[i]=json[i];
+        entQuery[i] = json[i];
         tabela += (`<td>
               <span class="custom-checkbox">
               <input type="checkbox" id="checkbox1" name="options[]" value="1">
@@ -302,7 +261,6 @@ window.onload = function () {
   });
 }
 
-
 //leva para o editor da entidade selecionada
 function editarEntidade(valor) {
   localStorage.setItem("cnpj", entQuery[valor].cnpj);
@@ -318,12 +276,13 @@ function editarEntidade(valor) {
 }
 
 
+
 //apaga a entidade selecionada
 function apagarEntidade(valor) {
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
-  
+
   //função fetch para mandar
   fetch('http://localhost:8080/read/entidade/' + entQuery[valor].cnpj, {
     method: 'DELETE',
@@ -333,37 +292,11 @@ function apagarEntidade(valor) {
   }).then(function (response) {
 
     //tratamento dos erros
-    if (response.status == 200) {
-      window.location.replace("./entidade.html");
-    } else if (response.status == 201) {
-      alert("Usuário criado com sucesso");
-      window.location.replace("./entidade.html");
-    } else if (response.status == 202) {
-      alert("Login efetivado com sucesso");
-      window.location.replace("./entidade.html");
-    } else if (response.status == 204) {
+    if (response.status == 204) {
       alert("Apagado com sucesso.");
       window.location.replace("./entidade.html");
-    } else if (response.status == 400) {
-      window.location.replace("./errors/400.html");
-    } else if (response.status == 401) {
-      window.location.replace("./errors/401.html");
-    } else if (response.status == 403) {
-      window.location.replace("./errors/403.html");
-    } else if (response.status == 404) {
-      window.location.replace("./errors/404.html");
-    } else if (response.status == 409) {
-      alert("Erro: Usuário já existente.");
-    } else if (response.status == 412) {
-      alert("Erro: Informação colocada é incorreta.");
-    } else if (response.status == 422) {
-      alert("Erro: Usuário ou senha inválidos.");
-    } else if (response.status == 500) {
-      window.location.replace("./errors/500.html");
-    } else if (response.status == 504) {
-      window.location.replace("./errors/504.html");
-    } else {
-      alert("ERRO DESCONHECIDO");
+    }  else {
+      erros(response.status);
     }
     return response.json().then(function (json) {
       console.log(json);
