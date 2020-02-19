@@ -1,3 +1,27 @@
+function erros(value){
+  if (value == 400) {
+    window.location.replace("./errors/400.html");
+  } else if (value == 401) {
+    window.location.replace("./errors/401.html");
+  } else if (value == 403) {
+    window.location.replace("./errors/403.html");
+  } else if (value == 404) {
+    window.location.replace("./errors/404.html");
+  } else if (value == 409) {
+    alert("Erro: Usuário já existente.");
+  } else if (value == 412) {
+    alert("Erro: Informação colocada é incorreta.");
+  } else if (value == 422) {
+    alert("Erro: Usuário ou senha incorretos.");
+  } else if (value == 500) {
+    window.location.replace("./errors/500.html");
+  } else if (value == 504) {
+    window.location.replace("./errors/504.html");
+  } else {
+    alert("ERRO DESCONHECIDO");
+  }
+}
+
 //caso os cookies não estejam habilitados
 if (navigator.cookieEnabled == false) {
   alert("Os cookies estão desabilitados, o que é um problema para a navegação nesse site. Por favor permita cookies no seu navegador.");
@@ -53,31 +77,12 @@ function entrar() {
     //tratamento dos erros
 
     if (response.status == 200) {
-      alert("Login feito com sucesso");
+      response.json().then(function (json) {
+        localStorage.setItem("token", json);
+      })
       window.location.replace("./home.html");
-    } else if (response.status == 400) {
-      window.location.replace("./errors/400.html");
-    } else if (response.status == 401) {
-      window.location.replace("./errors/401.html");
-    } else if (response.status == 403) {
-      window.location.replace("./errors/403.html");
-    } else if (response.status == 404) {
-      window.location.replace("./errors/404.html");
-    } else if (response.status == 409) {
-      alert("Erro: Usuário já existente.");
-    } else if (response.status == 412) {
-      alert("Erro: Informação colocada é incorreta.");
-    } else if (response.status == 422) {
-      alert("Erro: Usuário ou senha inválidos.");
-    } else if (response.status == 500) {
-      window.location.replace("./errors/500.html");
-    } else if (response.status == 504) {
-      window.location.replace("./errors/504.html");
-    } else {
-      alert("ERRO DESCONHECIDO");
+    } else{
+      erros(response.status);
     }
-    response.json().then(function (json) {
-      localStorage.setItem("token", json);
-    });
   })
 }
