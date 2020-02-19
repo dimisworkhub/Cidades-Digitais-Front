@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="bootstrap4\css\bootstrap.css"> <!-- CSS bootstrap -->
     <link rel="stylesheet" href="css/reset.css"> <!-- CSS reset -->
     <link rel="stylesheet" href="css/style.css">
+
+    <link rel="stylesheet" href="./css/multi.css">
     <!--Resource style -->
     <link rel="stylesheet" href="./css/style2.css">
     <script src="./Js/modernizr.js"></script> <!-- Modernizr -->
@@ -102,7 +104,7 @@
                         </div>
                     </div>
         </section> <!-- cd-intro -->
-        
+
         </div>
         </div>
     </main>
@@ -110,54 +112,136 @@
     <div id="addEmployeeModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form>
-                    <div class="modal-header">
-                        <h4 class="modal-title">Adicionar Entidade</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Adicionar Entidade</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body" style="padding-bottom: 8rem;">
+                    <div class="multisteps-form">
+                        <!--progress bar-->
+                        <div class="row">
+                            <div class="col-12 col-lg-12 ml-auto mr-auto mb-4">
+                                <div class="multisteps-form__progress">
+                                    <button class="multisteps-form__progress-btn js-active" type="button"
+                                        title="Entity Info">Informações da Entidade</button>
+                                    <button class="multisteps-form__progress-btn" type="button"
+                                        title="Address">Endereço</button>
+                                    <button class="multisteps-form__progress-btn" type="button"
+                                        title="Address">Observações</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!--form panels-->
+                        <div class="row">
+                            <div class="col-12 col-lg-12 m-auto">
+                                <form class="multisteps-form__form needs-validation" novalidate style="height: 307px;">
+                                    <!--single form panel-->
+                                    <div class="multisteps-form__panel shadow p-4 rounded bg-white js-active"
+                                        data-animation="scaleIn">
+                                        <h3 class="multisteps-form__title">Informações do Lote</h3>
+
+                                        <div class="multisteps-form__content">
+                                            <div class="form-row mt-4">
+                                                <div class="col-12 col-sm-12">
+                                                    <input type="text" class="multisteps-form__input form-control"
+                                                        id="cnpj" name="cnpj" maxlength="14"
+                                                        placeholder="Código da Entidade" onchange="changer()" required>
+                                                </div>
+                                                <div class="col-12 col-sm-12 mt-4">
+                                                    <input type="text" class="multisteps-form__input form-control"
+                                                        id="nome" name="nome" maxlength="50" placeholder="Nome"
+                                                        onchange="changer()">
+                                                </div>
+
+                                            </div>
+                                            <div class="button-row d-flex mt-4">
+                                                <button class="btn btn-primary multi-button ml-auto js-btn-next"
+                                                    type="button" title="Next">Próximo</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--single form panel-->
+                                    <div class="multisteps-form__panel shadow p-4 rounded bg-white"
+                                        data-animation="scaleIn">
+                                        <h3 class="multisteps-form__title">Endereço</h3>
+                                        <div class="multisteps-form__content">
+                                            <!--Tabela por JS-->
+                                            <div class="form-row mt-4">
+
+                                                <div class="col-12 col-sm-6 mt-4">
+                                                    <input type="text" class="multisteps-form__input form-control"
+                                                        placeholder="CEP" id="cep" name="cep" maxlength="8"
+                                                        onchange="changer()">
+                                                </div>
+                                                <div class="col-12 col-sm-6 mt-4">
+                                                    <select type="text" class="multisteps-form__input form-control"
+                                                        id="uf" onchange="enabler()">
+                                                    <option value="">UF</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-12 col-sm-12 mt-4">
+                                                    <label>Município</label>
+                                                    <select type="text" class="multisteps-form__input form-control"
+                                                        id="nomeMun" onchange="changer()"></select>
+                                                </div>
+
+                                                <div class="col-12 col-sm-12 mt-4">
+                                                    <textarea class="multisteps-form__input form-control"
+                                                        placeholder="Endereço" name="endereco" id="endereco"
+                                                        maxlength="100" onchange="changer()"></textarea>
+                                                </div>
+
+                                                <div class="col-12 col-sm-6 mt-4">
+                                                    <input type="text" class="multisteps-form__input form-control"
+                                                        name="numero" placeholder="numero" id="numero" maxlength="10"
+                                                        onchange="changer()">
+                                                </div>
+                                                <div class="col-12 col-sm-6 mt-4">
+                                                    <input type="text" class="multisteps-form__input form-control"
+                                                        id="bairro" name="bairro" placeholder="Bairro" maxlength="100"
+                                                        onchange="changer()">
+                                                </div>
+
+
+                                            </div>
+                                            <div class="button-row d-flex mt-4">
+                                                <button class="btn btn-primary multi-button ml-auto js-btn-next"
+                                                    type="button" title="Next">Próximo</button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <!--single form panel-->
+                                    <div class="multisteps-form__panel shadow p-4 rounded bg-white"
+                                        data-animation="scaleIn">
+                                        <h3 class="multisteps-form__title">Observações</h3>
+                                        <div class="multisteps-form__content">
+                                            <!--Tabela por JS-->
+                                            <div style="overflow-x:auto;">
+
+                                                <div class="col-12 col-sm-12 mt-4">
+                                                    <textarea class="multisteps-form__input form-control" name="obs"
+                                                        id="obs" maxlength="1000" onchange="changer()"></textarea>
+                                                </div>
+
+                                                <div class="button-row d-flex mt-4">
+                                                    <!-- <input type="button" class="btn btn-default" data-dismiss="modal"
+                                                            value="Voltar"> -->
+                                                    <button class="btn btn-primary multi-button ml-auto"
+                                                        onsubmit="enviar()" type="submit">Cadastrar</button>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label>CNPJ</label>
-                            <input type="text" class="form-control" id="cnpj" maxlength="14" onchange="changer()" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Name</label>
-                            <input type="text" class="form-control" id="nome" maxlength="50" onchange="changer()">
-                        </div>
-                        <div class="form-group">
-                            <label>Endereço</label>
-                            <textarea class="form-control" id="endereco" maxlength="100" onchange="changer()"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Numero</label>
-                            <input type="text" class="form-control" id="numero" maxlength="10" onchange="changer()">
-                        </div>
-                        <div class="form-group">
-                            <label>Bairro</label>
-                            <input type="text" class="form-control" id="bairro" maxlength="100" onchange="changer()">
-                        </div>
-                        <div class="form-group">
-                            <label>CEP</label>
-                            <input type="text" class="form-control" id="cep" maxlength="8" onchange="changer()">
-                        </div>
-                        <div class="form-group">
-                            <label>UF</label>
-                            <select type="text" class="form-control" id="uf" onchange="enabler()"></select>
-                        </div>
-                        <div class="form-group">
-                            <label>Município</label>
-                            <select type="text" class="form-control" id="nomeMun" onchange="changer()"></select>
-                        </div>
-                        <div class="form-group">
-                            <label>Observações</label>
-                            <textarea class="form-control" id="obs" maxlength="1000" onchange="changer()"></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
-                        <input type="button" style="background-color: #3a3a3a;" class="btn btn-success" value="Adicionar" onclick="enviar()">
-                    </div>
-                </form>
+                </div>
+
+
             </div>
         </div>
     </div>
@@ -173,7 +257,8 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <p>Deseja realmente excluir esses registros? Este processo não pode ser desfeito.</p>
+                    <p>Deseja realmente excluir esses registros? Este processo não pode ser desfeito.
+                    </p>
                 </div>
                 <div style="width:100%; text-align: center;" class="modal-footer">
                     <button type="button" class="btn btn-info" data-dismiss="modal">Cancelar</button>
@@ -183,15 +268,15 @@
         </div>
     </div>
 
-    </div>
-
     <div class="fixed-bottom">
         <script height="100%" width="100%" src="./Js/menu.js"></script>
     </div>
-    <script src="./Js/entidade.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="./Js/main.js"></script> <!-- Resource jQuery -->
-
 </body>
+<script src="./Js/modernizr.js"></script> <!-- Modernizr -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script src="./Js/entidade.js"></script>
+<script src="./Js/multi.js"></script>
 
+<script src="./Js/main.js"></script> <!-- Resource jQuery -->
 </html>
