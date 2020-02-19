@@ -223,7 +223,7 @@ function enviar() {
 
 document.getElementById("cod_lote").oninput = function () {
   if (this.value.length > 1) {
-      this.value = this.value.slice(0,11); 
+      this.value = this.value.slice(0,9); 
   }
 }
 
@@ -238,12 +238,13 @@ function editarLote(valor) {
   window.location.href = "./gerenciaLote.html";
 }
 
+
 //apaga a lote selecionada
 function apagarLote(valor) {
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
-  console.log(info);
+  console.log(loteQuery[valor].cod_lote);
   //função fetch para mandar
   fetch('http://localhost:8080/read/lote/' + loteQuery[valor].cod_lote, {
     method: 'DELETE',
