@@ -43,7 +43,7 @@ function enabler(){
   let uf1 = document.getElementById("uf");
   info.uf = uf1.value;
   let i,y = [];
-  for (i = 1; i < cidades.length; i++) {
+  for (i = 0; i < cidades.length; i++) {
     //h.value é o uf nesse caso
     if (cidades[i].uf == uf.value) {
       y[i] = "<option>" + cidades[i].nome_municipio + "</option>"
@@ -135,11 +135,17 @@ window.onload = function () {
             j++;
           }
         }
-        valorFinalUF.sort();
         for (i = 0; i < j; i++) {
           x[i] += "<option>" + valorFinalUF[i] + "</option>";
         }
+        x.sort();
         document.getElementById("uf").innerHTML = x;
+        let y = [];
+        for (i = 0; i < json.length; i++) {
+          y[i] = "<option>" + json[i].nome_municipio + "</option>"
+        }
+        y.sort();
+        document.getElementById("nomeMun").innerHTML = y;
 
         //captura os elementos anteriores para visualizar na edição
         let a = document.getElementById("cnpj");
@@ -156,11 +162,11 @@ window.onload = function () {
         f.value = localStorage.getItem("cep");
         let h = document.getElementById("uf");
         h.value = localStorage.getItem("uf");
+        enabler();
         let g = document.getElementById("nomeMun");
         g.value = localStorage.getItem("nome_municipio");
         let k = document.getElementById("obs");
         k.value = localStorage.getItem("observacao");
-        
       });
     } else if (response.status == 400) {
       window.location.replace("./errors/400.html");
@@ -171,7 +177,7 @@ window.onload = function () {
     } else if (response.status == 404) {
       window.location.replace("./errors/404.html");
     } else if (response.status == 409) {
-      alert("Erro: Usuário já existente.");
+      alert("Erro: Entidade já existente.");
     } else if (response.status == 412) {
       alert("Erro: Informação colocada é incorreta.");
     } else if (response.status == 422) {
