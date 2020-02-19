@@ -280,9 +280,6 @@ function editarEntidade(valor) {
 //apaga a entidade selecionada
 function apagarEntidade(valor) {
 
-  //transforma as informações do token em json
-  let corpo = JSON.stringify(info);
-
   //função fetch para mandar
   fetch('http://localhost:8080/read/entidade/' + entQuery[valor].cnpj, {
     method: 'DELETE',
@@ -295,7 +292,7 @@ function apagarEntidade(valor) {
     if (response.status == 204) {
       alert("Apagado com sucesso.");
       window.location.replace("./entidade.html");
-    }  else {
+    } else {
       erros(response.status);
     }
     return response.json().then(function (json) {

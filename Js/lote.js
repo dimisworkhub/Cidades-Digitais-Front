@@ -6,7 +6,7 @@ let meuToken = localStorage.getItem("token");
 
 
 //tratamento de erros
-function erros(value){
+function erros(value) {
   if (value == 400) {
     window.location.replace("./errors/400.html");
   } else if (value == 401) {
@@ -45,7 +45,7 @@ window.onload = function () {
     //tratamento dos erros
     if (response.status == 200) {
       console.log("ok");
-      
+
     } else {
       erros(response.status);
     }
@@ -55,10 +55,6 @@ window.onload = function () {
 
       let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
-          <th> <span class="custom-checkbox">
-          <input type="checkbox" id="selectAll">
-          <label for="selectAll"></label>
-          </span></th>
           <th scope="col">Lote</th>
           <th scope="col">CNPJ</th>
           <th scope="col">Contrato</th>
@@ -72,12 +68,6 @@ window.onload = function () {
 
       for (let i = 0; i < json.length; i++) {
         loteQuery[i] = json[i]["cnpj"];
-        tabela += (`<td>
-                <span class="custom-checkbox">
-                <input type="checkbox" id="checkbox1" name="options[]" value="1">
-                <label for="checkbox1"></label>
-                </span>
-                </td>`);
         tabela += (`<td>`);
         tabela += json[i]["cod_lote"];
         tabela += (`</td> <td>`);
@@ -105,13 +95,9 @@ window.onload = function () {
                 <button onclick="editarLote(` + i + `)" class="btn btn-success">
                 <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
                 </button>
-                <button onclick="apagarLote(` + i + `)" class="btn btn-danger">
-                <i class="material-icons"data-toggle="tooltip" title="Delete">&#xE872;</i>
-                </button> 
-                </span> </td>`);
+                </td>`);
         tabela += (`</tr> <tr>`);
       }
-
       tabela += (`</tr> </tbody>`);
       document.getElementById("tabela").innerHTML = tabela;
 
@@ -139,11 +125,36 @@ window.onload = function () {
 
     });
   });
+
+  //preenche os CNPJs
+  fetch('http://localhost:8080/read/entidade', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      return response.json().then(function (json) {
+        //cria variaveis
+        let i = 0;
+        let x = [];
+
+        for (i = 0; i < json.length; i++) {
+          x[i] += "<option>" + json[i].cnpj + "</option>";
+        }
+        x.sort();
+        document.getElementById("cnpj").innerHTML = x;
+      });
+    } else {
+      erros(response.status);
+    }
+  });
 }
 
 
 function changer() {
-  console.log(info);
   var a = document.getElementById("cod_lote");
   info.cod_lote = parseFloat(a.value);
   var b = document.getElementById("cnpj");
@@ -156,13 +167,13 @@ function changer() {
   info.dt_final_vig = e.value;
   var f = document.getElementById("dt_reajuste");
   info.dt_reajuste = f.value;
-  
+
 }
 
 
 //Fazer Lote
 let info = {
-  "cod_lote": "" ,
+  "cod_lote": "",
   "cnpj": "",
   "contrato": "",
   "dt_inicio_vig": "",
@@ -188,23 +199,19 @@ function enviar() {
     console.log(response);
 
     //tratamento dos erros
-    if (response.status == 200) {
-      window.location.replace("./home.html");
-    } else if (response.status == 201) {
-      alert("Lote criado com sucesso");
-      window.location.replace("./home.html");
+    if (response.status == 201) {
+      return response.json().then(function (json) {
+        window.location.replace("./lote.html");
+      });
     } else {
       erros(response.status);
     }
-    return response.json().then(function (json) {
-      console.log(json);
-    });
   });
 }
 
 document.getElementById("cod_lote").oninput = function () {
   if (this.value.length > 1) {
-      this.value = this.value.slice(0,9); 
+    this.value = this.value.slice(0, 9);
   }
 }
 
@@ -217,32 +224,4 @@ function editarLote(valor) {
   localStorage.setItem("dt_final_vig", loteQuery[valor].dt_final_vig);
   localStorage.setItem("dt_reajuste", loteQuery[valor].dt_reajuste);
   window.location.href = "./gerenciaLote.html";
-}
-
-
-//apaga a lote selecionada
-function apagarLote(valor) {
-
-  //transforma as informações do token em json
-  let corpo = JSON.stringify(info);
-  console.log(loteQuery[valor].cod_lote);
-  //função fetch para mandar
-  fetch('http://localhost:8080/read/lote/' + loteQuery[valor].cod_lote, {
-    method: 'DELETE',
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-
-    //tratamento dos erros
-    if (response.status == 204) {
-      alert("Apagado com sucesso.");
-      return response.json().then(function (json) {
-        console.log(json);
-        window.location.replace("./lote.html");
-      })
-    } else {
-      erros(response.status);
-    }
-  });
 }
