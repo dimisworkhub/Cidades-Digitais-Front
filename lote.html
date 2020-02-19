@@ -44,8 +44,6 @@
                                         <span>Atualizar
                                             Lista
                                         </span></a>
-                                    <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i
-                                            class="material-icons">&#xE15C;</i> <span>Deletar</span></a>
                                     <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i
                                             class="material-icons">&#xE147;</i> <span>Adicionar</span></a>
 
@@ -145,19 +143,17 @@
                                             <div class="form-row mt-4">
                                                 <div class="col-12 col-sm-12">
                                                     <input class="multisteps-form__input form-control" type="number"
-                                                        placeholder="Código do Lote" onchange="changer()" value=""
-                                                        name="cod_lote" id="cod_lote" required />
+                                                        placeholder="Código do Lote" 
+                                                        onchange="changer()" name="cod_lote" id="cod_lote" required />
                                                 </div>
                                                 <div class="col-12 col-sm-12 mt-4">
-                                                    <input class="multisteps-form__input form-control" type="text"
-                                                        placeholder="CNPJ" maxlength="14" onchange="changer()" value=""
-                                                        name="cnpj" id="cnpj" required />
+                                                    <select class="multisteps-form__input form-control" onchange="changer()" 
+                                                        name="cnpj" id="cnpj" required ></select>
                                                 </div>
                                                 <div class="col-12 col-sm-12 mt-4">
                                                     <input class="multisteps-form__input form-control" type="text"
                                                         placeholder="Número de contrato" maxlength="10"
-                                                        onchange="changer()" value="" name="contrato" id="contrato"
-                                                        required />
+                                                        onchange="changer()" name="contrato" id="contrato" required />
                                                 </div>
                                             </div>
 
@@ -178,20 +174,21 @@
                                                 <div class="col-12 col-sm-12 mt-4">
                                                     <label for="dt_inicio_vig">Data de Início de Vigencia</label>
                                                     <input class=" multisteps-form__input form-control" type="date"
-                                                        placeholder="Data de Inicio" onchange="changer()" value=""
+                                                        placeholder="Data de Inicio"  onchange="changer()"
+
                                                         name="dt_inicio_vig" id="dt_inicio_vig" required />
 
                                                 </div>
                                                 <div class="col-12 col-sm-12 mt-4">
                                                     <label for="dt_final_vig">Data Final de Vigencia</label>
                                                     <input class=" multisteps-form__input form-control" type="date"
-                                                        placeholder="Data Final" onchange="changer()" value=""
+                                                        placeholder="Data Final" onchange="changer()"
                                                         name="dt_final_vig" id="dt_final_vig" required />
                                                 </div>
                                                 <div class="col-12 col-sm-12 mt-4">
                                                     <label for="dt_reajuste">Data de Reajuste</label>
                                                     <input class=" multisteps-form__input form-control" type="date"
-                                                        placeholder="Data de Reajuste" onchange="changer()" value=""
+                                                        placeholder="Data de Reajuste" onchange="changer()"
                                                         name="dt_reajuste" id="dt_reajuste" required />
                                                 </div>
                                             </div>
@@ -212,27 +209,6 @@
                 </div>
 
 
-            </div>
-        </div>
-    </div>
-    <!-- Delete Modal HTML -->
-    <div id="deleteEmployeeModal" class="modal fade">
-        <div class="modal-dialog modal-confirm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="icon-box">
-                        <i class="material-icons">&#xE5CD;</i>
-                    </div>
-                    <h4 class="modal-title">Esta certo disso?</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <p>Deseja realmente excluir esses registros? Este processo não pode ser desfeito.</p>
-                </div>
-                <div style="width:100%; text-align: center;" class="modal-footer">
-                    <button type="button" class="btn btn-info" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger">Deletar</button>
-                </div>
             </div>
         </div>
     </div>
