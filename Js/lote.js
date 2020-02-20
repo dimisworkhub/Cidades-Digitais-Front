@@ -2,7 +2,7 @@
 let loteQuery = [];
 
 //pega o token do login
-let meuToken = localStorage.getItem("token");
+let meuToken = localStorage.getItem("token");       
 
 
 //tratamento de erros
@@ -33,7 +33,6 @@ function erros(value) {
 
 //Fazer Tabela
 window.onload = function () {
-
   //função fetch para chamar itens da tabela
   fetch('http://localhost:8080/read/lote', {
     method: 'GET',
@@ -47,7 +46,7 @@ window.onload = function () {
       console.log("ok");
 
     } else {
-      erros(response.status);
+      //erros(response.status);
     }
     //pegar o json que possui a tabela
     return response.json().then(function (json) {
@@ -148,7 +147,7 @@ window.onload = function () {
         document.getElementById("cnpj").innerHTML = x;
       });
     } else {
-      erros(response.status);
+      //erros(response.status);
     }
   });
 }
