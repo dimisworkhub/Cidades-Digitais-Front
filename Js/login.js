@@ -76,7 +76,7 @@ function entrar() {
 
     //tratamento dos erros
 
-    if (response.status == 200) {
+    if (response.status == 200 || response.status == 202) {
       response.json().then(function (json) {
         localStorage.setItem("token", json);
       })
