@@ -140,8 +140,8 @@ window.onload = function () {
         //cria variaveis
         let i = 0;
         let x = [];
-
-        for (i = 0; i < json.length; i++) {
+        x[0] += "<option value='00000000000000'>CNPJ</option>";
+        for (i = 1; i < json.length; i++) {
           x[i] += "<option>" + json[i].cnpj + "</option>";
         }
         x.sort();
