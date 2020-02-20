@@ -78,9 +78,12 @@ function entrar() {
 
     if (response.status == 200 || response.status == 202) {
       response.json().then(function (json) {
+       
         localStorage.setItem("token", json);
+        window.location.replace("./home.html");
       })
-      window.location.replace("./home.html");
+ 
+      
     } else{
       erros(response.status);
     }

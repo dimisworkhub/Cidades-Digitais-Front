@@ -135,7 +135,7 @@ window.onload = function () {
           valorUF = [],
           valorFinalUF = [];
 
-        //faz a ligação entre letiaveis e valores iniciais do banco
+        //faz a ligação entre variaveis e valores iniciais do banco
         valorUF[0] = json["0"].uf;
         valorFinalUF[0] = valorUF[0];
         //faz a ligação com os outros valores do banco
