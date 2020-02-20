@@ -141,8 +141,8 @@ window.onload = function () {
         let i = 0;
         let x = [];
         x[0] += "<option value='00000000000000'>CNPJ</option>";
-        for (i = 1; i < json.length; i++) {
-          x[i] += "<option>" + json[i].cnpj + "</option>";
+        for (i = 0; i < json.length; i++) {
+          x[i+1] += "<option>" + json[i].cnpj + "</option>";
         }
         x.sort();
         document.getElementById("cnpj").innerHTML = x;
