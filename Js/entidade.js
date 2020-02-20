@@ -64,6 +64,9 @@ function changer() {
   info.observacao = g.value;
   let h = document.getElementById("nomeMun");
   info.nome_municipio = h.value;
+
+  console.log(info);
+  
 }
 
 function enabler() {
