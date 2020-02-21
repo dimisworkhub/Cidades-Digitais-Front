@@ -1,9 +1,31 @@
 //Fazer Tabela
-let cod_usuarioQuery = [];
+let listaUser = [],
+  listaModulo = [];
 //pega o token do login
 let meuToken = localStorage.getItem("token");
+//organizar os modulos
+let modulo = [],
+  valorModulo = [];
 
-let uModulos=[];
+//Fazer Usuário
+let info = {
+  "nome": "",
+  "email": "",
+  "login": "",
+  "senha": ""
+};
+
+//captura valores do html e coloca no string para enviar
+function changer() {
+  let a = document.getElementById("nome");
+  info.nome = a.value;
+  let b = document.getElementById("email");
+  info.email = b.value;
+  let c = document.getElementById("login");
+  info.login = c.value;
+  let d = document.getElementById("senha");
+  info.senha = d.value;
+}
 
 //tratamento de erros
 function erros(value) {
@@ -41,42 +63,27 @@ window.onload = function () {
   }).then(function (response) {
     //tratamento dos erros
     if (response.status == 200) {
-      console.log("ok");
+      console.log(response.statusText);
     } else {
       erros(response.status);
     }
     //pegar o json que possui a tabela
     return response.json().then(function (json) {
-      console.log(json);
-      console.log(response.text);
+      listaUser = json;
 
       let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
-          <th> <span class="custom-checkbox">
-          <input type="checkbox" id="selectAll">
-          <label for="selectAll"></label>
-          </span></th>
           <th scope="col">Cód. Usuario</th>
           <th scope="col">Nome</th>
           <th scope="col">E-mail</th>
-          <th scope="col">Status</th>
           <th scope="col">Login</th>
+          <th scope="col">Status</th>
           <th scope="col">Opções</th>
           </tr>
           </thead>`);
       tabela += (`<tbody> <tr>`);
 
-
-
       for (let i = 0; i < json.length; i++) {
-        cod_usuarioQuery[i] = json[i]["cod_usuario"];
-        tabela += (`<td>
-              <span class="custom-checkbox">
-              <input type="checkbox" id="checkbox1" name="o
-              console.log(response.text);ptions[]" value="1">
-              <label for="checkbox1"></label>
-              </span>
-              </td>`);
         tabela += (`<td>`);
         tabela += json[i]["cod_usuario"];
         tabela += (`</td> <td>`);
@@ -84,46 +91,20 @@ window.onload = function () {
         tabela += (`</td> <td>`);
         tabela += json[i]["email"]
         tabela += (`</td> <td>`);
-        tabela += json[i]["status"]
-        tabela += (`</td> <td>`);
         tabela += json[i]["login"]
+        tabela += (`</td> <td>`);
+        tabela += json[i]["status"]
         tabela += (`</td> <td> 
               <span class="d-flex">
               <button onclick="editarUsuario(` + i + `)" class="btn btn-success">
               <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
               </button>
-              <button onclick="apagarUsuario()" class="btn btn-danger">
-              <i class="material-icons"data-toggle="tooltip" title="Delete">&#xE872;</i>
-              </button> 
               </span> </td>`);
         tabela += (`</tr> <tr>`);
       }
 
-
       tabela += (`</tr> </tbody>`);
       document.getElementById("tabela").innerHTML = tabela;
-
-      $(document).ready(function () {
-        // Select/Deselect checkboxes
-        let checkbox = $('table tbody input[type="checkbox"]');
-        $("#selectAll").click(function () {
-          if (this.checked) {
-            checkbox.each(function () {
-              this.checked = true;
-            });
-          } else {
-            checkbox.each(function () {
-              this.checked = false;
-            });
-          }
-        });
-        checkbox.click(function () {
-          if (!this.checked) {
-            $("#selectAll").prop("checked", false);
-          }
-        })
-      })
-
     });
   });
 
@@ -131,32 +112,29 @@ window.onload = function () {
 
   //Fazer Tabela para Modulos
 
-  //função fetch para mandar itens 
-  //mudar para modulo quando possivel e se necessario
+  //função fetch para mandar itens do modulo
   fetch('http://localhost:8080/read/modulo', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
     },
   }).then(function (response) {
+
     //tratamento dos erros
-    if (response.status == 200) {
-      console.log("ok");
-    } else if (response.status == 201) {
-      console.log("modulo criada com sucesso");
-    } else if (response.status == 204) {
-      console.log("Apagado com sucesso.");
+    if (response.status == 200 || response.status == 201) {
+      console.log(response.statusText);
     } else {
       erros(response.status);
     }
+
     //pegar o json que possui a tabela
     return response.json().then(function (json) {
-      console.log(json);
-      let cod_moduloQuery = [];
+      //usado para listar os modulos usados na criação do usuario
+      listaModulo = json;
       let tabelaMod = (`<thead style="background: #4b5366; color:white; font-size:15px">
               <tr>
               <th> <span class="custom-checkbox">
-              <input type="checkbox" id="selectAll">
+              <input type="checkbox" id="selectAll" onclick="check()">
               <label for="selectAll"></label>
               </span></th>
               <th scope="col">Cód. Módulo</th>
@@ -170,12 +148,10 @@ window.onload = function () {
 
 
       for (let i = 0; i < json.length; i++) {
-        cod_moduloQuery[i] = json[i]["cod_modulo"];
         tabelaMod += (`<td>
               <span class="custom-checkbox">
-              <input onclick="modulos()" type="checkbox" id="checkbox1" name="o
-              console.log(response.text);ptions[]" value="`+json[i]["cod_modulo"]+`">
-              <label for="checkbox1"></label>
+              <input class="checking" onclick="modulos(` + i + `)" type="checkbox" id="checkbox` + i + `" name="options[]" value="` + json[i]["cod_modulo"] + `">
+              <label for="checkbox` + 1 + `"></label>
               </span>
               </td>`);
         tabelaMod += (`<td>`);
@@ -188,62 +164,95 @@ window.onload = function () {
         tabelaMod += json[i]["categoria_3"]
         tabelaMod += (`</td>`);
         tabelaMod += (`</tr> <tr>`);
-
-        uModulos[i]=
       }
 
 
       tabelaMod += (`</tr> </tbody>`);
       document.getElementById("tabelaMod").innerHTML = tabelaMod;
-
-      $(document).ready(function () {
-        // Select/Deselect checkboxes
-        let checkbox = $('table tbody input[type="checkbox"]');
-        $("#selectAll").click(function () {
-          if (this.checked) {
-            checkbox.each(function () {
-              this.checked = true;
-            });
-          } else {
-            checkbox.each(function () {
-              this.checked = false;
-            });
-          }
-        });
-        checkbox.click(function () {
-          if (!this.checked) {
-            $("#selectAll").prop("checked", false);
-          }
-        })
-      })
-
     });
   });
 }
 
+function check() {
+  let checkbox = document.getElementById("selectAll"),
+    i;
+  if (checkbox.checked == true) {
+    console.log("foi");
+    for (i = 0; i < listaModulo.length; i++) {
+      document.getElementsByClassName("checking").checked == true;
+    }
+  } else if (checkbox.checked == false) {
+    console.log("nao foi");
+    for (i = 0; i < listaModulo.length; i++) {
+      document.getElementsByClassName("checking").checked == false;
+    }
+  }
+}
+
 function editarUsuario(valor) {
-  localStorage.setItem("cod_usuario", cod_usuarioQuery[valor]);
+  localStorage.setItem("cod_usuario", listaUser[valor]);
   window.location.href = "./gerenciaUsuario.html";
 }
 
+//pega os valores de modulo dos checkboxes e coloca na estrutura valorModulo
+function modulos(numCod) {
+  let mods = [];
+  mods[numCod] = document.getElementById("checkbox" + numCod);
+  if (mods[numCod].checked) {
+    valorModulo[numCod] = mods[numCod].value;
+  } else {
+    valorModulo[numCod] = null;
+  }
+  // Select/Deselect checkboxes
+}
 
-//Fazer Usuário
-let info = {
-  "nome": "",
-  "email": "",
-  "login": "",
-  "senha": ""
-};
+function enviarMod() {
 
-function changer() {
-  let a = document.getElementById("nome");
-  info.nome = a.value;
-  let b = document.getElementById("email");
-  info.email = b.value;
-  let c = document.getElementById("login");
-  info.login = c.value;
-  let d = document.getElementById("senha");
-  info.senha = d.value;
+  let ultimoUser, i;
+  for (i = 0; i < listaUser.length; i++) {
+    if (i + 1 == listaUser.length) {
+      ultimoUser = listaUser[i].cod_usuario + 1;
+    }
+  }
+  console.log("cod user: " + listaModulo + " e valor de i: " + i);
+  for (i = 0; i < listaModulo.length; i++) {
+    if (valorModulo[i] != null) {
+      modulo[i] = {
+        "cod_usuario": parseFloat(ultimoUser),
+        "cod_modulo": parseFloat(valorModulo[i])
+      }
+    }
+  }
+  console.log("Dentro do modulo: " + modulo);
+  console.log("cod user: " + listaModulo);
+
+
+  //transforma as informações do token em json
+  let enviarModulo = JSON.stringify(modulo);
+
+  //função fetch para mandar
+  fetch('http://localhost:8080/read/usuario/' + 1 + '/modulo', {
+    method: 'POST',
+    body: enviarModulo,
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //checar o status do pedido
+    console.log(response);
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      alert("Usuário criado com sucesso");
+      window.location.reload();
+    } else {
+      erros(response.status);
+    }
+    return response.json().then(function (json) {
+      console.log(json);
+    });
+  });
 }
 
 function enviar() {
@@ -266,34 +275,11 @@ function enviar() {
     //tratamento dos erros
     if (response.status == 201) {
       alert("Usuário criado com sucesso");
+      response.json().then(function (json) {
+        console.log(json);
+      });
     } else {
-      erros(response.status);
-    }
-    return response.json().then(function (json) {
-      console.log(json);
-    });
-  });
-}
-
-function apagarUsuario(valor) {
-  //transforma as informações do token em json
-  let corpo = JSON.stringify(info);
-
-  //função fetch para mandar
-  fetch('http://localhost:8080/read/usuario/' + cod_usuarioQuery[valor], {
-    method: 'DELETE',
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-    //checar o status do pedido
-    console.log(response);
-    //tratamento dos erros
-    if (response.status == 204) {
-      alert("Apagado com sucesso.");
-      window.location.replace("./usuario.html");
-    } else {
-      erros(response.status);
+      //erros(response.status);
     }
   });
 }
