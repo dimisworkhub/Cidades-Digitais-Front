@@ -30,6 +30,33 @@ function erros(value) {
   }
 }
 
+//captura valores do html e coloca no string para enviar
+function changer() {
+  var a = document.getElementById("cod_lote");
+  info.cod_lote = parseFloat(a.value);
+  var b = document.getElementById("cnpj");
+  info.cnpj = b.value;
+  var c = document.getElementById("contrato");
+  info.contrato = c.value;
+  var d = document.getElementById("dt_inicio_vig");
+  info.dt_inicio_vig = d.value;
+  var e = document.getElementById("dt_final_vig");
+  info.dt_final_vig = e.value;
+  var f = document.getElementById("dt_reajuste");
+  info.dt_reajuste = f.value;
+}
+
+
+//Fazer Lote
+let info = {
+  "cod_lote": "",
+  "cnpj": "",
+  "contrato": "",
+  "dt_inicio_vig": "",
+  "dt_final_vig": "",
+  "dt_reajuste": ""
+};
+
 
 //Fazer Tabela
 window.onload = function () {
@@ -151,34 +178,6 @@ window.onload = function () {
     }
   });
 }
-
-
-function changer() {
-  var a = document.getElementById("cod_lote");
-  info.cod_lote = parseFloat(a.value);
-  var b = document.getElementById("cnpj");
-  info.cnpj = b.value;
-  var c = document.getElementById("contrato");
-  info.contrato = c.value;
-  var d = document.getElementById("dt_inicio_vig");
-  info.dt_inicio_vig = d.value;
-  var e = document.getElementById("dt_final_vig");
-  info.dt_final_vig = e.value;
-  var f = document.getElementById("dt_reajuste");
-  info.dt_reajuste = f.value;
-
-}
-
-
-//Fazer Lote
-let info = {
-  "cod_lote": "",
-  "cnpj": "",
-  "contrato": "",
-  "dt_inicio_vig": "",
-  "dt_final_vig": "",
-  "dt_reajuste": ""
-};
 
 function enviar() {
 

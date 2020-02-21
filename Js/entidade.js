@@ -47,6 +47,7 @@ let info = {
   "observacao": " "
 };
 
+//captura valores do html e coloca no string para enviar
 function changer() {
   let a = document.getElementById("cnpj");
   info.cnpj = a.value;
@@ -64,9 +65,6 @@ function changer() {
   info.observacao = g.value;
   let h = document.getElementById("nomeMun");
   info.nome_municipio = h.value;
-
-  console.log(info);
-  
 }
 
 function enabler() {
