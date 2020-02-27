@@ -134,7 +134,7 @@ window.onload = function () {
       let tabelaMod = (`<thead style="background: #4b5366; color:white; font-size:15px">
               <tr>
               <th> <span class="custom-checkbox">
-              <input type="checkbox" id="selectAll" onclick="check()">
+              <input type="checkbox" id="selectAll" >
               <label for="selectAll"></label>
               </span></th>
               <th scope="col">Cód. Módulo</th>
@@ -151,7 +151,7 @@ window.onload = function () {
         tabelaMod += (`<td>
               <span class="custom-checkbox">
               <input class="checking" onclick="modulos(` + i + `)" type="checkbox" id="checkbox` + i + `" name="options[]" value="` + json[i]["cod_modulo"] + `">
-              <label for="checkbox` + 1 + `"></label>
+              <label for="checkbox` + i + `"></label>
               </span>
               </td>`);
         tabelaMod += (`<td>`);
@@ -169,25 +169,61 @@ window.onload = function () {
 
       tabelaMod += (`</tr> </tbody>`);
       document.getElementById("tabelaMod").innerHTML = tabelaMod;
+
+      $(document).ready(function () {
+        // Select/Deselect checkboxes
+        let checkbox = $('table tbody input[type="checkbox"]');
+        $("#selectAll").click(function () {
+          if (this.checked) {
+
+            checkbox.each(function () {
+              this.checked = true;
+            });
+
+            for(i=0;i<json.length;i++){  
+                let mods = [];
+                mods[i] = document.getElementById("checkbox" + i);
+                valorModulo[i] = mods[i].value;
+            }
+          } else {
+
+            checkbox.each(function () {
+              this.checked = false;
+            });
+
+            for(i=0;i<json.length;i++){
+                let mods = [];
+                mods[i] = document.getElementById("checkbox" + i);
+                valorModulo[i] = null;
+            }
+          }
+        });
+        checkbox.click(function () {
+          if (!this.checked) {
+            $("#selectAll").prop("checked", false);
+          }
+        });
+      });
+
     });
   });
 }
 
-function check() {
-  let checkbox = document.getElementById("selectAll"),
-    i;
-  if (checkbox.checked == true) {
-    console.log("foi");
-    for (i = 0; i < listaModulo.length; i++) {
-      document.getElementsByClassName("checking").checked == true;
-    }
-  } else if (checkbox.checked == false) {
-    console.log("nao foi");
-    for (i = 0; i < listaModulo.length; i++) {
-      document.getElementsByClassName("checking").checked == false;
-    }
-  }
-}
+// function check() {
+//   let checkbox = document.getElementById("selectAll"),
+//     i;
+//   if (checkbox.checked == true) {
+//     console.log("foi");
+//     for (i = 0; i < listaModulo.length; i++) {
+//       document.getElementsByClassName("checking").checked == true;
+//     }
+//   } else if (checkbox.checked == false) {
+//     console.log("nao foi");
+//     for (i = 0; i < listaModulo.length; i++) {
+//       document.getElementsByClassName("checking").checked == false;
+//     }
+//   }
+// }
 
 function editarUsuario(valor) {
   localStorage.setItem("cod_usuario", listaUser[valor]);
@@ -203,56 +239,6 @@ function modulos(numCod) {
   } else {
     valorModulo[numCod] = null;
   }
-  // Select/Deselect checkboxes
-}
-
-function enviarMod() {
-
-  let ultimoUser, i;
-  for (i = 0; i < listaUser.length; i++) {
-    if (i + 1 == listaUser.length) {
-      ultimoUser = listaUser[i].cod_usuario + 1;
-    }
-  }
-  console.log("cod user: " + listaModulo + " e valor de i: " + i);
-  for (i = 0; i < listaModulo.length; i++) {
-    if (valorModulo[i] != null) {
-      modulo[i] = {
-        "cod_usuario": parseFloat(ultimoUser),
-        "cod_modulo": parseFloat(valorModulo[i])
-      }
-    }
-  }
-  console.log("Dentro do modulo: " + modulo);
-  console.log("cod user: " + listaModulo);
-
-
-  //transforma as informações do token em json
-  let enviarModulo = JSON.stringify(modulo);
-
-  //função fetch para mandar
-  fetch('http://localhost:8080/read/usuario/' + 1 + '/modulo', {
-    method: 'POST',
-    body: enviarModulo,
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-
-    //checar o status do pedido
-    console.log(response);
-
-    //tratamento dos erros
-    if (response.status == 200 || response.status == 201) {
-      alert("Usuário criado com sucesso");
-      window.location.reload();
-    } else {
-      erros(response.status);
-    }
-    return response.json().then(function (json) {
-      console.log(json);
-    });
-  });
 }
 
 function enviar() {
@@ -281,5 +267,53 @@ function enviar() {
     } else {
       //erros(response.status);
     }
+  });
+}
+
+function enviarMod() {
+
+  let ultimoUser, i, j = 0;
+  for (i = 0; i < listaUser.length; i++) {
+    if (i + 1 == listaUser.length) {
+      ultimoUser = listaUser[i].cod_usuario + 1;
+    }
+  }
+  for (i = 0; i < listaModulo.length; i++) {
+    if (valorModulo[i] != null) {
+      modulo[j] = {
+        "cod_usuario": parseFloat(ultimoUser),
+        "cod_modulo": parseFloat(valorModulo[i])
+      }
+      j++;
+    }
+  }
+  console.log(j);
+
+
+  //transforma as informações do token em json
+  let enviarModulo = JSON.stringify(modulo);
+
+  //função fetch para mandar
+  fetch('http://localhost:8080/read/usuario/' + 1 + '/modulo', {
+    method: 'POST',
+    body: enviarModulo,
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //checar o status do pedido
+    console.log(response);
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      alert("Módulos inseridos com sucesso");
+      window.location.reload();
+    } else {
+      //erros(response.status);
+    }
+    return response.json().then(function (json) {
+      console.log(json);
+    });
   });
 }
