@@ -65,41 +65,15 @@ function changer() {
 }
 
 function enabler(){
-  let uf1 = document.getElementById("uf");
-  info.uf = uf1.value;
+  let ufNovo = document.getElementById("uf");
+  info.uf = ufNovo.value;
   let i,y = [];
   for (i = 0; i < cidades.length; i++) {
-    //h.value é o uf nesse caso
-    if (cidades[i].uf == uf.value) {
+    if (cidades[i].uf == info.uf) {
       y[i] = "<option>" + cidades[i].nome_municipio + "</option>"
     }
   }
   document.getElementById("nomeMun").innerHTML = y;
-}
-
-
-
-function enviar() {
-
-  //transforma as informações do token em json
-  let corpo = JSON.stringify(info);
-  //função fetch para mandar
-  fetch('http://localhost:8080/read/entidade/' + meuCNPJ, {
-    method: 'PUT',
-    body: corpo,
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-
-    //tratamento dos erros
-    if (response.status == 200) {
-      window.location.replace("./entidade.html");
-    } else {
-      erros(response.status);
-    }
-    return console.log(response);
-  });
 }
 
 window.onload = function () {
@@ -169,5 +143,28 @@ window.onload = function () {
     } else {
       erros(response.status);
     }
+  });
+}
+
+function enviar() {
+
+  //transforma as informações do token em json
+  let corpo = JSON.stringify(info);
+  //função fetch para mandar
+  fetch('http://localhost:8080/read/entidade/' + meuCNPJ, {
+    method: 'PUT',
+    body: corpo,
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      window.location.replace("./entidade.html");
+    } else {
+      erros(response.status);
+    }
+    return console.log(response);
   });
 }

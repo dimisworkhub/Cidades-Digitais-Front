@@ -1,11 +1,8 @@
-//PRECISA ADAPTAR A LOTE
-
 //pega o token do login
 let meuToken = localStorage.getItem("token");
 
 //pega o CNPJ escolhido anteriormente
-let meuCNPJ = localStorage.getItem("cod_lote");
-
+let meuLote = localStorage.getItem("cod_lote");
 
 //tratamento de erros
 function erros(value){
@@ -50,7 +47,7 @@ var info = {
 
 //captura o codigo do lote para usar como chave na edição
 var a = document.getElementById("cod_lote");
-a.value = localStorage.getItem("cod_lote");
+a.value = meuLote;
 
 //captura as informações do input e coloca no JSON
 

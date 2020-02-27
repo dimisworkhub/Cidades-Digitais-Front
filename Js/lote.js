@@ -93,7 +93,7 @@ window.onload = function () {
       tabela += (`<tbody> <tr>`);
 
       for (let i = 0; i < json.length; i++) {
-        loteQuery[i] = json[i]["cnpj"];
+        loteQuery[i] = json[i];
         tabela += (`<td>`);
         tabela += json[i]["cod_lote"];
         tabela += (`</td> <td>`);
