@@ -1,10 +1,11 @@
 //Fazer Tabela
-let listaUser = [],
-  listaModulo = [];
+let listaModulo = [];
 //pega o token do login
 let meuToken = localStorage.getItem("token");
 //organizar os modulos
-let modulo = [],
+let ultimoUser,
+  codUser = [],
+  modulo = [],
   valorModulo = [];
 
 //Fazer Usuário
@@ -69,8 +70,6 @@ window.onload = function () {
     }
     //pegar o json que possui a tabela
     return response.json().then(function (json) {
-      listaUser = json;
-
       let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
           <th scope="col">Cód. Usuario</th>
@@ -84,6 +83,7 @@ window.onload = function () {
       tabela += (`<tbody> <tr>`);
 
       for (let i = 0; i < json.length; i++) {
+        codUser[i]=json[i].cod_usuario;
         tabela += (`<td>`);
         tabela += json[i]["cod_usuario"];
         tabela += (`</td> <td>`);
@@ -180,10 +180,10 @@ window.onload = function () {
               this.checked = true;
             });
 
-            for(i=0;i<json.length;i++){  
-                let mods = [];
-                mods[i] = document.getElementById("checkbox" + i);
-                valorModulo[i] = mods[i].value;
+            for (i = 0; i < json.length; i++) {
+              let mods = [];
+              mods[i] = document.getElementById("checkbox" + i);
+              valorModulo[i] = mods[i].value;
             }
           } else {
 
@@ -191,10 +191,10 @@ window.onload = function () {
               this.checked = false;
             });
 
-            for(i=0;i<json.length;i++){
-                let mods = [];
-                mods[i] = document.getElementById("checkbox" + i);
-                valorModulo[i] = null;
+            for (i = 0; i < json.length; i++) {
+              let mods = [];
+              mods[i] = document.getElementById("checkbox" + i);
+              valorModulo[i] = null;
             }
           }
         });
@@ -209,24 +209,9 @@ window.onload = function () {
   });
 }
 
-// function check() {
-//   let checkbox = document.getElementById("selectAll"),
-//     i;
-//   if (checkbox.checked == true) {
-//     console.log("foi");
-//     for (i = 0; i < listaModulo.length; i++) {
-//       document.getElementsByClassName("checking").checked == true;
-//     }
-//   } else if (checkbox.checked == false) {
-//     console.log("nao foi");
-//     for (i = 0; i < listaModulo.length; i++) {
-//       document.getElementsByClassName("checking").checked == false;
-//     }
-//   }
-// }
-
 function editarUsuario(valor) {
-  localStorage.setItem("cod_usuario", listaUser[valor]);
+  localStorage.setItem("cod_usuario", codUser[valor]);
+  console.log(codUser[valor])
   window.location.href = "./gerenciaUsuario.html";
 }
 
@@ -256,24 +241,23 @@ function enviar() {
   }).then(function (response) {
 
     //checar o status do pedido
-    console.log(response);
+    //console.log(response);
 
     //tratamento dos erros
     if (response.status == 201) {
       alert("Usuário criado com sucesso");
       response.json().then(function (json) {
-        console.log(json);
+        ultimoUser = json.cod_usuario;
       });
     } else {
-      //erros(response.status);
+      erros(response.status);
     }
   });
 }
 
 function enviarMod() {
 
-  let ultimoUser, i, j = 0;
-  ultimoUser=listaUser.length+1;
+  let i, j = 0;
   for (i = 0; i < listaModulo.length; i++) {
     if (valorModulo[i] != null) {
       modulo[j] = {
