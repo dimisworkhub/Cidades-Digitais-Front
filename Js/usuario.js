@@ -273,11 +273,7 @@ function enviar() {
 function enviarMod() {
 
   let ultimoUser, i, j = 0;
-  for (i = 0; i < listaUser.length; i++) {
-    if (i + 1 == listaUser.length) {
-      ultimoUser = listaUser[i].cod_usuario + 1;
-    }
-  }
+  ultimoUser=listaModulo.length+1;
   for (i = 0; i < listaModulo.length; i++) {
     if (valorModulo[i] != null) {
       modulo[j] = {
