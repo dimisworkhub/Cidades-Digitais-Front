@@ -174,7 +174,7 @@ window.onload = function () {
         document.getElementById("cnpj").innerHTML = x;
       });
     } else {
-      //erros(response.status);
+      erros(response.status);
     }
   });
 }
