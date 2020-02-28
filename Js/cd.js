@@ -105,7 +105,7 @@ window.onload = function () {
 
       $(document).ready(function () {
         // Select/Deselect checkboxes
-        var checkbox = $('table tbody input[type="checkbox"]');
+        let checkbox = $('table tbody input[type="checkbox"]');
         $("#selectAll").click(function () {
           if (this.checked) {
             checkbox.each(function () {
@@ -139,7 +139,7 @@ function editarCd(valor) {
 
 
 //Fazer Entidade
-var info = {
+let info = {
   "cod_ibge": " ",
   "cod_lote": " ",
   "os_pe": " ",
@@ -149,24 +149,24 @@ var info = {
 };
 
 function changer() {
-  var a = document.getElementById("cod_ibge");
+  let a = document.getElementById("cod_ibge");
   info.cod_ibge = parseInt(a.value);
-  var b = document.getElementById("cod_lote");
+  let b = document.getElementById("cod_lote");
   info.cod_lote = parseInt(b.value);
-  var c = document.getElementById("os_pe");
+  let c = document.getElementById("os_pe");
   info.os_pe = c.value;
-  var d = document.getElementById("data_pe");
+  let d = document.getElementById("data_pe");
   info.data_pe = d.value;
-  var e = document.getElementById("os_imp");
+  let e = document.getElementById("os_imp");
   info.os_imp = e.value;
-  var f = document.getElementById("data_imp");
+  let f = document.getElementById("data_imp");
   info.data_imp = f.value;
 }
 
 function formatar(mascara, documento) {
-  var i = documento.value.length;
-  var saida = mascara.substring(0, 1);
-  var texto = mascara.substring(i)
+  let i = documento.value.length;
+  let saida = mascara.substring(0, 1);
+  let texto = mascara.substring(i)
 
   if (texto.substring(0, 1) != saida) {
     documento.value += texto.substring(0, 1);

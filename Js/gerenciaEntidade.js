@@ -65,9 +65,9 @@ function changer() {
 }
 
 function enabler(){
+  let i,y = [];
   let ufNovo = document.getElementById("uf");
   info.uf = ufNovo.value;
-  let i,y = [];
   for (i = 0; i < cidades.length; i++) {
     if (cidades[i].uf == info.uf) {
       y[i] = "<option>" + cidades[i].nome_municipio + "</option>"
@@ -90,14 +90,14 @@ window.onload = function () {
       return response.json().then(function (json) {
         //pegando valores para usar em municipios
         cidades=json;
-        //cria letiaveis
+        //cria variaveis
         let i, j = 1;
         let x = [],
           valorUF = [],
           valorFinalUF = [];
 
-        //faz a ligação entre letiaveis e valores iniciais do banco
-        valorUF[0] = json["0"].uf;
+        //faz a ligação entre variaveis e valores iniciais do banco
+        valorUF[0] = json[0].uf;
         valorFinalUF[0] = valorUF[0];
         //faz a ligação com os outros valores do banco
         for (i = 1; i < json.length; i++) {
@@ -139,6 +139,15 @@ window.onload = function () {
         g.value = localStorage.getItem("nome_municipio");
         let k = document.getElementById("obs");
         k.value = localStorage.getItem("observacao");
+        
+        //garantindo que os campos não alterados não sejam nulos
+        info.nome = b.value;
+        info.endereco = c.value;
+        info.numero = d.value;
+        info.bairro = e.value;
+        info.cep = f.value;
+        info.nome_municipio = g.value;
+        info.observacao = k.value;
       });
     } else {
       erros(response.status);

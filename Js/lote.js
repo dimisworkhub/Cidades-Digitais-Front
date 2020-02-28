@@ -32,17 +32,17 @@ function erros(value) {
 
 //captura valores do html e coloca no string para enviar
 function changer() {
-  var a = document.getElementById("cod_lote");
+  let a = document.getElementById("cod_lote");
   info.cod_lote = parseFloat(a.value);
-  var b = document.getElementById("cnpj");
+  let b = document.getElementById("cnpj");
   info.cnpj = b.value;
-  var c = document.getElementById("contrato");
+  let c = document.getElementById("contrato");
   info.contrato = c.value;
-  var d = document.getElementById("dt_inicio_vig");
+  let d = document.getElementById("dt_inicio_vig");
   info.dt_inicio_vig = d.value;
-  var e = document.getElementById("dt_final_vig");
+  let e = document.getElementById("dt_final_vig");
   info.dt_final_vig = e.value;
-  var f = document.getElementById("dt_reajuste");
+  let f = document.getElementById("dt_reajuste");
   info.dt_reajuste = f.value;
 }
 
@@ -129,7 +129,7 @@ window.onload = function () {
 
       $(document).ready(function () {
         // Select/Deselect checkboxes
-        var checkbox = $('table tbody input[type="checkbox"]');
+        let checkbox = $('table tbody input[type="checkbox"]');
         $("#selectAll").click(function () {
           if (this.checked) {
             checkbox.each(function () {

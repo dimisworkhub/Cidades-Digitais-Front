@@ -1,25 +1,25 @@
 // Utilities
-var autoprefixer = require('autoprefixer');
-var cssnano = require('cssnano');
-var fs = require('fs');
+let autoprefixer = require('autoprefixer');
+let cssnano = require('cssnano');
+let fs = require('fs');
 
 // Gulp
-var gulp = require('gulp');
+let gulp = require('gulp');
 
 // Gulp plugins
-var concat = require('gulp-concat');
-var gutil = require('gulp-util');
-var header = require('gulp-header');
-var postcss = require('gulp-postcss');
-var rename = require('gulp-rename');
-var runSequence = require('run-sequence');
+let concat = require('gulp-concat');
+let gutil = require('gulp-util');
+let header = require('gulp-header');
+let postcss = require('gulp-postcss');
+let rename = require('gulp-rename');
+let runSequence = require('run-sequence');
 
 // Misc/global vars
-var pkg = JSON.parse(fs.readFileSync('package.json'));
-var activatedAnimations = activateAnimations();
+let pkg = JSON.parse(fs.readFileSync('package.json'));
+let activatedAnimations = activateAnimations();
 
 // Task options
-var opts = {
+let opts = {
   destPath: './',
   concatName: 'animate.css',
 
@@ -78,7 +78,7 @@ gulp.task('default', gulp.series('createCSS', 'addHeader'));
 
 // Read the config file and return an array of the animations to be activated
 function activateAnimations() {
-  var categories = JSON.parse(fs.readFileSync('animate-config.json')),
+  let categories = JSON.parse(fs.readFileSync('animate-config.json')),
     category,
     files,
     file,

@@ -1,5 +1,5 @@
 jQuery(document).ready(function ($) {
-	var secondaryNav = $('.cd-secondary-nav'),
+	let secondaryNav = $('.cd-secondary-nav'),
 		secondaryNavTopPosition = secondaryNav.offset().top,
 		taglineOffesetTop = $('#cd-intro-tagline').offset().top + $('#cd-intro-tagline').height() + parseInt($('#cd-intro-tagline').css('paddingTop').replace('px', '')),
 		contentSections = $('.cd-section');
@@ -37,7 +37,7 @@ jQuery(document).ready(function ($) {
 
 	function updateSecondaryNavigation() {
 		contentSections.each(function () {
-			var actual = $(this),
+			let actual = $(this),
 				actualHeight = actual.height() + parseInt(actual.css('paddingTop').replace('px', '')) + parseInt(actual.css('paddingBottom').replace('px', '')),
 				actualAnchor = secondaryNav.find('a[href="#' + actual.attr('id') + '"]');
 			if ((actual.offset().top - secondaryNav.height() <= $(window).scrollTop()) && (actual.offset().top + actualHeight - secondaryNav.height() > $(window).scrollTop())) {
@@ -58,7 +58,7 @@ jQuery(document).ready(function ($) {
 	//smooth scrolling when clicking on the secondary navigation items
 	secondaryNav.find('ul a').on('click', function (event) {
 		event.preventDefault();
-		var target = $(this.hash);
+		let target = $(this.hash);
 		$('body,html').animate({
 			'scrollTop': target.offset().top - secondaryNav.height() + 1
 		}, 400);

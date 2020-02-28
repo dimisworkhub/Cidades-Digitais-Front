@@ -24,7 +24,7 @@
 
 window.Modernizr = (function (window, document, undefined) {
 
-  var version = '2.8.3',
+  let version = '2.8.3',
 
     Modernizr = {},
 
@@ -98,7 +98,7 @@ window.Modernizr = (function (window, document, undefined) {
     // Inject element with style element and some CSS rules
     injectElementWithStyles = function (rule, callback, nodes, testnames) {
 
-      var style, ret, node, docOverflow,
+      let style, ret, node, docOverflow,
         div = document.createElement('div'),
         // After page load injecting a fake body doesn't work so check if body exists
         body = document.body,
@@ -156,12 +156,12 @@ window.Modernizr = (function (window, document, undefined) {
     // gist.github.com/786768
     testMediaQuery = function (mq) {
 
-      var matchMedia = window.matchMedia || window.msMatchMedia;
+      let matchMedia = window.matchMedia || window.msMatchMedia;
       if (matchMedia) {
         return matchMedia(mq) && matchMedia(mq).matches || false;
       }
 
-      var bool;
+      let bool;
 
       injectElementWithStyles('@media ' + mq + ' { #' + mod + ' { position: absolute; } }', function (node) {
         bool = (window.getComputedStyle ?
@@ -186,7 +186,7 @@ window.Modernizr = (function (window, document, undefined) {
     //   ...
     isEventSupported = (function () {
 
-      var TAGNAMES = {
+      let TAGNAMES = {
         'select': 'input',
         'change': 'input',
         'submit': 'form',
@@ -202,7 +202,7 @@ window.Modernizr = (function (window, document, undefined) {
         eventName = 'on' + eventName;
 
         // When using `setAttribute`, IE skips "unload", WebKit skips "unload" and "resize", whereas `in` "catches" those
-        var isSupported = eventName in element;
+        let isSupported = eventName in element;
 
         if (!isSupported) {
           // If it has no `setAttribute` (i.e. doesn't implement Node interface), try generic element
@@ -251,22 +251,22 @@ window.Modernizr = (function (window, document, undefined) {
   if (!Function.prototype.bind) {
     Function.prototype.bind = function bind(that) {
 
-      var target = this;
+      let target = this;
 
       if (typeof target != "function") {
         throw new TypeError();
       }
 
-      var args = slice.call(arguments, 1),
+      let args = slice.call(arguments, 1),
         bound = function () {
 
           if (this instanceof bound) {
 
-            var F = function () {};
+            let F = function () {};
             F.prototype = target.prototype;
-            var self = new F();
+            let self = new F();
 
-            var result = target.apply(
+            let result = target.apply(
               self,
               args.concat(slice.call(arguments))
             );
@@ -339,8 +339,8 @@ window.Modernizr = (function (window, document, undefined) {
   // browser-specific content by accident.
 
   function testProps(props, prefixed) {
-    for (var i in props) {
-      var prop = props[i];
+    for (let i in props) {
+      let prop = props[i];
       if (!contains(prop, "-") && mStyle[prop] !== undefined) {
         return prefixed == 'pfx' ? prop : true;
       }
@@ -355,8 +355,8 @@ window.Modernizr = (function (window, document, undefined) {
    *   a certain property, it won't return undefined for it.
    */
   function testDOMProps(props, obj, elem) {
-    for (var i in props) {
-      var item = obj[props[i]];
+    for (let i in props) {
+      let item = obj[props[i]];
       if (item !== undefined) {
 
         // return the property name as a string
@@ -384,7 +384,7 @@ window.Modernizr = (function (window, document, undefined) {
    */
   function testPropsAll(prop, prefixed, elem) {
 
-    var ucProp = prop.charAt(0).toUpperCase() + prop.slice(1),
+    let ucProp = prop.charAt(0).toUpperCase() + prop.slice(1),
       props = (prop + ' ' + cssomPrefixes.join(ucProp + ' ') + ucProp).split(' ');
 
     // did they call .prefixed('boxSizing') or are we just testing a prop?
@@ -424,7 +424,7 @@ window.Modernizr = (function (window, document, undefined) {
   // github.com/Modernizr/Modernizr/issues/issue/97/
 
   tests['canvas'] = function () {
-    var elem = document.createElement('canvas');
+    let elem = document.createElement('canvas');
     return !!(elem.getContext && elem.getContext('2d'));
   };
 
@@ -456,7 +456,7 @@ window.Modernizr = (function (window, document, undefined) {
    */
 
   tests['touch'] = function () {
-    var bool;
+    let bool;
 
     if (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch) {
       bool = true;
@@ -520,7 +520,7 @@ window.Modernizr = (function (window, document, undefined) {
   };
 
   tests['draganddrop'] = function () {
-    var div = document.createElement('div');
+    let div = document.createElement('div');
     return ('draggable' in div) || ('ondragstart' in div && 'ondrop' in div);
   };
 
@@ -632,7 +632,7 @@ window.Modernizr = (function (window, document, undefined) {
      * dev.w3.org/csswg/css3-images/#gradients-
      */
 
-    var str1 = 'background-image:',
+    let str1 = 'background-image:',
       str2 = 'gradient(linear,left top,right bottom,from(#9f9),to(white));',
       str3 = 'linear-gradient(left top,#9f9, white);';
 
@@ -659,7 +659,7 @@ window.Modernizr = (function (window, document, undefined) {
 
   tests['csstransforms3d'] = function () {
 
-    var ret = !!testPropsAll('perspective');
+    let ret = !!testPropsAll('perspective');
 
     // Webkit's 3D transforms are passed off to the browser's own graphics renderer.
     //   It works fine in Safari on Leopard and Snow Leopard, but not in Chrome in
@@ -690,10 +690,10 @@ window.Modernizr = (function (window, document, undefined) {
   //   WebOS github.com/Modernizr/Modernizr/issues/342
   //   WP7   github.com/Modernizr/Modernizr/issues/538
   tests['fontface'] = function () {
-    var bool;
+    let bool;
 
     injectElementWithStyles('@font-face {font-family:"font";src:url("https://")}', function (node, rule) {
-      var style = document.getElementById('smodernizr'),
+      let style = document.getElementById('smodernizr'),
         sheet = style.sheet || style.styleSheet,
         cssText = sheet ? (sheet.cssRules && sheet.cssRules[0] ? sheet.cssRules[0].cssText : sheet.cssText || '') : '';
 
@@ -706,7 +706,7 @@ window.Modernizr = (function (window, document, undefined) {
 
   // CSS generated content detection
   tests['generatedcontent'] = function () {
-    var bool;
+    let bool;
 
     injectElementWithStyles(['#', mod, '{font:0/0 a}#', mod, ':after{content:"', smile, '";visibility:hidden;font:3px/1 a}'].join(''), function (node) {
       bool = node.offsetHeight >= 3;
@@ -732,7 +732,7 @@ window.Modernizr = (function (window, document, undefined) {
   //   It was also live in Safari 4.0.0 - 4.0.4, but fixed in 4.0.5
 
   tests['video'] = function () {
-    var elem = document.createElement('video'),
+    let elem = document.createElement('video'),
       bool = false;
 
     // IE9 Running on Windows Server SKU can cause an exception to be thrown, bug #224
@@ -753,7 +753,7 @@ window.Modernizr = (function (window, document, undefined) {
   };
 
   tests['audio'] = function () {
-    var elem = document.createElement('audio'),
+    let elem = document.createElement('audio'),
       bool = false;
 
     try {
@@ -831,7 +831,7 @@ window.Modernizr = (function (window, document, undefined) {
   // specifically for SVG inline in HTML, not within XHTML
   // test page: paulirish.com/demo/inline-svg
   tests['inlinesvg'] = function () {
-    var div = document.createElement('div');
+    let div = document.createElement('div');
     div.innerHTML = '<svg/>';
     return (div.firstChild && div.firstChild.namespaceURI) == ns.svg;
   };
@@ -866,7 +866,7 @@ window.Modernizr = (function (window, document, undefined) {
     // Currently Safari 4 and Opera 11 have support only for the input placeholder
     // Both tests are available in feature-detects/forms-placeholder.js
     Modernizr['input'] = (function (props) {
-      for (var i = 0, len = props.length; i < len; i++) {
+      for (let i = 0, len = props.length; i < len; i++) {
         attrs[props[i]] = !!(props[i] in inputElem);
       }
       if (attrs.list) {
@@ -887,7 +887,7 @@ window.Modernizr = (function (window, document, undefined) {
     // Big thanks to @miketaylr for the html5 forms expertise. miketaylr.com/
     Modernizr['inputtypes'] = (function (props) {
 
-      for (var i = 0, bool, inputElemType, defaultView, len = props.length; i < len; i++) {
+      for (let i = 0, bool, inputElemType, defaultView, len = props.length; i < len; i++) {
 
         inputElem.setAttribute('type', inputElemType = props[i]);
         bool = inputElem.type !== 'text';
@@ -947,7 +947,7 @@ window.Modernizr = (function (window, document, undefined) {
 
   // Run through all tests and detect their support in the current UA.
   // todo: hypothetically we could be doing an array of tests and use a basic loop here.
-  for (var feature in tests) {
+  for (let feature in tests) {
     if (hasOwnProp(tests, feature)) {
       // run the test, throw the return value into the Modernizr,
       //   then based on that boolean, define an appropriate className
@@ -975,7 +975,7 @@ window.Modernizr = (function (window, document, undefined) {
    */
   Modernizr.addTest = function (feature, test) {
     if (typeof feature == 'object') {
-      for (var key in feature) {
+      for (let key in feature) {
         if (hasOwnProp(feature, key)) {
           Modernizr.addTest(key, feature[key]);
         }
@@ -987,7 +987,7 @@ window.Modernizr = (function (window, document, undefined) {
       if (Modernizr[feature] !== undefined) {
         // we're going to quit if you're trying to overwrite an existing test
         // if we were to allow it, we'd do this:
-        //   var re = new RegExp("\\b(no-)?" + feature + "\\b");
+        //   let re = new RegExp("\\b(no-)?" + feature + "\\b");
         //   docElement.className = docElement.className.replace( re, '' );
         // but, no rly, stuff 'em.
         return Modernizr;
@@ -1018,35 +1018,35 @@ window.Modernizr = (function (window, document, undefined) {
   (function (window, document) {
     /*jshint evil:true */
     /** version */
-    var version = '3.7.0';
+    let version = '3.7.0';
 
     /** Preset options */
-    var options = window.html5 || {};
+    let options = window.html5 || {};
 
     /** Used to skip problem elements */
-    var reSkip = /^<|^(?:button|map|select|textarea|object|iframe|option|optgroup)$/i;
+    let reSkip = /^<|^(?:button|map|select|textarea|object|iframe|option|optgroup)$/i;
 
     /** Not all elements can be cloned in IE **/
-    var saveClones = /^(?:a|b|code|div|fieldset|h1|h2|h3|h4|h5|h6|i|label|li|ol|p|q|span|strong|style|table|tbody|td|th|tr|ul)$/i;
+    let saveClones = /^(?:a|b|code|div|fieldset|h1|h2|h3|h4|h5|h6|i|label|li|ol|p|q|span|strong|style|table|tbody|td|th|tr|ul)$/i;
 
     /** Detect whether the browser supports default html5 styles */
-    var supportsHtml5Styles;
+    let supportsHtml5Styles;
 
     /** Name of the expando, to work with multiple documents or to re-shiv one document */
-    var expando = '_html5shiv';
+    let expando = '_html5shiv';
 
     /** The id for the the documents expando */
-    var expanID = 0;
+    let expanID = 0;
 
     /** Cached data for each document */
-    var expandoData = {};
+    let expandoData = {};
 
     /** Detect whether the browser supports unknown elements */
-    var supportsUnknownElements;
+    let supportsUnknownElements;
 
     (function () {
       try {
-        var a = document.createElement('a');
+        let a = document.createElement('a');
         a.innerHTML = '<xyz></xyz>';
         //if the hidden property is implemented we can assume, that the browser supports basic HTML5 Styles
         supportsHtml5Styles = ('hidden' in a);
@@ -1054,7 +1054,7 @@ window.Modernizr = (function (window, document, undefined) {
         supportsUnknownElements = a.childNodes.length == 1 || (function () {
           // assign a false positive if unable to shiv
           (document.createElement)('a');
-          var frag = document.createDocumentFragment();
+          let frag = document.createDocumentFragment();
           return (
             typeof frag.cloneNode == 'undefined' ||
             typeof frag.createDocumentFragment == 'undefined' ||
@@ -1079,7 +1079,7 @@ window.Modernizr = (function (window, document, undefined) {
      * @returns {StyleSheet} The style element.
      */
     function addStyleSheet(ownerDocument, cssText) {
-      var p = ownerDocument.createElement('p'),
+      let p = ownerDocument.createElement('p'),
         parent = ownerDocument.getElementsByTagName('head')[0] || ownerDocument.documentElement;
 
       p.innerHTML = 'x<style>' + cssText + '</style>';
@@ -1092,7 +1092,7 @@ window.Modernizr = (function (window, document, undefined) {
      * @returns {Array} An array of shived element node names.
      */
     function getElements() {
-      var elements = html5.elements;
+      let elements = html5.elements;
       return typeof elements == 'string' ? elements.split(' ') : elements;
     }
 
@@ -1103,7 +1103,7 @@ window.Modernizr = (function (window, document, undefined) {
      * @returns {Object} An object of data.
      */
     function getExpandoData(ownerDocument) {
-      var data = expandoData[ownerDocument[expando]];
+      let data = expandoData[ownerDocument[expando]];
       if (!data) {
         data = {};
         expanID++;
@@ -1130,7 +1130,7 @@ window.Modernizr = (function (window, document, undefined) {
       if (!data) {
         data = getExpandoData(ownerDocument);
       }
-      var node;
+      let node;
 
       if (data.cache[nodeName]) {
         node = data.cache[nodeName].cloneNode();
@@ -1164,7 +1164,7 @@ window.Modernizr = (function (window, document, undefined) {
         return ownerDocument.createDocumentFragment();
       }
       data = data || getExpandoData(ownerDocument);
-      var clone = data.frag.cloneNode(),
+      let clone = data.frag.cloneNode(),
         i = 0,
         elems = getElements(),
         l = elems.length;
@@ -1198,7 +1198,7 @@ window.Modernizr = (function (window, document, undefined) {
       };
 
       ownerDocument.createDocumentFragment = Function('h,f', 'return function(){' +
-        'var n=f.cloneNode(),c=n.createElement;' +
+        'let n=f.cloneNode(),c=n.createElement;' +
         'h.shivMethods&&(' +
         // unroll the `createElement` calls
         getElements().join().replace(/[\w\-]+/g, function (nodeName) {
@@ -1222,7 +1222,7 @@ window.Modernizr = (function (window, document, undefined) {
       if (!ownerDocument) {
         ownerDocument = document;
       }
-      var data = getExpandoData(ownerDocument);
+      let data = getExpandoData(ownerDocument);
 
       if (html5.shivCSS && !supportsHtml5Styles && !data.hasCSS) {
         data.hasCSS = !!addStyleSheet(ownerDocument,
@@ -1251,7 +1251,7 @@ window.Modernizr = (function (window, document, undefined) {
      * // options can be changed before the script is included
      * html5 = { 'elements': 'mark section', 'shivCSS': false, 'shivMethods': false };
      */
-    var html5 = {
+    let html5 = {
 
       /**
        * An array or space separated string of node names of the elements to shiv.
@@ -1381,7 +1381,7 @@ window.Modernizr = (function (window, document, undefined) {
 
   // If you're trying to ascertain which transition end event to bind to, you might do something like...
   //
-  //     var transEndEventNames = {
+  //     let transEndEventNames = {
   //       'WebkitTransition' : 'webkitTransitionEnd',
   //       'MozTransition'    : 'transitionend',
   //       'OTransition'      : 'oTransitionEnd',

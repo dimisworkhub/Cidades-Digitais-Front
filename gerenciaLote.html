@@ -31,7 +31,7 @@
                             <div class="table-title">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        <h2 class="text-align:center">Gerencia <b>Lote</b></h2>
+                                        <h2 class="text-align:center">Gerenciar <b>Lote</b></h2>
                                     </div>
                                 </div>
                             </div>
@@ -40,39 +40,39 @@
                                 <div class="form-row" style=" padding: 30px;">
                                         
                                      <div class="form-group col-md-4">
-                                            <label class="progress" for="cod_lote"></label>
-                                            <input type="text" class="form-control" id="cod_lote" value="cod_lote" placeholder="Código do Lote:" maxlength="19" onchange="changer()">
+                                            <label for="cod_lote">Código do Lote:</label>
+                                            <input type="text" class="form-control" id="cod_lote" disabled>
                                         </div>
                                     
                                         <div class="form-group col-md-4">
-                                            <label class="progress" for="cnpj"></label>
-                                            <input type="text" class="form-control" id="cnpj" value="cnpj" placeholder="CNPJ:" maxlength="19" onchange="changer()">
+                                        <label for="uf">CNPJ:</label>
+                                        <select type="text" class="form-control" id="cnpj" onchange="changer()"></select>
                                         </div>
                                     
                                         <div class="form-group col-md-4">
-                                            <label class="progress" for="contrato"></label>
-                                            <input type="text" class="form-control" id="contrato" value="contrato" placeholder="Contrato:" maxlength="9" onchange="changer()">
+                                            <label for="contrato">Contrato</label>
+                                            <input type="text" class="form-control" id="contrato" maxlength="10" onchange="changer()">
                                         </div>
                 
                                         <div class="form-group col-md-4">
-                                            <label class="progress" for="dt_inicio_vig"></label>
-                                            <input type="text" class="form-control" id="dt_inicio_vig" value="dt_inicio_vig" placeholder="Data de Inicio de Vigencia:" maxlength="100" onchange="changer()">
+                                            <label for="dt_inicio_vig">Data de Inicio</label>
+                                            <input type="date" class="form-control" id="dt_inicio_vig" onchange="changer()">
                                         </div>
                         
                                         <div class="form-group col-md-4">
-                                            <label class="progress" for="dt_final_vig"></label>
-                                            <input type="text" class="form-control" id="dt_final_vig" value="dt_final_vig" placeholder="Data Final de Vigencia:" maxlength="100" onchange="changer()">
+                                            <label for="dt_final_vig">Data Final</label>
+                                            <input type="date" class="form-control" id="dt_final_vig" onchange="changer()">
                                         </div>
                         
                                         <div class="form-group col-md-4">
-                                            <label class="progress" for="dt_reajuste"></label>
-                                            <input type="text" class="form-control" id="dt_reajuste" value="dt_reajuste" placeholder="Data de Reajuste:" maxlength="100" onchange="changer()">
+                                            <label for="dt_reajuste">Data de Reajuste</label>
+                                            <input type="date" class="form-control" id="dt_reajuste" onchange="changer()">
                                         </div>
                         
                                         
                 
                                         <div style= "width:100%; text-align: center;">
-                                            <div class="col-sm-12">
+                                            <div class="col-sm-6">
                                                 <button style="background-color:#3a3a3a" type="button" class="btn btn-primary" onclick="enviar()" >Salvar</button>
                                             </div>
                                         </div>
@@ -87,8 +87,6 @@
                                                 class="material-icons">&#xE147;</i> <span>Reajuste</span></a>
                                         </div>
 
-                                        
-                                    </div>
                                 </div>
 
                                 
@@ -138,6 +136,6 @@
                     </div>
 </body>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-<script src="Js/gerenciaLote.js"></script>
+<script src="./Js/gerenciaLote.js"></script>
 <script src="./Js/main.js"></script> <!-- Resource jQuery -->
 </html>
