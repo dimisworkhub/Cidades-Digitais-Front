@@ -2225,7 +2225,7 @@
 
     let computedPlacement = filteredAreas.length > 0 ? filteredAreas[0].key : sortedAreas[0].key;
 
-    let variation = placement.split('-')[1];
+    let letiation = placement.split('-')[1];
 
     return computedPlacement + (variation ? '-' + variation : '');
   }

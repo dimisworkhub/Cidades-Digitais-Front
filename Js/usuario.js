@@ -251,6 +251,7 @@ function enviar() {
       });
     } else {
       erros(response.status);
+      window.location.reload();
     }
   });
 }

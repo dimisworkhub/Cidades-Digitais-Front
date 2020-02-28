@@ -45,6 +45,9 @@ function changer() {
   info.login = x.value;
   let y = document.getElementById("senha");
   info.senha = y.value;
+  let a = document.getElementById("status");
+  info.status = a.value;
+  
 }
 
 function enviar() {

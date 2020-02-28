@@ -21,7 +21,7 @@ jQuery(document).ready(function ($) {
 	});
 
 	function set_clip_property() {
-		var $header_height = $('.cd-header').height(),
+		let $header_height = $('.cd-header').height(),
 			$window_height = $(window).height(),
 			$header_top = $window_height - $header_height,
 			$window_width = $(window).width();
