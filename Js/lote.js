@@ -77,7 +77,7 @@ window.onload = function () {
     }
     //pegar o json que possui a tabela
     return response.json().then(function (json) {
-      console.log(json);
+      //console.log(json);
 
       let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
@@ -194,11 +194,12 @@ function enviar() {
   }).then(function (response) {
 
     //checar o status do pedido
-    console.log(response);
+    //console.log(response);
 
     //tratamento dos erros
     if (response.status == 201) {
       return response.json().then(function (json) {
+        //console.log(json);
         window.location.replace("./lote.html");
       });
     } else {
@@ -208,7 +209,7 @@ function enviar() {
 }
 
 document.getElementById("cod_lote").oninput = function () {
-  if (this.value.length > 1) {
+  if (this.value.length > 0) {
     this.value = this.value.slice(0, 9);
   }
 }

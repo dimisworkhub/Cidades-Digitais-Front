@@ -108,7 +108,9 @@
         </div>
         </div>
     </main>
+
     <!-- ADD Modal HTML -->
+
     <div id="addEmployeeModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -134,7 +136,9 @@
                         <div class="row">
                             <div class="col-12 col-lg-12 m-auto">
                                 <form class="multisteps-form__form needs-validation" novalidate style="height: 307px;">
+                                    
                                     <!--single form panel-->
+                                    
                                     <div class="multisteps-form__panel shadow p-4 rounded bg-white js-active"
                                         data-animation="scaleIn">
                                         <h3 class="multisteps-form__title">Informações do Lote</h3>
@@ -144,7 +148,7 @@
                                                 <div class="col-12 col-sm-12">
                                                     <input class="multisteps-form__input form-control" type="number"
                                                         value="" placeholder="Código do Lote" onchange="changer()"
-                                                        name="cod_lote" id="cod_lote" required />
+                                                        name="cod_lote" id="cod_lote" required>
                                                 </div>
                                                 <div class="col-12 col-sm-12 mt-4">
                                                     <label for="cnpj">CNPJ</label>
@@ -155,7 +159,7 @@
                                                 <div class="col-12 col-sm-12 mt-4">
                                                     <input class="multisteps-form__input form-control" type="text"
                                                         placeholder="Número de contrato" maxlength="10" value=""
-                                                        onchange="changer()" name="contrato" id="contrato" required />
+                                                        onchange="changer()" name="contrato" id="contrato" required>
                                                 </div>
                                             </div>
 
@@ -167,11 +171,14 @@
                                     </div>
 
                                     <!--single form panel-->
+
                                     <div class="multisteps-form__panel shadow p-4 rounded bg-white"
                                         data-animation="scaleIn">
                                         <h3 class="multisteps-form__title">Datas</h3>
                                         <div class="multisteps-form__content">
+                                            
                                             <!--Tabela por JS-->
+
                                             <div style="overflow-x:auto;">
                                                 <div class="col-12 col-sm-12 mt-4">
                                                     <label for="dt_inicio_vig">Data de Início de Vigencia</label>
@@ -201,19 +208,22 @@
                                                 <button class="btn btn-primary multi-button ml-auto" onclick="enviar()"
                                                     type="button">Cadastrar</button>
                                             </div>
+
                                         </div>
                                     </div>
+
                                 </form>
                             </div>
                         </div>
+
                     </div>
                 </div>
-
 
             </div>
         </div>
     </div>
-    <div class="fixed-bottom">
+    <div class="fixed-bottom" style="padding-top: 200%;">
+        <!-- ainda testando -->
         <script height="100%" width="100%" src="./Js/menu.js"></script>
     </div>
 
