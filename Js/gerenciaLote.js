@@ -32,54 +32,42 @@ function erros(value) {
 
 //JSON usado para mandar as informações no fetch
 let info = {
-  "cod_lote": " ",
-  "cnpj": " ",
-  "contrato": " ",
-  "dt_inicio_vig": " ",
-  "dt_final_vig": " ",
-  "dt_reajuste": " ",
+  "cod_lote": "",
+  "cnpj": "",
+  "contrato": "",
+  "dt_inicio_vig": "",
+  "dt_final_vig": "",
+  "dt_reajuste": "",
 };
-
-//captura as informações do input e coloca no JSON
-
-function changer() {
-  info.cod_lote = localStorage.getItem("cod_lote");
-  let b = document.getElementById("cnpj");
-  info.nome = b.value;
-  let c = document.getElementById("contrato");
-  info.endereco = c.value;
-  let d = document.getElementById("dt_inicio_vig");
-  info.numero = d.value;
-  let e = document.getElementById("dt_final_vig");
-  info.bairro = e.value;
-  let f = document.getElementById("dt_reajuste");
-  info.cep = f.value;
-}
-
 
 window.onload = function () {
 
   //captura o codigo do lote para usar como chave na edição
   let a = document.getElementById("cod_lote");
   a.value = meuLote;
-  info.cod_lote = parseFloat(a.value);
+  info.cod_lote = parseFloat(meuLote);
 
   //preenche os outros campos
   let contrato1 = document.getElementById("contrato");
   contrato1.value = localStorage.getItem("contrato");
+
   //estes campos precisam de adaptações para serem aceitos como yyyy-MM-dd
+
   let dt_inicio_vig1 = document.getElementById("dt_inicio_vig");
   let dt_final_vig1 = document.getElementById("dt_final_vig");
   let dt_reajuste1 = document.getElementById("dt_reajuste");
+
   let data1 = new Date(localStorage.getItem("dt_inicio_vig"));
   let data2 = new Date(localStorage.getItem("dt_final_vig"));
   let data3 = new Date(localStorage.getItem("dt_reajuste"));
-  let dataf1 = String(data1.getFullYear()).padStart(4, '0') + "-" + String(data1.getMonth()).padStart(2, '0') + "-" + String(data1.getDate()).padStart(2, '0');
-  let dataf2 = String(data2.getFullYear()).padStart(4, '0') + "-" + String(data2.getMonth()).padStart(2, '0') + "-" + String(data2.getDate()).padStart(2, '0');
-  let dataf3 = String(data3.getFullYear()).padStart(4, '0') + "-" + String(data3.getMonth()).padStart(2, '0') + "-" + String(data3.getDate()).padStart(2, '0');
-  dt_inicio_vig1.value = dataf1;
-  dt_final_vig1.value = dataf2;
-  dt_reajuste1.value = dataf3;
+
+  let dataFinal1 = String(data1.getFullYear()).padStart(4, '0') + "-" + String(data1.getMonth()+1).padStart(2, '0') + "-" + String(data1.getDate()).padStart(2, '0');
+  let dataFinal2 = String(data2.getFullYear()).padStart(4, '0') + "-" + String(data2.getMonth()+1).padStart(2, '0') + "-" + String(data2.getDate()).padStart(2, '0');
+  let dataFinal3 = String(data3.getFullYear()).padStart(4, '0') + "-" + String(data3.getMonth()+1).padStart(2, '0') + "-" + String(data3.getDate()).padStart(2, '0');
+  
+  dt_inicio_vig1.value = dataFinal1;
+  dt_final_vig1.value = dataFinal2;
+  dt_reajuste1.value = dataFinal3;
 
 
 
@@ -103,12 +91,11 @@ window.onload = function () {
         }
         x.sort();
         document.getElementById("cnpj").innerHTML = x;
-
+        
         let cnpj1 = document.getElementById("cnpj");
         cnpj1.value = localStorage.getItem("cnpj");
-
-
       });
+
     } else {
       erros(response.status);
     }
@@ -118,8 +105,20 @@ window.onload = function () {
 
 function enviar() {
 
+  let b = document.getElementById("cnpj");
+  info.cnpj = b.value;
+  let c = document.getElementById("contrato");
+  info.contrato = c.value;
+  let d = document.getElementById("dt_inicio_vig");
+  info.dt_inicio_vig = d.value;
+  let e = document.getElementById("dt_final_vig");
+  info.dt_final_vig = e.value;
+  let f = document.getElementById("dt_reajuste");
+  info.dt_reajuste = f.value;
+  
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
+  alert(corpo);
   //função fetch para mandar
   fetch('http://localhost:8080/read/lote/' + meuLote, {
     method: 'PUT',
@@ -134,12 +133,11 @@ function enviar() {
 
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
-      alert("Usuário criado com sucesso");
       //checar o json
       //response.json().then(function (json) {
       //console.log(json);
       //});
-      window.location.replace("./entidade.html");
+      window.location.replace("./lote.html");
     } else {
       erros(response.status);
     }

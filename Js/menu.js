@@ -1,4 +1,5 @@
 document.write(`
+		<section>
 			<div class="container-fluid">
 				<header class="cd-header"><!--Barra Menu-->
 			<div id="cd-logo">
@@ -19,7 +20,7 @@ document.write(`
 				</ul>
 				<a href="#0" class="cd-close-menu">Close<span></span></a>
 			</nav>
-		</section> <!-- cd-intro -->
+		</section>
 
 	<div class="cd-shadow-layer"></div>`);
 
@@ -41,21 +42,3 @@ if (setupTime == null) {
 		window.location.replace("./index.html");
 	}
 }
-
-(function() {
-  'use strict';
-  window.addEventListener('load', function() {
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    let forms = document.getElementsByClassName('needs-validation');
-    // Loop over them and prevent submission
-    let validation = Array.prototype.filter.call(forms, function(form) {
-      form.addEventListener('submit', function(event) {
-        if (form.checkValidity() === false) {
-          event.preventDefault();
-          event.stopPropagation();
-        }
-        form.classList.add('was-validated');
-      }, false);
-    });
-  }, false);
-})();
