@@ -40,7 +40,7 @@
                                     <h2>Tabela <b>Lote</b></h2>
                                 </div>
                                 <div class="col-sm-8">
-                                    <a href="#" class="btn btn-primary"><i class="material-icons">&#xE863;</i>
+                                    <a href="./lote.html" class="btn btn-primary"><i class="material-icons">&#xE863;</i>
                                         <span>Atualizar
                                             Lista
                                         </span></a>
@@ -56,7 +56,7 @@
                                 <div class="col-sm-3">
                                     <div class="show-entries">
                                         <span>Mostrando</span>
-                                        <select class="form-control">
+                                        <select class="form-control" id="quantos" onchange="paginacao()">
                                             <option>5</option>
                                             <option>10</option>
                                             <option>15</option>
@@ -91,26 +91,17 @@
                         <!--Footer-->
                         <div class="clearfix">
                             <div class="hint-text">Mostrando <b>5</b> de <b>25</b> Itens</div>
-                            <ul class="pagination">
-                                <li class="page-item disabled"><a href="#">Anterior</a></li>
-                                <li class="page-item"><a href="#" class="page-link">1</a></li>
-                                <li class="page-item"><a href="#" class="page-link">2</a></li>
-                                <li class="page-item"><a href="#" class="page-link">3</a></li>
-                                <li class="page-item"><a href="#" class="page-link">4</a></li>
-                                <li class="page-item"><a href="#" class="page-link">5</a></li>
-                                <li class="page-item"><a href="#" class="page-link">6</a></li>
-                                <li class="page-item"><a href="#" class="page-link">7</a></li>
-                                <li class="page-item"><a href="#" class="page-link">Próximo</a></li>
+                            <ul class="pagination" id="paginacao">
+                                
                             </ul>
                         </div>
                     </div>
-        </section> <!-- cd-intro -->
+                    
+      </section>   <!-- cd-intro -->
         </div>
         </div>
     </main>
-
     <!-- ADD Modal HTML -->
-
     <div id="addEmployeeModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -136,9 +127,7 @@
                         <div class="row">
                             <div class="col-12 col-lg-12 m-auto">
                                 <form class="multisteps-form__form needs-validation" novalidate style="height: 307px;">
-                                    
                                     <!--single form panel-->
-                                    
                                     <div class="multisteps-form__panel shadow p-4 rounded bg-white js-active"
                                         data-animation="scaleIn">
                                         <h3 class="multisteps-form__title">Informações do Lote</h3>
@@ -147,19 +136,17 @@
                                             <div class="form-row mt-4">
                                                 <div class="col-12 col-sm-12">
                                                     <input class="multisteps-form__input form-control" type="number"
-                                                        value="" placeholder="Código do Lote" onchange="changer()"
-                                                        name="cod_lote" id="cod_lote" required>
+                                                        placeholder="Código do Lote" name="cod_lote" id="cod_lote"
+                                                        required />
                                                 </div>
                                                 <div class="col-12 col-sm-12 mt-4">
-                                                    <label for="cnpj">CNPJ</label>
-                                                    <select class="multisteps-form__input form-control"
-                                                        onchange="changer()" value="" name="cnpj" id="cnpj"
-                                                        required></select>
+                                                    <select class="multisteps-form__input form-control" name="cnpj"
+                                                        id="cnpj" required></select>
                                                 </div>
                                                 <div class="col-12 col-sm-12 mt-4">
                                                     <input class="multisteps-form__input form-control" type="text"
-                                                        placeholder="Número de contrato" maxlength="10" value=""
-                                                        onchange="changer()" name="contrato" id="contrato" required>
+                                                        placeholder="Número de contrato" maxlength="10" name="contrato"
+                                                        id="contrato" required />
                                                 </div>
                                             </div>
 
@@ -171,33 +158,27 @@
                                     </div>
 
                                     <!--single form panel-->
-
                                     <div class="multisteps-form__panel shadow p-4 rounded bg-white"
                                         data-animation="scaleIn">
                                         <h3 class="multisteps-form__title">Datas</h3>
                                         <div class="multisteps-form__content">
-                                            
                                             <!--Tabela por JS-->
-
                                             <div style="overflow-x:auto;">
                                                 <div class="col-12 col-sm-12 mt-4">
                                                     <label for="dt_inicio_vig">Data de Início de Vigencia</label>
                                                     <input class=" multisteps-form__input form-control" type="date"
-                                                        onchange="changer()" name="dt_inicio_vig" id="dt_inicio_vig"
-                                                        required>
+                                                        name="dt_inicio_vig" id="dt_inicio_vig" required />
 
                                                 </div>
                                                 <div class="col-12 col-sm-12 mt-4">
                                                     <label for="dt_final_vig">Data Final de Vigencia</label>
                                                     <input class=" multisteps-form__input form-control" type="date"
-                                                        onchange="changer()" name="dt_final_vig" id="dt_final_vig"
-                                                        required>
+                                                        name="dt_final_vig" id="dt_final_vig" required />
                                                 </div>
                                                 <div class="col-12 col-sm-12 mt-4">
                                                     <label for="dt_reajuste">Data de Reajuste</label>
                                                     <input class=" multisteps-form__input form-control" type="date"
-                                                        onchange="changer()" name="dt_reajuste" id="dt_reajuste"
-                                                        required>
+                                                        name="dt_reajuste" id="dt_reajuste" required />
                                                 </div>
                                             </div>
 
@@ -208,22 +189,19 @@
                                                 <button class="btn btn-primary multi-button ml-auto" onclick="enviar()"
                                                     type="button">Cadastrar</button>
                                             </div>
-
                                         </div>
                                     </div>
-
                                 </form>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
             </div>
         </div>
     </div>
-    <div class="fixed-bottom" style="padding-top: 200%;">
-        <!-- ainda testando -->
+    
+    <div class="fixed-bottom">
         <script height="100%" width="100%" src="./Js/menu.js"></script>
     </div>
 
