@@ -283,7 +283,7 @@ Main components
   height: 100%;
 }
 #main-nav li {
-  height: 20%;
+  height: 14.28%;
 }
 #main-nav li a {
   position: relative;
@@ -333,7 +333,7 @@ Main components
   position: absolute;
   top: 18px;
   left: 10px;
-  width: 20px;
+  width: 25px;
   height: 3px;
   background-color: #FFF;
   -webkit-transition-property: -webkit-transform;
