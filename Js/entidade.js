@@ -1,5 +1,5 @@
 //capturar itens para mandar no gerenciaEstrutura
-let entQuery = [];
+let entTotal = [];
 //pega o token do login
 let meuToken = localStorage.getItem("token");
 //pega o JSON de municípios para uso em "adicionar entidades"
@@ -50,8 +50,6 @@ let info = {
 
 
 function enabler() {
-  let a = document.getElementById("uf");
-  info.uf = a.value;
   document.getElementById("nomeMun").disabled = false;
   let i, y = [];
   for (i = 1; i < cidades.length; i++) {
@@ -68,7 +66,7 @@ function enabler() {
 //sistema de paginação
 let contador = 0;
 let porPagina = 5;
-let totalPaginas = (entQuery.length + (porPagina-1)) / porPagina;
+let totalPaginas = (entTotal.length + (porPagina-1)) / porPagina;
 
 function antes() {
   contador--;
@@ -107,14 +105,12 @@ function paginacao() {
       response.json().then(function (json) {
         //mostra quanto do total aparece na tela
         document.getElementById("mostrando").innerHTML = "Mostrando " + porPagina + " de " + json.length;
-        
+        if(porPagina>json.length-fim){
+          document.getElementById("mostrando").innerHTML = "Mostrando " + (json.length-comeco) + " de " + json.length;
+        }
 
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
             <tr>
-            <th> <span class="custom-checkbox">
-            <input type="checkbox" id="selectAll">
-            <label for="selectAll"></label>
-            </span></th>
             <th scope="col">CNPJ</th>
             <th scope="col">Nome</th>
             <th scope="col">Endereço</th>
@@ -130,13 +126,7 @@ function paginacao() {
         tabela += (`<tbody> <tr>`);
 
         for (let i = comeco; i < fim && i < json.length; i++) {
-          entQuery[i] = json[i];
-          tabela += (`<td>
-                <span class="custom-checkbox">
-                <input type="checkbox" id="checkbox1" name="options[]" value="1">
-                <label for="checkbox1"></label>
-                </span>
-                </td>`);
+          entTotal[i] = json[i];
           tabela += (`<td>`);
           tabela += json[i]["cnpj"];
           tabela += (`</td> <td>`);
@@ -178,28 +168,7 @@ function paginacao() {
       } else {
         document.getElementById("proximo").style.visibility = "hidden";
       }
-
-
-      //checkboxes
-      $(document).ready(function () {
-        let checkbox = $('table tbody input[type="checkbox"]');
-        $("#selectAll").click(function () {
-          if (this.checked) {
-            checkbox.each(function () {
-              this.checked = true;
-            });
-          } else {
-            checkbox.each(function () {
-              this.checked = false;
-            });
-          }
-        });
-        checkbox.click(function () {
-          if (!this.checked) {
-            $("#selectAll").prop("checked", false);
-          }
-        });
-      });
+      
     });
     } else {
       erros(response.status);
@@ -278,6 +247,8 @@ function enviar() {
   info.observacao = g.value;
   let h = document.getElementById("nomeMun");
   info.nome_municipio = h.value;
+  let i = document.getElementById("uf");
+  info.uf = i.value;
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
@@ -306,14 +277,14 @@ function enviar() {
 
 //leva para o editor da entidade selecionada
 function editarEntidade(valor) {
-  localStorage.setItem("cnpj", entQuery[valor].cnpj);
-  localStorage.setItem("nome", entQuery[valor].nome);
-  localStorage.setItem("endereco", entQuery[valor].endereco);
-  localStorage.setItem("numero", entQuery[valor].numero);
-  localStorage.setItem("bairro", entQuery[valor].bairro);
-  localStorage.setItem("cep", entQuery[valor].cep);
-  localStorage.setItem("uf", entQuery[valor].uf);
-  localStorage.setItem("nome_municipio", entQuery[valor].nome_municipio);
-  localStorage.setItem("observacao", entQuery[valor].observacao);
+  localStorage.setItem("cnpj", entTotal[valor].cnpj);
+  localStorage.setItem("nome", entTotal[valor].nome);
+  localStorage.setItem("endereco", entTotal[valor].endereco);
+  localStorage.setItem("numero", entTotal[valor].numero);
+  localStorage.setItem("bairro", entTotal[valor].bairro);
+  localStorage.setItem("cep", entTotal[valor].cep);
+  localStorage.setItem("uf", entTotal[valor].uf);
+  localStorage.setItem("nome_municipio", entTotal[valor].nome_municipio);
+  localStorage.setItem("observacao", entTotal[valor].observacao);
   window.location.href = "./gerenciaEntidade.html";
 }

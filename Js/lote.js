@@ -89,7 +89,9 @@ function paginacao() {
 
           //mostra quanto do total aparece na tela
           document.getElementById("mostrando").innerHTML = "Mostrando " + porPagina + " de " + json.length;
-
+          if(porPagina>json.length-fim){
+            document.getElementById("mostrando").innerHTML = "Mostrando " + (json.length-comeco) + " de " + json.length;
+          }
 
           let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
               <tr>
@@ -151,28 +153,6 @@ function paginacao() {
           } else {
             document.getElementById("proximo").style.visibility = "hidden";
           }
-
-
-          //checkboxes
-          $(document).ready(function () {
-            let checkbox = $('table tbody input[type="checkbox"]');
-            $("#selectAll").click(function () {
-              if (this.checked) {
-                checkbox.each(function () {
-                  this.checked = true;
-                });
-              } else {
-                checkbox.each(function () {
-                  this.checked = false;
-                });
-              }
-            });
-            checkbox.click(function () {
-              if (!this.checked) {
-                $("#selectAll").prop("checked", false);
-              }
-            });
-          });
 
        });
     } else {

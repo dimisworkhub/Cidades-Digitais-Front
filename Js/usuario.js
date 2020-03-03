@@ -3,8 +3,8 @@ let listaModulo = [];
 //pega o token do login
 let meuToken = localStorage.getItem("token");
 //organizar os modulos
-let ultimoUser,
-  codUser = [],
+let userCriado,
+  userTotal = [],
   modulo = [],
   valorModulo = [];
 
@@ -16,17 +16,6 @@ let info = {
   "senha": ""
 };
 
-//captura valores do html e coloca no string para enviar
-function changer() {
-  let a = document.getElementById("nome");
-  info.nome = a.value;
-  let b = document.getElementById("email");
-  info.email = b.value;
-  let c = document.getElementById("login");
-  info.login = c.value;
-  let d = document.getElementById("senha");
-  info.senha = d.value;
-}
 
 //tratamento de erros
 function erros(value) {
@@ -53,8 +42,47 @@ function erros(value) {
   }
 }
 
+// função para checar quem está ativo ou inativo
+// function selecionarStatus(){
+//   let selecao=document.getElementById("status").value;
+//   if(selecao==1){
 
-window.onload = function () {
+//   }else if(selecao==2){
+
+//   }else{
+    
+//   }
+//   paginacao();
+// }
+
+
+//sistema de paginação
+let contador = 0;
+let porPagina = 5;
+let totalPaginas = (userTotal.length +  (porPagina-1)) / porPagina;
+
+function antes() {
+  contador--;
+  paginacao();
+}
+
+function depois() {
+  contador++;
+  paginacao();
+}
+
+//garantindo o limite de paginação
+
+function pagina(valor) {
+  contador = valor;
+  paginacao();
+}
+
+function paginacao() {
+  porPagina = document.getElementById("quantos").value;
+  let comeco = contador * porPagina;
+  let fim = (contador + 1) * porPagina;
+
   //função fetch para mandar
   fetch('http://localhost:8080/read/usuario', {
     method: 'GET',
@@ -65,51 +93,74 @@ window.onload = function () {
     //tratamento dos erros
     if (response.status == 200) {
       console.log(response.statusText);
+
+      //pegar o json que possui a tabela
+      response.json().then(function (json) {
+
+        //mostra quanto do total aparece na tela
+        document.getElementById("mostrando").innerHTML = "Mostrando " + porPagina + " de " + json.length;
+        if(porPagina>json.length-fim){
+          document.getElementById("mostrando").innerHTML = "Mostrando " + (json.length-comeco) + " de " + json.length;
+        }
+
+        let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
+            <tr>
+            <th scope="col">Cód. Usuario</th>
+            <th scope="col">Nome</th>
+            <th scope="col">E-mail</th>
+            <th scope="col">Login</th>
+            <th scope="col">Status</th>
+            <th scope="col">Opções</th>
+            </tr>
+            </thead>`);
+        tabela += (`<tbody> <tr>`);
+    
+        for (let i = comeco; i < fim && i < json.length; i++) {
+          userTotal[i]=json[i].cod_usuario;
+          tabela += (`<td>`);
+          tabela += json[i]["cod_usuario"];
+          tabela += (`</td> <td>`);
+          tabela += json[i]["nome"]
+          tabela += (`</td> <td>`);
+          tabela += json[i]["email"]
+          tabela += (`</td> <td>`);
+          tabela += json[i]["login"]
+          tabela += (`</td> <td>`);
+          tabela += json[i]["status"]
+          tabela += (`</td> <td> 
+                <span class="d-flex">
+                <button onclick="editarUsuario(` + i + `)" class="btn btn-success">
+                <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
+                </button>
+                </span> </td>`);
+          tabela += (`</tr> <tr>`);
+        }
+        tabela += (`</tr> </tbody>`);
+        document.getElementById("tabela").innerHTML = tabela;
+
+        //limite das paginas
+        if (contador > 0) {
+          document.getElementById("anterior").style.visibility = "visible";
+        } else {
+          document.getElementById("anterior").style.visibility = "hidden";
+        }
+        if (contador < totalPaginas) {
+          document.getElementById("proximo").style.visibility = "visible";
+        } else {
+          document.getElementById("proximo").style.visibility = "hidden";
+        }
+
+      });
     } else {
       erros(response.status);
     }
-    //pegar o json que possui a tabela
-    return response.json().then(function (json) {
-      let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
-          <tr>
-          <th scope="col">Cód. Usuario</th>
-          <th scope="col">Nome</th>
-          <th scope="col">E-mail</th>
-          <th scope="col">Login</th>
-          <th scope="col">Status</th>
-          <th scope="col">Opções</th>
-          </tr>
-          </thead>`);
-      tabela += (`<tbody> <tr>`);
-
-      for (let i = 0; i < json.length; i++) {
-        codUser[i]=json[i].cod_usuario;
-        tabela += (`<td>`);
-        tabela += json[i]["cod_usuario"];
-        tabela += (`</td> <td>`);
-        tabela += json[i]["nome"]
-        tabela += (`</td> <td>`);
-        tabela += json[i]["email"]
-        tabela += (`</td> <td>`);
-        tabela += json[i]["login"]
-        tabela += (`</td> <td>`);
-        tabela += json[i]["status"]
-        tabela += (`</td> <td> 
-              <span class="d-flex">
-              <button onclick="editarUsuario(` + i + `)" class="btn btn-success">
-              <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
-              </button>
-              </span> </td>`);
-        tabela += (`</tr> <tr>`);
-      }
-
-      tabela += (`</tr> </tbody>`);
-      document.getElementById("tabela").innerHTML = tabela;
-    });
   });
+}
 
 
-
+window.onload = function () {
+  this.paginacao();
+  
   //Fazer Tabela para Modulos
 
   //função fetch para mandar itens do modulo
@@ -207,11 +258,20 @@ window.onload = function () {
 
     });
   });
+
+  //conta quantas paginas é necessário
+  let paginas = `<li id="anterior" class="page-item" ><a href="#" class="page-link" onclick="antes()">Anterior</a></li>`;
+  for (i = 0; i <= Math.ceil(totalPaginas); i++) {
+    paginas += `<li class="page-item"><a href="#" onclick="pagina(` + i + `)" class="page-link">` + (i + 1) + `</a></li>`;
+  }
+  paginas += `<li id="proximo" class="page-item" ><a href="#" class="page-link" onclick="depois()">Próximo</a></li>`;
+  document.getElementById("paginacao").innerHTML = paginas;
+
 }
 
 function editarUsuario(valor) {
-  localStorage.setItem("cod_usuario", codUser[valor]);
-  console.log(codUser[valor])
+  localStorage.setItem("cod_usuario", userTotal[valor]);
+  console.log(userTotal[valor])
   window.location.href = "./gerenciaUsuario.html";
 }
 
@@ -227,6 +287,15 @@ function modulos(numCod) {
 }
 
 function enviar() {
+
+  let a = document.getElementById("nome");
+  info.nome = a.value;
+  let b = document.getElementById("email");
+  info.email = b.value;
+  let c = document.getElementById("login");
+  info.login = c.value;
+  let d = document.getElementById("senha");
+  info.senha = d.value;
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
@@ -247,7 +316,7 @@ function enviar() {
     if (response.status == 201) {
       alert("Usuário criado com sucesso");
       response.json().then(function (json) {
-        ultimoUser = json.cod_usuario;
+        userCriado = json.cod_usuario;
       });
     } else {
       erros(response.status);
@@ -256,13 +325,13 @@ function enviar() {
   });
 }
 
-function enviarMod() {
+function enviarModulo() {
 
   let i, j = 0;
   for (i = 0; i < listaModulo.length; i++) {
     if (valorModulo[i] != null) {
       modulo[j] = {
-        "cod_usuario": parseFloat(ultimoUser),
+        "cod_usuario": parseFloat(userCriado),
         "cod_modulo": parseFloat(valorModulo[i])
       }
       j++;
@@ -272,12 +341,12 @@ function enviarMod() {
 
 
   //transforma as informações do token em json
-  let enviarModulo = JSON.stringify(modulo);
+  let infoModulo = JSON.stringify(modulo);
 
   //função fetch para mandar
   fetch('http://localhost:8080/read/usuario/' + 1 + '/modulo', {
     method: 'POST',
-    body: enviarModulo,
+    body: infoModulo,
     headers: {
       'Authorization': 'Bearer ' + meuToken
     },
