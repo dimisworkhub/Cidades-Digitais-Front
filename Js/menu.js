@@ -16,6 +16,8 @@ document.write(`
 				<li><a href="./cd.html"><span>Cidades Digitais</span></a></li>
 				<li><a href="./lote.html"><span>Lote</span></a></li>
 				<li><a href="./usuario.html"><span>Usuario</span></a></li>
+				<li><a href="./administracao.html"><span>Administração</span></a></li>
+				<li><a href="./fiscalizacao.html"><span>Fiscalização</span></a></li>
 				<input value="Sair" onclick="logoff()" type="button">
 				</ul>
 				<a href="#0" class="cd-close-menu">Close<span></span></a>
