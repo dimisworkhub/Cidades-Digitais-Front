@@ -20,7 +20,7 @@ function erros(value){
   } else if (value == 412) {
     alert("Erro: Informação colocada é incorreta.");
   } else if (value == 422) {
-    alert("Erro: Informação incorreta.");
+    alert("Erro: Formato de informação não aceito.");
   } else if (value == 500) {
     window.location.replace("./errors/500.html");
   } else if (value == 504) {
@@ -96,11 +96,8 @@ window.onload = function () {
           valorUF = [],
           valorFinalUF = [];
 
-        //faz a ligação entre variaveis e valores iniciais do banco
-        valorUF[0] = json[0].uf;
-        valorFinalUF[0] = valorUF[0];
-        //faz a ligação com os outros valores do banco
-        for (i = 1; i < json.length; i++) {
+        //faz a ligação entre variaveis e valores do banco
+        for (i = 0; i < json.length; i++) {
           valorUF[i] = json[i].uf;
           if (valorUF[i] != valorUF[i - 1]) {
             valorFinalUF[j] = valorUF[i];

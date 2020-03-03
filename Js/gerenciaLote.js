@@ -19,7 +19,7 @@ function erros(value) {
   } else if (value == 412) {
     alert("Erro: Informação colocada é incorreta.");
   } else if (value == 422) {
-    alert("Erro: Informação incorreta.");
+    alert("Erro: Formato de informação não aceito.");
   } else if (value == 500) {
     window.location.replace("./errors/500.html");
   } else if (value == 504) {
@@ -118,7 +118,6 @@ function enviar() {
   
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
-  alert(corpo);
   //função fetch para mandar
   fetch('http://localhost:8080/read/lote/' + meuLote, {
     method: 'PUT',

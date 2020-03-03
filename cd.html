@@ -39,11 +39,7 @@
                                 </div>
                                 <div class="col-sm-8">
                                     <a href="#" class="btn btn-primary"><i class="material-icons">&#xE863;</i>
-                                        <span>Atualizar
-                                            Lista
-                                        </span></a>
-                                    <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i
-                                            class="material-icons">&#xE15C;</i> <span>Deletar</span></a>
+                                        <span> Atualizar Lista </span></a>
                                     <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i
                                             class="material-icons">&#xE147;</i> <span>Adicionar</span></a>
 
@@ -56,7 +52,7 @@
                                 <div class="col-sm-3">
                                     <div class="show-entries">
                                         <span>Mostrando</span>
-                                        <select class="form-control">
+                                        <select class="form-control" id="quantos" onchange="paginacao()">
                                             <option>5</option>
                                             <option>10</option>
                                             <option>15</option>
@@ -71,16 +67,6 @@
                                         <label>Nome</label>
                                         <input type="text" class="form-control">
                                     </div>
-
-                                    <div class="filter-group">
-                                        <label>Status</label>
-                                        <select class="form-control">
-                                            <option>Todos</option>
-                                            <option>Ativo</option>
-                                            <option>Inativo</option>
-                                        </select>
-                                    </div>
-                                    <span class="filter-icon"><i class="fa fa-filter"></i></span>
                                 </div>
                             </div>
                         </div>
@@ -91,17 +77,7 @@
                         <!--Footer-->
                         <div class="clearfix">
                             <div class="hint-text">Mostrando <b>5</b> de <b>25</b> Itens</div>
-                            <ul class="pagination">
-                                <li class="page-item disabled"><a href="#">Anterior</a></li>
-                                <li class="page-item"><a href="#" class="page-link">1</a></li>
-                                <li class="page-item"><a href="#" class="page-link">2</a></li>
-                                <li class="page-item"><a href="#" class="page-link">3</a></li>
-                                <li class="page-item"><a href="#" class="page-link">4</a></li>
-                                <li class="page-item"><a href="#" class="page-link">5</a></li>
-                                <li class="page-item"><a href="#" class="page-link">6</a></li>
-                                <li class="page-item"><a href="#" class="page-link">7</a></li>
-                                <li class="page-item"><a href="#" class="page-link">Próximo</a></li>
-                            </ul>
+                            <ul class="pagination"></ul>
                         </div>
         </section> <!-- cd-intro -->
 
@@ -142,14 +118,12 @@
                                         <div class="multisteps-form__content">
                                             <div class="form-row mt-4">
                                                 <div class="col-12 col-sm-6">
-                                                    <input class="multisteps-form__input form-control" type="number"
-                                                        placeholder="Código IBGE" onchange="changer()" value=""
-                                                        id="cod_ibge" />
+                                                    <select class="multisteps-form__input form-control" name="cod_ibge"
+                                                        id="cod_ibge" required></select>
                                                 </div>
                                                 <div class="col-12 col-sm-6 mt-4 mt-sm-0">
-                                                    <input class="multisteps-form__input form-control" type="int"
-                                                        placeholder="Código lote" onchange="changer()" value=""
-                                                        id="cod_lote" />
+                                                    <select class="multisteps-form__input form-control" name="cod_lote"
+                                                        id="cod_lote" required></select>
                                                 </div>
                                             </div>
                                             <div class="button-row d-flex mt-4">
@@ -167,30 +141,24 @@
                                             <div class="form-row mt-4">
                                                 <div class="col-12 col-sm-6">
                                                     <input class="multisteps-form__input form-control" type="text"
-                                                        placeholder="Órdem de Serviço P.E" onchange="changer()" value=""
-                                                        id="os_pe" />
+                                                        placeholder="Órdem de Serviço P.E" id="os_pe" />
                                                 </div>
                                                 <div class="col-12 col-sm-6  ">
                                                     <input class="multisteps-form__input form-control" type="date"
-                                                        placeholder="Data P.E" onchange="changer()" value=""
-                                                        id="data_pe" />
+                                                        placeholder="Data P.E" id="data_pe" />
                                                 </div>
-                                            
+
                                                 <div class="col-12 col-sm-6 mt-4">
                                                     <input class="multisteps-form__input form-control" type="text"
-                                                        placeholder="Órdem de Implantação" onchange="changer()" value=""
-                                                        id="os_imp" />
+                                                        placeholder="Órdem de Implantação" id="os_imp" />
                                                 </div>
                                                 <div class="col-12 col-sm-6 mt-4">
                                                     <input class="multisteps-form__input form-control" type="date"
-                                                        placeholder="Data de Implantação" onchange="changer()" value=""
-                                                        id="data_imp" />
+                                                        placeholder="Data de Implantação" id="data_imp" />
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="button-row d-flex mt-4">
-                                            <input type="button" class="btn btn-default" data-dismiss="modal"
-                                                value="Voltar">
                                             <button class="btn btn-primary multi-button ml-auto js-btn-next"
                                                 type="button" onclick="enviar()" title="Next">Cadastrar</button>
                                         </div>
