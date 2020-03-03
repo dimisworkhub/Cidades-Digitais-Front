@@ -90,104 +90,318 @@
 
 
 
+futuros deletes:
+entidade não usa.
 
-  paginação:
+<button onclick="apagarEntidade(` + i + `)" class="btn btn-danger">
+<i class="material-icons"data-toggle="tooltip" title="Delete">&#xE872;</i>
+</button>
 
-  $(document).ready(function () {
-  $('#tabela').DataTable({
-    "pagingType": "simple_numbers"
+
+
+//apaga a entidade selecionada
+function apagarEntidade(valor) {
+
+  //função fetch para mandar
+  fetch('http://localhost:8080/read/entidade/' + entQuery[valor].cnpj, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 204) {
+      alert("Apagado com sucesso.");
+      window.location.replace("./entidade.html");
+    } else {
+      erros(response.status);
+    }
+    return response.json().then(function (json) {
+      console.log(json);
+    });
   });
-  $('.dataTables_length').addClass('bs-select');
-});
-} 
-
-
-
-
-
-
-
-
-
-
-
-
-
-//a lista, preciso alterar.     <div id="listingTable"></div>
-//botoes anteriores e proximos. <a href="javascript:prevPage()" id="btn_prev">Prev</a>
-                                <a href="javascript:nextPage()" id="btn_next">Next</a>
-//indice das paginas. page:     <span id="page"></span>
-
-
-
-
-var current_page = 1;
-var records_per_page = 2;
-
-var objJson = [
-    { adName: "AdName 1"},
-    { adName: "AdName 2"},
-    { adName: "AdName 3"},
-    { adName: "AdName 4"},
-    { adName: "AdName 5"},
-    { adName: "AdName 6"},
-    { adName: "AdName 7"},
-    { adName: "AdName 8"},
-    { adName: "AdName 9"},
-    { adName: "AdName 10"}
-]; // Can be obtained from another source, such as your objJson variable
-
-function prevPage()
-{
-    if (current_page > 1) {
-        current_page--;
-        changePage(current_page);
-    }
-}
-
-function nextPage()
-{
-    if (current_page < numPages()) {
-        current_page++;
-        changePage(current_page);
-    }
-}
-    
-function changePage(page)
-{
-    var btn_next = document.getElementById("btn_next");
-    var btn_prev = document.getElementById("btn_prev");
-    var listing_table = document.getElementById("listingTable");
-    var page_span = document.getElementById("page");
- 
-    // Validate page
-    if (page < 1) page = 1;
-    if (page > numPages()) page = numPages();
-
-    listing_table.innerHTML = "";
-
-    for (var i = (page-1) * records_per_page; i < (page * records_per_page)&& i < objJson.length; i++) {
-        listing_table.innerHTML += objJson[i].adName + "<br>";
-    }
-    page_span.innerHTML = page;
-
-    if (page == 1) {
-        btn_prev.style.visibility = "hidden";
-    } else {
-        btn_prev.style.visibility = "visible";
-    }
-
-    if (page == numPages()) {
-        btn_next.style.visibility = "hidden";
-    } else {
-        btn_next.style.visibility = "visible";
-    }
 }
 
 
 
-window.onload = function() {
-    changePage(1);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Fazer Tabela
+let cdQuery = [];
+
+//pega o token do login
+let meuToken = localStorage.getItem("token");
+
+//pega o JSON de municípios para uso na tabela
+let cidades = [];
+
+//tratamento de erros
+function erros(value) {
+  if (value == 400) {
+    window.location.replace("./errors/400.html");
+  } else if (value == 401) {
+    window.location.replace("./errors/401.html");
+  } else if (value == 403) {
+    window.location.replace("./errors/403.html");
+  } else if (value == 404) {
+    window.location.replace("./errors/404.html");
+  } else if (value == 409) {
+    alert("Erro: Lote já existente.");
+  } else if (value == 412) {
+    alert("Erro: Informação colocada é incorreta.");
+  } else if (value == 422) {
+    alert("Erro: Formato de informação não aceito.");
+  } else if (value == 500) {
+    window.location.replace("./errors/500.html");
+  } else if (value == 504) {
+    window.location.replace("./errors/504.html");
+  } else {
+    alert("ERRO DESCONHECIDO");
+  }
+}
+
+
+//Fazer Entidade
+let info = {
+  "cod_ibge": " ",
+  "cod_lote": " ",
+  "os_pe": " ",
+  "data_pe": " ",
+  "os_imp": " ",
+  "data_imp": " "
 };
+
+
+
+
+
+
+//sistema de paginação
+let contador = 0;
+let porPagina = 5;
+let totalPaginas = (loteTotal.length + (porPagina - 1)) / porPagina;
+
+function antes() {
+  contador--;
+  paginacao();
+}
+
+function depois() {
+  contador++;
+  paginacao();
+}
+
+//garantindo o limite de paginação
+
+function pagina(valor) {
+  contador = valor;
+  paginacao();
+}
+
+function paginacao() {
+  porPagina = document.getElementById("quantos").value;
+  let comeco = contador * porPagina;
+  let fim = (contador + 1) * porPagina;
+
+  //função fetch para mandar
+  fetch('http://localhost:8080/read/cd', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      response.json().then(function (json) {
+        console.log(json);
+
+        let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
+            <tr>
+            <th> <span class="custom-checkbox">
+            <input type="checkbox" id="selectAll">
+            <label for="selectAll"></label>
+            </span></th>
+            <th scope="col">Código IBGE do Município</th>
+            <th scope="col">Município</th>
+            <th scope="col">Código Lote</th>
+            <th scope="col">O.S. Projeto Executivo</th>
+            <th scope="col">Data de Projeto Executivo</th>
+            <th scope="col">O.S. Implementação</th>
+            <th scope="col">Data de Implementação</th>
+            <th scope="col">Opções</th>
+            </tr>
+            </thead>`);
+        tabela += (`<tbody> <tr>`);
+
+        for (let i = comeco; i < fim && i < json.length; i++) {
+          cdQuery[i] = json[i];
+          tabela += (`<td>
+                <span class="custom-checkbox">
+                <input type="checkbox" id="checkbox1" name="options[]" value="1">
+                <label for="checkbox1"></label>
+                </span>
+                </td>`);
+          tabela += (`<td>`);
+          tabela += json[i]["cod_ibge"];
+          tabela += (`</td> <td>`);
+          tabela += cicades[i]["nome_municipio"];
+          tabela += (`</td> <td>`);
+          tabela += json[i]["cod_lote"]
+          tabela += (`</td> <td>`);
+          tabela += json[i]["os_pe"]
+          tabela += (`</td> <td>`);
+          tabela += json[i]["data_pe"]
+          tabela += (`</td> <td>`);
+          tabela += json[i]["os_imp"]
+          tabela += (`</td> <td>`);
+          tabela += json[i]["data_imp"]
+          tabela += (`</td> <td> 
+                <span class="d-flex">
+                <button onclick="editarCd(` + i + `)" class="btn btn-success">
+                <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
+                </button>
+                </span> </td>`);
+          tabela += (`</tr> <tr>`);
+        }
+        tabela += (`</tr> </tbody>`);
+        document.getElementById("tabela").innerHTML = tabela;
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+
+
+window.onload = function () {
+  //preenche os cod_lotes
+  fetch('http://localhost:8080/read/lote', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      response.json().then(function (json) {
+        //cria variaveis
+        let i = 0;
+        let x = [];
+        x[0] += "<option value='00000000000000'>Código do Lote</option>";
+        for (i = 0; i < json.length; i++) {
+          x[i + 1] += "<option>" + json[i].cod_lote + "</option>";
+        }
+        x.sort();
+        document.getElementById("cod_lote").innerHTML = x;
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+function editarCd(valor) {
+  localStorage.setItem("COD_IBGE", cdQuery[valor].cod_ibge);
+  window.location.href = "./gerenciaCd.html";
+}
+
+
+
+
+function enviar() {
+
+  let a = document.getElementById("cod_ibge");
+  info.cod_ibge = parseFloat(a.value);
+  let b = document.getElementById("cod_lote");
+  info.cod_lote = parseFloat(b.value);
+  let c = document.getElementById("os_pe");
+  info.os_pe = c.value;
+  let d = document.getElementById("data_pe");
+  info.data_pe = d.value;
+  let e = document.getElementById("os_imp");
+  info.os_imp = e.value;
+  let f = document.getElementById("data_imp");
+  info.data_imp = f.value;
+
+  //pega o token do login
+  let meuToken = localStorage.getItem("token");
+  console.log(info);
+  //transforma as informações do token em json
+  let corpo = JSON.stringify(info);
+
+  //função fetch para mandar
+  fetch('http://localhost:8080/read/cd', {
+    method: 'POST',
+    body: corpo,
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //checar o status do pedido
+    console.log(response);
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      window.location.replace("./cd.html");
+    } else if (response.status == 201) {
+      alert("Usuário criado com sucesso");
+      window.location.replace("./cd.html");
+    } else if (response.status == 202) {
+      alert("Login efetivado com sucesso");
+      window.location.replace("./cd.html");
+    } else if (response.status == 204) {
+      alert("Apagado com sucesso.");
+      window.location.replace("./cd.html");
+    } else if (response.status == 400) {
+      window.location.replace("./errors/400.html");
+    } else if (response.status == 401) {
+      window.location.replace("./errors/401.html");
+    } else if (response.status == 403) {
+      window.location.replace("./errors/403.html");
+    } else if (response.status == 404) {
+      window.location.replace("./errors/404.html");
+    } else if (response.status == 409) {
+      alert("Erro: Usuário já existente.");
+    } else if (response.status == 412) {
+      alert("Erro: Informação colocada é incorreta.");
+    } else if (response.status == 422) {
+      alert("Erro: Usuário ou senha inválidos.");
+    } else if (response.status == 500) {
+      window.location.replace("./errors/500.html");
+    } else if (response.status == 504) {
+      window.location.replace("./errors/504.html");
+    } else {
+      alert("ERRO DESCONHECIDO");
+    }
+    return response.json().then(function (json) {
+      console.log(json);
+    });
+  });
+}
+
 
 -->

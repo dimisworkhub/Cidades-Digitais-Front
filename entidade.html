@@ -55,7 +55,7 @@
                                 <div class="col-sm-3">
                                     <div class="show-entries">
                                         <span>Mostrando</span>
-                                        <select class="form-control">
+                                        <select class="form-control" id="quantos" onchange="paginacao()">
                                             <option>5</option>
                                             <option>10</option>
                                             <option>15</option>
@@ -70,16 +70,6 @@
                                         <label>Nome</label>
                                         <input type="text" class="form-control">
                                     </div>
-
-                                    <div class="filter-group">
-                                        <label>Status</label>
-                                        <select class="form-control">
-                                            <option>Todos</option>
-                                            <option>Ativo</option>
-                                            <option>Inativo</option>
-                                        </select>
-                                    </div>
-                                    <span class="filter-icon"><i class="fa fa-filter"></i></span>
                                 </div>
                             </div>
                         </div>
@@ -89,18 +79,8 @@
                         </div>
                         <!--Footer-->
                         <div class="clearfix">
-                            <div class="hint-text">Mostrando <b>5</b> de <b>25</b> Itens</div>
-                            <ul class="pagination">
-                                <li class="page-item disabled"><a href="#">Anterior</a></li>
-                                <li class="page-item"><a href="#" class="page-link">1</a></li>
-                                <li class="page-item"><a href="#" class="page-link">2</a></li>
-                                <li class="page-item"><a href="#" class="page-link">3</a></li>
-                                <li class="page-item"><a href="#" class="page-link">4</a></li>
-                                <li class="page-item"><a href="#" class="page-link">5</a></li>
-                                <li class="page-item"><a href="#" class="page-link">6</a></li>
-                                <li class="page-item"><a href="#" class="page-link">7</a></li>
-                                <li class="page-item"><a href="#" class="page-link">Próximo</a></li>
-                            </ul>
+                            <div class="hint-text" id="mostrando"></div>
+                            <ul class="pagination" id="paginacao"></ul>
                         </div>
                     </div>
         </section> <!-- cd-intro -->
@@ -145,13 +125,12 @@
                                             <div class="form-row mt-4">
                                                 <div class="col-12 col-sm-12">
                                                     <input type="text" class="multisteps-form__input form-control"
-                                                        id="cnpj" name="cnpj" maxlength="14"
-                                                        placeholder="CNPJ" onchange="changer()" required>
+                                                        id="cnpj" name="cnpj" maxlength="14" placeholder="CNPJ"
+                                                        required>
                                                 </div>
                                                 <div class="col-12 col-sm-12 mt-4">
                                                     <input type="text" class="multisteps-form__input form-control"
-                                                        id="nome" name="nome" maxlength="50" placeholder="Nome"
-                                                        onchange="changer()">
+                                                        id="nome" name="nome" maxlength="50" placeholder="Nome">
                                                 </div>
 
                                             </div>
@@ -171,36 +150,33 @@
 
                                                 <div class="col-12 col-sm-6 mt-4">
                                                     <input type="text" class="multisteps-form__input form-control"
-                                                        placeholder="CEP" id="cep" name="cep" maxlength="8"
-                                                        onchange="changer()">
+                                                        placeholder="CEP" id="cep" name="cep" maxlength="8">
                                                 </div>
                                                 <div class="col-12 col-sm-6 mt-4">
                                                     <select type="text" class="multisteps-form__input form-control"
-                                                        id="uf" onchange="enabler()">
-                                                    <option value="">UF</option>
+                                                        id="uf" onclick="enabler()">
+                                                        <option value="">UF</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-12 col-sm-12 mt-4">
                                                     <label>Município</label>
                                                     <select type="text" class="multisteps-form__input form-control"
-                                                        id="nomeMun" onchange="changer()"></select>
+                                                        id="nomeMun"></select>
                                                 </div>
 
                                                 <div class="col-12 col-sm-12 mt-4">
                                                     <textarea class="multisteps-form__input form-control"
                                                         placeholder="Endereço" name="endereco" id="endereco"
-                                                        maxlength="100" onchange="changer()"></textarea>
+                                                        maxlength="100"></textarea>
                                                 </div>
 
                                                 <div class="col-12 col-sm-6 mt-4">
                                                     <input type="text" class="multisteps-form__input form-control"
-                                                        name="numero" placeholder="numero" id="numero" maxlength="10"
-                                                        onchange="changer()">
+                                                        name="numero" placeholder="numero" id="numero" maxlength="10">
                                                 </div>
                                                 <div class="col-12 col-sm-6 mt-4">
                                                     <input type="text" class="multisteps-form__input form-control"
-                                                        id="bairro" name="bairro" placeholder="Bairro" maxlength="100"
-                                                        onchange="changer()">
+                                                        id="bairro" name="bairro" placeholder="Bairro" maxlength="100">
                                                 </div>
 
 
@@ -222,7 +198,7 @@
 
                                                 <div class="col-12 col-sm-12 mt-4">
                                                     <textarea class="multisteps-form__input form-control" name="obs"
-                                                        id="obs" maxlength="1000" onchange="changer()"></textarea>
+                                                        id="obs" maxlength="1000"></textarea>
                                                 </div>
 
                                                 <div class="button-row d-flex mt-4">
@@ -279,4 +255,5 @@
 <script src="./Js/multi.js"></script>
 
 <script src="./Js/main.js"></script> <!-- Resource jQuery -->
+
 </html>

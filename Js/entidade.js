@@ -47,25 +47,7 @@ let info = {
   "observacao": " "
 };
 
-//captura valores do html e coloca no string para enviar
-function changer() {
-  let a = document.getElementById("cnpj");
-  info.cnpj = a.value;
-  let b = document.getElementById("nome");
-  info.nome = b.value;
-  let c = document.getElementById("endereco");
-  info.endereco = c.value;
-  let d = document.getElementById("numero");
-  info.numero = d.value;
-  let e = document.getElementById("bairro");
-  info.bairro = e.value;
-  let f = document.getElementById("cep");
-  info.cep = f.value;
-  let g = document.getElementById("obs");
-  info.observacao = g.value;
-  let h = document.getElementById("nomeMun");
-  info.nome_municipio = h.value;
-}
+
 
 function enabler() {
   let a = document.getElementById("uf");
@@ -83,7 +65,219 @@ function enabler() {
 
 
 
+//sistema de paginação
+let contador = 0;
+let porPagina = 5;
+let totalPaginas = (entQuery.length + (porPagina-1)) / porPagina;
+
+function antes() {
+  contador--;
+  paginacao();
+}
+
+function depois() {
+  contador++;
+  paginacao();
+}
+
+//garantindo o limite de paginação
+
+function pagina(valor) {
+  contador = valor;
+  paginacao();
+}
+
+function paginacao() {
+  porPagina = document.getElementById("quantos").value;
+  let comeco = contador * porPagina;
+  let fim = (contador + 1) * porPagina;
+
+  //função fetch para mandar itens 
+  fetch('http://localhost:8080/read/entidade', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+    //tratamento dos erros
+    if (response.status == 200) {
+      console.log(response.statusText);
+      
+      //pegar o json que possui a tabela
+      response.json().then(function (json) {
+        //mostra quanto do total aparece na tela
+        document.getElementById("mostrando").innerHTML = "Mostrando " + porPagina + " de " + json.length;
+        
+
+        let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
+            <tr>
+            <th> <span class="custom-checkbox">
+            <input type="checkbox" id="selectAll">
+            <label for="selectAll"></label>
+            </span></th>
+            <th scope="col">CNPJ</th>
+            <th scope="col">Nome</th>
+            <th scope="col">Endereço</th>
+            <th scope="col">Número</th>
+            <th scope="col">Bairro</th>
+            <th scope="col">CEP</th>
+            <th scope="col">UF</th>
+            <th scope="col">Município</th>
+            <th scope="col">Observações</th>
+            <th scope="col">Opções</th>
+            </tr>
+            </thead>`);
+        tabela += (`<tbody> <tr>`);
+
+        for (let i = comeco; i < fim && i < json.length; i++) {
+          entQuery[i] = json[i];
+          tabela += (`<td>
+                <span class="custom-checkbox">
+                <input type="checkbox" id="checkbox1" name="options[]" value="1">
+                <label for="checkbox1"></label>
+                </span>
+                </td>`);
+          tabela += (`<td>`);
+          tabela += json[i]["cnpj"];
+          tabela += (`</td> <td>`);
+          tabela += json[i]["nome"]
+          tabela += (`</td> <td>`);
+          tabela += json[i]["endereco"]
+          tabela += (`</td> <td>`);
+          tabela += json[i]["numero"]
+          tabela += (`</td> <td>`);
+          tabela += json[i]["bairro"]
+          tabela += (`</td> <td>`);
+          tabela += json[i]["cep"]
+          tabela += (`</td> <td>`);
+          tabela += json[i]["uf"]
+          tabela += (`</td> <td>`);
+          tabela += json[i]["nome_municipio"]
+          tabela += (`</td> <td>`);
+          tabela += json[i]["observacao"]
+          tabela += (`</td> <td> 
+                <span class="d-flex">
+                <button onclick="editarEntidade(` + i + `)" class="btn btn-success">
+                <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
+                </button> 
+                </span> </td>`);
+          tabela += (`</tr> <tr>`);
+      }
+      tabela += (`</tr> </tbody>`);
+      document.getElementById("tabela").innerHTML = tabela;
+
+
+      //limite das paginas
+      if (contador > 0) {
+        document.getElementById("anterior").style.visibility = "visible";
+      } else {
+        document.getElementById("anterior").style.visibility = "hidden";
+      }
+      if (contador < totalPaginas) {
+        document.getElementById("proximo").style.visibility = "visible";
+      } else {
+        document.getElementById("proximo").style.visibility = "hidden";
+      }
+
+
+      //checkboxes
+      $(document).ready(function () {
+        let checkbox = $('table tbody input[type="checkbox"]');
+        $("#selectAll").click(function () {
+          if (this.checked) {
+            checkbox.each(function () {
+              this.checked = true;
+            });
+          } else {
+            checkbox.each(function () {
+              this.checked = false;
+            });
+          }
+        });
+        checkbox.click(function () {
+          if (!this.checked) {
+            $("#selectAll").prop("checked", false);
+          }
+        });
+      });
+    });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+
+window.onload = function () {
+  this.paginacao();
+  fetch('http://localhost:8080/read/municipio', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      response.json().then(function (json) {
+        //pegando valores para usar em municipios
+        cidades = json;
+        //cria letiaveis
+        let i, j = 1;
+        let x = [],
+          valorUF = [],
+          valorFinalUF = [];
+
+        //faz a ligação entre variaveis e valores do banco
+        for (i = 0; i < json.length; i++) {
+          valorUF[i] = json[i].uf;
+          if (valorUF[i] != valorUF[i - 1]) {
+            valorFinalUF[j] = valorUF[i];
+            j++;
+          }
+        }
+        for (i = 0; i < j; i++) {
+          x[i] += "<option>" + valorFinalUF[i] + "</option>";
+        }
+        x.sort();
+        document.getElementById("uf").innerHTML = x;
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+
+  //conta quantas paginas é necessário
+  let paginas = `<li id="anterior" class="page-item" ><a href="#" class="page-link" onclick="antes()">Anterior</a></li>`;
+  for (i = 0; i <= Math.ceil(totalPaginas); i++) {
+    paginas += `<li class="page-item"><a href="#" onclick="pagina(` + i + `)" class="page-link">` + (i + 1) + `</a></li>`;
+  }
+  paginas += `<li id="proximo" class="page-item" ><a href="#" class="page-link" onclick="depois()">Próximo</a></li>`;
+  document.getElementById("paginacao").innerHTML = paginas;
+
+}
+
+
+
+
 function enviar() {
+
+  let a = document.getElementById("cnpj");
+  info.cnpj = a.value;
+  let b = document.getElementById("nome");
+  info.nome = b.value;
+  let c = document.getElementById("endereco");
+  info.endereco = c.value;
+  let d = document.getElementById("numero");
+  info.numero = d.value;
+  let e = document.getElementById("bairro");
+  info.bairro = e.value;
+  let f = document.getElementById("cep");
+  info.cep = f.value;
+  let g = document.getElementById("obs");
+  info.observacao = g.value;
+  let h = document.getElementById("nomeMun");
+  info.nome_municipio = h.value;
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
@@ -110,158 +304,6 @@ function enviar() {
   });
 }
 
-
-
-
-window.onload = function () {
-
-  fetch('http://localhost:8080/read/municipio', {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-
-    //tratamento dos erros
-    if (response.status == 200) {
-      return response.json().then(function (json) {
-        //pegando valores para usar em municipios
-        cidades = json;
-        //cria letiaveis
-        let i, j = 1;
-        let x = [],
-          valorUF = [],
-          valorFinalUF = [];
-
-        //faz a ligação entre variaveis e valores iniciais do banco
-        valorUF[0] = json["0"].uf;
-        valorFinalUF[0] = valorUF[0];
-        //faz a ligação com os outros valores do banco
-        for (i = 1; i < json.length; i++) {
-          valorUF[i] = json[i].uf;
-          if (valorUF[i] != valorUF[i - 1]) {
-            valorFinalUF[j] = valorUF[i];
-            j++;
-          }
-        }
-        for (i = 0; i < j; i++) {
-          x[i] += "<option>" + valorFinalUF[i] + "</option>";
-        }
-        x.sort();
-        document.getElementById("uf").innerHTML = x;
-      });
-    } else {
-      erros(response.status);
-    }
-  });
-
-
-  //Fazer Tabela
-
-  //função fetch para mandar itens 
-  fetch('http://localhost:8080/read/entidade', {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-    //tratamento dos erros
-    if (response.status == 200) {
-      console.log("ok");
-    } else {
-      erros(response.status);
-    }
-    //pegar o json que possui a tabela
-    return response.json().then(function (json) {
-
-      let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
-          <tr>
-          <th> <span class="custom-checkbox">
-          <input type="checkbox" id="selectAll">
-          <label for="selectAll"></label>
-          </span></th>
-          <th scope="col">CNPJ</th>
-          <th scope="col">Nome</th>
-          <th scope="col">Endereço</th>
-          <th scope="col">Número</th>
-          <th scope="col">Bairro</th>
-          <th scope="col">CEP</th>
-          <th scope="col">UF</th>
-          <th scope="col">Município</th>
-          <th scope="col">Observações</th>
-          <th scope="col">Opções</th>
-          </tr>
-          </thead>`);
-      tabela += (`<tbody> <tr>`);
-
-      for (let i = 0; i < json.length; i++) {
-        entQuery[i] = json[i];
-        tabela += (`<td>
-              <span class="custom-checkbox">
-              <input type="checkbox" id="checkbox1" name="options[]" value="1">
-              <label for="checkbox1"></label>
-              </span>
-              </td>`);
-        tabela += (`<td>`);
-        tabela += json[i]["cnpj"];
-        tabela += (`</td> <td>`);
-        tabela += json[i]["nome"]
-        tabela += (`</td> <td>`);
-        tabela += json[i]["endereco"]
-        tabela += (`</td> <td>`);
-        tabela += json[i]["numero"]
-        tabela += (`</td> <td>`);
-        tabela += json[i]["bairro"]
-        tabela += (`</td> <td>`);
-        tabela += json[i]["cep"]
-        tabela += (`</td> <td>`);
-        tabela += json[i]["uf"]
-        tabela += (`</td> <td>`);
-        tabela += json[i]["nome_municipio"]
-        tabela += (`</td> <td>`);
-        tabela += json[i]["observacao"]
-        tabela += (`</td> <td> 
-              <span class="d-flex">
-              <button onclick="editarEntidade(` + i + `)" class="btn btn-success">
-              <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
-              </button>
-              <button onclick="apagarEntidade(` + i + `)" class="btn btn-danger">
-              <i class="material-icons"data-toggle="tooltip" title="Delete">&#xE872;</i>
-              </button> 
-              </span> </td>`);
-        tabela += (`</tr> <tr>`);
-      }
-
-
-      tabela += (`</tr> </tbody>`);
-      document.getElementById("tabela").innerHTML = tabela;
-
-      $(document).ready(function () {
-        // Select/Deselect checkboxes
-        let checkbox = $('table tbody input[type="checkbox"]');
-        $("#selectAll").click(function () {
-          if (this.checked) {
-            checkbox.each(function () {
-              this.checked = true;
-            });
-          } else {
-            checkbox.each(function () {
-              this.checked = false;
-            });
-          }
-        });
-        checkbox.click(function () {
-          if (!this.checked) {
-            $("#selectAll").prop("checked", false);
-          }
-        });
-      });
-
-
-    });
-  });
-}
-
 //leva para o editor da entidade selecionada
 function editarEntidade(valor) {
   localStorage.setItem("cnpj", entQuery[valor].cnpj);
@@ -274,30 +316,4 @@ function editarEntidade(valor) {
   localStorage.setItem("nome_municipio", entQuery[valor].nome_municipio);
   localStorage.setItem("observacao", entQuery[valor].observacao);
   window.location.href = "./gerenciaEntidade.html";
-}
-
-
-
-//apaga a entidade selecionada
-function apagarEntidade(valor) {
-
-  //função fetch para mandar
-  fetch('http://localhost:8080/read/entidade/' + entQuery[valor].cnpj, {
-    method: 'DELETE',
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-
-    //tratamento dos erros
-    if (response.status == 204) {
-      alert("Apagado com sucesso.");
-      window.location.replace("./entidade.html");
-    } else {
-      erros(response.status);
-    }
-    return response.json().then(function (json) {
-      console.log(json);
-    });
-  });
 }

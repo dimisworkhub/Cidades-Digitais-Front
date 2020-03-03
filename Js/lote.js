@@ -20,7 +20,7 @@ function erros(value) {
   } else if (value == 412) {
     alert("Erro: Informação colocada é incorreta.");
   } else if (value == 422) {
-    alert("Erro: Informação incorreta.");
+    alert("Erro: Formato de informação não aceito.");
   } else if (value == 500) {
     window.location.replace("./errors/500.html");
   } else if (value == 504) {
@@ -49,15 +49,7 @@ let info = {
 //sistema de paginação
 let contador = 0;
 let porPagina = 5;
-let totalPaginas = Math.ceil((loteTotal.length+4) / porPagina);
-
-//conta quantas paginas é necessário
-let paginas = `<li id="anterior" class="page-item" ><a href="#" class="page-link" onclick="antes()">Anterior</a></li>`;
-for(i=0;i<=totalPaginas;i++){
-  paginas +=`<li class="page-item"><a href="#" onclick="pagina(`+i+`)" class="page-link">`+(i+1)+`</a></li>`;
-}
-paginas += `<li id="proximo" class="page-item" ><a href="#" class="page-link" onclick="depois()">Próximo</a></li>`;
-document.getElementById("paginacao").innerHTML=paginas;
+let totalPaginas = (loteTotal.length +  (porPagina-1)) / porPagina;
 
 function antes() {
   contador--;
@@ -66,21 +58,20 @@ function antes() {
 
 function depois() {
   contador++;
-  
   paginacao();
 }
 
 //garantindo o limite de paginação
 
-function pagina(valor){
-  contador=valor;
+function pagina(valor) {
+  contador = valor;
   paginacao();
 }
 
 function paginacao() {
   porPagina = document.getElementById("quantos").value;
-  let comeco=contador*porPagina;
-  let fim=(contador+1)*porPagina;
+  let comeco = contador * porPagina;
+  let fim = (contador + 1) * porPagina;
 
   //função fetch para chamar itens da tabela
   fetch('http://localhost:8080/read/lote', {
@@ -93,95 +84,100 @@ function paginacao() {
     //tratamento dos erros
     if (response.status == 200) {
       console.log(response.statusText);
-    } else {
-      //erros(response.status);
-    }
-    //pegar o json que possui a tabela
-    return response.json().then(function (json) {
-      //console.log(json);
+      //pegar o json que possui a tabela
+        response.json().then(function (json) {
 
-      let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
-          <tr>
-          <th scope="col">Lote</th>
-          <th scope="col">CNPJ</th>
-          <th scope="col">Contrato</th>
-          <th scope="col">Data de Inicio</th>
-          <th scope="col">Data Final</th>
-          <th scope="col">Data de Reajuste</th>
-          <th scope="col">Opções</th>
-          </tr>
-          </thead>`);
-      tabela += (`<tbody> <tr>`);
-      for (let i = comeco; i<fim && i<json.length; i++) {
-        loteTotal[i] = json[i];
-        tabela += (`<td>`);
-        tabela += json[i]["cod_lote"];
-        tabela += (`</td> <td>`);
-        tabela += json[i]["cnpj"];
-        tabela += (`</td> <td>`);
-        tabela += json[i]["contrato"];
-        tabela += (`</td> <td>`);
+          //mostra quanto do total aparece na tela
+          document.getElementById("mostrando").innerHTML = "Mostrando " + porPagina + " de " + json.length;
 
-        let data1 = new Date(json[i]["dt_inicio_vig"]);
-        let dataf1 = data1.getDate() + '/' + (data1.getMonth() + 1) + '/' + data1.getFullYear();
-        tabela += dataf1;
-        tabela += (`</td> <td>`);
 
-        let data2 = new Date(json[i]["dt_final_vig"]);
-        let dataf2 = data2.getDate() + '/' + (data2.getMonth() + 1) + '/' + data2.getFullYear();
-        tabela += dataf2;
-        tabela += (`</td> <td>`);
+          let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
+              <tr>
+              <th scope="col">Lote</th>
+              <th scope="col">CNPJ</th>
+              <th scope="col">Contrato</th>
+              <th scope="col">Data de Inicio</th>
+              <th scope="col">Data Final</th>
+              <th scope="col">Data de Reajuste</th>
+              <th scope="col">Opções</th>
+              </tr>
+              </thead>`);
+          tabela += (`<tbody> <tr>`);
+          for (let i = comeco; i < fim && i < json.length; i++) {
+            loteTotal[i] = json[i];
+            tabela += (`<td>`);
+            tabela += json[i]["cod_lote"];
+            tabela += (`</td> <td>`);
+            tabela += json[i]["cnpj"];
+            tabela += (`</td> <td>`);
+            tabela += json[i]["contrato"];
+            tabela += (`</td> <td>`);
 
-        let data3 = new Date(json[i]["dt_reajuste"]);
-        let dataf3 = data3.getDate() + '/' + (data3.getMonth() + 1) + '/' + data3.getFullYear();
-        tabela += dataf3;
+            let data1 = new Date(json[i]["dt_inicio_vig"]);
+            let dataf1 = data1.getDate() + '/' + (data1.getMonth() + 1) + '/' + data1.getFullYear();
+            tabela += dataf1;
+            tabela += (`</td> <td>`);
 
-        tabela += (`</td> <td> 
-                <span class="d-flex">
-                <button onclick="editarLote(` + i + `)" class="btn btn-success">
-                <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
-                </button>
-                </td>`);
-        tabela += (`</tr> <tr>`);
-      }
-      
-      tabela += (`</tr> </tbody>`);
-      document.getElementById("tabela").innerHTML = tabela;
+            let data2 = new Date(json[i]["dt_final_vig"]);
+            let dataf2 = data2.getDate() + '/' + (data2.getMonth() + 1) + '/' + data2.getFullYear();
+            tabela += dataf2;
+            tabela += (`</td> <td>`);
 
-      //limite das paginas
-      if(contador>0){
-        document.getElementById("anterior").style.visibility = "visible";
-      }else{
-        document.getElementById("anterior").style.visibility = "hidden";
-      }
-      if(contador<totalPaginas){
-        document.getElementById("proximo").style.visibility = "visible";
-      }else{
-        document.getElementById("proximo").style.visibility = "hidden";
-      }
+            let data3 = new Date(json[i]["dt_reajuste"]);
+            let dataf3 = data3.getDate() + '/' + (data3.getMonth() + 1) + '/' + data3.getFullYear();
+            tabela += dataf3;
 
-      $(document).ready(function () {
-        // Select/Deselect checkboxes
-        let checkbox = $('table tbody input[type="checkbox"]');
-        $("#selectAll").click(function () {
-          if (this.checked) {
-            checkbox.each(function () {
-              this.checked = true;
-            });
+            tabela += (`</td> <td> 
+                    <span class="d-flex">
+                    <button onclick="editarLote(` + i + `)" class="btn btn-success">
+                    <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
+                    </button>
+                    </td>`);
+            tabela += (`</tr> <tr>`);
+          }
+
+          tabela += (`</tr> </tbody>`);
+          document.getElementById("tabela").innerHTML = tabela;
+
+
+          //limite das paginas
+          if (contador > 0) {
+            document.getElementById("anterior").style.visibility = "visible";
           } else {
-            checkbox.each(function () {
-              this.checked = false;
-            });
+            document.getElementById("anterior").style.visibility = "hidden";
           }
-        });
-        checkbox.click(function () {
-          if (!this.checked) {
-            $("#selectAll").prop("checked", false);
+          if (contador < totalPaginas) {
+            document.getElementById("proximo").style.visibility = "visible";
+          } else {
+            document.getElementById("proximo").style.visibility = "hidden";
           }
-        });
-      });
 
-    });
+
+          //checkboxes
+          $(document).ready(function () {
+            let checkbox = $('table tbody input[type="checkbox"]');
+            $("#selectAll").click(function () {
+              if (this.checked) {
+                checkbox.each(function () {
+                  this.checked = true;
+                });
+              } else {
+                checkbox.each(function () {
+                  this.checked = false;
+                });
+              }
+            });
+            checkbox.click(function () {
+              if (!this.checked) {
+                $("#selectAll").prop("checked", false);
+              }
+            });
+          });
+
+       });
+    } else {
+      erros(response.status);
+    }
   });
 }
 
@@ -197,7 +193,7 @@ window.onload = function () {
 
     //tratamento dos erros
     if (response.status == 200) {
-      return response.json().then(function (json) {
+      response.json().then(function (json) {
         //cria variaveis
         let i = 0;
         let x = [];
@@ -212,6 +208,16 @@ window.onload = function () {
       erros(response.status);
     }
   });
+
+  //conta quantas paginas é necessário
+  let paginas = `<li id="anterior" class="page-item" ><a href="#" class="page-link" onclick="antes()">Anterior</a></li>`;
+  for (i = 0; i <= Math.ceil(totalPaginas); i++) {
+    paginas += `<li class="page-item"><a href="#" onclick="pagina(` + i + `)" class="page-link">` + (i + 1) + `</a></li>`;
+  }
+  paginas += `<li id="proximo" class="page-item" ><a href="#" class="page-link" onclick="depois()">Próximo</a></li>`;
+  document.getElementById("paginacao").innerHTML = paginas;
+
+
 }
 
 function enviar() {
