@@ -4,8 +4,9 @@ let cdQuery = [];
 //pega o token do login
 let meuToken = localStorage.getItem("token");
 
-//pega o JSON de municípios para uso na tabela
+//pega o JSON de municípios para uso na tabela e para adcionar "CD"s
 let cidades = [];
+document.getElementById("cod_ibge").disabled = true;
 
 //tratamento de erros
 function erros(value) {
@@ -42,9 +43,6 @@ let info = {
   "os_imp": " ",
   "data_imp": " "
 };
-
-
-
 
 
 
@@ -87,13 +85,16 @@ function paginacao() {
       response.json().then(function (json) {
         //console.log(json);
 
+        //mostra quanto do total aparece na tela
+        document.getElementById("mostrando").innerHTML = "Mostrando " + porPagina + " de " + json.length;
+        if(porPagina>json.length-fim){
+          document.getElementById("mostrando").innerHTML = "Mostrando " + (json.length-comeco) + " de " + json.length;
+        }
+
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
             <tr>
-            <th> <span class="custom-checkbox">
-            <input type="checkbox" id="selectAll">
-            <label for="selectAll"></label>
-            </span></th>
             <th scope="col">Código IBGE do Município</th>
+            <th scope="col">Estado</th>
             <th scope="col">Município</th>
             <th scope="col">Código Lote</th>
             <th scope="col">O.S. Projeto Executivo</th>
@@ -107,14 +108,10 @@ function paginacao() {
 
         for (let i = comeco; i < fim && i < json.length; i++) {
           cdQuery[i] = json[i];
-          tabela += (`<td>
-                <span class="custom-checkbox">
-                <input type="checkbox" id="checkbox1" name="options[]" value="1">
-                <label for="checkbox1"></label>
-                </span>
-                </td>`);
           tabela += (`<td>`);
           tabela += json[i]["cod_ibge"];
+          tabela += (`</td> <td>`);
+          tabela += cidades[i]["uf"];
           tabela += (`</td> <td>`);
           tabela += cidades[i]["nome_municipio"];
           tabela += (`</td> <td>`);
@@ -148,7 +145,6 @@ function paginacao() {
 
 window.onload = function () {
 
-  //preenche os cod_ibges
   fetch('http://localhost:8080/read/municipio', {
     method: 'GET',
     headers: {
@@ -159,21 +155,32 @@ window.onload = function () {
     //tratamento dos erros
     if (response.status == 200) {
       response.json().then(function (json) {
+        //pegando valores para usar em municipios
+        cidades = json;
         //cria variaveis
-        let i = 0;
-        let x = [];
-        x[0] += "<option value='00000000000000'>Código do IBGE</option>";
+        let i, j = 1;
+        let x = [],
+          valorUF = [],
+          valorFinalUF = [];
+
+        //faz a ligação entre variaveis e valores do banco
         for (i = 0; i < json.length; i++) {
-          cidades[i]=json[i];
-          x[i + 1] += "<option>" + json[i].cod_ibge + "</option>";
+          valorUF[i] = json[i].uf;
+          if (valorUF[i] != valorUF[i - 1]) {
+            valorFinalUF[j] = valorUF[i];
+            j++;
+          }
+        }
+        for (i = 0; i < j; i++) {
+          x[i] += "<option>" + valorFinalUF[i] + "</option>";
         }
         x.sort();
-        document.getElementById("cod_ibge").innerHTML = x;
+        document.getElementById("uf").innerHTML = x;
       });
-    this.paginacao();
     } else {
       erros(response.status);
     }
+    this.paginacao();
   });
 
   //preenche os cod_lotes
@@ -201,9 +208,30 @@ window.onload = function () {
       erros(response.status);
     }
   });
+
+  //conta quantas paginas é necessário
+  let paginas = `<li id="anterior" class="page-item" ><a href="#" class="page-link" onclick="antes()">Anterior</a></li>`;
+  for (i = 0; i <= Math.ceil(totalPaginas); i++) {
+    paginas += `<li class="page-item"><a href="#" onclick="pagina(` + i + `)" class="page-link">` + (i + 1) + `</a></li>`;
+  }
+  paginas += `<li id="proximo" class="page-item" ><a href="#" class="page-link" onclick="depois()">Próximo</a></li>`;
+  document.getElementById("paginacao").innerHTML = paginas;
+
 }
 
 
+function enabler() {
+  document.getElementById("cod_ibge").disabled = false;
+  let ibge = document.getElementById("cod_ibge");
+  let i, y = [];
+  for (i = 0; i < cidades.length; i++) {
+    if (cidades[i].uf == ibge.value) {
+      y[i] = "<option value='"+cidades[i].cod_ibge+"'>" + cidades[i].nome_municipio + "</option>"
+    }
+  }
+  y.sort();
+  document.getElementById("cod_ibge").innerHTML = y;
+}
 
 
 

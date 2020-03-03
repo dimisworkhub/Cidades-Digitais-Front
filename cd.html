@@ -76,8 +76,8 @@
                         </div>
                         <!--Footer-->
                         <div class="clearfix">
-                            <div class="hint-text">Mostrando <b>5</b> de <b>25</b> Itens</div>
-                            <ul class="pagination"></ul>
+                            <div class="hint-text" id="mostrando"></div>
+                            <ul class="pagination" id="paginacao"></ul>
                         </div>
         </section> <!-- cd-intro -->
 
@@ -118,12 +118,16 @@
                                         <div class="multisteps-form__content">
                                             <div class="form-row mt-4">
                                                 <div class="col-12 col-sm-6">
-                                                    <select class="multisteps-form__input form-control" name="cod_ibge"
-                                                        id="cod_ibge" required></select>
+                                                    <select class="multisteps-form__input form-control" name="uf"
+                                                        id="uf" onclick="enabler()" required></select>
                                                 </div>
                                                 <div class="col-12 col-sm-6 mt-4 mt-sm-0">
                                                     <select class="multisteps-form__input form-control" name="cod_lote"
                                                         id="cod_lote" required></select>
+                                                </div>
+                                                <div class="col-12 col-sm-12 mt-4">
+                                                    <select type="text" class="multisteps-form__input form-control"
+                                                        id="cod_ibge"></select>
                                                 </div>
                                             </div>
                                             <div class="button-row d-flex mt-4">
