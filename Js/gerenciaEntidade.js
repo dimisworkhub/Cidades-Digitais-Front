@@ -44,26 +44,6 @@ let info = {
   "observacao": " "
 };
 
-
-//captura as informações do input e coloca no JSON
-function changer() {
-  info.cnpj = localStorage.getItem("cnpj");
-  let nome1 = document.getElementById("nome");
-  info.nome = nome1.value;
-  let endereco1 = document.getElementById("endereco");
-  info.endereco = endereco1.value;
-  let numero1 = document.getElementById("numero");
-  info.numero = numero1.value;
-  let bairro1 = document.getElementById("bairro");
-  info.bairro = bairro1.value;
-  let cep1 = document.getElementById("cep");
-  info.cep = cep1.value;
-  let nomeMun1 = document.getElementById("nomeMun");
-  info.nome_municipio = nomeMun1.value;
-  let obs1 = document.getElementById("obs");
-  info.observacao = obs1.value;
-}
-
 function enabler(){
   let i,y = [];
   let ufNovo = document.getElementById("uf");
@@ -132,7 +112,7 @@ window.onload = function () {
         let h = document.getElementById("uf");
         h.value = localStorage.getItem("uf");
         enabler();
-        let g = document.getElementById("nomeMun");
+        let g = document.getElementById("nome_municipio");
         g.value = localStorage.getItem("nome_municipio");
         let k = document.getElementById("obs");
         k.value = localStorage.getItem("observacao");
@@ -153,6 +133,22 @@ window.onload = function () {
 }
 
 function enviar() {
+  
+  info.cnpj = localStorage.getItem("cnpj");
+  let nome1 = document.getElementById("nome");
+  info.nome = nome1.value;
+  let endereco1 = document.getElementById("endereco");
+  info.endereco = endereco1.value;
+  let numero1 = document.getElementById("numero");
+  info.numero = numero1.value;
+  let bairro1 = document.getElementById("bairro");
+  info.bairro = bairro1.value;
+  let cep1 = document.getElementById("cep");
+  info.cep = cep1.value;
+  let nomeMun1 = document.getElementById("nomeMun");
+  info.nome_municipio = nomeMun1.value;
+  let obs1 = document.getElementById("obs");
+  info.observacao = obs1.value;
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);

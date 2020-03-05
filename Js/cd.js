@@ -1,5 +1,5 @@
 //Fazer Tabela
-let cdQuery = [];
+let cdTotal = [];
 
 //pega o token do login
 let meuToken = localStorage.getItem("token");
@@ -45,11 +45,11 @@ let info = {
 };
 
 
-
 //sistema de paginação
 let contador = 0;
 let porPagina = 5;
-let totalPaginas = (cdQuery.length + (porPagina - 1)) / porPagina;
+let totalPaginas = cdTotal.length/porPagina;//check lote to continue
+
 
 function antes() {
   contador--;
@@ -69,6 +69,10 @@ function pagina(valor) {
 }
 
 function paginacao() {
+  if(cdTotal.length%porPagina!=0){
+    totalPaginas++;
+  }
+
   porPagina = document.getElementById("quantos").value;
   let comeco = contador * porPagina;
   let fim = (contador + 1) * porPagina;
@@ -87,7 +91,7 @@ function paginacao() {
 
         //mostra quanto do total aparece na tela
         document.getElementById("mostrando").innerHTML = "Mostrando " + porPagina + " de " + json.length;
-        if(porPagina>json.length-fim){
+        if(porPagina>json.length-comeco){
           document.getElementById("mostrando").innerHTML = "Mostrando " + (json.length-comeco) + " de " + json.length;
         }
 
@@ -107,7 +111,7 @@ function paginacao() {
         tabela += (`<tbody> <tr>`);
 
         for (let i = comeco; i < fim && i < json.length; i++) {
-          cdQuery[i] = json[i];
+          cdTotal[i] = json[i];
           tabela += (`<td>`);
           tabela += json[i]["cod_ibge"];
           tabela += (`</td> <td>`);
@@ -119,11 +123,15 @@ function paginacao() {
           tabela += (`</td> <td>`);
           tabela += json[i]["os_pe"]
           tabela += (`</td> <td>`);
-          tabela += json[i]["data_pe"]
+          let data1 = new Date(json[i]["data_pe"]);
+          let dataf1 = String(data1.getDate()).padStart(2, '0') + '/' + String(data1.getMonth()+1).padStart(2, '0') + '/' + String(data1.getFullYear()).padStart(4, '0');
+          tabela += dataf1;
           tabela += (`</td> <td>`);
           tabela += json[i]["os_imp"]
           tabela += (`</td> <td>`);
-          tabela += json[i]["data_imp"]
+          let data2 = new Date(json[i]["data_imp"]);
+          let dataf2 = String(data2.getDate()).padStart(2, '0') + '/' + String(data2.getMonth()+1).padStart(2, '0') + '/' + String(data2.getFullYear()).padStart(4, '0');
+          tabela += dataf2;
           tabela += (`</td> <td> 
                 <span class="d-flex">
                 <button onclick="editarCd(` + i + `)" class="btn btn-success">
@@ -134,6 +142,19 @@ function paginacao() {
         }
         tabela += (`</tr> </tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
+
+        //limite das paginas
+      if (contador > 0) {
+        document.getElementById("anterior").style.visibility = "visible";
+      } else {
+        document.getElementById("anterior").style.visibility = "hidden";
+      }
+      if (contador < totalPaginas) {
+        document.getElementById("proximo").style.visibility = "visible";
+      } else {
+        document.getElementById("proximo").style.visibility = "hidden";
+      }
+      
       });
     } else {
       erros(response.status);
@@ -236,7 +257,12 @@ function enabler() {
 
 
 function editarCd(valor) {
-  localStorage.setItem("COD_IBGE", cdQuery[valor].cod_ibge);
+  localStorage.setItem("cod_ibge", cdTotal[valor].cod_ibge);
+  localStorage.setItem("cod_lote", cdTotal[valor].cod_lote);
+  localStorage.setItem("os_pe", cdTotal[valor].os_pe);
+  localStorage.setItem("data_pe", cdTotal[valor].data_pe);
+  localStorage.setItem("os_imp", cdTotal[valor].os_imp);
+  localStorage.setItem("data_imp", cdTotal[valor].data_imp);
   window.location.href = "./gerenciaCd.html";
 }
 

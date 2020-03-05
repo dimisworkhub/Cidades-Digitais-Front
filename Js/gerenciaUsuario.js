@@ -68,22 +68,13 @@ function enviar() {
     console.log(response.status);
 
     //tratamento dos erros
-    if (response.status == 200) {
-      window.location.replace("./criarUsuario.html");
-    } else if (response.status == 201) {
-      alert("Usuário criado com sucesso");
-      window.location.replace("./criarUsuario.html");
-    } else if (response.status == 202) {
-      alert("Login efetivado com sucesso");
-      window.location.replace("./criarUsuario.html");
-    } else if (response.status == 204) {
-      alert("Apagado com sucesso.");
+    if (response.status == 200 || response.status == 202) {
+      response.json().then(function (json) {
+        console.log(json);
+      });
       window.location.replace("./criarUsuario.html");
     } else {
       erros(response.status);
     }
-    return response.json().then(function (response) {
-      console.log("Resultado: " + response.status);
-    });
   });
 }
