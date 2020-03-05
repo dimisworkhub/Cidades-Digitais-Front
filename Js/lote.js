@@ -49,7 +49,8 @@ let info = {
 //sistema de paginação
 let contador = 0;
 let porPagina = 5;
-let totalPaginas = (loteTotal.length +  (porPagina-1)) / porPagina;
+let totalPaginas;
+
 
 function antes() {
   contador--;
@@ -89,7 +90,7 @@ function paginacao() {
 
           //mostra quanto do total aparece na tela
           document.getElementById("mostrando").innerHTML = "Mostrando " + porPagina + " de " + json.length;
-          if(porPagina>json.length-fim){
+          if(porPagina>json.length-comeco){
             document.getElementById("mostrando").innerHTML = "Mostrando " + (json.length-comeco) + " de " + json.length;
           }
 
@@ -116,17 +117,17 @@ function paginacao() {
             tabela += (`</td> <td>`);
 
             let data1 = new Date(json[i]["dt_inicio_vig"]);
-            let dataf1 = data1.getDate() + '/' + (data1.getMonth() + 1) + '/' + data1.getFullYear();
+            let dataf1 = String(data1.getDate()).padStart(2, '0') + '/' + String(data1.getMonth()+1).padStart(2, '0') + '/' + String(data1.getFullYear()).padStart(4, '0');
             tabela += dataf1;
             tabela += (`</td> <td>`);
 
             let data2 = new Date(json[i]["dt_final_vig"]);
-            let dataf2 = data2.getDate() + '/' + (data2.getMonth() + 1) + '/' + data2.getFullYear();
+            let dataf2 = String(data2.getDate()).padStart(2, '0') + '/' + String(data2.getMonth()+1).padStart(2, '0') + '/' + String(data2.getFullYear()).padStart(4, '0');
             tabela += dataf2;
             tabela += (`</td> <td>`);
 
             let data3 = new Date(json[i]["dt_reajuste"]);
-            let dataf3 = data3.getDate() + '/' + (data3.getMonth() + 1) + '/' + data3.getFullYear();
+            let dataf3 = String(data3.getDate()).padStart(2, '0') + '/' + String(data3.getMonth()+1).padStart(2, '0') + '/' + String(data3.getFullYear()).padStart(4, '0');
             tabela += dataf3;
 
             tabela += (`</td> <td> 
@@ -141,6 +142,7 @@ function paginacao() {
           tabela += (`</tr> </tbody>`);
           document.getElementById("tabela").innerHTML = tabela;
 
+          totalPaginas = Math.ceil(loteTotal.length/porPagina);
 
           //limite das paginas
           if (contador > 0) {
@@ -153,7 +155,6 @@ function paginacao() {
           } else {
             document.getElementById("proximo").style.visibility = "hidden";
           }
-
        });
     } else {
       erros(response.status);
@@ -188,16 +189,14 @@ window.onload = function () {
       erros(response.status);
     }
   });
-
+  
   //conta quantas paginas é necessário
   let paginas = `<li id="anterior" class="page-item" ><a href="#" class="page-link" onclick="antes()">Anterior</a></li>`;
-  for (i = 0; i <= Math.ceil(totalPaginas); i++) {
-    paginas += `<li class="page-item"><a href="#" onclick="pagina(` + i + `)" class="page-link">` + (i + 1) + `</a></li>`;
+  for (i = 0; i < Math.ceil(totalPaginas); i++) {
+    paginas += `<li class="page-item" id="page`+i+`"><a href="#" onclick="pagina(` + i + `)" class="page-link">` + (i + 1) + `</a></li>`;
   }
   paginas += `<li id="proximo" class="page-item" ><a href="#" class="page-link" onclick="depois()">Próximo</a></li>`;
   document.getElementById("paginacao").innerHTML = paginas;
-
-
 }
 
 function enviar() {

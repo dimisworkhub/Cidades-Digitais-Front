@@ -43,17 +43,17 @@ function erros(value) {
 }
 
 // função para checar quem está ativo ou inativo
-// function selecionarStatus(){
-//   let selecao=document.getElementById("status").value;
-//   if(selecao==1){
+function selecionarStatus(){
+  let selecao=document.getElementById("status").value;
+  if(selecao==1){
 
-//   }else if(selecao==2){
+  }else if(selecao==2){
 
-//   }else{
+  }else{
     
-//   }
-//   paginacao();
-// }
+  }
+  paginacao();
+}
 
 
 //sistema de paginação
@@ -99,7 +99,7 @@ function paginacao() {
 
         //mostra quanto do total aparece na tela
         document.getElementById("mostrando").innerHTML = "Mostrando " + porPagina + " de " + json.length;
-        if(porPagina>json.length-fim){
+        if(porPagina>json.length-comeco){
           document.getElementById("mostrando").innerHTML = "Mostrando " + (json.length-comeco) + " de " + json.length;
         }
 

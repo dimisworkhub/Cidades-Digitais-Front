@@ -4,7 +4,7 @@ let entTotal = [];
 let meuToken = localStorage.getItem("token");
 //pega o JSON de municípios para uso em "adicionar entidades"
 let cidades = [];
-document.getElementById("nomeMun").disabled = true;
+document.getElementById("nome_municipio").disabled = true;
 
 
 //tratamento de erros
@@ -50,7 +50,7 @@ let info = {
 
 
 function enabler() {
-  document.getElementById("nomeMun").disabled = false;
+  document.getElementById("nome_municipio").disabled = false;
   let i, y = [];
   for (i = 1; i < cidades.length; i++) {
     if (cidades[i].uf == a.value) {
@@ -58,7 +58,7 @@ function enabler() {
     }
   }
   y.sort();
-  document.getElementById("nomeMun").innerHTML = y;
+  document.getElementById("nome_municipio").innerHTML = y;
 }
 
 
@@ -66,7 +66,10 @@ function enabler() {
 //sistema de paginação
 let contador = 0;
 let porPagina = 5;
-let totalPaginas = (entTotal.length + (porPagina-1)) / porPagina;
+let totalPaginas = entTotal.length/porPagina;
+if(entTotal.length%porPagina!=0){
+  totalPaginas++;
+}
 
 function antes() {
   contador--;
@@ -105,7 +108,7 @@ function paginacao() {
       response.json().then(function (json) {
         //mostra quanto do total aparece na tela
         document.getElementById("mostrando").innerHTML = "Mostrando " + porPagina + " de " + json.length;
-        if(porPagina>json.length-fim){
+        if(porPagina>json.length-comeco){
           document.getElementById("mostrando").innerHTML = "Mostrando " + (json.length-comeco) + " de " + json.length;
         }
 
@@ -155,7 +158,6 @@ function paginacao() {
       }
       tabela += (`</tr> </tbody>`);
       document.getElementById("tabela").innerHTML = tabela;
-
 
       //limite das paginas
       if (contador > 0) {
@@ -245,7 +247,7 @@ function enviar() {
   info.cep = f.value;
   let g = document.getElementById("obs");
   info.observacao = g.value;
-  let h = document.getElementById("nomeMun");
+  let h = document.getElementById("nome_municipio");
   info.nome_municipio = h.value;
   let i = document.getElementById("uf");
   info.uf = i.value;

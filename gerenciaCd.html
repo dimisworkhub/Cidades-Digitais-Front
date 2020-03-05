@@ -82,38 +82,37 @@
                             <form enctype='application/json'>
                                 <div class="form-row" style=" padding: 30px;">
 
-                                    <div class="form-group col-md-5">
-                                        <label class="progress" for="cod_ibge"></label>
-                                        <input type="text" class="form-control" id="cod_ibge" placeholder="Código IBGE:" maxlength="19" value="" onchange="changer()">
+                                    <div class="form-group col-md-4">
+                                        <label for="cod_ibge">Código do IBGE</label>
+                                        <input type="number" class="form-control" id="cod_ibge" readonly>
                                     </div>
                                     
-                                    <div class="form-group col-md-5">
-                                        <label class="progress" for="cod_lote"></label>
-                                        <input type="text" class="form-control" id="cod_lote" placeholder="Código do Lote:" maxlength="19" value="" onchange="changer()">
-                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="cod_lote">Código do Lote:</label>
+                                        <select type="text" class="form-control" id="cod_lote">
+                                        </select>
+                                        </div>
                                 
                                 
-                                    <div class="form-group col-md-3">
-                                        <label class="progress" for="os_pe"></label>
-                                        <input type="text" class="form-control" id="os_pe" placeholder="O.S. Projeto Executivo:" maxlength="9"  value="" onchange="changer()">
+                                    <div class="form-group col-md-4">
+                                        <label for="os_pe">O.S. Projeto Executivo</label>
+                                        <input type="text" class="form-control" id="os_pe" maxlength="50">
                                     </div>
             
-                                    <div class="form-group col-md-3">
-                                        <label class="progress" for="data_pe"></label>
-                                        <input type="text" class="form-control" id="data_pe" placeholder="Data de Projeto Executivo:" maxlength="100" value="" onchange="changer()">
+                                    <div class="form-group col-md-4">
+                                        <label for="data_pe">Data de Projeto Executivo</label>
+                                        <input type="date" class="form-control" id="data_pe" maxlength="50">
                                     </div>
                     
-                                    <div class="form-group col-md-3">
-                                        <label class="progress" for="os_imp"></label>
-                                        <input type="text" class="form-control" id="os_imp" placeholder="O.S. Implementação:" maxlength="9"  value="" onchange="changer()">
+                                    <div class="form-group col-md-4">
+                                        <label for="os_imp">O.S. Implementação</label>
+                                        <input type="text" class="form-control" id="os_imp" maxlength="50">
                                     </div>
                     
-                                    <div class="form-group col-md-3">
-                                        <label class="progress" for="data_imp"></label>
-                                        <input type="text" class="form-control" id="data_imp" placeholder="Data de Implementação:" maxlength="100" value="" onchange="changer()">
+                                    <div class="form-group col-md-4">
+                                        <label for="data_imp">Data de Implementação</label>
+                                        <input type="date" class="form-control" id="data_imp" maxlength="50">
                                     </div>
-                    
-                                    
             
                                     <div style= "width:100%; text-align: center;">
                                         <div class="col-sm-12"><button style="background-color:#3a3a3a" type="button" class="btn btn-primary" onclick="enviar()" >Salvar</button>
@@ -189,9 +188,10 @@
                         </div>
                     </div>
                     <div class="fixed-bottom" >   
-                        <script height="100%" width="100%" src="/home/mctic/go/src/Cidades-Digitais-Front/Js/menu.js"></script>	
+                        <script height="100%" width="100%" src="./Js/menu.js"></script>	
                     </div>
 </body>
+<script src="./Js/gerenciaCd.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-<script src="Js/main.js"></script> <!-- Resource jQuery -->
+<script src="./Js/main.js"></script> <!-- Resource jQuery -->
 </html>
