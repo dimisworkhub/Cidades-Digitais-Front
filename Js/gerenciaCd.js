@@ -5,6 +5,12 @@ let meuToken = localStorage.getItem("token");
 let meuCD = localStorage.getItem("cod_ibge");
 document.getElementById("cod_ibge").value=meuCD;
 
+//estruturas para as tabelas
+let listaItem = [];
+let meuItem = [], meuTipo = []; 
+let edicaoItem1 = [],edicaoItem2 = [],edicaoItem3 = [];
+document.getElementById("cod_ibge").value=meuCD;
+
 //tratamento de erros
 function erros(value) {
   if (value == 400) {
@@ -131,4 +137,188 @@ function enviar() {
       erros(response.status);
     }
   });
+}
+
+
+
+//CD Itens
+
+
+
+
+function itens() {
+
+  //função fetch para chamar itens da tabela
+  fetch('http://localhost:8080/read/cditens', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //checar os status de pedidos
+    //console.log(response)
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      console.log(response.statusText);
+
+      //pegar o json que possui a tabela
+      response.json().then(function (json) {
+        let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
+                <tr>
+                <th scope="col">Código do IBGE</th>
+                <th scope="col">Código do item</th>
+                <th scope="col">Código do tipo de item</th>
+                <th scope="col">Quantidade prevista</th>
+                <th scope="col">Quantidade do projeto executivo</th>
+                <th scope="col">Quantidade de termo de instalação </th>
+                </tr>
+                </thead>`);
+        tabela += (`<tbody> <tr>`);
+
+        //cria uma lista apenas com os itens do lote selecionado
+        let j=0;
+        for (let i = 0; i < json.length; i++) {
+          if (json[i]["cod_ibge"] == meuCD) {
+            listaItem[j] = json[i];
+            j++;
+          }
+        }
+        for (i = 0; i < listaItem.length; i++) {
+          meuItem[i]=listaItem[i]["cod_item"];
+          meuTipo[i]=listaItem[i]["cod_tipo_item"];
+          tabela += (`<tr>`);
+          tabela += (`<td>`);
+          tabela += listaItem[i]["cod_ibge"];
+          tabela += (`</td> <td>`);
+          tabela += listaItem[i]["cod_item"];
+          tabela += (`</td> <td>`);
+          tabela += listaItem[i]["cod_tipo_item"];
+          tabela += (`</td> <td id="quantidade_previsto` + i + `">`);
+          tabela += listaItem[i]["quantidade_previsto"];
+          tabela += (`</td> <td id="quantidade_projeto_executivo` + i + `">`);
+          tabela += listaItem[i]["quantidade_projeto_executivo"];
+          tabela += (`</td> <td id="quantidade_termo_instalacao` + i + `">`);
+          tabela += listaItem[i]["quantidade_termo_instalacao"];
+          tabela += (`</td>`);
+          tabela += (`</tr>`);
+        }
+        tabela += (`</tbody>`);
+        document.getElementById("tabela").innerHTML = tabela;
+        
+        //cria o botão para editar
+        document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarItem()" class="btn btn-success">Editar</button>`);
+        
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+function editarItem() {
+  for(let i=0; i<listaItem.length;i++){
+    edicaoItem1[i] = {
+      "quantidade_previsto": "&",
+    };
+    edicaoItem2[i] = {
+      "quantidade_projeto_executivo": "&",
+    };
+    edicaoItem3[i] = {
+      "quantidade_termo_instalacao": "&",
+    };
+    document.getElementById("quantidade_previsto" + i).innerHTML = `<input type="text" id="quantidade_previsto" onchange="edicaoItem1[`+i+`].quantidade_previsto=parseFloat(this.value);">`;
+    document.getElementById("quantidade_projeto_executivo" + i).innerHTML = `<input type="text" id="quantidade_projeto_executivo" onchange="edicaoItem2[`+i+`].quantidade_projeto_executivo=parseFloat(this.value);">`;
+    document.getElementById("quantidade_termo_instalacao" + i).innerHTML = `<input type="text" id="quantidade_termo_instalacao" onchange="edicaoItem3[`+i+`].quantidade_termo_instalacao=parseFloat(this.value);">`;
+  }
+  document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarItem2()" class="btn btn-success">Salvar</button>`);
+}
+
+function editarItem2() {
+  for(let i=0;i<listaItem.length;i++){
+    
+    let corpoFinal;
+    if(edicaoItem1[i].quantidade_previsto!="&"){
+      corpoFinal = edicaoItem1[i];
+      //transforma as informações do token em json
+      let corpo = JSON.stringify(corpoFinal);
+      //função fetch para mandar
+      fetch('http://localhost:8080/read/cditens/' + meuCD + '/' + meuItem[i] + '/' + meuTipo[i], {
+        method: 'PUT',
+        body: corpo,
+        headers: {
+          'Authorization': 'Bearer ' + meuToken
+        },
+      }).then(function (response) {
+
+        //checar o status do pedido
+        //console.log(response.statusText);
+        
+        //tratamento dos erros
+        if (response.status == 200 || response.status == 201) {
+          //checar a resposta do pedido
+          //console.log(json);
+          alert("Valores alterados com sucesso");
+          itens();
+        } else {
+          //erros(response.status);
+        }
+      });
+    }
+    if(edicaoItem2[i].quantidade_projeto_executivo!="&"){
+      corpoFinal = edicaoItem2[i];
+      //transforma as informações do token em json
+      let corpo = JSON.stringify(corpoFinal);
+      //função fetch para mandar
+      fetch('http://localhost:8080/read/cditens/' + meuCD + '/' + meuItem[i] + '/' + meuTipo[i], {
+        method: 'PUT',
+        body: corpo,
+        headers: {
+          'Authorization': 'Bearer ' + meuToken
+        },
+      }).then(function (response) {
+
+        //checar o status do pedido
+        //console.log(response.statusText);
+        
+        //tratamento dos erros
+        if (response.status == 200 || response.status == 201) {
+          //checar a resposta do pedido
+          //console.log(json);
+          alert("Valores alterados com sucesso");
+          itens();
+        } else {
+          //erros(response.status);
+        }
+      });
+    }
+    if(edicaoItem3[i].quantidade_termo_instalacao!="&"){
+      corpoFinal = edicaoItem3[i];
+      //transforma as informações do token em json
+      let corpo = JSON.stringify(corpoFinal);
+      //função fetch para mandar
+      fetch('http://localhost:8080/read/cditens/' + meuCD + '/' + meuItem[i] + '/' + meuTipo[i], {
+        method: 'PUT',
+        body: corpo,
+        headers: {
+          'Authorization': 'Bearer ' + meuToken
+        },
+      }).then(function (response) {
+
+        //checar o status do pedido
+        //console.log(response.statusText);
+        
+        //tratamento dos erros
+        if (response.status == 200 || response.status == 201) {
+          //checar a resposta do pedido
+          //console.log(json);
+          alert("Valores alterados com sucesso");
+          itens();
+        } else {
+          //erros(response.status);
+        }
+      });
+    } 
+  }
 }

@@ -143,36 +143,12 @@ function enviar() {
 
 
 
-
-//sistema de paginação de itens
-let contador = 0;
-let porPagina = 2;
-let totalPaginas;
+//lote Itens:
 
 
-function antes() {
-  contador--;
-  itens();
-}
 
-function depois() {
-  contador++;
-  itens();
-}
-
-//garantindo o limite de paginação
-
-function pagina(valor) {
-  contador = valor;
-  itens();
-}
 
 function itens() {
-
-  let listaItem = [];
-  let j = 0;
-  let comeco = contador * porPagina;
-  let fim = (contador + 1) * porPagina;
 
   //função fetch para chamar itens da tabela
   fetch('http://localhost:8080/read/loteitens', {
@@ -194,8 +170,8 @@ function itens() {
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
                 <tr>
                 <th scope="col">Lote</th>
-                <th scope="col">Código do Item</th>
-                <th scope="col">Código do Tipo de Item</th>
+                <th scope="col">Código do item</th>
+                <th scope="col">Código do tipo de item</th>
                 <th scope="col">Valor</th>
                 <th scope="col">Opções</th>
                 </tr>
@@ -219,26 +195,34 @@ function itens() {
           tabela += (`</td> <td>`);
           tabela += listaItem[i]["cod_tipo_item"];
           tabela += (`</td> <td id="preco` + i + `">`);
-          tabela += (`R$`+listaItem[i]["preco"]);
+          tabela += listaItem[i]["preco"];
           tabela += (`</td> <td> 
                         <span class="d-flex">
                         <button onclick="editarItem(` + i + `)" id="editar` + i + `" class="btn btn-success">
                         <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
                         </button>
+                        </span>
                         </td>`);
           tabela += (`</tr> <tr>`);
         }
         tabela += (`</tr> </tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
 
-        totalPaginas = (listaItem.length + 1) / 2;
-        console.log()
+        totalPaginas = listaItem.length/porPagina;
+
+        //mostra quanto do total aparece na tela
+        document.getElementById("mostrando").innerHTML = "Mostrando " + (comeco + 1) + " a " + fim + " de " + listaItem.length;
+        if (porPagina > listaItem.length - comeco) {
+          document.getElementById("mostrando").innerHTML = "Mostrando " + (comeco + 1) + " a " + listaItem.length + " de " + listaItem.length;
+        }
 
         //conta quantas paginas é necessário
         let paginas = `<li id="anterior" class="page-item" ><a href="#" class="page-link" onclick="antes()">Anterior</a></li>`;
-        // for (i = 0; i < Math.ceil(totalPaginas); i++) {
-        //   paginas += `<li class="page-item" id="page`+i+`"><a href="#" onclick="pagina(` + i + `)" class="page-link">` + (i + 1) + `</a></li>`;
-        // }
+        if(listaItem.length>porPagina){
+          for (i = 0; i < totalPaginas; i++) {
+            paginas += `<li class="page-item" id="page`+i+`"><a href="#" onclick="pagina(` + i + `)" class="page-link">` + (i + 1) + `</a></li>`;
+          }
+        }
         paginas += `<li id="proximo" class="page-item" ><a href="#" class="page-link" onclick="depois()">Próximo</a></li>`;
         document.getElementById("paginacao").innerHTML = paginas;
 
@@ -248,16 +232,10 @@ function itens() {
         } else {
           document.getElementById("anterior").style.visibility = "hidden";
         }
-        if (contador >= totalPaginas || porPagina > listaItem.length - comeco) {
-          document.getElementById("proximo").style.visibility = "hidden";
-        } else {
+        if (fim<listaItem.length) {
           document.getElementById("proximo").style.visibility = "visible";
-        }
-
-        //mostra quanto do total aparece na tela
-        document.getElementById("mostrando").innerHTML = "Mostrando " + (comeco + 1) + " e " + fim + " de " + listaItem.length;
-        if (porPagina > listaItem.length - comeco) {
-          document.getElementById("mostrando").innerHTML = "Mostrando " + (comeco + 1) + " de " + listaItem.length;
+        } else {
+          document.getElementById("proximo").style.visibility = "hidden";
         }
 
       });
@@ -272,12 +250,17 @@ let edicao = {
 };
 
 function editarItem(valor) {
-  document.getElementById("preco" + valor).innerHTML = `<input type="number" id="preco" onchange="edicao.preco=parseFloat(this.value);">`;
-  document.getElementById("editar" + valor).innerHTML = `<button onclick="editarItem2(`+valor+`)" class="btn btn-success">Salvar</button>`;
+  document.getElementById("preco" + valor).innerHTML = `<td><input type="text" id="preco" onchange="edicao.preco=parseFloat(this.value);"></td>`;
+  let input = document.getElementById("preco");
+  input.addEventListener("keyup", function (event) {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      editarItem2(valor);
+    }
+  });
 }
 
 function editarItem2(valor) {
-  console.log(edicao.preco);
   //transforma as informações do token em json
   let corpo = JSON.stringify(edicao);
   //função fetch para mandar
@@ -290,11 +273,14 @@ function editarItem2(valor) {
   }).then(function (response) {
 
     //checar o status do pedido
-    //console.log(response);
+    //console.log(response.statusText);
     
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
-      window.location.replace("./gerenciaLote.html");
+      //checar a resposta do pedido
+      //console.log(json);
+      alert("Valor alterado com sucesso");
+      itens();
     } else {
       //erros(response.status);
     }
