@@ -16,15 +16,16 @@
     <!--Resource style -->
     <link rel="stylesheet" href="./css/style2.css">
     <script src="./Js/modernizr.js"></script> <!-- Modernizr -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>
 
 
 </head>
 
 <body>
     <main id="cd-main-content">
-        <section id="cd-intro">
+        <section id="cd-intro"  style="overflow-y: auto;">
             <!--imagem de fundo-->
             <div class="row">
                 <div class="container">
@@ -93,22 +94,24 @@
                         <button onclick="itens()" type="button" style="background-color:#959595"
                             class="btn btn-primary">Itens</button>
                     </div>
-                        <div style="overflow-x:auto;">
-                            <table style="margin: 0px auto;" class="table table-striped table-bordered table-hover" id="tabela"></table>
-                            <div class="hint-text" id="mostrando"></div>
-                            <ul class="pagination" id="paginacao"></ul>
-                        </div>
+                        
+                    <div style="overflow-x:auto;">
+                        <table style="margin: 0px auto;" class="table table-striped table-bordered table-hover" id="tabela"></table>
+                        <div class="hint-text" id="mostrando"></div>
+                        <ul class="pagination" id="paginacao"></ul>
+                    </div>
+                    
+                </div>
                 </div>
                 </div>
             </div>
-            </div>
+            <br><br><br>
         </section> <!-- cd-intro -->
     </main>
     <div class="fixed-bottom">
         <script height="100%" width="100%" src="./Js/menu.js"></script>
     </div>
 </body>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="./Js/gerenciaLote.js"></script>
 <script src="./Js/main.js"></script> <!-- Resource jQuery -->
 

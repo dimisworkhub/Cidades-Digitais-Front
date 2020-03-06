@@ -50,10 +50,12 @@ let info = {
 
 
 function enabler() {
+  let uf1 = document.getElementById("uf");
+  info.uf = uf1.value;
   document.getElementById("nome_municipio").disabled = false;
   let i, y = [];
-  for (i = 1; i < cidades.length; i++) {
-    if (cidades[i].uf == a.value) {
+  for (i = 0; i < cidades.length; i++) {
+    if (cidades[i].uf == info.uf) {
       y[i] = "<option>" + cidades[i].nome_municipio + "</option>"
     }
   }
@@ -66,10 +68,7 @@ function enabler() {
 //sistema de paginação
 let contador = 0;
 let porPagina = 5;
-let totalPaginas = entTotal.length/porPagina;
-if(entTotal.length%porPagina!=0){
-  totalPaginas++;
-}
+let totalPaginas;
 
 function antes() {
   contador--;
@@ -103,14 +102,9 @@ function paginacao() {
     //tratamento dos erros
     if (response.status == 200) {
       console.log(response.statusText);
-      
+
       //pegar o json que possui a tabela
       response.json().then(function (json) {
-        //mostra quanto do total aparece na tela
-        document.getElementById("mostrando").innerHTML = "Mostrando " + porPagina + " de " + json.length;
-        if(porPagina>json.length-comeco){
-          document.getElementById("mostrando").innerHTML = "Mostrando " + (json.length-comeco) + " de " + json.length;
-        }
 
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
             <tr>
@@ -155,23 +149,41 @@ function paginacao() {
                 </button> 
                 </span> </td>`);
           tabela += (`</tr> <tr>`);
-      }
-      tabela += (`</tr> </tbody>`);
-      document.getElementById("tabela").innerHTML = tabela;
+        }
+        tabela += (`</tr> </tbody>`);
+        document.getElementById("tabela").innerHTML = tabela;
 
-      //limite das paginas
-      if (contador > 0) {
-        document.getElementById("anterior").style.visibility = "visible";
-      } else {
-        document.getElementById("anterior").style.visibility = "hidden";
-      }
-      if (contador < totalPaginas) {
-        document.getElementById("proximo").style.visibility = "visible";
-      } else {
-        document.getElementById("proximo").style.visibility = "hidden";
-      }
-      
-    });
+        totalPaginas = entTotal.length / porPagina;
+
+        //mostra quanto do total aparece na tela
+        document.getElementById("mostrando").innerHTML = "Mostrando " + (comeco + 1) + " a " + fim + " de " + json.length;
+        if (porPagina > json.length - comeco) {
+          document.getElementById("mostrando").innerHTML = "Mostrando " + (comeco + 1) + " a " + json.length + " de " + json.length;
+        }
+
+        //conta quantas paginas é necessário
+        let paginas = `<li id="anterior" class="page-item" ><a href="#" class="page-link" onclick="antes()">Anterior</a></li>`;
+        if (json.length > porPagina) {
+          for (i = 0; i <= totalPaginas; i++) {
+            paginas += `<li class="page-item" id="page` + i + `"><a href="#" onclick="pagina(` + i + `)" class="page-link">` + (i + 1) + `</a></li>`;
+          }
+        }
+        paginas += `<li id="proximo" class="page-item" ><a href="#" class="page-link" onclick="depois()">Próximo</a></li>`;
+        document.getElementById("paginacao").innerHTML = paginas;
+
+        //limite das paginas
+        if (contador > 0) {
+          document.getElementById("anterior").style.visibility = "visible";
+        } else {
+          document.getElementById("anterior").style.visibility = "hidden";
+        }
+        if (fim<json.length) {
+          document.getElementById("proximo").style.visibility = "visible";
+        } else {
+          document.getElementById("proximo").style.visibility = "hidden";
+        }
+
+      });
     } else {
       erros(response.status);
     }
@@ -181,6 +193,8 @@ function paginacao() {
 
 window.onload = function () {
   this.paginacao();
+
+
   fetch('http://localhost:8080/read/municipio', {
     method: 'GET',
     headers: {
@@ -194,7 +208,7 @@ window.onload = function () {
         //pegando valores para usar em municipios
         cidades = json;
         //cria letiaveis
-        let i, j = 1;
+        let i, j = 0;
         let x = [],
           valorUF = [],
           valorFinalUF = [];
@@ -217,15 +231,6 @@ window.onload = function () {
       erros(response.status);
     }
   });
-
-  //conta quantas paginas é necessário
-  let paginas = `<li id="anterior" class="page-item" ><a href="#" class="page-link" onclick="antes()">Anterior</a></li>`;
-  for (i = 0; i <= Math.ceil(totalPaginas); i++) {
-    paginas += `<li class="page-item"><a href="#" onclick="pagina(` + i + `)" class="page-link">` + (i + 1) + `</a></li>`;
-  }
-  paginas += `<li id="proximo" class="page-item" ><a href="#" class="page-link" onclick="depois()">Próximo</a></li>`;
-  document.getElementById("paginacao").innerHTML = paginas;
-
 }
 
 
@@ -249,8 +254,6 @@ function enviar() {
   info.observacao = g.value;
   let h = document.getElementById("nome_municipio");
   info.nome_municipio = h.value;
-  let i = document.getElementById("uf");
-  info.uf = i.value;
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);

@@ -88,12 +88,6 @@ function paginacao() {
       //pegar o json que possui a tabela
         response.json().then(function (json) {
 
-          //mostra quanto do total aparece na tela
-          document.getElementById("mostrando").innerHTML = "Mostrando " + porPagina + " de " + json.length;
-          if(porPagina>json.length-comeco){
-            document.getElementById("mostrando").innerHTML = "Mostrando " + (json.length-comeco) + " de " + json.length;
-          }
-
           let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
               <tr>
               <th scope="col">Lote</th>
@@ -142,7 +136,24 @@ function paginacao() {
           tabela += (`</tr> </tbody>`);
           document.getElementById("tabela").innerHTML = tabela;
 
-          totalPaginas = Math.ceil(loteTotal.length/porPagina);
+          totalPaginas = loteTotal.length / porPagina;
+
+          //mostra quanto do total aparece na tela
+          document.getElementById("mostrando").innerHTML = "Mostrando " + (comeco + 1) + " a " + fim + " de " + json.length;
+          if (porPagina > json.length - comeco) {
+            document.getElementById("mostrando").innerHTML = "Mostrando " + (comeco + 1) + " a " + json.length + " de " + json.length;
+          }
+
+
+          //conta quantas paginas é necessário
+          let paginas = `<li id="anterior" class="page-item" ><a href="#" class="page-link" onclick="antes()">Anterior</a></li>`;
+          if (json.length > porPagina) {
+            for (i = 0; i <= totalPaginas; i++) {
+              paginas += `<li class="page-item" id="page` + i + `"><a href="#" onclick="pagina(` + i + `)" class="page-link">` + (i + 1) + `</a></li>`;
+            }
+          }
+          paginas += `<li id="proximo" class="page-item" ><a href="#" class="page-link" onclick="depois()">Próximo</a></li>`;
+          document.getElementById("paginacao").innerHTML = paginas;
 
           //limite das paginas
           if (contador > 0) {
@@ -150,11 +161,12 @@ function paginacao() {
           } else {
             document.getElementById("anterior").style.visibility = "hidden";
           }
-          if (contador < totalPaginas) {
+          if (fim<json.length) {
             document.getElementById("proximo").style.visibility = "visible";
           } else {
             document.getElementById("proximo").style.visibility = "hidden";
           }
+
        });
     } else {
       erros(response.status);
@@ -189,14 +201,6 @@ window.onload = function () {
       erros(response.status);
     }
   });
-  
-  //conta quantas paginas é necessário
-  let paginas = `<li id="anterior" class="page-item" ><a href="#" class="page-link" onclick="antes()">Anterior</a></li>`;
-  for (i = 0; i < Math.ceil(totalPaginas); i++) {
-    paginas += `<li class="page-item" id="page`+i+`"><a href="#" onclick="pagina(` + i + `)" class="page-link">` + (i + 1) + `</a></li>`;
-  }
-  paginas += `<li id="proximo" class="page-item" ><a href="#" class="page-link" onclick="depois()">Próximo</a></li>`;
-  document.getElementById("paginacao").innerHTML = paginas;
 }
 
 function enviar() {

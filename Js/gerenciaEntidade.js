@@ -53,7 +53,7 @@ function enabler(){
       y[i] = "<option>" + cidades[i].nome_municipio + "</option>"
     }
   }
-  document.getElementById("nomeMun").innerHTML = y;
+  document.getElementById("nome_municipio").innerHTML = y;
 }
 
 window.onload = function () {
@@ -94,7 +94,7 @@ window.onload = function () {
           y[i] = "<option>" + json[i].nome_municipio + "</option>"
         }
         y.sort();
-        document.getElementById("nomeMun").innerHTML = y;
+        document.getElementById("nome_municipio").innerHTML = y;
 
         //captura os elementos anteriores para visualizar na edição
         let a = document.getElementById("cnpj");
@@ -145,8 +145,8 @@ function enviar() {
   info.bairro = bairro1.value;
   let cep1 = document.getElementById("cep");
   info.cep = cep1.value;
-  let nomeMun1 = document.getElementById("nomeMun");
-  info.nome_municipio = nomeMun1.value;
+  let nome_municipio1 = document.getElementById("nome_municipio");
+  info.nome_municipio = nome_municipio1.value;
   let obs1 = document.getElementById("obs");
   info.observacao = obs1.value;
 
