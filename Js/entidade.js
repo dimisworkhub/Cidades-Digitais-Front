@@ -153,7 +153,7 @@ function paginacao() {
         tabela += (`</tr> </tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
 
-        totalPaginas = entTotal.length / porPagina;
+        totalPaginas = json.length / porPagina;
 
         //mostra quanto do total aparece na tela
         document.getElementById("mostrando").innerHTML = "Mostrando " + (comeco + 1) + " a " + fim + " de " + json.length;
