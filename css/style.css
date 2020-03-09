@@ -37,6 +37,20 @@ a:hover {
 
 
 /* -------------------------------- 
+Funcao para Administracao e Fiscalizacao 
+-------------------------------- */
+
+.figurinha {
+  visibility: hidden;
+}
+
+figure:active .figurinha,
+figure:focus .figurinha {
+  visibility: visible;
+}
+
+
+/* -------------------------------- 
 
 Modules - reusable parts of our design
 
