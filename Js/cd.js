@@ -102,10 +102,11 @@ function paginacao() {
             <th scope="col">Opções</th>
             </tr>
             </thead>`);
-        tabela += (`<tbody> <tr>`);
+        tabela += (`<tbody>`);
 
         for (let i = comeco; i < fim && i < json.length; i++) {
           cdTotal[i] = json[i];
+          tabela += (`<tr>`);
           tabela += (`<td>`);
           tabela += json[i]["cod_ibge"];
           tabela += (`</td> <td>`);
@@ -132,12 +133,12 @@ function paginacao() {
                 <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
                 </button>
                 </span> </td>`);
-          tabela += (`</tr> <tr>`);
+          tabela += (`</tr>`);
         }
         tabela += (`</tr> </tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
 
-        totalPaginas = cdTotal.length / porPagina;
+        totalPaginas = json.length / porPagina;
 
         //mostra quanto do total aparece na tela
         document.getElementById("mostrando").innerHTML = "Mostrando " + (comeco + 1) + " a " + fim + " de " + json.length;

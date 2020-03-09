@@ -69,6 +69,8 @@ let info = {
   data_imp1.value = dataFinal2;
 
 window.onload = function () {
+
+  itens();
     //preenche os cod_lotes
   fetch('http://localhost:8080/read/lote', {
     method: 'GET',
@@ -167,7 +169,6 @@ function itens() {
       response.json().then(function (json) {
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
                 <tr>
-                <th scope="col">Código do IBGE</th>
                 <th scope="col">Código do item</th>
                 <th scope="col">Código do tipo de item</th>
                 <th scope="col">Quantidade prevista</th>
@@ -175,7 +176,7 @@ function itens() {
                 <th scope="col">Quantidade de termo de instalação </th>
                 </tr>
                 </thead>`);
-        tabela += (`<tbody> <tr>`);
+        tabela += (`<tbody>`);
 
         //cria uma lista apenas com os itens do lote selecionado
         let j=0;
@@ -190,8 +191,6 @@ function itens() {
           meuTipo[i]=listaItem[i]["cod_tipo_item"];
           tabela += (`<tr>`);
           tabela += (`<td>`);
-          tabela += listaItem[i]["cod_ibge"];
-          tabela += (`</td> <td>`);
           tabela += listaItem[i]["cod_item"];
           tabela += (`</td> <td>`);
           tabela += listaItem[i]["cod_tipo_item"];
@@ -228,9 +227,9 @@ function editarItem() {
     edicaoItem3[i] = {
       "quantidade_termo_instalacao": "&",
     };
-    document.getElementById("quantidade_previsto" + i).innerHTML = `<input type="text" id="quantidade_previsto" onchange="edicaoItem1[`+i+`].quantidade_previsto=parseFloat(this.value);">`;
-    document.getElementById("quantidade_projeto_executivo" + i).innerHTML = `<input type="text" id="quantidade_projeto_executivo" onchange="edicaoItem2[`+i+`].quantidade_projeto_executivo=parseFloat(this.value);">`;
-    document.getElementById("quantidade_termo_instalacao" + i).innerHTML = `<input type="text" id="quantidade_termo_instalacao" onchange="edicaoItem3[`+i+`].quantidade_termo_instalacao=parseFloat(this.value);">`;
+    document.getElementById("quantidade_previsto" + i).innerHTML = `<input type="number" id="quantidade_previsto" onchange="edicaoItem1[`+i+`].quantidade_previsto=parseFloat(this.value);">`;
+    document.getElementById("quantidade_projeto_executivo" + i).innerHTML = `<input type="number" id="quantidade_projeto_executivo" onchange="edicaoItem2[`+i+`].quantidade_projeto_executivo=parseFloat(this.value);">`;
+    document.getElementById("quantidade_termo_instalacao" + i).innerHTML = `<input type="number" id="quantidade_termo_instalacao" onchange="edicaoItem3[`+i+`].quantidade_termo_instalacao=parseFloat(this.value);">`;
   }
   document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarItem2()" class="btn btn-success">Salvar</button>`);
 }

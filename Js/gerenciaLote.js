@@ -3,6 +3,8 @@ let meuToken = localStorage.getItem("token");
 
 //pega o CNPJ escolhido anteriormente
 let meuLote = localStorage.getItem("cod_lote");
+let edicaoItem = [];
+let listaItem = [];
 let meuItem = [],
   meuTipo = [];
 
@@ -141,11 +143,7 @@ function enviar() {
 }
 
 
-
-
 //lote Itens:
-
-
 
 
 function itens() {
@@ -167,17 +165,17 @@ function itens() {
 
       //pegar o json que possui a tabela
       response.json().then(function (json) {
+        
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
                 <tr>
-                <th scope="col">Lote</th>
                 <th scope="col">Código do item</th>
                 <th scope="col">Código do tipo de item</th>
                 <th scope="col">Valor</th>
-                <th scope="col">Opções</th>
                 </tr>
                 </thead>`);
-        tabela += (`<tbody> <tr>`);
+        tabela += (`<tbody>`);
 
+        let j = 0;
         //cria uma lista apenas com os itens do lote selecionado
         for (let i = 0; i < json.length; i++) {
           if (json[i]["cod_lote"] == meuLote) {
@@ -185,58 +183,20 @@ function itens() {
             j++;
           }
         }
-        for (i = comeco; i < fim && i < listaItem.length; i++) {
-          meuItem[i]=listaItem[i]["cod_item"];
-          meuTipo[i]=listaItem[i]["cod_tipo_item"];
-          tabela += (`<td>`);
-          tabela += listaItem[i]["cod_lote"];
-          tabela += (`</td> <td>`);
-          tabela += listaItem[i]["cod_item"];
-          tabela += (`</td> <td>`);
-          tabela += listaItem[i]["cod_tipo_item"];
-          tabela += (`</td> <td id="preco` + i + `">`);
+        for (i = 0; i < listaItem.length; i++) {
+          tabela += (`<tr>`);
+          meuItem[i] = listaItem[i]["cod_item"];
+          meuTipo[i] = listaItem[i]["cod_tipo_item"];
+          tabela += (`<td id="preco` + i + `">`);
           tabela += listaItem[i]["preco"];
-          tabela += (`</td> <td> 
-                        <span class="d-flex">
-                        <button onclick="editarItem(` + i + `)" id="editar` + i + `" class="btn btn-success">
-                        <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
-                        </button>
-                        </span>
-                        </td>`);
-          tabela += (`</tr> <tr>`);
+          tabela += (`</td>`);
+          tabela += (`</tr>`);
         }
-        tabela += (`</tr> </tbody>`);
+        tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
 
-        totalPaginas = listaItem.length/porPagina;
-
-        //mostra quanto do total aparece na tela
-        document.getElementById("mostrando").innerHTML = "Mostrando " + (comeco + 1) + " a " + fim + " de " + listaItem.length;
-        if (porPagina > listaItem.length - comeco) {
-          document.getElementById("mostrando").innerHTML = "Mostrando " + (comeco + 1) + " a " + listaItem.length + " de " + listaItem.length;
-        }
-
-        //conta quantas paginas é necessário
-        let paginas = `<li id="anterior" class="page-item" ><a href="#" class="page-link" onclick="antes()">Anterior</a></li>`;
-        if(listaItem.length>porPagina){
-          for (i = 0; i < totalPaginas; i++) {
-            paginas += `<li class="page-item" id="page`+i+`"><a href="#" onclick="pagina(` + i + `)" class="page-link">` + (i + 1) + `</a></li>`;
-          }
-        }
-        paginas += `<li id="proximo" class="page-item" ><a href="#" class="page-link" onclick="depois()">Próximo</a></li>`;
-        document.getElementById("paginacao").innerHTML = paginas;
-
-        //limite das paginas
-        if (contador > 0) {
-          document.getElementById("anterior").style.visibility = "visible";
-        } else {
-          document.getElementById("anterior").style.visibility = "hidden";
-        }
-        if (fim<listaItem.length) {
-          document.getElementById("proximo").style.visibility = "visible";
-        } else {
-          document.getElementById("proximo").style.visibility = "hidden";
-        }
+        //cria o botão para editar
+        document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarItem()" class="btn btn-success">Editar</button>`);
 
       });
     } else {
@@ -245,44 +205,201 @@ function itens() {
   });
 }
 
-let edicao = {
-  "preco": "",
-};
 
-function editarItem(valor) {
-  document.getElementById("preco" + valor).innerHTML = `<td><input type="text" id="preco" onchange="edicao.preco=parseFloat(this.value);"></td>`;
-  let input = document.getElementById("preco");
-  input.addEventListener("keyup", function (event) {
-    if (event.keyCode === 13) {
-      event.preventDefault();
-      editarItem2(valor);
-    }
-  });
-}
-
-function editarItem2(valor) {
-  //transforma as informações do token em json
-  let corpo = JSON.stringify(edicao);
-  //função fetch para mandar
-  fetch('http://localhost:8080/read/loteitens/' + meuLote + '/' + meuItem[valor] + '/' + meuTipo[valor], {
-    method: 'PUT',
-    body: corpo,
+function descricao(codItem,codTipo){
+  //função fetch para chamar itens da tabela
+  fetch('http://localhost:8080/read/itens' + codItem + '/' + codTipo, {
+    method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
     },
   }).then(function (response) {
 
-    //checar o status do pedido
-    //console.log(response.statusText);
-    
     //tratamento dos erros
-    if (response.status == 200 || response.status == 201) {
-      //checar a resposta do pedido
-      //console.log(json);
-      alert("Valor alterado com sucesso");
-      itens();
+    if (response.status == 200) {
+      console.log(response.statusText);
+
+      //pegar o json que possui a tabela
+      response.json().then(function (json) {
+        console.log(json.descricao);
+        return json.descricao;
+      });
     } else {
-      //erros(response.status);
+      erros(response.status);
     }
   });
 }
+
+
+function editarItem() {
+  for (let i = 0; i < listaItem.length; i++) {
+    edicaoItem[i] = {
+      "preco": "&",
+    };
+
+    document.getElementById("preco" + i).innerHTML = `<input type="number" id="preco" onchange="edicaoItem[` + i + `].preco=parseFloat(this.value);">`;
+
+  }
+  document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarItem2()" class="btn btn-success">Salvar</button>`);
+}
+
+function editarItem2() {
+  for (let i = 0; i < listaItem.length; i++) {
+    if(edicaoItem[i].preco!="&"){
+      //transforma as informações do token em json
+      let corpo = JSON.stringify(edicaoItem[i]);
+      //função fetch para mandar
+      fetch('http://localhost:8080/read/loteitens/' + meuLote + '/' + meuItem[i] + '/' + meuTipo[i], {
+        method: 'PUT',
+        body: corpo,
+        headers: {
+          'Authorization': 'Bearer ' + meuToken
+        },
+      }).then(function (response) {
+
+        //checar o status do pedido
+        //console.log(response.statusText);
+
+        //tratamento dos erros
+        if (response.status == 200 || response.status == 201) {
+          //checar a resposta do pedido
+          //console.log(json);
+          alert("Valor alterado com sucesso");
+          itens();
+        } else {
+          erros(response.status);
+        }
+      });
+    }
+  }
+
+      //captura as descrições necessárias
+      //função fetch para mandar
+      fetch('http://localhost:8080/read/loteitens/' + meuLote + '/' + meuItem[i] + '/' + meuTipo[i], {
+        method: 'PUT',
+        headers: {
+          'Authorization': 'Bearer ' + meuToken
+        },
+      }).then(function (response) {
+        //checar o status do pedido
+        //console.log(response.statusText);
+
+        //tratamento dos erros
+        if (response.status == 200 || response.status == 201) {
+          
+        } else {
+          erros(response.status);
+        }
+      });
+}
+
+
+
+//lote reajustes
+
+
+
+// function reajuste() {
+
+//   //função fetch para chamar reajustes da tabela
+//   fetch('http://localhost:8080/read/reajuste', {
+//     method: 'GET',
+//     headers: {
+//       'Authorization': 'Bearer ' + meuToken
+//     },
+//   }).then(function (response) {
+
+//     //checar os status de pedidos
+//     //console.log(response)
+
+//     //tratamento dos erros
+//     if (response.status == 200) {
+//       console.log(response.statusText);
+
+//       //pegar o json que possui a tabela
+//       response.json().then(function (json) {
+//         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
+//                 <tr>
+//                 <th scope="col">Código do item</th>
+//                 <th scope="col">Código do tipo de item</th>
+//                 <th scope="col">Valor</th>
+//                 </tr>
+//                 </thead>`);
+//         tabela += (`<tbody>`);
+
+//         let j = 0;
+//         //cria uma lista apenas com os itens do lote selecionado
+//         for (let i = 0; i < json.length; i++) {
+//           if (json[i]["cod_lote"] == meuLote) {
+//             listaItem[j] = json[i];
+//             j++;
+//           }
+//         }
+//         for (i = 0; i < listaItem.length; i++) {
+//           tabela += (`<tr>`);
+//           meuItem[i] = listaItem[i]["cod_item"];
+//           meuTipo[i] = listaItem[i]["cod_tipo_item"];
+//           tabela += (`<td>`);
+//           tabela += listaItem[i]["cod_item"];
+//           tabela += (`</td> <td>`);
+//           tabela += listaItem[i]["cod_tipo_item"];
+//           tabela += (`</td> <td id="preco` + i + `">`);
+//           tabela += listaItem[i]["preco"];
+//           tabela += (`</td>`);
+//           tabela += (`</tr>`);
+//         }
+//         tabela += (`</tbody>`);
+//         document.getElementById("tabela").innerHTML = tabela;
+
+//         //cria o botão para editar
+//         document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarItem()" class="btn btn-success">Editar</button>`);
+
+//       });
+//     } else {
+//       erros(response.status);
+//     }
+//   });
+// }
+
+// function editarItem() {
+//   for (let i = 0; i < listaItem.length; i++) {
+//     edicaoItem[i] = {
+//       "preco": "&",
+//     };
+
+//     document.getElementById("preco" + i).innerHTML = `<input type="number" id="preco" onchange="edicaoItem[` + i + `].preco=parseFloat(this.value);">`;
+
+//   }
+//   document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarItem2()" class="btn btn-success">Salvar</button>`);
+// }
+
+// function editarItem2() {
+//   for (let i = 0; i < listaItem.length; i++) {
+//     if(edicaoItem[i].preco!="&"){
+//       //transforma as informações do token em json
+//       let corpo = JSON.stringify(edicaoItem[i]);
+//       //função fetch para mandar
+//       fetch('http://localhost:8080/read/loteitens/' + meuLote + '/' + meuItem[i] + '/' + meuTipo[i], {
+//         method: 'PUT',
+//         body: corpo,
+//         headers: {
+//           'Authorization': 'Bearer ' + meuToken
+//         },
+//       }).then(function (response) {
+
+//         //checar o status do pedido
+//         //console.log(response.statusText);
+
+//         //tratamento dos erros
+//         if (response.status == 200 || response.status == 201) {
+//           //checar a resposta do pedido
+//           //console.log(json);
+//           alert("Valor alterado com sucesso");
+//           itens();
+//         } else {
+//           //erros(response.status);
+//         }
+//       });
+//     }
+//   }
+// }
