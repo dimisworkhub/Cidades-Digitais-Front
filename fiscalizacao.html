@@ -19,12 +19,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
-
 </head>
 
 <body>
     <main id="cd-main-content">
-        <section id="cd-intro" style="overflow-y: auto;">
+        <section id="cd-intro">
             <!--imagem de fundo-->
             <div class="row">
                 <div class="container">
@@ -42,33 +41,88 @@
                             <table style="text-align:center; width:100%">
                                 <tr>
                                     <td style="padding-top: 25px;">
-                                        <figure>
-                                            <img width="100vh" src="https://cdn1.iconfinder.com/data/icons/stock-market-2/100/Stock_Market_Finance_Money_Banking_Stocks_Shares_Commerce_Business-40-512.png"
+                                        <figure tabindex="-1">
+                                            <img width="100vh"
+                                                src="https://cdn1.iconfinder.com/data/icons/stock-market-2/100/Stock_Market_Finance_Money_Banking_Stocks_Shares_Commerce_Business-40-512.png"
                                                 alt="" />
                                             <figcaption>Previsão de Empenho</figcaption>
+
+                                            <nav class="figurinha">
+                                                <ul class="p-1">
+                                                    <li>
+                                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                                            <button style="background: rgb(202, 201, 201)" type="button"
+                                                                class="btn btn-secondary" onclick="window.location='#.html'">Adicionar</button>
+
+                                                            <button style="background: rgb(202, 201, 201)" type="button"
+                                                                class="btn btn-secondary" onclick="window.location='#.html'">Vizualizar</button>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </nav>
                                         </figure>
                                     </td>
                                     <td style="padding-top: 25px;">
-                                        <figure>
-                                            <img width="100vh" src="https://i.pinimg.com/originals/0e/47/f8/0e47f863552c82c0d9a8ea45f3ecfec4.png"
+                                        <figure tabindex="-1">
+                                            <img width="100vh"
+                                                src="https://i.pinimg.com/originals/0e/47/f8/0e47f863552c82c0d9a8ea45f3ecfec4.png"
                                                 alt="">
                                             <figcaption>Empenho</figcaption>
+
+                                            <nav class="figurinha">
+                                                <ul class="p-1">
+                                                    <li>
+                                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                                            <button style="background: rgb(202, 201, 201)" type="button"
+                                                                class="btn btn-secondary" onclick="window.location='#.html'">Adicionar</button>
+
+                                                            <button style="background: rgb(202, 201, 201)" type="button"
+                                                                class="btn btn-secondary" onclick="window.location='#.html'">Vizualizar</button>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </nav>
                                         </figure>
                                     </td>
                                     <td style="padding-top: 25px;">
-                                        <figure>
-                                            <img width="100vh"
-                                                src="https://static.thenounproject.com/png/47347-200.png"
+                                        <figure tabindex="-1">
+                                            <img width="100vh" src="https://static.thenounproject.com/png/47347-200.png"
                                                 alt="">
                                             <figcaption>Fatura</figcaption>
+                                            <nav class="figurinha">
+                                                <ul class="p-1">
+                                                    <li>
+                                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                                            <button style="background: rgb(202, 201, 201)" type="button"
+                                                                class="btn btn-secondary" onclick="window.location='#.html'">Adicionar</button>
+
+                                                            <button style="background: rgb(202, 201, 201)" type="button"
+                                                                class="btn btn-secondary" onclick="window.location='#.html'">Vizualizar</button>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </nav>
                                         </figure>
                                     </td>
                                     <td style="padding-top: 25px;">
-                                        <figure>
+                                        <figure tabindex="-1">
                                             <img width="100vh"
                                                 src="https://cdn1.iconfinder.com/data/icons/business-and-marketing-outline-5/64/business-and-marketing-outline-5-15-512.png"
                                                 alt="">
                                             <figcaption>Pagamento</figcaption>
+                                            <nav class="figurinha">
+                                                <ul class="p-1">
+                                                    <li>
+                                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                                            <button style="background: rgb(202, 201, 201)" type="button"
+                                                                class="btn btn-secondary" onclick="window.location='#.html'">Adicionar</button>
+
+                                                            <button style="background: rgb(202, 201, 201)" type="button"
+                                                                class="btn btn-secondary" onclick="window.location='#.html'">Vizualizar</button>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </nav>
                                         </figure>
                                     </td>
                                 </tr>
@@ -77,13 +131,25 @@
                     </div>
                 </div>
             </div>
-            <br><br><br>
         </section> <!-- cd-intro -->
     </main>
     <div class="fixed-bottom">
         <script height="100%" width="100%" src="./Js/menu.js"></script>
     </div>
 </body>
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="popover"]').popover({
+            //trigger: 'focus',
+            trigger: 'hover',
+            html: true,
+            content: function () {
+                return '<img class="img-fluid" src="' + $(this).data('img') + '" />';
+            },
+            title: 'Toolbox'
+        })
+    });
+</script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="./Js/gerenciaLote.js"></script>
 <script src="./Js/main.js"></script> <!-- Resource jQuery -->
