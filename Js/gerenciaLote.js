@@ -46,7 +46,7 @@ let info = {
 
 window.onload = function () {
 
-  itens();
+  reajuste();
   //captura o codigo do lote para usar como chave na edição
   let a = document.getElementById("cod_lote");
   a.value = meuLote;
@@ -299,67 +299,68 @@ function editarItem2() {
 
 
 
-// function reajuste() {
+function reajuste() {
+  
+  //função fetch para chamar reajustes da tabela
+  fetch('http://localhost:8080/read/reajuste', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
 
-//   //função fetch para chamar reajustes da tabela
-//   fetch('http://localhost:8080/read/reajuste', {
-//     method: 'GET',
-//     headers: {
-//       'Authorization': 'Bearer ' + meuToken
-//     },
-//   }).then(function (response) {
+    //checar os status de pedidos
+    //console.log(response)
 
-//     //checar os status de pedidos
-//     //console.log(response)
+    //tratamento dos erros
+    if (response.status == 200) {
+      console.log(response.statusText);
 
-//     //tratamento dos erros
-//     if (response.status == 200) {
-//       console.log(response.statusText);
+      //pegar o json que possui a tabela
+      response.json().then(function (json) {
+        let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
+                <tr>
+                <th style="width:45%" scope="col">Percentual de Reajuste</th>
+                <th style="width:45%" scope="col">Ano de Referência</th>
+                <th style="width:10%" scope="col">Ações</th>
+                </tr>
+                </thead>`);
+        tabela += (`<tbody>`);
+        let listaReajuste = [],j=0,i;
+        
+        for(i=0;i<json.length;i++){
+          if(json[i].cod_lote==meuLote){
+            listaReajuste[j]=json[i];
+          }
+        }
+        for (i = 0; i < listaReajuste.length; i++) {
+          tabela += (`<tr><td>`);
+          tabela += listaReajuste[i]["percentual"];
+          tabela += (`</td><td>`);
+          tabela += listaReajuste[i]["ano_ref"];
+          tabela += (`</td> <td> 
+                <span class="d-flex">
+                <button onclick="editarEntidade(` + i + `)" class="btn btn-success">
+                <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
+                </button>
+                <button onclick="apagarEntidade(` + i + `)" class="btn btn-danger">
+                <i class="material-icons"data-toggle="tooltip" title="Delete">&#xE872;</i>
+                </button>
+                </span> </td>`);
+          tabela += (`</tr> <tr>`);
+        }
+        tabela += (`</tbody>`);
+        document.getElementById("tabela").innerHTML = tabela;
 
-//       //pegar o json que possui a tabela
-//       response.json().then(function (json) {
-//         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
-//                 <tr>
-//                 <th scope="col">Código do item</th>
-//                 <th scope="col">Código do tipo de item</th>
-//                 <th scope="col">Valor</th>
-//                 </tr>
-//                 </thead>`);
-//         tabela += (`<tbody>`);
+        //cria o botão para editar
+        document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarItem()" class="btn btn-success">Editar</button>`);
 
-//         let j = 0;
-//         //cria uma lista apenas com os itens do lote selecionado
-//         for (let i = 0; i < json.length; i++) {
-//           if (json[i]["cod_lote"] == meuLote) {
-//             listaItem[j] = json[i];
-//             j++;
-//           }
-//         }
-//         for (i = 0; i < listaItem.length; i++) {
-//           tabela += (`<tr>`);
-//           meuItem[i] = listaItem[i]["cod_item"];
-//           meuTipo[i] = listaItem[i]["cod_tipo_item"];
-//           tabela += (`<td>`);
-//           tabela += listaItem[i]["cod_item"];
-//           tabela += (`</td> <td>`);
-//           tabela += listaItem[i]["cod_tipo_item"];
-//           tabela += (`</td> <td id="preco` + i + `">`);
-//           tabela += listaItem[i]["preco"];
-//           tabela += (`</td>`);
-//           tabela += (`</tr>`);
-//         }
-//         tabela += (`</tbody>`);
-//         document.getElementById("tabela").innerHTML = tabela;
-
-//         //cria o botão para editar
-//         document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarItem()" class="btn btn-success">Editar</button>`);
-
-//       });
-//     } else {
-//       erros(response.status);
-//     }
-//   });
-// }
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
 
 // function editarItem() {
 //   for (let i = 0; i < listaItem.length; i++) {
