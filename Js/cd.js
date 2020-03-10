@@ -1,8 +1,8 @@
-//Fazer Tabela
-let cdTotal = [];
-
 //pega o token do login
 let meuToken = localStorage.getItem("token");
+
+//Fazer Tabela
+let cdTotal = [];
 
 //pega o JSON de municípios para uso na tabela e para adcionar "CD"s
 let cidades = [];
@@ -11,22 +11,31 @@ document.getElementById("cod_ibge").disabled = true;
 //tratamento de erros
 function erros(value) {
   if (value == 400) {
+    console.log(response.statusText);
     window.location.replace("./errors/400.html");
   } else if (value == 401) {
+    console.log(response.statusText);
     window.location.replace("./errors/401.html");
   } else if (value == 403) {
+    console.log(response.statusText);
     window.location.replace("./errors/403.html");
   } else if (value == 404) {
+    console.log(response.statusText);
     window.location.replace("./errors/404.html");
   } else if (value == 409) {
-    alert("Erro: Cidade Digital já existente.");
+    console.log(response.statusText);
+    alert("Erro: Lote já existente.");
   } else if (value == 412) {
+    console.log(response.statusText);
     alert("Erro: Informação colocada é incorreta.");
   } else if (value == 422) {
+    console.log(response.statusText);
     alert("Erro: Formato de informação não aceito.");
   } else if (value == 500) {
+    console.log(response.statusText);
     window.location.replace("./errors/500.html");
   } else if (value == 504) {
+    console.log(response.statusText);
     window.location.replace("./errors/504.html");
   } else {
     alert("ERRO DESCONHECIDO");
@@ -297,12 +306,10 @@ function enviar() {
   let f = document.getElementById("data_imp");
   info.data_imp = f.value;
 
-  //pega o token do login
-  let meuToken = localStorage.getItem("token");
+  
   console.log(info);
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
-
   //função fetch para mandar
   fetch('http://localhost:8080/read/cd', {
     method: 'POST',

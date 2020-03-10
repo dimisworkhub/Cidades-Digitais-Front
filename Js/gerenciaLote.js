@@ -7,26 +7,36 @@ let edicaoItem = [];
 let listaItem = [];
 let meuItem = [],
   meuTipo = [];
+let detalhes = [];
 
 //tratamento de erros
 function erros(value) {
   if (value == 400) {
+    console.log(response.statusText);
     window.location.replace("./errors/400.html");
   } else if (value == 401) {
+    console.log(response.statusText);
     window.location.replace("./errors/401.html");
   } else if (value == 403) {
+    console.log(response.statusText);
     window.location.replace("./errors/403.html");
   } else if (value == 404) {
+    console.log(response.statusText);
     window.location.replace("./errors/404.html");
   } else if (value == 409) {
+    console.log(response.statusText);
     alert("Erro: Lote já existente.");
   } else if (value == 412) {
+    console.log(response.statusText);
     alert("Erro: Informação colocada é incorreta.");
   } else if (value == 422) {
+    console.log(response.statusText);
     alert("Erro: Formato de informação não aceito.");
   } else if (value == 500) {
+    console.log(response.statusText);
     window.location.replace("./errors/500.html");
   } else if (value == 504) {
+    console.log(response.statusText);
     window.location.replace("./errors/504.html");
   } else {
     alert("ERRO DESCONHECIDO");
@@ -44,9 +54,13 @@ let info = {
   "dt_reajuste": "",
 };
 
+
 window.onload = function () {
 
-  itens();
+  for(let i=0; i<8; i++){
+    this.itens();
+  }
+  
   //captura o codigo do lote para usar como chave na edição
   let a = document.getElementById("cod_lote");
   a.value = meuLote;
@@ -57,9 +71,6 @@ window.onload = function () {
       'Authorization': 'Bearer ' + meuToken
     },
   }).then(function (response) {
-
-    //checar o status do pedido
-    //console.log(response);
 
     //tratamento dos erros
     if (response.status == 200) {
@@ -74,10 +85,14 @@ window.onload = function () {
 
         let cnpj1 = document.getElementById("cnpj");
         cnpj1.value = localStorage.getItem("cnpj");
+
       });
 
     } else {
       erros(response.status);
+    }
+    for(let i=0; i<8; i++){
+      this.itens();
     }
   });
 
@@ -146,8 +161,35 @@ function enviar() {
 //lote Itens:
 
 
+function descricao(){
+
+  fetch('http://localhost:8080/read/itens', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+          
+    //tratamento dos erros
+      if (response.status == 200) {
+        //console.log(response.statusText);
+
+        //pegar o json que possui a tabela
+        response.json().then(function (json) {
+          for(let i=0;i<json.length;i++){
+            detalhes[i]=json[i].descricao;
+          }
+        })
+      } else {
+        //erros(response.status);
+      }
+    });
+}
+
+
 function itens() {
 
+  this.descricao();
   //função fetch para chamar itens da tabela
   fetch('http://localhost:8080/read/loteitens', {
     method: 'GET',
@@ -156,25 +198,13 @@ function itens() {
     },
   }).then(function (response) {
 
-    //checar os status de pedidos
-    //console.log(response)
-
     //tratamento dos erros
     if (response.status == 200) {
-      console.log(response.statusText);
+      //console.log(response.statusText);
 
       //pegar o json que possui a tabela
       response.json().then(function (json) {
         
-        let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
-                <tr>
-                <th scope="col">Código do item</th>
-                <th scope="col">Código do tipo de item</th>
-                <th scope="col">Valor</th>
-                </tr>
-                </thead>`);
-        tabela += (`<tbody>`);
-
         let j = 0;
         //cria uma lista apenas com os itens do lote selecionado
         for (let i = 0; i < json.length; i++) {
@@ -184,51 +214,42 @@ function itens() {
           }
         }
         for (i = 0; i < listaItem.length; i++) {
-          tabela += (`<tr>`);
-          meuItem[i] = listaItem[i]["cod_item"];
-          meuTipo[i] = listaItem[i]["cod_tipo_item"];
-          tabela += (`<td id="preco` + i + `">`);
-          tabela += listaItem[i]["preco"];
-          tabela += (`</td>`);
-          tabela += (`</tr>`);
+        meuItem[i] = listaItem[i]["cod_item"];
+        meuTipo[i] = listaItem[i]["cod_tipo_item"];
         }
-        tabela += (`</tbody>`);
-        document.getElementById("tabela").innerHTML = tabela;
-
-        //cria o botão para editar
-        document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarItem()" class="btn btn-success">Editar</button>`);
-
       });
     } else {
-      erros(response.status);
+      //erros(response.status);
     }
   });
+
+  let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
+                <tr>
+                <th scope="col">Código do Item, Tipo de Item e Descrição do item</th>
+                <th scope="col">Valor</th>
+                </tr>
+                </thead>`);
+        tabela += (`<tbody>`);
+
+  for (i = 0; i < listaItem.length; i++) {
+    tabela += (`<tr>`);
+    tabela += (`<td>`);
+    tabela += listaItem[i]["cod_item"] + "." + listaItem[i]["cod_tipo_item"] + " - " + detalhes[i];
+    tabela += (`</td> <td id="preco` + i + `">`);
+    tabela += listaItem[i]["preco"];
+    tabela += (`</td>`);
+    tabela += (`</tr>`);
+  }
+  tabela += (`</tbody>`);
+  document.getElementById("tabela").innerHTML = tabela;
+
+  //cria o botão para editar
+  document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarItem()" class="btn btn-success">Editar</button>`);
+
 }
 
 
-function descricao(codItem,codTipo){
-  //função fetch para chamar itens da tabela
-  fetch('http://localhost:8080/read/itens' + codItem + '/' + codTipo, {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
 
-    //tratamento dos erros
-    if (response.status == 200) {
-      console.log(response.statusText);
-
-      //pegar o json que possui a tabela
-      response.json().then(function (json) {
-        console.log(json.descricao);
-        return json.descricao;
-      });
-    } else {
-      erros(response.status);
-    }
-  });
-}
 
 
 function editarItem() {
@@ -272,134 +293,4 @@ function editarItem2() {
       });
     }
   }
-
-      //captura as descrições necessárias
-      //função fetch para mandar
-      fetch('http://localhost:8080/read/loteitens/' + meuLote + '/' + meuItem[i] + '/' + meuTipo[i], {
-        method: 'PUT',
-        headers: {
-          'Authorization': 'Bearer ' + meuToken
-        },
-      }).then(function (response) {
-        //checar o status do pedido
-        //console.log(response.statusText);
-
-        //tratamento dos erros
-        if (response.status == 200 || response.status == 201) {
-          
-        } else {
-          erros(response.status);
-        }
-      });
 }
-
-
-
-//lote reajustes
-
-
-
-// function reajuste() {
-
-//   //função fetch para chamar reajustes da tabela
-//   fetch('http://localhost:8080/read/reajuste', {
-//     method: 'GET',
-//     headers: {
-//       'Authorization': 'Bearer ' + meuToken
-//     },
-//   }).then(function (response) {
-
-//     //checar os status de pedidos
-//     //console.log(response)
-
-//     //tratamento dos erros
-//     if (response.status == 200) {
-//       console.log(response.statusText);
-
-//       //pegar o json que possui a tabela
-//       response.json().then(function (json) {
-//         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
-//                 <tr>
-//                 <th scope="col">Código do item</th>
-//                 <th scope="col">Código do tipo de item</th>
-//                 <th scope="col">Valor</th>
-//                 </tr>
-//                 </thead>`);
-//         tabela += (`<tbody>`);
-
-//         let j = 0;
-//         //cria uma lista apenas com os itens do lote selecionado
-//         for (let i = 0; i < json.length; i++) {
-//           if (json[i]["cod_lote"] == meuLote) {
-//             listaItem[j] = json[i];
-//             j++;
-//           }
-//         }
-//         for (i = 0; i < listaItem.length; i++) {
-//           tabela += (`<tr>`);
-//           meuItem[i] = listaItem[i]["cod_item"];
-//           meuTipo[i] = listaItem[i]["cod_tipo_item"];
-//           tabela += (`<td>`);
-//           tabela += listaItem[i]["cod_item"];
-//           tabela += (`</td> <td>`);
-//           tabela += listaItem[i]["cod_tipo_item"];
-//           tabela += (`</td> <td id="preco` + i + `">`);
-//           tabela += listaItem[i]["preco"];
-//           tabela += (`</td>`);
-//           tabela += (`</tr>`);
-//         }
-//         tabela += (`</tbody>`);
-//         document.getElementById("tabela").innerHTML = tabela;
-
-//         //cria o botão para editar
-//         document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarItem()" class="btn btn-success">Editar</button>`);
-
-//       });
-//     } else {
-//       erros(response.status);
-//     }
-//   });
-// }
-
-// function editarItem() {
-//   for (let i = 0; i < listaItem.length; i++) {
-//     edicaoItem[i] = {
-//       "preco": "&",
-//     };
-
-//     document.getElementById("preco" + i).innerHTML = `<input type="number" id="preco" onchange="edicaoItem[` + i + `].preco=parseFloat(this.value);">`;
-
-//   }
-//   document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarItem2()" class="btn btn-success">Salvar</button>`);
-// }
-
-// function editarItem2() {
-//   for (let i = 0; i < listaItem.length; i++) {
-//     if(edicaoItem[i].preco!="&"){
-//       //transforma as informações do token em json
-//       let corpo = JSON.stringify(edicaoItem[i]);
-//       //função fetch para mandar
-//       fetch('http://localhost:8080/read/loteitens/' + meuLote + '/' + meuItem[i] + '/' + meuTipo[i], {
-//         method: 'PUT',
-//         body: corpo,
-//         headers: {
-//           'Authorization': 'Bearer ' + meuToken
-//         },
-//       }).then(function (response) {
-
-//         //checar o status do pedido
-//         //console.log(response.statusText);
-
-//         //tratamento dos erros
-//         if (response.status == 200 || response.status == 201) {
-//           //checar a resposta do pedido
-//           //console.log(json);
-//           alert("Valor alterado com sucesso");
-//           itens();
-//         } else {
-//           //erros(response.status);
-//         }
-//       });
-//     }
-//   }
-// }
