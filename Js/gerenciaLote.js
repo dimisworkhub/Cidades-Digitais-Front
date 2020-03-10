@@ -57,10 +57,13 @@ let info = {
 
 window.onload = function () {
 
+  reajuste();
+
   for(let i=0; i<8; i++){
     this.itens();
   }
   
+
   //captura o codigo do lote para usar como chave na edição
   let a = document.getElementById("cod_lote");
   a.value = meuLote;
@@ -293,4 +296,138 @@ function editarItem2() {
       });
     }
   }
+
+      //captura as descrições necessárias
+      //função fetch para mandar
+      fetch('http://localhost:8080/read/loteitens/' + meuLote + '/' + meuItem[i] + '/' + meuTipo[i], {
+        method: 'PUT',
+        headers: {
+          'Authorization': 'Bearer ' + meuToken
+        },
+      }).then(function (response) {
+        //checar o status do pedido
+        //console.log(response.statusText);
+
+        //tratamento dos erros
+        if (response.status == 200 || response.status == 201) {
+          
+        } else {
+          erros(response.status);
+        }
+      });
 }
+
+
+
+//lote reajustes
+
+
+
+function reajuste() {
+  
+  //função fetch para chamar reajustes da tabela
+  fetch('http://localhost:8080/read/reajuste', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //checar os status de pedidos
+    //console.log(response)
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      console.log(response.statusText);
+
+      //pegar o json que possui a tabela
+      response.json().then(function (json) {
+        let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
+                <tr>
+                <th style="width:45%" scope="col">Percentual de Reajuste</th>
+                <th style="width:45%" scope="col">Ano de Referência</th>
+                <th style="width:10%" scope="col">Ações</th>
+                </tr>
+                </thead>`);
+        tabela += (`<tbody>`);
+        let listaReajuste = [],j=0,i;
+        
+        for(i=0;i<json.length;i++){
+          if(json[i].cod_lote==meuLote){
+            listaReajuste[j]=json[i];
+          }
+        }
+        for (i = 0; i < listaReajuste.length; i++) {
+          tabela += (`<tr><td>`);
+          tabela += listaReajuste[i]["percentual"];
+          tabela += (`</td><td>`);
+          tabela += listaReajuste[i]["ano_ref"];
+          tabela += (`</td> <td> 
+                <span class="d-flex">
+                <button onclick="editarEntidade(` + i + `)" class="btn btn-success">
+                <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
+                </button>
+                <button onclick="apagarEntidade(` + i + `)" class="btn btn-danger">
+                <i class="material-icons"data-toggle="tooltip" title="Delete">&#xE872;</i>
+                </button>
+                </span> </td>`);
+          tabela += (`</tr> <tr>`);
+        }
+        tabela += (`</tbody>`);
+        document.getElementById("tabela").innerHTML = tabela;
+
+        //cria o botão para editar
+        document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarItem()" class="btn btn-success">Editar</button>`);
+
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+// function editarItem() {
+//   for (let i = 0; i < listaItem.length; i++) {
+//     edicaoItem[i] = {
+//       "preco": "&",
+//     };
+
+//     document.getElementById("preco" + i).innerHTML = `<input type="number" id="preco" onchange="edicaoItem[` + i + `].preco=parseFloat(this.value);">`;
+
+//   }
+//   document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarItem2()" class="btn btn-success">Salvar</button>`);
+// }
+
+// function editarItem2() {
+//   for (let i = 0; i < listaItem.length; i++) {
+//     if(edicaoItem[i].preco!="&"){
+//       //transforma as informações do token em json
+//       let corpo = JSON.stringify(edicaoItem[i]);
+//       //função fetch para mandar
+//       fetch('http://localhost:8080/read/loteitens/' + meuLote + '/' + meuItem[i] + '/' + meuTipo[i], {
+//         method: 'PUT',
+//         body: corpo,
+//         headers: {
+//           'Authorization': 'Bearer ' + meuToken
+//         },
+//       }).then(function (response) {
+
+//         //checar o status do pedido
+//         //console.log(response.statusText);
+
+//         //tratamento dos erros
+//         if (response.status == 200 || response.status == 201) {
+//           //checar a resposta do pedido
+//           //console.log(json);
+//           alert("Valor alterado com sucesso");
+//           itens();
+//         } else {
+//           //erros(response.status);
+//         }
+//       });
+//     }
+//   }
+// }
+
+}
+

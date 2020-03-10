@@ -47,9 +47,9 @@ if (setupTime == null) {
 
 //adcionar as classes depois
 $(document).ready(function () {
-    $('.cep').mask('R$ 00000-000');
+    $('.cep').mask('00000-000');
     $('.telefone').mask('(00) 00000-0000');
-    $('.cpf').mask('R$ 000.000.000-00', {reverse: true});
+    $('.cpf').mask('000.000.000-00', {reverse: true});
     $('.cnpj').mask('00.000.000/0000-00', {reverse: true});
     $('.preco').mask('0.000.000.000,00', {reverse: true});
 });
