@@ -26,14 +26,16 @@ document.write(`
 
 	<div class="cd-shadow-layer"></div>`);
 
+//função usada pelo botão de logoff
 function logoff() {
 	localStorage.clear();
 	window.location.replace("./index.html");
 }
 
-//define as horas do login
+
+//define o total de horas para o login atual
 let hours = 13;
-//script para que 
+//script que mantêm o login apenas até o tempo limite
 let now = new Date().getTime();
 let setupTime = localStorage.getItem('setupTime');
 if (setupTime == null) {
