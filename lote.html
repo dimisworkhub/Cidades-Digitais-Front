@@ -45,7 +45,7 @@
                                         <span>Atualizar
                                             Lista
                                         </span></a>
-                                    <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i
+                                    <a href="#adicionarLote" class="btn btn-success" data-toggle="modal"><i
                                             class="material-icons">&#xE147;</i> <span>Adicionar</span></a>
 
                                 </div>
@@ -89,12 +89,12 @@
                         <script height="100%" width="100%" src="./Js/menu.js"></script>
                     </div>
                     <br><br><br>
-      </section>   <!-- cd-intro -->
+        </section> <!-- cd-intro -->
         </div>
         </div>
     </main>
-    <!-- ADD Modal HTML -->
-    <div id="addEmployeeModal" class="modal fade">
+    <!-- Modal Lote -->
+    <div id="adicionarLote" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
 
@@ -104,7 +104,7 @@
                 </div>
                 <div class="modal-body" style="padding-bottom: 3rem;">
                     <div class="multisteps-form">
-                        <!--progress bar-->
+                        <!--Barra de Progresso-->
                         <div class="row">
                             <div class="col-12 col-lg-12 ml-auto mr-auto mb-4">
                                 <div class="multisteps-form__progress">
@@ -115,11 +115,11 @@
                                 </div>
                             </div>
                         </div>
-                        <!--form panels-->
+                        <!--Formularios-->
                         <div class="row">
                             <div class="col-12 col-lg-12 m-auto">
                                 <form class="multisteps-form__form needs-validation" novalidate style="height: 307px;">
-                                    <!--single form panel-->
+                                    <!--Formulario 1 -->
                                     <div class="multisteps-form__panel shadow p-4 rounded bg-white js-active"
                                         data-animation="scaleIn">
                                         <h3 class="multisteps-form__title">Informações do Lote</h3>
@@ -132,8 +132,8 @@
                                                         required />
                                                 </div>
                                                 <div class="col-12 col-sm-12 mt-4">
-                                                    <select class="multisteps-form__input form-control" name="cnpj"
-                                                        id="cnpj" required></select>
+                                                    <select class="multisteps-form__input form-control" type="text"
+                                                        name="cnpj" id="cnpj" required></select>
                                                 </div>
                                                 <div class="col-12 col-sm-12 mt-4">
                                                     <input class="multisteps-form__input form-control" type="text"
@@ -149,7 +149,7 @@
                                         </div>
                                     </div>
 
-                                    <!--single form panel-->
+                                    <!--Formulario 2 -->
                                     <div class="multisteps-form__panel shadow p-4 rounded bg-white"
                                         data-animation="scaleIn">
                                         <h3 class="multisteps-form__title">Datas</h3>
@@ -176,8 +176,6 @@
 
 
                                             <div class="button-row d-flex mt-4">
-                                                <!-- <input type="button" class="btn btn-default" data-dismiss="modal"
-                                                    value="Voltar"> -->
                                                 <button class="btn btn-primary multi-button ml-auto" onclick="enviar()"
                                                     type="button">Cadastrar</button>
                                             </div>

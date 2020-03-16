@@ -11,31 +11,22 @@ document.getElementById("cod_ibge").disabled = true;
 //tratamento de erros
 function erros(value) {
   if (value == 400) {
-    console.log(response.statusText);
     window.location.replace("./errors/400.html");
   } else if (value == 401) {
-    console.log(response.statusText);
     window.location.replace("./errors/401.html");
   } else if (value == 403) {
-    console.log(response.statusText);
     window.location.replace("./errors/403.html");
   } else if (value == 404) {
-    console.log(response.statusText);
     window.location.replace("./errors/404.html");
   } else if (value == 409) {
-    console.log(response.statusText);
     alert("Erro: Lote já existente.");
   } else if (value == 412) {
-    console.log(response.statusText);
     alert("Erro: Informação colocada é incorreta.");
   } else if (value == 422) {
-    console.log(response.statusText);
     alert("Erro: Formato de informação não aceito.");
   } else if (value == 500) {
-    console.log(response.statusText);
     window.location.replace("./errors/500.html");
   } else if (value == 504) {
-    console.log(response.statusText);
     window.location.replace("./errors/504.html");
   } else {
     alert("ERRO DESCONHECIDO");
@@ -57,7 +48,7 @@ let info = {
 //sistema de paginação
 let contador = 0;
 let porPagina = 5;
-let totalPaginas = cdTotal.length/porPagina;//check lote to continue
+let totalPaginas = cdTotal.length/porPagina;
 
 
 function antes() {
@@ -98,10 +89,12 @@ function paginacao() {
       response.json().then(function (json) {
         //console.log(json);
 
+        cdTotal = json;
+        totalPaginas = json.length / porPagina;
+        
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
             <tr>
             <th scope="col">Código IBGE do Município</th>
-            <th scope="col">Estado</th>
             <th scope="col">Município</th>
             <th scope="col">Código Lote</th>
             <th scope="col">O.S. Projeto Executivo</th>
@@ -114,14 +107,11 @@ function paginacao() {
         tabela += (`<tbody>`);
 
         for (let i = comeco; i < fim && i < json.length; i++) {
-          cdTotal[i] = json[i];
           tabela += (`<tr>`);
           tabela += (`<td>`);
           tabela += json[i]["cod_ibge"];
           tabela += (`</td> <td>`);
-          tabela += cidades[i]["uf"];
-          tabela += (`</td> <td>`);
-          tabela += cidades[i]["nome_municipio"];
+          tabela += cidades[i]["nome_municipio"] + " - " + cidades[i]["uf"];
           tabela += (`</td> <td>`);
           tabela += json[i]["cod_lote"]
           tabela += (`</td> <td>`);
@@ -147,8 +137,6 @@ function paginacao() {
         tabela += (`</tr> </tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
 
-        totalPaginas = json.length / porPagina;
-
         //mostra quanto do total aparece na tela
         document.getElementById("mostrando").innerHTML = "Mostrando " + (comeco + 1) + " a " + fim + " de " + json.length;
         if (porPagina > json.length - comeco) {
@@ -158,7 +146,7 @@ function paginacao() {
         //conta quantas paginas é necessário
         let paginas = `<li id="anterior" class="page-item" ><a href="#" class="page-link" onclick="antes()">Anterior</a></li>`;
         if (json.length > porPagina) {
-          for (i = 0; i <= totalPaginas; i++) {
+          for (i = 0; i < totalPaginas; i++) {
             paginas += `<li class="page-item" id="page` + i + `"><a href="#" onclick="pagina(` + i + `)" class="page-link">` + (i + 1) + `</a></li>`;
           }
         }
@@ -180,6 +168,7 @@ function paginacao() {
       });
     } else {
       erros(response.status);
+      
     }
   });
 }
@@ -201,7 +190,7 @@ window.onload = function () {
         //pegando valores para usar em municipios
         cidades = json;
         //cria variaveis
-        let i, j = 1;
+        let i, j = 0;
         let x = [],
           valorUF = [],
           valorFinalUF = [];
@@ -209,7 +198,7 @@ window.onload = function () {
         //faz a ligação entre variaveis e valores do banco
         for (i = 0; i < json.length; i++) {
           valorUF[i] = json[i].uf;
-          if (valorUF[i] != valorUF[i - 1]) {
+          if (i!=0 && valorUF[i] != valorUF[i - 1]) {
             valorFinalUF[j] = valorUF[i];
             j++;
           }
@@ -252,28 +241,20 @@ window.onload = function () {
     }
   });
 
-  //conta quantas paginas é necessário
-  let paginas = `<li id="anterior" class="page-item" ><a href="#" class="page-link" onclick="antes()">Anterior</a></li>`;
-  for (i = 0; i <= Math.ceil(totalPaginas); i++) {
-    paginas += `<li class="page-item"><a href="#" onclick="pagina(` + i + `)" class="page-link">` + (i + 1) + `</a></li>`;
-  }
-  paginas += `<li id="proximo" class="page-item" ><a href="#" class="page-link" onclick="depois()">Próximo</a></li>`;
-  document.getElementById("paginacao").innerHTML = paginas;
-
 }
 
 
 function enabler() {
   document.getElementById("cod_ibge").disabled = false;
-  let ibge = document.getElementById("cod_ibge");
-  let i, y = [];
+  let uf = document.getElementById("uf");
+  let i, x = [];
   for (i = 0; i < cidades.length; i++) {
-    if (cidades[i].uf == ibge.value) {
-      y[i] = "<option value='"+cidades[i].cod_ibge+"'>" + cidades[i].nome_municipio + "</option>"
+    if (cidades[i].uf == uf.value) {
+      x[i] = "<option value='"+cidades[i].cod_ibge+"'>" + cidades[i].nome_municipio + "</option>"
     }
   }
-  y.sort();
-  document.getElementById("cod_ibge").innerHTML = y;
+  x.sort();
+  document.getElementById("cod_ibge").innerHTML = x;
 }
 
 
@@ -285,6 +266,8 @@ function editarCd(valor) {
   localStorage.setItem("data_pe", cdTotal[valor].data_pe);
   localStorage.setItem("os_imp", cdTotal[valor].os_imp);
   localStorage.setItem("data_imp", cdTotal[valor].data_imp);
+  localStorage.setItem("nome_municipio", cidades[valor].nome_municipio);
+  localStorage.setItem("uf", cidades[valor].uf);
   window.location.href = "./gerenciaCd.html";
 }
 
@@ -306,8 +289,6 @@ function enviar() {
   let f = document.getElementById("data_imp");
   info.data_imp = f.value;
 
-  
-  console.log(info);
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
   //função fetch para mandar
@@ -325,7 +306,7 @@ function enviar() {
     //tratamento dos erros
     if (response.status == 200 || response.status == 201 || response.status == 202) {
       response.json().then(function (json) {
-        console.log(json);
+        //console.log(json);
       });
       window.location.replace("./cd.html");
     } else {

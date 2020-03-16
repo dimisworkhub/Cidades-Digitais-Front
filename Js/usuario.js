@@ -20,31 +20,22 @@ let info = {
 //tratamento de erros
 function erros(value) {
   if (value == 400) {
-    console.log(response.statusText);
     window.location.replace("./errors/400.html");
   } else if (value == 401) {
-    console.log(response.statusText);
     window.location.replace("./errors/401.html");
   } else if (value == 403) {
-    console.log(response.statusText);
     window.location.replace("./errors/403.html");
   } else if (value == 404) {
-    console.log(response.statusText);
     window.location.replace("./errors/404.html");
   } else if (value == 409) {
-    console.log(response.statusText);
     alert("Erro: Lote já existente.");
   } else if (value == 412) {
-    console.log(response.statusText);
     alert("Erro: Informação colocada é incorreta.");
   } else if (value == 422) {
-    console.log(response.statusText);
     alert("Erro: Formato de informação não aceito.");
   } else if (value == 500) {
-    console.log(response.statusText);
     window.location.replace("./errors/500.html");
   } else if (value == 504) {
-    console.log(response.statusText);
     window.location.replace("./errors/504.html");
   } else {
     alert("ERRO DESCONHECIDO");
@@ -152,7 +143,7 @@ function paginacao() {
         //conta quantas paginas é necessário
         let paginas = `<li id="anterior" class="page-item" ><a href="#" class="page-link" onclick="antes()">Anterior</a></li>`;
         if (json.length > porPagina) {
-          for (i = 0; i <= totalPaginas; i++) {
+          for (i = 0; i < totalPaginas; i++) {
             paginas += `<li class="page-item" id="page` + i + `"><a href="#" onclick="pagina(` + i + `)" class="page-link">` + (i + 1) + `</a></li>`;
           }
         }

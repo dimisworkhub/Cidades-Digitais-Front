@@ -173,7 +173,7 @@ function paginacao() {
         //conta quantas paginas é necessário
         let paginas = `<li id="anterior" class="page-item" ><a href="#" class="page-link" onclick="antes()">Anterior</a></li>`;
         if (json.length > porPagina) {
-          for (i = 0; i <= totalPaginas; i++) {
+          for (i = 0; i < totalPaginas; i++) {
             paginas += `<li class="page-item" id="page` + i + `"><a href="#" onclick="pagina(` + i + `)" class="page-link">` + (i + 1) + `</a></li>`;
           }
         }
@@ -202,7 +202,6 @@ function paginacao() {
 
 window.onload = function () {
   this.paginacao();
-
 
   fetch('http://localhost:8080/read/municipio', {
     method: 'GET',

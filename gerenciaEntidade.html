@@ -10,9 +10,10 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-	<link rel="stylesheet" href="bootstrap4\css\bootstrap.css"> <!-- CSS bootstrap -->
-	<link rel="stylesheet" href="css/reset.css"> <!-- CSS reset -->
-	<link rel="stylesheet" href="css/style.css"> <!--Resource style -->
+    <link rel="stylesheet" href="bootstrap4\css\bootstrap.css"> <!-- CSS bootstrap -->
+    <link rel="stylesheet" href="css/reset.css"> <!-- CSS reset -->
+    <link rel="stylesheet" href="css/style.css">
+    <!--Resource style -->
     <link rel="stylesheet" href="./css/style2.css">
     <script src="Js/modernizr.js"></script> <!-- Modernizr -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -24,133 +25,134 @@
 
 <body>
     <main id="cd-main-content">
-        <section id="cd-intro" style="overflow-y: auto;"><!--imagem de fundo-->
-                <div class="row" >
-                    <div class="container">
-                        <div class="table-wrapper">
-                            <!--Header-->
-                            <div class="table-title">
-                                <div class="row">
-                                    <div class="col-sm-4">
-                                        <h2 class="text-align:center">Gerenciar <b>Entidade</b></h2>
-                                    </div></div></div> 
-
-                            <!--Table header-->
-                            <form enctype='application/json'>
-                                <div class="form-row" style=" padding: 30px;">
-                                        
-                                        <div class="form-group col-md-4">
-                                            <label for="cnpj">CNPJ</label>
-                                            <input type="text" class="form-control" id="cnpj" readonly>
-                                        </div>
-
-                                        <div class="form-group col-md-8">
-                                            <label for="nome">Nome</label>
-                                            <input type="text" class="form-control" id="nome" maxlength="50">
-                                        </div>
-                                        
-                                    
-                                        <div class="form-group col-md-3">
-                                        <label for="cep">CEP</label>
-                                        <input type="text" class="form-control" id="cep" maxlength="8">
-                                        </div>
-                
-                                        <div class="form-group col-md-6">
-                                        <label for="endereco">Endereço</label>
-                                        <input type="text" class="form-control" id="endereco" maxlength="100">
-                                        </div>
-                        
-                                        <div class="form-group col-md-3">
-                                        <label for="numero">Número</label>
-                                        <input type="text" class="form-control" id="numero" maxlength="10">
-                                        </div>
-                        
-                                        <div class="form-group col-md-5">
-                                        <label for="bairro">Bairro</label>
-                                        <input type="text" class="form-control" id="bairro" maxlength="100">
-                                        </div>
-                        
-                                        <div class="form-group col-md-2">
-                                        <label for="uf">UF</label>                 <!-- Veja Javascript para entender -->
-                                        <select type="text" class="form-control" id="uf" onchange="enabler()"></select>
-                                        </div>
-                        
-                                        <div class="form-group col-md-5">
-                                        <label for="nome_municipio">Nome do Município</label>
-                                        <select type="text" class="form-control" id="nome_municipio">
-                                        </select>
-                                        </div>
-                        
-                                        <div class="form-group col-md-12">
-                                        <label for="obs">Observações</label>
-                                        <textarea type="text" class="form-control" id="obs" maxlength="1000"></textarea>
-                                        </div>
-                
-                                        <div style= "width:100%; text-align: center;">
-                                            <div class="col-sm-12"><button style="background-color:#3a3a3a" type="button" class="btn btn-primary" onclick="enviar()" >Salvar</button>
-                                        </div>
-                                        <div class="p-5" style= "width:65%; text-align: center;">
-                                            <a href="#addLoteModal" class="btn btn-success" data-toggle="modal"><i
-                                                class="material-icons"></i> <span>Lote</span></a>
-                                            <a href="#addContatoModa" class="btn btn-danger" data-toggle="modal"><i
-                                                class="material-icons"></i> <span>Criar Contato</span></a>
-                                            <a href="#" class="btn btn-success" data-toggle="modal"><i
-                                                class="material-icons"></i> <span>Apagar Contato</span></a>
-                                        </div>
-
-                                        
-                                    </div>
-                                </div>
-
-                            
-                            </form>
-                            <br><br><br>
-
-                </section> <!-- cd-intro -->
-		
-            </div>
-        </div>
-    </main>
-                            <!-- ADD Contato HTML -->
-                            <div id="addContatoModal" class="modal fade">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <form>
-                                            <div class="modal-header">
-                                                <h4 class="modal-title">Adicionar Contato</h4>
-                                                <button type="button" class="close" data-dismiss="modal"
-                                                    aria-hidden="true">&times;</button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="form-group">
-                                                    <label>Nome</label>
-                                                    <input type="text" class="form-control" required>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>E-mail</label>
-                                                    <input type="text" class="form-control" required>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Função</label>
-                                                    <input type="text" class="form-control" required>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <input type="button" class="btn btn-danger" data-dismiss="modal" value="Cancelar">
-                                                <input style="background-color:#3a3a3a" type="button" class="btn btn-success" value="Adicionar">
-                                            </div>
-                                        </form>
-                                    </div>
+        <section id="cd-intro" style="overflow-y: auto;">
+            <!--imagem de fundo-->
+            <div class="row">
+                <div class="container">
+                    <div class="table-wrapper">
+                        <!--Header-->
+                        <div class="table-title">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <h2 class="text-align:center">Gerenciar <b>Entidade</b></h2>
                                 </div>
                             </div>
                         </div>
+
+                        <!--Table header-->
+                        <form enctype='application/json'>
+                            <div class="form-row" style=" padding: 30px;">
+
+                                <div class="form-group col-md-4">
+                                    <label for="cnpj">CNPJ</label>
+                                    <input type="text" class="form-control" id="cnpj" readonly>
+                                </div>
+
+                                <div class="form-group col-md-8">
+                                    <label for="nome">Nome</label>
+                                    <input type="text" class="form-control" id="nome" maxlength="50">
+                                </div>
+
+
+                                <div class="form-group col-md-3">
+                                    <label for="cep">CEP</label>
+                                    <input type="text" class="form-control" id="cep" maxlength="8">
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label for="endereco">Endereço</label>
+                                    <input type="text" class="form-control" id="endereco" maxlength="100">
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <label for="numero">Número</label>
+                                    <input type="text" class="form-control" id="numero" maxlength="10">
+                                </div>
+
+                                <div class="form-group col-md-5">
+                                    <label for="bairro">Bairro</label>
+                                    <input type="text" class="form-control" id="bairro" maxlength="100">
+                                </div>
+
+                                <div class="form-group col-md-2">
+                                    <label for="uf">UF</label> <!-- Veja Javascript para entender -->
+                                    <select type="text" class="form-control" id="uf" onchange="enabler()"></select>
+                                </div>
+
+                                <div class="form-group col-md-5">
+                                    <label for="nome_municipio">Nome do Município</label>
+                                    <select type="text" class="form-control" id="nome_municipio">
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-md-12">
+                                    <label for="obs">Observações</label>
+                                    <textarea type="text" class="form-control" id="obs" maxlength="1000"></textarea>
+                                </div>
+
+                                <div style="width:100%; text-align: center;">
+                                    <div class="col-sm-12"><button style="background-color:#3a3a3a" type="button"
+                                            class="btn btn-primary" onclick="enviar()">Salvar</button>
+                                    </div>
+                                    <div class="p-5" style="width:65%; text-align: center;">
+                                        <a href="#" class="btn btn-danger" data-toggle="modal"><i
+                                                class="material-icons"></i> <span>Apagar Contato</span></a>
+                                        <a href="#addContatoModa" class="btn btn-success" data-toggle="modal"><i
+                                                class="material-icons"></i> <span>Criar Contato</span></a>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                        </form>
+                        <br><br><br>
+
+        </section> <!-- cd-intro -->
+
+        </div>
+        </div>
+    </main>
+    <!-- ADD Contato HTML -->
+    <div id="addContatoModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form>
+                    <div class="modal-header">
+                        <h4 class="modal-title">Adicionar Contato</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     </div>
-                    <div class="fixed-bottom" >   
-                        <script height="100%" width="100%" src="./Js/menu.js"></script>	
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Nome</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>E-mail</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Função</label>
+                            <input type="text" class="form-control" required>
+                        </div>
                     </div>
-                    
-                    <script src="./Js/gerenciaEntidade.js"></script>
-                    <script src="./Js/main.js"></script> <!-- Resource jQuery -->
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-danger" data-dismiss="modal" value="Cancelar">
+                        <input style="background-color:#3a3a3a" type="button" class="btn btn-success" value="Adicionar">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    <div class="fixed-bottom">
+        <script height="100%" width="100%" src="./Js/menu.js"></script>
+    </div>
+
+    <script src="./Js/gerenciaEntidade.js"></script>
+    <script src="./Js/main.js"></script> <!-- Resource jQuery -->
 
 </body>
+
 </html>
