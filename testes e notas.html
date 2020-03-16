@@ -43,13 +43,13 @@
   usado até agora:
 
   $(document).ready(function(){
-    $('#data').mask('00/00/0000');
-    $('#cep').mask('00000-000');
-    $('#numero').mask('00000-0000');
-    $('#numero_ddd').mask('(00) 00000-0000');
-    $('#cpf').mask('000.000.000-00', {reverse: true});
-    $('#cnpj').mask('00.000.000/0000-00', {reverse: true});
-    $('.money').mask('000.000.000.000.000,00', {reverse: true});
+    $('.data').mask('00/00/0000');
+    $('.cep').mask('00000-000');
+    $('.numero').mask('00000-0000');
+    $('.numero_ddd').mask('(00) 00000-0000');
+    $('.cpf').mask('000.000.000-00', {reverse: true});
+    $('.cnpj').mask('00.000.000/0000-00', {reverse: true});
+    $('.preco').mask('R$ 000.000.000.000.000,00', {reverse: true});
   });
 -->
 
@@ -123,5 +123,28 @@ function apagarEntidade(valor) {
     });
   });
 }
+
+<!- Delete Modal HTML ->
+<div id="deleteEmployeeModal" class="modal fade">
+  <div class="modal-dialog modal-confirm">
+      <div class="modal-content">
+          <div class="modal-header">
+              <div class="icon-box">
+                  <i class="material-icons">&#xE5CD;</i>
+              </div>
+              <h4 class="modal-title">Esta certo disso?</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          </div>
+          <div class="modal-body">
+              <p>Deseja realmente excluir esses registros? Este processo não pode ser desfeito.
+              </p>
+          </div>
+          <div style="width:100%; text-align: center;" class="modal-footer">
+              <button type="button" class="btn btn-info" data-dismiss="modal">Cancelar</button>
+              <button type="button" class="btn btn-danger" onclick="enviar()">Deletar</button>
+          </div>
+      </div>
+  </div>
+</div>
 
 -->

@@ -43,14 +43,13 @@
                                 <div class="form-row" style=" padding: 30px;">
 
                                     <div class="form-group col-md-4">
-                                        <label for="cod_ibge">Código do IBGE</label>
-                                        <input type="number" class="form-control" id="cod_ibge" readonly>
+                                        <label for="cod_ibge">Cidade</label>
+                                        <input type="text" class="form-control" id="nome_municipio" readonly>
                                     </div>
                                     
                                     <div class="form-group col-md-4">
                                         <label for="cod_lote">Código do Lote:</label>
-                                        <select type="text" class="form-control" id="cod_lote">
-                                        </select>
+                                        <input type="number" class="form-control" id="cod_lote" readonly>
                                         </div>
                                 
                                 
@@ -98,10 +97,11 @@
                             </div>
 
                             <div style="overflow-x:auto;">
+                                <p id="editar"></p>
                                 <table style="margin: 0px auto;" class="table table-striped table-bordered table-hover" id="tabela"></table>
                                 <div class="hint-text" id="mostrando"></div>
                                 <ul class="pagination" id="paginacao"></ul>
-                                <p id="editar"></p>
+                                <p id="editar2"></p>
                             </div>
 
                         </div>
