@@ -423,3 +423,74 @@ function apagarReajuste(valor) {
     });
   });
 }
+
+
+//lote previsão de empenho
+
+
+function previsao() {
+
+  document.getElementById("editar").innerHTML = (`<button onclick="editarReajuste()" class="btn btn-success" >Salvar Alterações em Reajustes</button>`);
+  document.getElementById("editar2").innerHTML = (`<button onclick="editarReajuste()" class="btn btn-success">Salvar Alterações em Reajustes</button>`);
+
+  //função fetch para chamar reajustes da tabela
+  fetch('http://localhost:8080/read/reajuste', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //checar os status de pedidos
+    //console.log(response)
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      console.log(response.statusText);
+
+      //pegar o json que possui a tabela
+      response.json().then(function (json) {
+
+        let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
+        <tr>
+        <th style="width:15%" scope="col">Código de Previsão de Empenho</th>
+        <th style="width:15%" scope="col">Ano de Referência</th>
+        </tr>
+        </thead>`);
+        tabela += (`<tbody>`);
+
+        let j = 0;
+        for (let i = 0; i < json.length; i++) {
+          if (json[i].cod_lote == meuLote) {
+            listaReajuste[j] = json[i];
+            j++;
+          }
+        }
+
+        for (i = 0; i < listaReajuste.length; i++) {
+
+          //salva os valores para edição
+          meuAno[i] = listaReajuste[i]["ano_ref"];
+
+          //cria json para edição
+          edicaoReajuste[i] = {
+            "percentual": "",
+          };
+
+          //captura itens para tabela
+          tabela += (`<tr>`);
+          tabela += (`<td>`);
+          tabela += listaReajuste[i]["ano_ref"];
+          tabela += (`</td><td>`);
+          tabela += (`<input value="` + listaReajuste[i]["percentual"] + `" onchange="mudaReajuste(` + i + `)" id="percentual` + i + `" type="number">`) + "%";
+          tabela += (`</td>`);
+          tabela += (`</tr>`);
+        }
+        tabela += (`</tbody>`);
+        document.getElementById("tabela").innerHTML = tabela;
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
