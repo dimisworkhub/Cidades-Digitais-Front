@@ -456,12 +456,15 @@ function itensLote() {
           tabela += (`<td>`);
           tabela += listaItem[i]["cod_item"] + "." + listaItem[i]["cod_tipo_item"] + " - " + listaItem[i]["descricao"];
           tabela += (`</td> <td>`);
-          tabela += "R$ " + (`<input value="` + listaItem[i]["preco"] + `" onchange="mudaItemLote(` + i + `)" id="preco` + i + `" type="text" class="preco">`);
+          tabela += (`<input value="` + listaItem[i]["preco"] + `" onchange="mudaItemLote(` + i + `)" id="preco` + i + `" type="text" class="preco">`);
           tabela += (`</td>`);
           tabela += (`</tr>`);
         }
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
+
+        //Máscara colocada separadamente para tabela
+        mascara();
       });
     } else {
       erros(response.status);
@@ -470,11 +473,33 @@ function itensLote() {
 }
 
 function editarItemLote() {
+
+  //para organizar a mascara
+  let preco,preco2,preco3,preco4,preco5;
+
   for (i = 0; i < listaItem.length; i++) {
+
+    //ajustar preco:
+    preco = document.getElementById("preco" +i).value;
+    preco2 = preco.split("R$");
+
+    //Verifica se o númera possui uma casa de milhar
+    if((preco2.toString()).length > 8){
+      preco3 = preco2[1].split(",");
+      preco4 = preco3[1].split(".");
+  
+      preco5 = (preco3[0] + preco4[0] + preco4[1])/100;
+    }else{
+      preco4 = preco2[1].split(".");
+  
+      preco5 = (preco4[0] + preco4[1])/100;
+    }
+
+    // console.log(preco5)
 
     //cria json para edição
     edicaoItem[i] = {
-      "preco": parseFloat(document.getElementById("preco" + valor).value),
+      "preco": parseFloat(preco5),
     };
 
     if (edicaoItem[i][preco] != listaItem[i]["preco"]) {
