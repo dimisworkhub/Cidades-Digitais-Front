@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gerência Lote</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap4\css\bootstrap.css"> <!-- CSS bootstrap -->
+    <link rel="stylesheet" href="css/reset.css"> <!-- CSS reset -->
+    <link rel="stylesheet" href="css/style.css">
+    <!--Resource style -->
+    <link rel="stylesheet" href="./css/style2.css">
+    <script src="./Js/modernizr.js"></script> <!-- Modernizr -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-masker/1.2.0/vanilla-masker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.2.6/jquery.inputmask.bundle.min.js"></script>
+</head>
+
+<body>
+    <main id="cd-main-content">
+        <section id="cd-intro" style="overflow-y: auto;">
+            <!--imagem de fundo-->
+            <div class="row">
+                <div class="container">
+                    <div class="table-wrapper">
+                        <!--Header-->
+                        <div class="table-title">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <h2 class="text-align:center">Gerenciar <b>Lote</b></h2>
+                                </div>
+                                <div class="col-sm-8">
+                                    <a href="#" class="btn btn-primary"><i class="material-icons">&#xE863;</i>
+                                        <span>Atualizar Listas</span></a>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Table header-->
+                        <form enctype='application/json'>
+                            <div class="form-row" style=" padding: 30px;">
+
+                                <div class="form-group col-md-4">
+                                    <label for="cod_lote">Código do Lote:</label>
+                                    <input type="number" class="form-control" id="cod_lote" readonly>
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label for="cnpj">Entidade:</label>
+                                    <select type="text" class="form-control" id="cnpj"></select>
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label for="contrato">Contrato:</label>
+                                    <input type="text" class="form-control" id="contrato" maxlength="10">
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label for="dt_inicio_vig">Data de Inicio:</label>
+                                    <input type="text" class="form-control data" id="dt_inicio_vig">
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label for="dt_final_vig">Data Final:</label>
+                                    <input type="text" class="form-control data" id="dt_final_vig">
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label for="dt_reajuste">Data de Reajuste:</label>
+                                    <input type="text" class="form-control data2" id="dt_reajuste">
+                                </div>
+
+
+                                <div style="width:100%; text-align: center;">
+                                    <div class="col-sm-6">
+                                        <button style="background-color:#3a3a3a" type="button" class="btn btn-primary"
+                                            onclick="enviar()">Salvar</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+
+                        <div class="col-md-12">
+                            <div class="form-row">
+                                <button onclick="itensLote()" type="button" style="background-color:#959595"
+                                    class="btn btn-primary">Itens</button>
+                                <button onclick="previsaoSub('1')" type="button"
+                                    style="background-color:#959595" class="btn btn-primary">Previsao Empenho</button>
+                                <button onclick="empenhoSub('2')" type="button" style="background-color:#959595"
+                                    class="btn btn-primary">Empenho</button>
+                                <button onclick="reajuste()" type="button" style="background-color:#959595"
+                                    class="btn btn-primary">Reajuste</button>
+                            </div>
+                        </div>
+
+                        <div class="p-4 form-group" style="overflow-x:auto;">
+                            <p style="width: 100%; text-align: center" id="editar"></p>
+                            <table style="width: 100%; text-align: left"
+                                class="table table-striped table-bordered table-hover" id="tabela"></table>
+                            <div class="hint-text" id="mostrando"></div>
+                            <ul class="pagination" id="paginacao"></ul>
+                            <p style="width: 100%; text-align: center" id="editar2"></p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            </div>
+            <br><br><br>
+        </section> <!-- cd-intro -->
+    </main>
+
+    <!-- Modal Reajuste -->
+    <div id="adicionarReajuste" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Adicionar Reajuste</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body" style="padding-bottom: 3rem;">
+                    <div class="multisteps-form">
+
+                        <!--Formularios-->
+                        <div class="row">
+                            <div class="col-12 col-lg-12 m-auto">
+                                <form class="multisteps-form__form needs-validation" novalidate style="height: 300px;">
+                                    <!--Formulario 1 -->
+                                    <div class="multisteps-form__panel shadow p-4 rounded bg-white js-active"
+                                        data-animation="scaleIn">
+                                        <h3 class="multisteps-form__title">Informações do Reajuste</h3>
+
+                                        <div class="multisteps-form__content">
+                                            <div class="form-row mt-4">
+
+                                                <div class="col-12 col-sm-12">
+                                                    <input class="multisteps-form__input form-control" type="number"
+                                                        name="cod_lote1" value="" id="cod_lote1">
+                                                </div>
+                                                <div class="col-12 col-sm-12 mt-4">
+                                                    <input class="multisteps-form__input form-control" type="number" data-js="numberOnly"
+                                                        min="2014" placeholder="Ano de Referência" name="ano_ref"
+                                                        id="ano_ref">
+                                                </div>
+                                                <div class="col-12 col-sm-12 mt-4">
+                                                    <input class="multisteps-form__input form-control percentual" type="text" placeholder="000.00%"
+                                                        name="percentual" id="percentual">
+                                                </div>
+                                            </div>
+
+                                            <div class="button-row d-flex mt-4">
+                                                <button class="btn btn-primary multi-button ml-auto"
+                                                    onclick="novoReajuste()" type="button">Cadastrar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deletar Reajuste -->
+    <div id="deletarReajuste" class="modal fade">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="icon-box">
+                    <i class="material-icons">&#xE5CD;</i>
+                </div>
+                <h4 class="modal-title">Esta certo disso?</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Deseja realmente excluir esses registros? Este processo não pode ser desfeito.
+                </p>
+            </div>
+            <div style="width:100%; text-align: center;" class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" onclick="apagarReajuste()">Deletar</button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+    <div class="fixed-bottom">
+        <script height="100%" width="100%" src="./Js/menu.js"></script>
+    </div>
+
+</body>
+
+<script src="./Js/gerenciaLote.js"></script>
+<script src="./Js/subtabelas.js"></script>
+
+<script src="./Js/main.js"></script> <!-- Resource jQuery -->
+<script src="./Js/mask.js"></script>
+
+</html>
