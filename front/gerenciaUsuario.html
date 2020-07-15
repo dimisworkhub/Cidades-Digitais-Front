@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gerência Usuários</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap4\css\bootstrap.css"> <!-- CSS bootstrap -->
+    <link rel="stylesheet" href="css/reset.css"> <!-- CSS reset -->
+    <link rel="stylesheet" href="css/style.css">
+    <!--Resource style -->
+    <link rel="stylesheet" href="./css/style2.css">
+    <script src="Js/modernizr.js"></script> <!-- Modernizr -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>
+</head>
+
+<body>
+    <main id="cd-main-content">
+        <section id="cd-intro" style="overflow-y: auto;">
+            <!--imagem de fundo-->
+            <div class="row">
+                <div class="container">
+                    <div class="table-wrapper">
+                        <!--Header-->
+                        <div class="table-title">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <h2 class="text-align:center">Gerenciar <b>Usuário</b></h2>
+                                </div>
+                                <div class="col-sm-8">
+                                    <a href="#" class="btn btn-primary"><i class="material-icons">&#xE863;</i>
+                                        <span>Atualizar Listas</span></a>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Table header-->
+                        <form enctype='application/json'>
+                            <div class="form-row" style=" padding: 30px;">
+
+                                <div class="form-group col-md-2">
+                                    <label for="cod_usuario">Código do Usuário:</label>
+                                    <input type="number" class="form-control" id="cod_usuario" readonly>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label for="nome">Nome:</label>
+                                    <input type="text" class="form-control" id="nome" maxlength="100">
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label for="email">Email:</label>
+                                    <input type="email" class="form-control" id="email" maxlength="45">
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label for="login">Login:</label>
+                                    <input type="text" class="form-control" id="login" maxlength="45">
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label for="senha">Senha:</label>
+                                    <input type="password" class="form-control" id="senha" maxlength="100">
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label for="status">Status:</label>
+                                    <select type="text" class="form-control" id="status">
+                                        <option value="1">Ativo</option>
+                                        <option value="0">Inativo</option>
+                                    </select>
+                                </div>
+
+                                <div style="width:100%; text-align: center;">
+                                    <div class="col-sm-6">
+                                        <button style="background-color:#3a3a3a" type="button" class="btn btn-primary"
+                                            onclick="enviar()">Salvar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <div class="col-md-12">
+                            <div class="form-row">
+                                <button onclick="usuarioModulo()" type="button" style="background-color:#959595"
+                                    class="btn btn-primary">Módulos do Usuário</button>
+                            </div>
+                        </div>
+
+                        <div class="p-4 form-group" style="overflow-x:auto;">
+                            <p style="width: 100%; text-align: center" id="editar"></p>
+                            <table style="width: 100%; text-align: left"
+                                class="table table-striped table-bordered table-hover" id="tabela"></table>
+                            <div class="hint-text" id="mostrando"></div>
+                            <ul class="pagination" id="paginacao"></ul>
+                            <p style="width: 100%; text-align: center" id="editar2"></p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <br><br><br>
+
+        </section>
+        </div>
+    </main>
+    <div class="fixed-bottom">
+        <script height="100%" width="100%" src="./Js/menu.js"></script>
+    </div>
+</body>
+<script src="./Js/gerenciaUsuario.js"></script>
+<script src="./Js/main.js"></script> <!-- Resource jQuery -->
+
+</html>

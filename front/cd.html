@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tabela Cidades Digitais</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap4\css\bootstrap.css"> <!-- CSS bootstrap -->
+    <link rel="stylesheet" href="css/reset.css"> <!-- CSS reset -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="./css/multi.css">
+
+    <!--Resource style -->
+    <link rel="stylesheet" href="./css/style2.css">
+    <script src="./Js/modernizr.js"></script> <!-- Modernizr -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>
+</head>
+
+<body>
+    <main id="cd-main-content">
+        <section id="cd-intro" style="overflow-y: auto;">
+            <!--imagem de fundo-->
+            <div class="row">
+                <div class="container">
+                    <div class="table-wrapper">
+                        <!--Header-->
+                        <div class="table-title">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <h2>Tabela <b>Cidades Digitais</b></h2>
+                                </div>
+                                <div class="col-sm-8">
+                                    <a href="./cd.html" class="btn btn-primary"><i class="material-icons">&#xE863;</i>
+                                        <span> Atualizar Lista </span></a>
+                                    <a href="#addEmployeeModal" class="btn btn-success" onclick="pegarLote()" data-toggle="modal"><i class="material-icons">&#xE147;</i><span>Adicionar</span></a>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Filtro-->
+                        <div class="table-filter">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="show-entries">
+                                        <span>Mostrando</span>
+                                        <select class="form-control" id="quantos" onchange="pagina(0)">
+                                            <option>5</option>
+                                            <option>10</option>
+                                            <option>15</option>
+                                            <option>20</option>
+                                        </select>
+                                        <span>Itens</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-9">
+                                    <button type="button" class="btn btn-primary" onclick="pagina(0)"><i class="fa fa-search"></i></button>
+                                    <div class="filter-group">
+                                        <label>Nome</label>
+                                        <input type="text" class="form-control" id="filtro">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Tabela de Entidade-->
+                        <div style="overflow-x:auto;">
+                            <table class="table table-striped table-bordered table-hover" id="tabela"></table>
+                        </div>
+                        <!--Footer-->
+                        <div class="clearfix">
+                            <div class="hint-text" id="mostrando"></div>
+                            <ul class="pagination" id="paginacao"></ul>
+                        </div>
+                    </div>
+                    <br><br><br>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- ADD Modal HTML -->
+    <div id="addEmployeeModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Adicionar uma Cidade Digital</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="multisteps-form">
+                        <!--progress bar-->
+                        <div class="row">
+                            <div class="col-12 col-lg-12 ml-auto mr-auto mb-4">
+                                <div class="multisteps-form__progress">
+                                    <button class="multisteps-form__progress-btn js-active" type="button"
+                                        title="Cd Info">Informações da Cidade Digital</button>
+                                    <button class="multisteps-form__progress-btn" type="button"
+                                        title="OrdemServico">Ordens de Serviço</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!--form panels-->
+                        <div class="row">
+                            <div class="col-12 col-lg-12 m-auto">
+                                <form class="multisteps-form__form" style="height: 300px;">
+                                    <!--single form panel-->
+                                    <div class="multisteps-form__panel shadow p-4 rounded bg-white js-active"
+                                        data-animation="scaleIn">
+                                        <h3 class="multisteps-form__title">Informações da Cidade Digital</h3>
+
+                                        <div class="multisteps-form__content">
+                                            <div class="form-row mt-4">
+                                                <div class="col-12 col-sm-6 mt-4 mt-sm-0">
+                                                    <select class="multisteps-form__input form-control" name="cod_lote"
+                                                        id="cod_lote" required></select>
+                                                </div>
+                                                <div class="col-12 col-sm-6">
+                                                    <select class="multisteps-form__input form-control" name="uf"
+                                                        id="uf" onclick="enabler()" required></select>
+                                                </div>
+                                                <div class="col-12 col-sm-12 mt-4">
+                                                    <select type="text" class="multisteps-form__input form-control"
+                                                        id="cod_ibge"></select>
+                                                </div>
+                                            </div>
+                                            <div class="button-row d-flex mt-4">
+                                                <button class="btn btn-primary multi-button ml-auto js-btn-next"
+                                                    type="button" title="Next">Próximo</button>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+
+                                    <!--single form panel-->
+                                    <div class="multisteps-form__panel shadow p-4 rounded bg-white"
+                                        data-animation="scaleIn">
+                                        <h3 class="multisteps-form__title">Ordens de Serviço</h3>
+                                        <div class="multisteps-form__content">
+                                            <div class="form-row mt-4">
+                                                <div class="col-12 col-sm-6">
+                                                    <input class="multisteps-form__input form-control" type="text"
+                                                        placeholder="Órdem de Serviço P.E" id="os_pe" />
+                                                </div>
+                                                <div class="col-12 col-sm-6  ">
+                                                    <input class="multisteps-form__input form-control" type="date"
+                                                        placeholder="Data P.E" id="data_pe" />
+                                                </div>
+
+                                                <div class="col-12 col-sm-6 mt-4">
+                                                    <input class="multisteps-form__input form-control" type="text"
+                                                        placeholder="Órdem de Implantação" id="os_imp" />
+                                                </div>
+                                                <div class="col-12 col-sm-6 mt-4">
+                                                    <input class="multisteps-form__input form-control" type="date"
+                                                        placeholder="Data de Implantação" id="data_imp" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="button-row d-flex mt-4">
+                                            <button class="btn btn-primary multi-button ml-auto js-btn-next"
+                                                type="button" onclick="enviar()" title="Next">Cadastrar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Modal HTML -->
+    <div id="deleteEmployeeModal" class="modal fade">
+        <div class="modal-dialog modal-confirm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="icon-box">
+                        <i class="material-icons">&#xE5CD;</i>
+                    </div>
+                    <h4 class="modal-title">Esta certo disso?</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Deseja realmente excluir esses registros? Este processo não pode ser desfeito.</p>
+                </div>
+                <div style="width:100%; text-align: center;" class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger">Deletar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+    </div>
+    <div class="fixed-bottom">
+        <script height="100%" width="100%" src="./Js/menu.js"></script>
+    </div>
+</body>
+<script src="./Js/cd.js"></script>
+<script src="./Js/paginacao.js"></script>
+<script src="./Js/multi.js"></script>
+<script src="./Js/main.js"></script> <!-- Resource jQuery -->
+
+</html>

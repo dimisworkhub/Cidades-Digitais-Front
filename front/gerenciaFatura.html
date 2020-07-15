@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gerência Fatura</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap4\css\bootstrap.css"> <!-- CSS bootstrap -->
+    <link rel="stylesheet" href="css/reset.css"> <!-- CSS reset -->
+    <link rel="stylesheet" href="css/style.css">
+    <!--Resource style -->
+    <link rel="stylesheet" href="./css/style2.css">
+    <script src="./Js/modernizr.js"></script> <!-- Modernizr -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>
+</head>
+
+<body>
+    <main id="cd-main-content">
+        <section id="cd-intro" style="overflow-y: auto;">
+            <!--imagem de fundo-->
+            <div class="row">
+                <div class="container">
+                    <div class="table-wrapper">
+                        <!--Header-->
+                        <div class="table-title">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <h2 class="text-align:center">Gerenciar <b>Fatura</b></h2>
+                                </div>
+                                <div class="col-sm-8">
+                                    <a href="#" class="btn btn-primary"><i class="material-icons">&#xE863;</i> <span>Atualizar Listas</span></a>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Table header-->
+                        <form enctype='application/json'>
+                            <div class="form-row" style=" padding: 30px;">
+
+                                <div class="form-group col-md-3">
+                                    <label for="num_nf">Número da Fatura:</label>
+                                    <input type="text" class="form-control" id="num_nf" readonly></input>
+                                </div>
+
+                                <div class="form-group col-md-5">
+                                    <label for="cod_ibge">Município:</label>
+                                    <input type="text" class="form-control" id="cod_ibge" maxlength="13" readonly></input>
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label for="dt_nf">Data:</label>
+                                    <input type="date" class="form-control" id="dt_nf"></input>
+                                </div>
+
+                                <div style="width:100%; text-align: center;">
+                                    <div class="col-sm-6">
+                                        <button style="background-color:#3a3a3a" type="button" class="btn btn-primary"
+                                            onclick="enviar()">Salvar</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+
+                        <div class="col-md-12">
+                            <div class="form-row">
+                                <button onclick="itensFinanceamento('itensfatura')" type="button" style="background-color:#959595" class="btn btn-primary">Itens</button>
+                                <button onclick="pagamentoSub(meuCodigo)" type="button" style="background-color:#959595" class="btn btn-primary">Pagamento</button>
+                            </div>
+                        </div>
+
+                        <div class="p-4 form-group" style="overflow-x:auto;">
+                            <p style="width: 100%; text-align: center" id="editar"></p>
+                            <table style="width: 100%; text-align: left"
+                                class="table table-striped table-bordered table-hover" id="tabela"></table>
+                            <div class="hint-text" id="mostrando"></div>
+                            <ul class="pagination" id="paginacao"></ul>
+                            <p style="width: 100%; text-align: center" id="editar2"></p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <br><br><br>
+        </section>
+    </main>
+
+    <!-- Modal ItensFatura -->
+    <div id="adicionarItensFatura" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Adicionar Item</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body" style="padding-bottom: 3rem;">
+                    <div class="multisteps-form">
+
+                        <!--Formularios-->
+                        <div class="row">
+                            <div class="col-12 col-lg-12 m-auto">
+                                <form class="multisteps-form__form needs-validation" novalidate style="height: 300px;">
+                                    <!--Formulario 1 -->
+                                    <div class="multisteps-form__panel shadow p-4 rounded bg-white js-active"
+                                        data-animation="scaleIn">
+                                        <h3 class="multisteps-form__title">Informações do Item</h3>
+
+                                        <div class="multisteps-form__content">
+                                            <div class="form-row mt-4">
+
+                                                <div class="col-12 col-sm-6">
+                                                    <select class="multisteps-form__input form-control" name="tipo" id="tipo" onclick="enabler1()"></select>
+                                                </div>
+                                                <div class="col-12 col-sm-6">
+                                                    <select class="multisteps-form__input form-control" name="id_empenho" id="id_empenho" onclick="enabler2()"></select>
+                                                </div>
+                                                <div class="col-12 col-sm-12 mt-4">
+                                                    <select class="multisteps-form__input form-control" name="itens_disponiveis" id="itens_disponiveis" onclick="enabler3()"></select>
+                                                </div>
+                                                <div class="col-12 col-sm-4 mt-4">
+                                                    <label for="quantidade_disponivel">Q. Disponivel:</label>
+                                                    <input class="multisteps-form__input form-control" name="quantidade_disponivel" id="quantidade_disponivel">
+                                                </div>
+                                                <div class="col-12 col-sm-4 mt-4">
+                                                    <label for="quantidade">Quantidade:</label>
+                                                    <input class="multisteps-form__input form-control" type="number" name="quantidade" id="quantidade">
+                                                </div>
+                                                <div class="col-12 col-sm-4 mt-4">
+                                                    <label for="valor">Valor:</label>
+                                                    <input class="multisteps-form__input form-control" type="number" name="valor" id="valor">
+                                                </div>
+                                            </div>
+
+                                            <div class="button-row d-flex mt-4">
+                                                <button class="btn btn-primary multi-button ml-auto"
+                                                    onclick="novoItensFatura()" type="button">Cadastrar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed-bottom">
+        <script height="100%" width="100%" src="./Js/menu.js"></script>
+    </div>
+
+</body>
+<script src="./Js/gerenciaFatura.js"></script>
+<script src="./Js/subtabelas.js"></script>
+<script src="./Js/main.js"></script> <!-- Resource jQuery -->
+
+</html>
