@@ -1,82 +1,14 @@
 //Fazer Tabela
 let listaModulo = [];
-//pega o token do login
-let meuToken = localStorage.getItem("token");
+
+//pega o usuario logado
+let userLogado = localStorage.getItem("logado");
+
 //organizar os modulos
 let userCriado,
   userTotal = [],
   modulo = [],
   valorModulo = [];
-
-//Fazer Usuário
-let info = {
-  "nome": "",
-  "email": "",
-  "login": "",
-  "senha": ""
-};
-
-
-//tratamento de erros
-function erros(value) {
-  if (value == 400) {
-    window.location.replace("./errors/400.html");
-  } else if (value == 401) {
-    window.location.replace("./errors/401.html");
-  } else if (value == 403) {
-    window.location.replace("./errors/403.html");
-  } else if (value == 404) {
-    window.location.replace("./errors/404.html");
-  } else if (value == 409) {
-    alert("Erro: Lote já existente.");
-  } else if (value == 412) {
-    alert("Erro: Informação colocada é incorreta.");
-  } else if (value == 422) {
-    alert("Erro: Formato de informação não aceito.");
-  } else if (value == 500) {
-    window.location.replace("./errors/500.html");
-  } else if (value == 504) {
-    window.location.replace("./errors/504.html");
-  } else {
-    alert("ERRO DESCONHECIDO");
-  }
-}
-
-// função para checar quem está ativo ou inativo
-function selecionarStatus() {
-  let selecao = document.getElementById("status").value;
-  if (selecao == 1) {
-
-  } else if (selecao == 2) {
-
-  } else {
-
-  }
-  paginacao();
-}
-
-
-//sistema de paginação
-let contador = 0;
-let porPagina = 5;
-let totalPaginas = (userTotal.length + (porPagina - 1)) / porPagina;
-
-function antes() {
-  contador--;
-  paginacao();
-}
-
-function depois() {
-  contador++;
-  paginacao();
-}
-
-//garantindo o limite de paginação
-
-function pagina(valor) {
-  contador = valor;
-  paginacao();
-}
 
 function paginacao() {
   porPagina = document.getElementById("quantos").value;
@@ -84,7 +16,7 @@ function paginacao() {
   let fim = (contador + 1) * porPagina;
 
   //função fetch para mandar
-  fetch('http://localhost:8080/read/usuario', {
+  fetch(servidor + 'read/usuario', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -92,14 +24,15 @@ function paginacao() {
   }).then(function (response) {
     //tratamento dos erros
     if (response.status == 200) {
-      console.log(response.statusText);
+      let j = 0;
+      //console.log(response.statusText);
 
       //pegar o json que possui a tabela
       response.json().then(function (json) {
 
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
             <tr>
-            <th scope="col">Cód. Usuario</th>
+            <th scope="col">Código</th>
             <th scope="col">Nome</th>
             <th scope="col">E-mail</th>
             <th scope="col">Login</th>
@@ -107,61 +40,66 @@ function paginacao() {
             <th scope="col">Opções</th>
             </tr>
             </thead>`);
-        tabela += (`<tbody> <tr>`);
+        tabela += (`<tbody>`);
 
-        for (let i = comeco; i < fim && i < json.length; i++) {
-          userTotal[i] = json[i].cod_usuario;
-          tabela += (`<td>`);
-          tabela += json[i]["cod_usuario"];
+        // função para checar quem está ativo ou inativo
+        let selecao = document.getElementById("status").value;
+        
+
+        //para quando o status for inativo
+        let j = 0;
+        let jsonDeStatus = [];
+        for (let i = 0; i < json.length; i++) {
+          if (selecao == 1) {
+            if (json[i]["status"] == 1) {
+              jsonDeStatus[j] = json[i];
+              j++;
+            }
+          }
+          else if (selecao == 2){
+            if (json[i]["status"] == 0) {
+              jsonDeStatus[j] = json[i];
+              j++;
+            }
+          }
+          else{
+            jsonDeStatus = json;
+          }
+        }
+
+        //sistema de filtragem:
+        let filtrado = [];
+        filtrado = filtro(jsonDeStatus,["cod_usuario","nome","email","login","status"]);
+
+        //para edição
+        jsonFinal=filtrado;
+
+        for (let i = comeco; i < fim && i < filtrado.length; i++) {
+          userTotal[i] = filtrado[i];
+          tabela += (`<tr> <td>`);
+          tabela += filtrado[i]["cod_usuario"];
           tabela += (`</td> <td>`);
-          tabela += json[i]["nome"]
+          tabela += filtrado[i]["nome"]
           tabela += (`</td> <td>`);
-          tabela += json[i]["email"]
+          tabela += filtrado[i]["email"]
           tabela += (`</td> <td>`);
-          tabela += json[i]["login"]
+          tabela += filtrado[i]["login"]
           tabela += (`</td> <td>`);
-          tabela += json[i]["status"]
+          tabela += filtrado[i]["status"]
           tabela += (`</td> <td> 
                 <span class="d-flex">
                 <button onclick="editarUsuario(` + i + `)" class="btn btn-success">
                 <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
                 </button>
-                </span> </td>`);
-          tabela += (`</tr> <tr>`);
-        }
-        tabela += (`</tr> </tbody>`);
-        document.getElementById("tabela").innerHTML = tabela;
-
-        totalPaginas = json.length / porPagina;
-        
-        //mostra quanto do total aparece na tela
-        document.getElementById("mostrando").innerHTML = "Mostrando " + (comeco + 1) + " a " + fim + " de " + json.length;
-        if (porPagina > json.length - comeco) {
-          document.getElementById("mostrando").innerHTML = "Mostrando " + (comeco + 1) + " a " + json.length + " de " + json.length;
-        }
-
-        //conta quantas paginas é necessário
-        let paginas = `<li id="anterior" class="page-item" ><a href="#" class="page-link" onclick="antes()">Anterior</a></li>`;
-        if (json.length > porPagina) {
-          for (i = 0; i < totalPaginas; i++) {
-            paginas += `<li class="page-item" id="page` + i + `"><a href="#" onclick="pagina(` + i + `)" class="page-link">` + (i + 1) + `</a></li>`;
+                </span> </td> </tr>`);
+          if (filtrado[i]["login"] == userLogado) {
+            localStorage.setItem("codigoLogado", filtrado[i]["cod_usuario"]);
           }
         }
-        paginas += `<li id="proximo" class="page-item" ><a href="#" class="page-link" onclick="depois()">Próximo</a></li>`;
-        document.getElementById("paginacao").innerHTML = paginas;
+        tabela += (`</tbody>`);
+        document.getElementById("tabela").innerHTML = tabela;
 
-        //limite das paginas
-        if (contador > 0) {
-          document.getElementById("anterior").style.visibility = "visible";
-        } else {
-          document.getElementById("anterior").style.visibility = "hidden";
-        }
-        if (fim<json.length) {
-          document.getElementById("proximo").style.visibility = "visible";
-        } else {
-          document.getElementById("proximo").style.visibility = "hidden";
-        }
-        
+        paginasOrganizadas(filtrado,comeco,fim);
       });
     } else {
       erros(response.status);
@@ -176,7 +114,7 @@ window.onload = function () {
   //Fazer Tabela para Modulos
 
   //função fetch para mandar itens do modulo
-  fetch('http://localhost:8080/read/modulo', {
+  fetch(servidor + 'read/modulo', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -185,7 +123,7 @@ window.onload = function () {
 
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
-      console.log(response.statusText);
+      //console.log(response.statusText);
 
       //pegar o json que possui a tabela
       response.json().then(function (json) {
@@ -203,12 +141,10 @@ window.onload = function () {
                 <th scope="col">Ação</th>
                 </tr>
                 </thead>`);
-        tabelaMod += (`<tbody> <tr>`);
-
-
+        tabelaMod += (`<tbody>`);
 
         for (let i = 0; i < json.length; i++) {
-          tabelaMod += (`<td>
+          tabelaMod += (`<tr> <td>
                 <span class="custom-checkbox">
                 <input class="checking" onclick="modulos(` + i + `)" type="checkbox" id="checkbox` + i + `" name="options[]" value="` + json[i]["cod_modulo"] + `">
                 <label for="checkbox` + i + `"></label>
@@ -222,12 +158,10 @@ window.onload = function () {
           tabelaMod += json[i]["categoria_2"]
           tabelaMod += (`</td> <td>`);
           tabelaMod += json[i]["categoria_3"]
-          tabelaMod += (`</td>`);
-          tabelaMod += (`</tr> <tr>`);
+          tabelaMod += (`</td> </tr>`);
         }
 
-
-        tabelaMod += (`</tr> </tbody>`);
+        tabelaMod += (`</tbody>`);
         document.getElementById("tabelaMod").innerHTML = tabelaMod;
 
         $(document).ready(function () {
@@ -271,12 +205,15 @@ window.onload = function () {
       erros(response.status);
     }
   });
-
 }
 
 function editarUsuario(valor) {
-  localStorage.setItem("cod_usuario", userTotal[valor]);
-  console.log(userTotal[valor])
+  localStorage.setItem("cod_usuario", userTotal[valor].cod_usuario);
+  localStorage.setItem("nome", userTotal[valor].nome);
+  localStorage.setItem("email", userTotal[valor].email);
+  localStorage.setItem("login", userTotal[valor].login);
+  localStorage.setItem("status", userTotal[valor].status);
+  localStorage.setItem("senha", userTotal[valor].senha);
   window.location.href = "./gerenciaUsuario.html";
 }
 
@@ -293,6 +230,14 @@ function modulos(numCod) {
 
 function enviar() {
 
+  //estrutura usada para mandar o JSON no fetch
+  let info = {
+    "nome": "",
+    "email": "",
+    "login": "",
+    "senha": "",
+  };
+
   let a = document.getElementById("nome");
   info.nome = a.value;
   let b = document.getElementById("email");
@@ -306,7 +251,7 @@ function enviar() {
   let corpo = JSON.stringify(info);
 
   //função fetch para mandar
-  fetch('http://localhost:8080/read/usuario/createuser', {
+  fetch(servidor + 'read/usuario/createuser', {
     method: 'POST',
     body: corpo,
     headers: {
@@ -319,7 +264,7 @@ function enviar() {
 
     //tratamento dos erros
     if (response.status == 201) {
-      alert("Usuário criado com sucesso");
+      //alert("Usuário criado com sucesso");
       response.json().then(function (json) {
         userCriado = json.cod_usuario;
       });
@@ -342,14 +287,12 @@ function enviarModulo() {
       j++;
     }
   }
-  console.log(j);
-
 
   //transforma as informações do token em json
   let infoModulo = JSON.stringify(modulo);
 
   //função fetch para mandar
-  fetch('http://localhost:8080/read/usuario/' + 1 + '/modulo', {
+  fetch(servidor + 'read/usuario/' + 1 + '/modulo', {
     method: 'POST',
     body: infoModulo,
     headers: {
@@ -363,12 +306,9 @@ function enviarModulo() {
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
       alert("Módulos inseridos com sucesso");
-      window.location.reload();
+      location.reload();
     } else {
-      //erros(response.status);
+      erros(response.status);
     }
-    return response.json().then(function (json) {
-      console.log(json);
-    });
   });
 }

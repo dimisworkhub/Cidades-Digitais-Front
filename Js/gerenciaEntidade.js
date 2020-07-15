@@ -1,64 +1,18 @@
-//pega o token do login
-let meuToken = localStorage.getItem("token");
-
 //pega o CNPJ escolhido anteriormente
 let meuCNPJ = localStorage.getItem("cnpj");
-let cidades=[];
+let meuNome = localStorage.getItem("nome");
+let meuEndereco = localStorage.getItem("endereco");
+let meuNumero = localStorage.getItem("numero");
+let meuBairro = localStorage.getItem("bairro");
+let meuCep = localStorage.getItem("cep");
+let meuMunicipio = localStorage.getItem("nome_municipio");
+let meuObs = localStorage.getItem("observacao");
+let cidades = [];
 
-//tratamento de erros
-function erros(value) {
-  if (value == 400) {
-    window.location.replace("./errors/400.html");
-  } else if (value == 401) {
-    window.location.replace("./errors/401.html");
-  } else if (value == 403) {
-    window.location.replace("./errors/403.html");
-  } else if (value == 404) {
-    window.location.replace("./errors/404.html");
-  } else if (value == 409) {
-    alert("Erro: Lote já existente.");
-  } else if (value == 412) {
-    alert("Erro: Informação colocada é incorreta.");
-  } else if (value == 422) {
-    alert("Erro: Formato de informação não aceito.");
-  } else if (value == 500) {
-    window.location.replace("./errors/500.html");
-  } else if (value == 504) {
-    window.location.replace("./errors/504.html");
-  } else {
-    alert("ERRO DESCONHECIDO");
-  }
-}
-
-
-//JSON usado para mandar as informações no fetch
-let info = {
-  "cnpj": " ",
-  "nome": " ",
-  "endereco": " ",
-  "numero": " ",
-  "bairro": " ",
-  "cep": " ",
-  "nome_municipio": " ",
-  "uf": " ",
-  "observacao": " "
-};
-
-function enabler(){
-  let i,y = [];
-  let ufNovo = document.getElementById("uf");
-  info.uf = ufNovo.value;
-  for (i = 0; i < cidades.length; i++) {
-    if (cidades[i].uf == info.uf) {
-      y[i] = "<option>" + cidades[i].nome_municipio + "</option>"
-    }
-  }
-  document.getElementById("nome_municipio").innerHTML = y;
-}
 
 window.onload = function () {
 
-  fetch('http://localhost:8080/read/municipio', {
+  fetch(servidor + 'read/municipio', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -69,7 +23,7 @@ window.onload = function () {
     if (response.status == 200) {
       return response.json().then(function (json) {
         //pegando valores para usar em municipios
-        cidades=json;
+        cidades = json;
         //cria variaveis
         let i, j = 0;
         let x = [],
@@ -87,44 +41,26 @@ window.onload = function () {
         for (i = 0; i < j; i++) {
           x[i] += "<option>" + valorFinalUF[i] + "</option>";
         }
-        x.sort();
+        
         document.getElementById("uf").innerHTML = x;
+
         let y = [];
         for (i = 0; i < json.length; i++) {
           y[i] = "<option>" + json[i].nome_municipio + "</option>"
         }
-        y.sort();
+        
         document.getElementById("nome_municipio").innerHTML = y;
 
         //captura os elementos anteriores para visualizar na edição
-        let a = document.getElementById("cnpj");
-        a.value = localStorage.getItem("cnpj");
-        let b = document.getElementById("nome");
-        b.value = localStorage.getItem("nome");
-        let c = document.getElementById("endereco");
-        c.value = localStorage.getItem("endereco");
-        let d = document.getElementById("numero");
-        d.value = localStorage.getItem("numero");
-        let e = document.getElementById("bairro");
-        e.value = localStorage.getItem("bairro");
-        let f = document.getElementById("cep");
-        f.value = localStorage.getItem("cep");
-        let h = document.getElementById("uf");
-        h.value = localStorage.getItem("uf");
-        enabler();
-        let g = document.getElementById("nome_municipio");
-        g.value = localStorage.getItem("nome_municipio");
-        let k = document.getElementById("obs");
-        k.value = localStorage.getItem("observacao");
-        
-        //garantindo que os campos não alterados não sejam nulos
-        info.nome = b.value;
-        info.endereco = c.value;
-        info.numero = d.value;
-        info.bairro = e.value;
-        info.cep = f.value;
-        info.nome_municipio = g.value;
-        info.observacao = k.value;
+        document.getElementById("cnpj").value = localStorage.getItem("cnpj");
+        document.getElementById("nome").value = localStorage.getItem("nome");
+        document.getElementById("endereco").value = localStorage.getItem("endereco");
+        document.getElementById("numero").value = localStorage.getItem("numero");
+        document.getElementById("bairro").value = localStorage.getItem("bairro");
+        document.getElementById("cep").value = localStorage.getItem("cep");
+        document.getElementById("uf").value = localStorage.getItem("uf");
+        document.getElementById("nome_municipio").value = localStorage.getItem("nome_municipio");
+        document.getElementById("observacao").value = localStorage.getItem("observacao");
       });
     } else {
       erros(response.status);
@@ -132,28 +68,53 @@ window.onload = function () {
   });
 }
 
-function enviar() {
+function enabler() {
+  let uf1 = document.getElementById("uf").value;
+  document.getElementById("nome_municipio").disabled = false;
+  let i, y = [];
+  for (i = 0; i < cidades.length; i++) {
+    if (cidades[i].uf == uf1) {
+      y[i] = "<option>" + cidades[i].nome_municipio + "</option>"
+    }
+  }
   
-  info.cnpj = localStorage.getItem("cnpj");
-  let nome1 = document.getElementById("nome");
-  info.nome = nome1.value;
-  let endereco1 = document.getElementById("endereco");
-  info.endereco = endereco1.value;
-  let numero1 = document.getElementById("numero");
-  info.numero = numero1.value;
-  let bairro1 = document.getElementById("bairro");
-  info.bairro = bairro1.value;
-  let cep1 = document.getElementById("cep");
-  info.cep = cep1.value;
-  let nome_municipio1 = document.getElementById("nome_municipio");
-  info.nome_municipio = nome_municipio1.value;
-  let obs1 = document.getElementById("obs");
-  info.observacao = obs1.value;
+  document.getElementById("nome_municipio").innerHTML = y;
+}
+
+function enviar() {
+
+  //estrutura para o JSON usado no fetch
+  let info = {
+    "nome": "",
+    "endereco": "",
+    "numero": "",
+    "bairro": "",
+    "cep": "",
+    "nome_municipio": "",
+    "observacao": "",
+  };
+
+  let a = document.getElementById("nome").value;
+  let b = document.getElementById("endereco").value;
+  let c = document.getElementById("numero").value;
+  let d = document.getElementById("bairro").value;
+  let e = document.getElementById("cep").value;
+  let f = document.getElementById("nome_municipio").value;
+  let g = document.getElementById("observacao").value;
+
+  info.nome = a.value;
+  info.endereco = b.value;
+  info.numero = c.value;
+  info.bairro = d.value;
+  info.cep = e.value;
+  info.nome_municipio = f.value;
+  info.observacao = g.value;
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
+  console.log(corpo);
   //função fetch para mandar
-  fetch('http://localhost:8080/read/entidade/' + meuCNPJ, {
+  fetch(servidor + 'read/entidade/' + meuCNPJ, {
     method: 'PUT',
     body: corpo,
     headers: {

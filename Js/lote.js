@@ -1,75 +1,5 @@
-
-
 //capturar chave primaria
-let loteTotal = [];
-
-//pega o token do login
-let meuToken = localStorage.getItem("token");
-
-
-//tratamento de erros
-function erros(value) {
-  if (value == 400) {
-    window.location.replace("./errors/400.html");
-  } else if (value == 401) {
-    window.location.replace("./errors/401.html");
-  } else if (value == 403) {
-    window.location.replace("./errors/403.html");
-  } else if (value == 404) {
-    window.location.replace("./errors/404.html");
-  } else if (value == 409) {
-    alert("Erro: Lote já existente.");
-  } else if (value == 412) {
-    alert("Erro: Informação colocada é incorreta.");
-  } else if (value == 422) {
-    alert("Erro: Formato de informação não aceito.");
-  } else if (value == 500) {
-    window.location.replace("./errors/500.html");
-  } else if (value == 504) {
-    window.location.replace("./errors/504.html");
-  } else {
-    alert("ERRO DESCONHECIDO");
-  }
-}
-
-
-//Fazer Lote
-let info = {
-  "cod_lote": "",
-  "cnpj": "",
-  "contrato": "",
-  "dt_inicio_vig": "",
-  "dt_final_vig": "",
-  "dt_reajuste": ""
-};
-
-
-
-
-
-
-//sistema de paginação
-let contador = 0;
-let porPagina = 5;
-let totalPaginas;
-
-
-function antes() {
-  contador--;
-  paginacao();
-}
-
-function depois() {
-  contador++;
-  paginacao();
-}
-
-//garantindo o limite de paginação
-
-function pagina(valor) {
-  contador = valor;
-  paginacao();
-}
+let jsonFinal = [];
 
 function paginacao() {
   porPagina = document.getElementById("quantos").value;
@@ -77,7 +7,7 @@ function paginacao() {
   let fim = (contador + 1) * porPagina;
 
   //função fetch para chamar itens da tabela
-  fetch('http://localhost:8080/read/lote', {
+  fetch(servidor + 'read/lote', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -88,98 +18,85 @@ function paginacao() {
     if (response.status == 200) {
       console.log(response.statusText);
       //pegar o json que possui a tabela
-        response.json().then(function (json) {
+      response.json().then(function (json) {
 
-          loteTotal = json;
-          totalPaginas = json.length / porPagina;
-          let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
-              <tr>
-              <th scope="col">Lote</th>
-              <th scope="col">Entidade - CNPJ</th>
-              <th scope="col">Contrato</th>
-              <th scope="col">Data de Inicio</th>
-              <th scope="col">Data Final</th>
-              <th scope="col">Data de Reajuste</th>
-              <th scope="col">Opções</th>
-              </tr>
-              </thead>`);
-          tabela += (`<tbody> <tr>`);
-          
-          for (let i = comeco; i < fim && i < json.length; i++) {
-            tabela += (`<td>`);
-            tabela += json[i]["cod_lote"];
-            tabela += (`</td> <td>`);
-            tabela += json[i]["nome"] + " - " + json[i]["cnpj"];
-            tabela += (`</td> <td>`);
-            tabela += json[i]["contrato"];
-            tabela += (`</td> <td>`);
+        //para ser usado no campo abaixo
+        mascara();
 
-            let data1 = new Date(json[i]["dt_inicio_vig"]);
-            let dataf1 = String(data1.getDate()).padStart(2, '0') + '/' + String(data1.getMonth()+1).padStart(2, '0') + '/' + String(data1.getFullYear()).padStart(4, '0');
-            tabela += dataf1;
-            tabela += (`</td> <td>`);
+        let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
+            <tr>
+            <th style="width:10%" scope="col">Lote</th>
+            <th style="width:20%" scope="col">Entidade - CNPJ</th>
+            <th style="width:15%" scope="col">Contrato</th>
+            <th style="width:15%" scope="col">Data de Inicio</th>
+            <th style="width:15%" scope="col">Data Final</th>
+            <th style="width:15%" scope="col">Data de Reajuste</th>
+            <th style="width:10%" scope="col">Opções</th>
+            </tr>
+            </thead>`);
+        tabela += (`<tbody>`);
 
-            let data2 = new Date(json[i]["dt_final_vig"]);
-            let dataf2 = String(data2.getDate()).padStart(2, '0') + '/' + String(data2.getMonth()+1).padStart(2, '0') + '/' + String(data2.getFullYear()).padStart(4, '0');
-            tabela += dataf2;
-            tabela += (`</td> <td>`);
+        //sistema de filtragem:
+        let filtrado = [];
+        filtrado = filtro(json,["cnpj","nome","endereco","bairro","cep","uf","nome_municipio","observacao"]);
 
-            let data3 = new Date(json[i]["dt_reajuste"]);
-            let dataf3 = String(data3.getDate()).padStart(2, '0') + '/' + String(data3.getMonth()+1).padStart(2, '0') + '/' + String(data3.getFullYear()).padStart(4, '0');
-            tabela += dataf3;
+        //para edição
+        jsonFinal=filtrado;
 
-            tabela += (`</td> <td> 
-                    <span class="d-flex">
-                    <button onclick="editarLote(` + i + `)" class="btn btn-success">
-                    <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
-                    </button>
-                    </td>`);
-            tabela += (`</tr> <tr>`);
-          }
+        for (let i = comeco; i < fim && i < filtrado.length; i++) {
+          tabela += (`<tr><td>`);
+          tabela += filtrado[i]["cod_lote"];
+          tabela += (`</td> <td>`);
+          tabela += filtrado[i]["nome"] + " - " + filtrado[i]["cnpj"];
+          tabela += (`</td> <td>`);
+          tabela += filtrado[i]["contrato"];
+          tabela += (`</td> <td class="data">`);
 
-          tabela += (`</tr> </tbody>`);
-          document.getElementById("tabela").innerHTML = tabela;
+          //organizado junto à mascara
+          //mesma lógica de gerenciaLote
 
-          //mostra quanto do total aparece na tela
-          document.getElementById("mostrando").innerHTML = "Mostrando " + (comeco + 1) + " a " + fim + " de " + json.length;
-          if (porPagina > json.length - comeco) {
-            document.getElementById("mostrando").innerHTML = "Mostrando " + (comeco + 1) + " a " + json.length + " de " + json.length;
-          }
+          let data1 = filtrado[i]["dt_inicio_vig"];
+          let dataSeparada1 = data1.split("-");
+          let dataEspecial1 = dataSeparada1[2].split("T");
 
+          tabela += dataEspecial1[0] + dataSeparada1[1] + dataSeparada1[0];
+          tabela += (`</td> <td class="data">`);
 
-          //conta quantas paginas é necessário
-          let paginas = `<li id="anterior" class="page-item" ><a href="#" class="page-link" onclick="antes()">Anterior</a></li>`;
-          if (json.length > porPagina) {
-            for (i = 0; i < totalPaginas; i++) {
-              paginas += `<li class="page-item" id="page` + i + `"><a href="#" onclick="pagina(` + i + `)" class="page-link">` + (i + 1) + `</a></li>`;
-            }
-          }
-          paginas += `<li id="proximo" class="page-item" ><a href="#" class="page-link" onclick="depois()">Próximo</a></li>`;
-          document.getElementById("paginacao").innerHTML = paginas;
+          let data2 = filtrado[i]["dt_final_vig"];
+          let dataSeparada2 = data2.split("-");
+          let dataEspecial2 = dataSeparada2[2].split("T");
 
-          //limite das paginas
-          if (contador > 0) {
-            document.getElementById("anterior").style.visibility = "visible";
-          } else {
-            document.getElementById("anterior").style.visibility = "hidden";
-          }
-          if (fim<json.length) {
-            document.getElementById("proximo").style.visibility = "visible";
-          } else {
-            document.getElementById("proximo").style.visibility = "hidden";
-          }
+          tabela += dataEspecial2[0] + dataSeparada2[1] + dataSeparada2[0];
+          tabela += (`</td> <td class="data2">`);
 
-       });
+          let data3 = filtrado[i]["dt_reajuste"];
+          let dataSeparada3 = data3.split("-");
+          let dataEspecial3 = dataSeparada3[2].split("T");
+
+          tabela += dataEspecial3[0] + dataSeparada3[1];
+
+          tabela += (`</td><td>
+                  <span class="d-flex">
+                  <button onclick="editarLote(` + i + `)" class="btn btn-success">
+                  <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
+                  </button>
+                  </td></tr>`);
+        }
+        tabela += (`</tbody>`);
+        document.getElementById("tabela").innerHTML = tabela;
+
+        paginasOrganizadas(filtrado,comeco,fim);
+      });
     } else {
       erros(response.status);
     }
   });
 }
 
-window.onload = function () {
-  this.paginacao();
+
+function pegarCNPJ() {
   //preenche os CNPJs
-  fetch('http://localhost:8080/read/entidade', {
+  fetch(servidor + 'read/entidade', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -196,8 +113,9 @@ window.onload = function () {
         for (i = 0; i < json.length; i++) {
           x[i + 1] += "<option>" + json[i].cnpj + "</option>";
         }
-        x.sort();
+        
         document.getElementById("cnpj").innerHTML = x;
+        paginacao();
       });
     } else {
       erros(response.status);
@@ -205,25 +123,27 @@ window.onload = function () {
   });
 }
 
+
+window.onload = function () {
+  pegarCNPJ();
+}
+
 function enviar() {
 
-  let a = document.getElementById("cod_lote");
-  info.cod_lote = parseFloat(a.value);
-  let b = document.getElementById("cnpj");
-  info.cnpj = b.value;
-  let c = document.getElementById("contrato");
-  info.contrato = c.value;
-  let d = document.getElementById("dt_inicio_vig");
-  info.dt_inicio_vig = d.value;
-  let e = document.getElementById("dt_final_vig");
-  info.dt_final_vig = e.value;
-  let f = document.getElementById("dt_reajuste");
-  info.dt_reajuste = f.value;
+  //estrutura usada para mandar o JSON no fetch
+  let info = {
+    "cod_lote": parseFloat(document.getElementById("cod_lote").value),
+    "cnpj": document.getElementById("cnpj").value,
+    "contrato": document.getElementById("contrato").value,
+    "dt_inicio_vig": document.getElementById("dt_inicio_vig").value,
+    "dt_final_vig": document.getElementById("dt_final_vig").value,
+    "dt_reajuste": document.getElementById("dt_reajuste").value,
+  };
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
   //função fetch para mandar
-  fetch('http://localhost:8080/read/lote', {
+  fetch(servidor + 'read/lote', {
     method: 'POST',
     body: corpo,
     headers: {
@@ -236,29 +156,20 @@ function enviar() {
 
     //tratamento dos erros
     if (response.status == 201) {
-      return response.json().then(function (json) {
-        //console.log(json);
-        window.location.replace("./lote.html");
-      });
+      location.reload();
     } else {
       erros(response.status);
     }
   });
 }
 
-document.getElementById("cod_lote").oninput = function () {
-  if (this.value.length > 0) {
-    this.value = this.value.slice(0, 9);
-  }
-}
-
-//leva para o editor da lote selecionada
+//leva para o editor do campo selecionado
 function editarLote(valor) {
-  localStorage.setItem("cod_lote", loteTotal[valor].cod_lote);
-  localStorage.setItem("cnpj", loteTotal[valor].cnpj);
-  localStorage.setItem("contrato", loteTotal[valor].contrato);
-  localStorage.setItem("dt_inicio_vig", loteTotal[valor].dt_inicio_vig);
-  localStorage.setItem("dt_final_vig", loteTotal[valor].dt_final_vig);
-  localStorage.setItem("dt_reajuste", loteTotal[valor].dt_reajuste);
+  localStorage.setItem("cod_lote", jsonFinal[valor].cod_lote);
+  localStorage.setItem("cnpj", jsonFinal[valor].cnpj);
+  localStorage.setItem("contrato", jsonFinal[valor].contrato);
+  localStorage.setItem("dt_inicio_vig", jsonFinal[valor].dt_inicio_vig);
+  localStorage.setItem("dt_final_vig", jsonFinal[valor].dt_final_vig);
+  localStorage.setItem("dt_reajuste", jsonFinal[valor].dt_reajuste);
   window.location.href = "./gerenciaLote.html";
 }
