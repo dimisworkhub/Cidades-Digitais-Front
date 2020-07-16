@@ -117,7 +117,9 @@ func (empenho *Empenho) FindEmpenhoCodPrevisaoEmpenho(db *gorm.DB, codPrevisaoEm
 	allEmpenho := []Empenho{}
 
 	err := db.Debug().Table("empenho").
-		Select("empenho.*").
+		Select("empenho.*, previsao_empenho.cod_previsao_empenho, natureza_despesa.descricao").
+		Joins("JOIN previsao_empenho ON empenho.cod_previsao_empenho = previsao_empenho.cod_previsao_empenho").
+		Joins("JOIN natureza_despesa ON previsao_empenho.cod_natureza_despesa = natureza_despesa.cod_natureza_despesa").
 		Where("empenho.cod_previsao_empenho = ?", codPrevisaoEmpenho).
 		Order("empenho.id_empenho").
 		Scan(&allEmpenho).Error
