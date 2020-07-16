@@ -94,10 +94,12 @@ function itens() {
 
     //tratamento dos erros
     if (response.status == 200) {
-      console.log(response.statusText);
+      //console.log(response.statusText);
 
       //pegar o json que possui a tabela
       response.json().then(function (json) {
+
+        //console.log(json);
 
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
         <tr>

@@ -19,6 +19,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.2.6/jquery.inputmask.bundle.min.js"></script>
 </head>
 
 <body>
@@ -102,20 +103,17 @@
 
                         <!-- Esta parte por algum motivo inverte o alinhamento do começo. Precisa de separação por ser muito grande para uma linha. -->
 
-                        <div class="p-4 form-group col-sm-10">
-                            <button onclick="acompanhamento()" type="button" style="background-color:#959595" class="btn btn-primary">Acompanhamento</button>
-                            <button onclick="processos()" type="button" style="background-color:#959595" class="btn btn-primary">Processos</button>
-                            <button onclick="contatos()" type="button" style="background-color:#959595" class="btn btn-primary">Contatos</button>
-                            <button onclick="glosa()" type="button" style="background-color:#959595" class="btn btn-primary">Glosa</button>
-                            <button onclick="faturado()" type="button" style="background-color:#959595" class="btn btn-primary">Faturado</button>
-                            <button onclick="pagamento()" type="button" style="background-color:#959595" class="btn btn-primary">Pagamento</button>
-                        </div>
-
                         <div class="col-md-12">
                             <div class="form-row">
                                 <button onclick="itens()" type="button" style="background-color:#959595" class="btn btn-primary">Itens</button>
-                                <button onclick="previsaoSub()" type="button" style="background-color:#959595" class="btn btn-primary">Previsão de Empenho</button>
-                                <button onclick="empenho()" type="button" style="background-color:#959595" class="btn btn-primary">Empenho</button>
+                                <button onclick="previsaoSub('3')" type="button" style="background-color:#959595" class="btn btn-primary">Pr. Empenho</button>
+                                <button onclick="empenhoSub('4')" type="button" style="background-color:#959595" class="btn btn-primary">Empenho</button>
+                                <button onclick="faturaSub()" type="button" style="background-color:#959595" class="btn btn-primary">Fatura</button>
+                                <button onclick="pagamento()" type="button" style="background-color:#959595" class="btn btn-primary">Pagamento</button>
+                                <button onclick="acompanhamento()" type="button" style="background-color:#959595" class="btn btn-primary">Acomp.</button>
+                                <button onclick="processos()" type="button" style="background-color:#959595" class="btn btn-primary">Processos</button>
+                                <button onclick="contatos()" type="button" style="background-color:#959595" class="btn btn-primary">Contatos</button>
+                                <button onclick="glosa()" type="button" style="background-color:#959595" class="btn btn-primary">Glosa</button>
                                 <button onclick="ponto()" type="button" style="background-color:#959595" class="btn btn-primary">Ponto</button>
                             </div>
                         </div>
