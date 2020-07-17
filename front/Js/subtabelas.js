@@ -39,7 +39,7 @@ function previsaoSub(valorCodigo) {
         let j = 0;
         for (let i = 0; i < json.length; i++) {
 
-          //valorCodigo define se é no html de Lote (1) ou de Cidades Digitais (2)
+          //valorCodigo define se é no html de Lote (1), de Cidades Digitais (2) ou de Entidade (3)
           if(valorCodigo=='1'){
             if (meuCodigo == json[i]["cod_lote"]) {
               listaFinal[j] = json[i];
@@ -68,10 +68,16 @@ function previsaoSub(valorCodigo) {
           else{
             tabela += "Reajuste";
           }
-          tabela += (`</td><td>`);
-          let data1 = new Date(listaFinal[i]["data"]);
-          let dataFinal1 = String(data1.getDate()).padStart(2, '0') + "/" + String(data1.getMonth() + 1).padStart(2, '0') + "/" + String(data1.getFullYear()).padStart(4, '0');
-          tabela += dataFinal1;
+          tabela += (`</td> <td class="data">`);
+          let data = listaFinal[i]["data"];
+          let dataSeparada = data.split("-");
+          let dataEspecial = dataSeparada[2].split("T");
+
+          $(document).ready(function(){
+            $('.data').mask('00/00/0000');
+          });
+
+          tabela += dataEspecial[0] + dataSeparada[1] + dataSeparada[0];
           tabela += (`</td><td>`);
           tabela += listaFinal[i]["ano_referencia"];
           tabela += (`</td>`);
@@ -103,7 +109,7 @@ function empenhoSub(valorCodigo) {
   }
 
   //caso não seja em previsão
-  else if(valorCodigo=='2' || valorCodigo=='3'){
+  else if(valorCodigo=='2' || valorCodigo=='3' || valorCodigo=='4'){
     caminhoEmpenho = 'read/empenho';
   }
 
@@ -134,7 +140,7 @@ function empenhoSub(valorCodigo) {
         }
 
         //caso não seja em previsão
-        else if(valorCodigo=='2' || valorCodigo=='3'){
+        else if(valorCodigo=='2' || valorCodigo=='3' || valorCodigo=='4'){
           tabela += (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
           <th style="width:20%" scope="col">Código de Empenho</th>
@@ -193,10 +199,16 @@ function empenhoSub(valorCodigo) {
             tabela += (`</td>`);
           }
 
-          tabela += (`<td>`);
-          let data1 = new Date(listaFinal[i]["data"]);
-          let dataFinal1 = String(data1.getDate()).padStart(2, '0') + "/" + String(data1.getMonth() + 1).padStart(2, '0') + "/" + String(data1.getFullYear()).padStart(4, '0');
-          tabela += dataFinal1;
+          tabela += (`<td class="data">`);
+          let data = listaFinal[i]["data"];
+          let dataSeparada = data.split("-");
+          let dataEspecial = dataSeparada[2].split("T");
+
+          $(document).ready(function(){
+            $('.data').mask('00/00/0000');
+          });
+
+          tabela += dataEspecial[0] + dataSeparada[1] + dataSeparada[0];
           tabela += (`</td>`);
           tabela += (`</tr>`);
         }
@@ -268,11 +280,19 @@ function faturaSub(valorCodigo) {
           tabela += listaFinal[i]["num_nf"];
           tabela += (`</td><td>`);
           tabela += listaFinal[i]["nome_municipio"] + " - " + listaFinal[i]["uf"] + " - " + listaFinal[i]["cod_ibge"];
-          tabela += (`</td><td>`);
-          let data1 = new Date(listaFinal[i]["dt_nf"]);
-          let dataFinal1 = String(data1.getDate()).padStart(2, '0') + "/" + String(data1.getMonth() + 1).padStart(2, '0') + "/" + String(data1.getFullYear()).padStart(4, '0');
-          tabela += dataFinal1;
+
+          tabela += (`</td> <td class="data">`);
+          let data = listaFinal[i]["dt_nf"];
+          let dataSeparada = data.split("-");
+          let dataEspecial = dataSeparada[2].split("T");
+
+          $(document).ready(function(){
+            $('.data').mask('00/00/0000');
+          });
+
+          tabela += dataEspecial[0] + dataSeparada[1] + dataSeparada[0];
           tabela += (`</td>`);
+
           tabela += (`</tr>`);
         }
         tabela += (`</tbody>`);
@@ -495,7 +515,7 @@ function editarItemLote() {
       preco5 = (preco4[0] + preco4[1])/100;
     }
 
-    // console.log(preco5)
+    console.log(preco5)
 
     //cria json para edição
     edicaoItem[i] = {
