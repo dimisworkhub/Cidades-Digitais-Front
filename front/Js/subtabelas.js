@@ -495,21 +495,25 @@ function editarItemLote() {
 
     //ajustar preco:
     preco = document.getElementById("preco" +i).value;
-    preco2 = preco.split("R$");
+    preco2 = preco;
+
+    // console.log(preco2.toString().length)
 
     //Verifica se o númera possui uma casa de milhar
-    if((preco2.toString()).length > 8){
-      preco3 = preco2[1].split(",");
-      preco4 = preco3[1].split(".");
+    if((preco2.toString()).length > 6){
+      preco3 = preco2.split(".");
+      preco4 = preco3[1].split(",");
   
       preco5 = (preco3[0] + preco4[0] + preco4[1])/100;
+      
+      
     }else{
-      preco4 = preco2[1].split(".");
-  
+      preco4 = preco2.split(",");
+      
       preco5 = (preco4[0] + preco4[1])/100;
     }
-
-    console.log(preco5)
+    
+    // console.log(preco5)
 
     //cria json para edição
     edicaoItem[i] = {
