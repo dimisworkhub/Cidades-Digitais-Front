@@ -14,10 +14,12 @@ window.onload = function () {
   document.getElementById("cod_ibge").value = localStorage.getItem("nome_municipio") + " - " + localStorage.getItem("uf") + " - " + localStorage.getItem("cod_ibge");
 
   //estes campos precisam de adaptações para serem aceitos com o padrão yyyy-MM-dd
-  let data1 = new Date(localStorage.getItem("dt_nf"));
-  let dataFinal1 = String(data1.getFullYear()).padStart(4, '0') + "-" + String(data1.getMonth() + 1).padStart(2, '0') + "-" + String(data1.getDate()).padStart(2, '0');
-  document.getElementById("dt_nf").value = dataFinal1;
+  let data = localStorage.getItem("dt_nf");
+  let dataSeparada = data.split("-");
+  let dataEspecial = dataSeparada[2].split("T");
+  document.getElementById("data").value = dataEspecial[0]+dataSeparada[1]+dataSeparada[0];
 
+  mascara();
   adicionarItensFatura();
 }
 

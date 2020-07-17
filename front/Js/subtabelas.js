@@ -39,7 +39,7 @@ function previsaoSub(valorCodigo) {
         let j = 0;
         for (let i = 0; i < json.length; i++) {
 
-          //valorCodigo define se é no html de Lote (1), de Cidades Digitais (2) ou de Entidade (3)
+          //valorCodigo define se é no html de Lote (1), de Cidades Digitais (2)
           if(valorCodigo=='1'){
             if (meuCodigo == json[i]["cod_lote"]) {
               listaFinal[j] = json[i];
@@ -73,9 +73,7 @@ function previsaoSub(valorCodigo) {
           let dataSeparada = data.split("-");
           let dataEspecial = dataSeparada[2].split("T");
 
-          $(document).ready(function(){
-            $('.data').mask('00/00/0000');
-          });
+          mascara();
 
           tabela += dataEspecial[0] + dataSeparada[1] + dataSeparada[0];
           tabela += (`</td><td>`);
@@ -101,7 +99,7 @@ function empenhoSub(valorCodigo) {
   document.getElementById("editar").innerHTML = (`<br>`);
   document.getElementById("editar2").innerHTML = (`<br>`);
 
-  //filtro de subtabelas pelo codigo escolhido (1 para previsao, 2 para lote, 3 para CD)
+  //filtro de subtabelas pelo codigo escolhido (1 para previsao, 2 para lote)
   let caminhoEmpenho;
 
   if(valorCodigo=='1'){
@@ -109,7 +107,7 @@ function empenhoSub(valorCodigo) {
   }
 
   //caso não seja em previsão
-  else if(valorCodigo=='2' || valorCodigo=='3' || valorCodigo=='4'){
+  else if(valorCodigo=='2' || valorCodigo=='3'){
     caminhoEmpenho = 'read/empenho';
   }
 
@@ -140,7 +138,7 @@ function empenhoSub(valorCodigo) {
         }
 
         //caso não seja em previsão
-        else if(valorCodigo=='2' || valorCodigo=='3' || valorCodigo=='4'){
+        else if(valorCodigo=='2' || valorCodigo=='3'){
           tabela += (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
           <th style="width:20%" scope="col">Código de Empenho</th>
@@ -204,9 +202,7 @@ function empenhoSub(valorCodigo) {
           let dataSeparada = data.split("-");
           let dataEspecial = dataSeparada[2].split("T");
 
-          $(document).ready(function(){
-            $('.data').mask('00/00/0000');
-          });
+          mascara();
 
           tabela += dataEspecial[0] + dataSeparada[1] + dataSeparada[0];
           tabela += (`</td>`);
@@ -286,9 +282,7 @@ function faturaSub(valorCodigo) {
           let dataSeparada = data.split("-");
           let dataEspecial = dataSeparada[2].split("T");
 
-          $(document).ready(function(){
-            $('.data').mask('00/00/0000');
-          });
+          mascara();
 
           tabela += dataEspecial[0] + dataSeparada[1] + dataSeparada[0];
           tabela += (`</td>`);

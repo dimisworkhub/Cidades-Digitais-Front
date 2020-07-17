@@ -5,7 +5,8 @@
 
 //sistema de paginação
 let contador = 0;
-let porPagina = 5;
+let porPagina = 50;
+//200 e 500
 let totalPaginas;
 
 function antes() {
