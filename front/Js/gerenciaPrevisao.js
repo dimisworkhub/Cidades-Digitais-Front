@@ -4,8 +4,6 @@ let meuCodigoSec = localStorage.getItem("cod_lote");
 
 window.onload = function () {
 
-  mascara();
-
   //preenche os campos
   document.getElementById("cod_previsao_empenho").value = meuCodigo;
   document.getElementById("cod_lote").value = meuCodigoSec;
@@ -22,6 +20,8 @@ window.onload = function () {
   let dataSeparada = data.split("-");
   let dataEspecial = dataSeparada[2].split("T");
   document.getElementById("data").value = dataEspecial[0]+dataSeparada[1]+dataSeparada[0];
+
+  mascara();
 
 }
 

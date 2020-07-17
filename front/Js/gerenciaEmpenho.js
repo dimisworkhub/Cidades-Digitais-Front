@@ -5,6 +5,7 @@ let meuCodigoSec = localStorage.getItem("cod_previsao_empenho");
 //colocar natureza de despesa como campo para chamar as opções de previsão no FiscEmpenho de adição
 
 window.onload = function () {
+  
   //preenche os campos
   document.getElementById("cod_empenho").value = localStorage.getItem("cod_empenho");
 
@@ -19,9 +20,12 @@ window.onload = function () {
   document.getElementById("cod_previsao_empenho").value = meuCodigoSec + " - " + localStorage.getItem("descricao") + " - " + tipo;
 
   //este campo precisa de adaptação para ser aceito, como yyyy-MM-dd
-  let data1 = new Date(localStorage.getItem("data"));
-  let dataFinal1 = String(data1.getFullYear()).padStart(4, '0') + "-" + String(data1.getMonth() + 1).padStart(2, '0') + "-" + String(data1.getDate()).padStart(2, '0');
-  document.getElementById("data").value = dataFinal1;
+  let data = localStorage.getItem("data");
+  let dataSeparada = data.split("-");
+  let dataEspecial = dataSeparada[2].split("T");
+  document.getElementById("data").value = dataEspecial[0]+dataSeparada[1]+dataSeparada[0];
+
+  mascara();
 }
 
 function enviar() {
