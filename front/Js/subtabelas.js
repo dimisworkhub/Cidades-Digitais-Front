@@ -470,7 +470,7 @@ function itensLote() {
           tabela += (`<td>`);
           tabela += listaItem[i]["cod_item"] + "." + listaItem[i]["cod_tipo_item"] + " - " + listaItem[i]["descricao"];
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + (listaItem[i]["preco"]*100) + `" onchange="mudaItemLote(` + i + `)" id="preco` + i + `" type="text" class="preco" placeholder="_.___.___.___,__%">`);
+          tabela += (`R$ <input value="` + (listaItem[i]["preco"]*100) + `" onchange="mudaItemLote(` + i + `)" id="preco` + i + `" type="text" class="preco" placeholder="_.___.___.___,__" size="50">`);
           tabela += (`</td>`);
           tabela += (`</tr>`);
         }
