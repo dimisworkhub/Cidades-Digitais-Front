@@ -486,38 +486,49 @@ function itensLote() {
   });
 }
 
+function splitPreco(preco) {
+
+  //para organizar a mascara
+  let preco2,preco3,preco4,preco5;
+
+  //ajustar preco:
+  preco2 = preco;
+
+  // console.log(preco2.toString().length)
+
+  //Verifica se o númera possui uma casa de milhar
+  if((preco2.toString()).length > 6){
+    preco3 = preco2.split(".");
+    preco4 = preco3[1].split(",");
+
+    preco5 = (preco3[0] + preco4[0] + preco4[1])/100;
+    
+    
+  }else{
+    preco4 = preco2.split(",");
+    
+    preco5 = (preco4[0] + preco4[1])/100;
+  }
+
+  return preco5;
+
+}
+
 function editarItemLote() {
 
   //para organizar a mascara
-  let preco,preco2,preco3,preco4,preco5;
+  let preco, precoFinal;
 
   for (i = 0; i < listaItem.length; i++) {
 
     //ajustar preco:
     preco = document.getElementById("preco" +i).value;
-    preco2 = preco;
-
-    // console.log(preco2.toString().length)
-
-    //Verifica se o númera possui uma casa de milhar
-    if((preco2.toString()).length > 6){
-      preco3 = preco2.split(".");
-      preco4 = preco3[1].split(",");
-  
-      preco5 = (preco3[0] + preco4[0] + preco4[1])/100;
-      
-      
-    }else{
-      preco4 = preco2.split(",");
-      
-      preco5 = (preco4[0] + preco4[1])/100;
-    }
     
-    // console.log(preco5)
+    precoFinal = splitPreco(preco)
 
     //cria json para edição
     edicaoItem[i] = {
-      "preco": parseFloat(preco5),
+      "preco": parseFloat(precoFinal),
     };
 
     if (edicaoItem[i][preco] != listaItem[i]["preco"]) {
@@ -614,7 +625,7 @@ function itensFinanceamento(caminho) {
           <th style="width:60%" scope="col">Descrição</th>
           <th style="width:10%" scope="col">Quantidade Disponível</th>
           <th style="width:10%" scope="col">Quantidade</th>
-          <th style="width:10%" scope="col">Valor</th>
+          <th style="width:15%" scope="col">Valor</th>
           <th style="width:10%" scope="col">Subtotal</th>
           </tr>
           </thead>`);
@@ -658,14 +669,14 @@ function itensFinanceamento(caminho) {
           tabela += (`</td> <td>`);
           tabela += (`<input value="` + listaItem[i]["quantidade"] + `" onchange="mudaItem(` + i + `)" id="quantidade` + i + `" type="text" size="10"></input>`);
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["valor"] + `" onchange="mudaItem(` + i + `)" id="valor` + i + `" type="text" size="10"></input>`);
+          tabela += (`R$ <input value="` + listaItem[i]["valor"] + `" class="preco" onchange="mudaItem(` + i + `)" id="valor` + i + `" type="text" size="10"></input>`);
           tabela += (`</td> <td>`);
           total = (listaItem[i]["quantidade"] * listaItem[i]["valor"]);
           tabela += total;
           totalFinal = totalFinal + total;
           tabela += (`</td>`);
           tabela += (`</tr>`);
-
+          
           edicaoItem[i] = {
             "quantidade": listaItem[i]["quantidade"],
             "valor": listaItem[i]["valor"],
@@ -702,6 +713,9 @@ function itensFinanceamento(caminho) {
 
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
+
+        //Máscara colocada separadamente para tabela
+        mascara();
       });
     } else {
       erros(response.status);
@@ -711,7 +725,11 @@ function itensFinanceamento(caminho) {
 
 function mudaItem(itemPego) {
   edicaoItem[itemPego].quantidade = parseFloat(document.getElementById("quantidade" + itemPego).value);
-  edicaoItem[itemPego].valor = parseFloat(document.getElementById("valor" + itemPego).value);
+
+  preco = document.getElementById("valor" + itemPego).value;
+
+  edicaoItem[itemPego].valor = splitPreco(preco);
+  console.log(edicaoItem[itemPego].valor)
   itemMudado[itemPego] = itemPego;
 }
 
