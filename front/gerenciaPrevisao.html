@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Gerência Previsão de Empenho</title>
+    <title>Tabela Lote</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="bootstrap4\css\bootstrap.css"> <!-- CSS bootstrap -->
     <link rel="stylesheet" href="css/reset.css"> <!-- CSS reset -->
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="./css/multi.css">
     <!--Resource style -->
     <link rel="stylesheet" href="./css/style2.css">
     <script src="./Js/modernizr.js"></script> <!-- Modernizr -->
@@ -107,14 +108,115 @@
         </section>
     </main>
 
+    <!-- Modal Lote -->
+    <div id="descricaoItem" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Adicionar Lote</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body" style="padding-bottom: 3rem;">
+                    <div class="multisteps-form">
+                        <!--Barra de Progresso-->
+                        <div class="row">
+                            <div class="col-12 col-lg-12 ml-auto mr-auto mb-4">
+                                <div class="multisteps-form__progress">
+                                    <button class="multisteps-form__progress-btn js-active" type="button"
+                                        title="User Info">Informações do Lote</button>
+                                    <button class="multisteps-form__progress-btn" type="button"
+                                        title="Address">Datas</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Formularios-->
+                        <div class="row">
+                            <div class="col-12 col-lg-12 m-auto">
+                                <form class="multisteps-form__form needs-validation" novalidate style="height: 300px;">
+                                    <!--Formulario 1 -->
+                                    <div class="multisteps-form__panel shadow p-4 rounded bg-white js-active"
+                                        data-animation="scaleIn">
+                                        <h3 class="multisteps-form__title">Informações do Lote</h3>
+
+                                        <div class="multisteps-form__content">
+                                            <div class="form-row mt-4">
+                                                <div class="col-12 col-sm-12">
+                                                    <input class="multisteps-form__input form-control" type="number"
+                                                        placeholder="Código do Lote" name="cod_lote" id="cod_lote"
+                                                        required>
+                                                </div>
+                                                <div class="col-12 col-sm-12 mt-4">
+                                                    <select class="multisteps-form__input form-control" type="text"
+                                                        name="cnpj" id="cnpj" required></select>
+                                                </div>
+                                                <div class="col-12 col-sm-12 mt-4">
+                                                    <input class="multisteps-form__input form-control" type="text"
+                                                        placeholder="Número de contrato" maxlength="10" name="contrato"
+                                                        id="contrato" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="button-row d-flex mt-4">
+                                                <button class="btn btn-primary multi-button ml-auto js-btn-next"
+                                                    type="button" title="Next">Próximo</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--Formulario 2 -->
+                                    <div class="multisteps-form__panel shadow p-4 rounded bg-white"
+                                        data-animation="scaleIn">
+                                        <h3 class="multisteps-form__title">Datas</h3>
+                                        <div class="multisteps-form__content">
+                                            <!--Tabela por JS-->
+                                            <div style="overflow-x:auto;">
+                                                <div class="col-12 col-sm-12 mt-4">
+                                                    <label for="dt_inicio_vig">Data de Início de Vigencia</label>
+                                                    <input class=" multisteps-form__input form-control" type="text"
+                                                        name="dt_inicio_vig" id="dt_inicio_vig" required>
+
+                                                </div>
+                                                <div class="col-12 col-sm-12 mt-4">
+                                                    <label for="dt_final_vig">Data Final de Vigencia</label>
+                                                    <input class=" multisteps-form__input form-control" type="text"
+                                                        name="dt_final_vig" id="dt_final_vig" required>
+                                                </div>
+                                                <div class="col-12 col-sm-12 mt-4">
+                                                    <label for="dt_reajuste">Data de Reajuste</label>
+                                                    <input class=" multisteps-form__input form-control" type="text"
+                                                        name="dt_reajuste" id="dt_reajuste" required>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="button-row d-flex mt-4">
+                                                <button class="btn btn-primary multi-button ml-auto" onclick="enviar()"
+                                                    type="button">Cadastrar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="fixed-bottom">
         <script height="100%" width="100%" src="./Js/menu.js"></script>
     </div>
 
 </body>
+
+<!-- Menu de cabeçalho -->
+<script src="./Js/modernizr.js"></script> <!-- Modernizr -->
 <script src="./Js/gerenciaPrevisao.js"></script>
 <script src="./Js/subtabelas.js"></script>
-<script src="./Js/main.js"></script> <!-- Resource jQuery -->
 <script src="./Js/mask.js"></script>
+<script src="./Js/multi.js"></script>
+<script src="./Js/main.js"></script> <!-- Resource jQuery -->
 
 </html>
