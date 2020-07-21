@@ -610,23 +610,23 @@ function itensFinanceamento(caminho) {
         if (caminho == "itensfatura") {
           tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
-          <th style="width:40%" scope="col">Descrição</th>
+          <th style="width:30%" scope="col">Descrição</th>
           <th style="width:10%" scope="col">Empenho</th>
-          <th style="width:10%" scope="col">Tipo</th>
-          <th style="width:10%" scope="col">Quantidade Disponível</th>
-          <th style="width:10%" scope="col">Quantidade</th>
-          <th style="width:10%" scope="col">Valor</th>
-          <th style="width:10%" scope="col">Subtotal</th>
+          <th style="cursor:pointer;width:10%" onclick="descricaoItem("tipo")" scope="col">Tipo</th>
+          <th onclick="descricaoItem("quantidade disponível")" style="width:10%" scope="col">Quantidade Disponível</th>
+          <th onclick="descricaoItem("quantidade")" style="width:10%" scope="col">Quantidade</th>
+          <th onclick="descricaoItem("valor")" style="width:25%" scope="col">Valor</th>
+          <th onclick="descricaoItem("subtotal")" style="width:5%" scope="col">Subtotal</th>
           </tr>
           </thead>`);
         } else {
           tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
-          <th style="width:60%" scope="col">Descrição</th>
-          <th style="width:10%" scope="col">Quantidade Disponível</th>
-          <th style="width:10%" scope="col">Quantidade</th>
-          <th style="width:15%" scope="col">Valor</th>
-          <th style="width:10%" scope="col">Subtotal</th>
+          <th style="width:50%" scope="col">Descrição</th>
+          <th style="cursor:pointer;width:10%" onclick="descricaoItem("quantidade disponível")" scope="col">Quantidade Disponível</th>
+          <th style="cursor:pointer;width:10%" onclick="descricaoItem("quantidade")"  scope="col">Quantidade</th>
+          <th onclick="descricaoItem("valor")" style="width:20%" scope="col">Valor</th>
+          <th onclick="descricaoItem("subtotal")" style="width:10%" scope="col">Subtotal</th>
           </tr>
           </thead>`);
         }
@@ -669,8 +669,10 @@ function itensFinanceamento(caminho) {
           tabela += (`</td> <td>`);
           tabela += (`<input value="` + listaItem[i]["quantidade"] + `" onchange="mudaItem(` + i + `)" id="quantidade` + i + `" type="text" size="10"></input>`);
           tabela += (`</td> <td>`);
-          tabela += (`R$ <input value="` + listaItem[i]["valor"] + `" class="preco" onchange="mudaItem(` + i + `)" id="valor` + i + `" type="text" size="10"></input>`);
+          tabela += (`R$ <input value="` + listaItem[i]["valor"] + `" class="preco" onchange="mudaItem(` + i + `)" id="valor` + i + `" type="text" size="15"></input>`);
           tabela += (`</td> <td>`);
+
+          //calculo do subtotal
           total = (listaItem[i]["quantidade"] * listaItem[i]["valor"]);
           tabela += total;
           totalFinal = totalFinal + total;
@@ -721,6 +723,22 @@ function itensFinanceamento(caminho) {
       erros(response.status);
     }
   });
+}
+
+function descricaoItem(itemDescrito){
+  $("#descricaoItem").modal({
+    show: true
+  });
+  itemDescrito=2;
+  // //frase inicial
+  // document.getElementById("explicacao").value = "Calculo para encontrar o valor de " + itemDescrito + ":";
+
+  // //calculos para cada caso
+  // if(itemDescrito == "subtotal"){
+  //   document.getElementById("calculo").value = "Calculo = " + itemDescrito;
+  // }else{
+  //   document.getElementById("calculo").value = "misterio";
+  // }
 }
 
 function mudaItem(itemPego) {
