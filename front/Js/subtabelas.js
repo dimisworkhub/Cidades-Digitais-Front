@@ -415,7 +415,31 @@ function sublinhar(valor,tamanho){
 }
 
 
+//função comum para os valores em itens:
+function splitPreco(preco) {
 
+  //para organizar a mascara
+  let preco2,preco3,preco4;
+
+  //console.log(preco.toString().length)
+
+  //Verifica se o númera possui uma casa de milhar
+  if((preco.toString()).length > 6){
+    preco2 = preco.split(".");
+    preco3 = preco2[1].split(",");
+
+    preco4 = (preco2[0] + preco3[0] + preco3[1])/100;
+    
+    
+  }else{
+    preco2 = preco.split(",");
+    
+    preco4 = (preco2[0] + preco2[1])/100;
+  }
+
+  return preco4;
+
+}
 
 
 //lote itens
@@ -470,7 +494,7 @@ function itensLote() {
           tabela += (`<td>`);
           tabela += listaItem[i]["cod_item"] + "." + listaItem[i]["cod_tipo_item"] + " - " + listaItem[i]["descricao"];
           tabela += (`</td> <td>`);
-          tabela += (`R$ <input value="` + (listaItem[i]["preco"]*100) + `" onchange="mudaItemLote(` + i + `)" id="preco` + i + `" type="text" class="preco" placeholder="_.___.___.___,__" size="50">`);
+          tabela += (`R$ <input value="` + (listaItem[i]["preco"]*100) + `" id="preco` + i + `" type="text" class="preco" size="50">`);
           tabela += (`</td>`);
           tabela += (`</tr>`);
         }
@@ -486,54 +510,21 @@ function itensLote() {
   });
 }
 
-function splitPreco(preco) {
-
-  //para organizar a mascara
-  let preco2,preco3,preco4,preco5;
-
-  //ajustar preco:
-  preco2 = preco;
-
-  // console.log(preco2.toString().length)
-
-  //Verifica se o númera possui uma casa de milhar
-  if((preco2.toString()).length > 6){
-    preco3 = preco2.split(".");
-    preco4 = preco3[1].split(",");
-
-    preco5 = (preco3[0] + preco4[0] + preco4[1])/100;
-    
-    
-  }else{
-    preco4 = preco2.split(",");
-    
-    preco5 = (preco4[0] + preco4[1])/100;
-  }
-
-  return preco5;
-
-}
-
 function editarItemLote() {
-
-  //para organizar a mascara
-  let preco, precoFinal;
 
   for (i = 0; i < listaItem.length; i++) {
 
-    //ajustar preco:
-    preco = document.getElementById("preco" +i).value;
-    
-    precoFinal = splitPreco(preco)
-
     //cria json para edição
+    //função splitPreco é usada aqui dentro
     edicaoItem[i] = {
-      "preco": parseFloat(precoFinal),
+      "preco": parseFloat(splitPreco(document.getElementById("preco" + i).value)),
     };
 
-    if (edicaoItem[i][preco] != listaItem[i]["preco"]) {
+    if (listaItem[i]["preco"] != edicaoItem[i]["preco"]) {
       //transforma as informações em string para mandar
       let corpo = JSON.stringify(edicaoItem[i]);
+      //console.log(corpo);
+      
       //função fetch para mandar
       fetch(servidor + 'read/loteitens/' + meuCodigo + '/' + meuItem[i] + '/' + meuTipo[i], {
         method: 'PUT',
@@ -612,21 +603,21 @@ function itensFinanceamento(caminho) {
           <tr>
           <th style="width:30%" scope="col">Descrição</th>
           <th style="width:10%" scope="col">Empenho</th>
-          <th style="cursor:pointer;width:10%" onclick="descricaoItem("tipo")" scope="col">Tipo</th>
-          <th onclick="descricaoItem("quantidade disponível")" style="width:10%" scope="col">Quantidade Disponível</th>
-          <th onclick="descricaoItem("quantidade")" style="width:10%" scope="col">Quantidade</th>
-          <th onclick="descricaoItem("valor")" style="width:25%" scope="col">Valor</th>
-          <th onclick="descricaoItem("subtotal")" style="width:5%" scope="col">Subtotal</th>
+          <th style="cursor:pointer;width:10%" onclick="descricaoItem('tipo')" scope="col">Tipo</th>
+          <th style="cursor:pointer;width:10%" onclick="descricaoItem('quantidade disponível')" scope="col">Quantidade Disponível</th>
+          <th style="cursor:pointer;width:10%" onclick="descricaoItem('quantidade')" scope="col">Quantidade</th>
+          <th style="cursor:pointer;width:25%" onclick="descricaoItem('valor')" scope="col">Valor</th>
+          <th style="cursor:pointer;width:5%" onclick="descricaoItem('subtotal')" scope="col">Subtotal</th>
           </tr>
           </thead>`);
         } else {
           tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
           <th style="width:50%" scope="col">Descrição</th>
-          <th style="cursor:pointer;width:10%" onclick="descricaoItem("quantidade disponível")" scope="col">Quantidade Disponível</th>
-          <th style="cursor:pointer;width:10%" onclick="descricaoItem("quantidade")"  scope="col">Quantidade</th>
-          <th onclick="descricaoItem("valor")" style="width:20%" scope="col">Valor</th>
-          <th onclick="descricaoItem("subtotal")" style="width:10%" scope="col">Subtotal</th>
+          <th style="cursor:pointer;width:10%" onclick="descricaoItem('quantidade disponível')" scope="col">Quantidade Disponível</th>
+          <th style="cursor:pointer;width:10%" onclick="descricaoItem('quantidade')"  scope="col">Quantidade</th>
+          <th style="cursor:pointer;width:20%" onclick="descricaoItem('valor')" scope="col">Valor</th>
+          <th style="cursor:pointer;width:10%" onclick="descricaoItem('subtotal')" scope="col">Subtotal</th>
           </tr>
           </thead>`);
         }
@@ -667,9 +658,9 @@ function itensFinanceamento(caminho) {
           tabela += (`</td> <td>`);
           tabela += listaItem[i]["quantidade_disponivel"];
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["quantidade"] + `" onchange="mudaItem(` + i + `)" id="quantidade` + i + `" type="text" size="10"></input>`);
+          tabela += (`<input value="` + listaItem[i]["quantidade"] + `" id="quantidade` + i + `" type="text" size="10"></input>`);
           tabela += (`</td> <td>`);
-          tabela += (`R$ <input value="` + listaItem[i]["valor"] + `" class="preco" onchange="mudaItem(` + i + `)" id="valor` + i + `" type="text" size="15"></input>`);
+          tabela += (`R$ <input value="` + (listaItem[i]["valor"]*100) + `" class="preco" id="valor` + i + `" type="text" size="15"></input>`);
           tabela += (`</td> <td>`);
 
           //calculo do subtotal
@@ -678,14 +669,10 @@ function itensFinanceamento(caminho) {
           totalFinal = totalFinal + total;
           tabela += (`</td>`);
           tabela += (`</tr>`);
-          
-          edicaoItem[i] = {
-            "quantidade": listaItem[i]["quantidade"],
-            "valor": listaItem[i]["valor"],
-          };
         }
-        tabela += (`<tr>`);
 
+        //a parte final da tabela é organizada de forma diferente.
+        tabela += (`<tr>`);
         tabela += (`<td>`);
         tabela += (`<p> Total: </p>`);
         tabela += (`</td>`);
@@ -698,7 +685,7 @@ function itensFinanceamento(caminho) {
         tabela += (`<td>`);
         tabela += (`</td>`);
 
-        //para fatura
+        //espaços extras para fatura
         if (caminho == "itensfatura") {
           tabela += (`<td>`);
           tabela += (`</td>`);
@@ -712,8 +699,8 @@ function itensFinanceamento(caminho) {
         tabela += (`</td>`);
 
         tabela += (`</tr>`);
-
         tabela += (`</tbody>`);
+
         document.getElementById("tabela").innerHTML = tabela;
 
         //Máscara colocada separadamente para tabela
@@ -725,35 +712,37 @@ function itensFinanceamento(caminho) {
   });
 }
 
-function descricaoItem(itemDescrito){
+function descricaoItem(valor){
   $("#descricaoItem").modal({
     show: true
   });
-  itemDescrito=2;
-  // //frase inicial
-  // document.getElementById("explicacao").value = "Calculo para encontrar o valor de " + itemDescrito + ":";
-
-  // //calculos para cada caso
-  // if(itemDescrito == "subtotal"){
-  //   document.getElementById("calculo").value = "Calculo = " + itemDescrito;
-  // }else{
-  //   document.getElementById("calculo").value = "misterio";
-  // }
+  
+  descricaoItem2(valor);
 }
 
-function mudaItem(itemPego) {
-  edicaoItem[itemPego].quantidade = parseFloat(document.getElementById("quantidade" + itemPego).value);
+function descricaoItem2(itemDescrito){
+  
+  //frase inicial
+  document.getElementById("explicacao").innerHTML = "<h2>Calculo para encontrar o valor de " + itemDescrito + ":</h2>";
 
-  preco = document.getElementById("valor" + itemPego).value;
+  //calculos para cada caso
+  if(itemDescrito == "subtotal"){
+    document.getElementById("calculo").innerHTML = "Quantidade x Valor = " + itemDescrito;
+  }else{
+    document.getElementById("calculo").innerHTML = "misterio";
+  }
 
-  edicaoItem[itemPego].valor = splitPreco(preco);
-  console.log(edicaoItem[itemPego].valor)
-  itemMudado[itemPego] = itemPego;
 }
 
 function editarItem(caminho) {
 
   for (let i = 0; i < listaItem.length; i++) {
+
+    //função splitPreco é usada aqui dentro
+    edicaoItem[i] = {
+      "quantidade": parseFloat(document.getElementById("quantidade" + i).value),
+      "valor": parseFloat(splitPreco(document.getElementById("valor" + i).value)),
+    };
 
     let caminhoFinal;
     if (caminho == "itensfatura") {
@@ -762,9 +751,11 @@ function editarItem(caminho) {
       caminhoFinal = servidor + 'read/' + caminho + '/' + meuCodigo + '/' + meuItem[i] + '/' + meuTipo[i];
     }
 
-    if (itemMudado[i] != null) {
+    if (listaItem[i]["quantidade"] != edicaoItem[i]["quantidade"] || listaItem[i]["valor"] != edicaoItem[i]["valor"]) {
       //transforma as informações do token em json
       let corpo = JSON.stringify(edicaoItem[i]);
+      //console.log(corpo);
+
       //função fetch para mandar
       fetch(caminhoFinal, {
         method: 'PUT',
