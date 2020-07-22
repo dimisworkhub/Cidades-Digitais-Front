@@ -129,17 +129,20 @@ function itens() {
           tabela += (`<td>`);
           tabela += listaItem[i]["descricao"];
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["quantidade_previsto"] + `" id="quantidade_previsto` + i + `" type="text" size="15">`);
+          tabela += (`<input value="` + listaItem[i]["quantidade_previsto"] + `"class="inteiros" id="quantidade_previsto` + i + `" type="text" size="15">`);
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["quantidade_projeto_executivo"] + `" id="quantidade_projeto_executivo` + i + `" type="text" size="15">`);
+          tabela += (`<input value="` + listaItem[i]["quantidade_projeto_executivo"] + `"class="quebrados" id="quantidade_projeto_executivo` + i + `" type="text" size="15">`);
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["quantidade_termo_instalacao"] + `" id="quantidade_termo_instalacao` + i + `" type="text" size="15">`);
+          tabela += (`<input value="` + listaItem[i]["quantidade_termo_instalacao"] + `"class="quebrados" id="quantidade_termo_instalacao` + i + `" type="text" size="15">`);
           tabela += (`</td>`);
           tabela += (`</tr>`);
         }
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
 
+        //Máscara colocada separadamente para tabela
+        mascara();
+        
       });
     } else {
       erros(response.status);
@@ -148,15 +151,21 @@ function itens() {
 }
 
 function editarItemCD() {
+  let i1, i2, qpe, qti;
 
   for (let i = 0; i < listaItem.length; i++) {
+    i1 = document.getElementById("quantidade_projeto_executivo" + i).value
+    qpe = i1.split(",")
 
+    i2 = document.getElementById("quantidade_termo_instalacao" + i).value
+    qti = i2.split(",")
     edicaoItem[i] = {
       "quantidade_previsto": parseInt(document.getElementById("quantidade_previsto" + i).value),
-      "quantidade_projeto_executivo": parseInt(document.getElementById("quantidade_projeto_executivo" + i).value),
-      "quantidade_termo_instalacao": parseInt(document.getElementById("quantidade_termo_instalacao" + i).value),
+      "quantidade_projeto_executivo": parseFloat(qpe[0]+qpe[1])/100,
+      "quantidade_termo_instalacao": parseFloat(qti[0]+qti[1])/100,
     };
 
+    // console.log(edicaoItem)
     if (edicaoItem[i]["quantidade_previsto"] != listaItem[i]["quantidade_previsto"] || edicaoItem[i]["quantidade_projeto_executivo"] != listaItem[i]["quantidade_projeto_executivo"] || edicaoItem[i]["quantidade_termo_instalacao"] != listaItem[i]["quantidade_termo_instalacao"]) {
       //transforma as informações do token em json
       let corpo = JSON.stringify(edicaoItem[i]);
