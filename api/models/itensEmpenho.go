@@ -18,7 +18,7 @@ type ItensEmpenho struct {
 	Quantidade           float32 `gorm:"default:null" json:"quantidade"`
 	Tipo                 string  `gorm:"default:null" json:"tipo"`
 	Descricao            string  `gorm:"default:null" json:"descricao"`
-	QuantidadeDisponivel float32 `gorm:"default:null" json:"quantidade_disponivel"`
+	QuantidadeDisponivel float32 `gorm:"default:null" json:"quant_disponivel"`
 }
 
 /*  =========================
@@ -53,10 +53,34 @@ func (itensEmpenho *ItensEmpenho) FindAllItensEmpenho(db *gorm.DB, idEmpenho, co
 		return &[]ItensEmpenho{}, err
 	}
 
+	/* Calculo da quantidade de itens que ainda nao foi empenhado
+	-- Pega o primeiro Select e faz a diferenca deste com o segundo
+
+	-- Seleciona e soma todas as quantidades de um determinado item
+	-- (ex.: pegas todos itens 1.1 e soma suas quantidades)
+	SELECT ROUND((SELECT SUM(itens_previsao_empenho.quantidade) AS quant_previsao_empenho
+	FROM itens_previsao_empenho
+	WHERE itens_previsao_empenho.cod_item = ?
+	AND itens_previsao_empenho.cod_tipo_item = ?
+	AND itens_previsao_empenho.cod_previsao_empenho = ?)
+	--(menos)
+
+	-
+
+	-- Seleciona e soma todos os itens que já foram empenhados
+	-- (ex.: pegas todos itens 1.1 e soma suas quantidades)
+	(SELECT SUM(itens_empenho.quantidade) AS quant_empenho
+	FROM itens_empenho
+	WHERE itens_empenho.cod_item = ?
+	AND itens_empenho.cod_tipo_item = ?
+	AND itens_empenho.cod_previsao_empenho = ?)
+	, 2) AS quant_disponivel
+	*/
+
 	for i, data := range allItensEmpenho {
 		//	Busca um elemento no banco de dados a partir de sua chave primaria
 		err := db.Debug().
-			Raw("SELECT ROUND((SELECT SUM(itens_previsao_empenho.quantidade) AS quantidade_previsao_empenho FROM itens_previsao_empenho WHERE itens_previsao_empenho.cod_item = ? AND itens_previsao_empenho.cod_tipo_item = ? AND itens_previsao_empenho.cod_previsao_empenho = ?) - (SELECT SUM(itens_empenho.quantidade) AS quantidade_empenho FROM itens_empenho WHERE itens_empenho.cod_item = ? AND itens_empenho.cod_tipo_item = ? AND itens_empenho.cod_previsao_empenho = ?), 2) AS quantidade_disponivel", data.CodItem, data.CodTipoItem, codPrevisaoEmpenho, data.CodItem, data.CodTipoItem, codPrevisaoEmpenho).
+			Raw("SELECT ROUND((SELECT SUM(itens_previsao_empenho.quantidade) AS quant_previsao_empenho FROM itens_previsao_empenho WHERE itens_previsao_empenho.cod_item = ? AND itens_previsao_empenho.cod_tipo_item = ? AND itens_previsao_empenho.cod_previsao_empenho = ?) - (SELECT SUM(itens_empenho.quantidade) AS quant_empenho FROM itens_empenho WHERE itens_empenho.cod_item = ? AND itens_empenho.cod_tipo_item = ? AND itens_empenho.cod_previsao_empenho = ?), 2) AS quant_disponivel", data.CodItem, data.CodTipoItem, codPrevisaoEmpenho, data.CodItem, data.CodTipoItem, codPrevisaoEmpenho).
 			Scan(&allItensEmpenho[i]).Error
 		if err != nil {
 			return &[]ItensEmpenho{}, err
