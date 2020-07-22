@@ -603,21 +603,21 @@ function itensFinanceamento(caminho) {
           <tr>
           <th style="width:30%" scope="col">Descrição</th>
           <th style="width:10%" scope="col">Empenho</th>
-          <th style="cursor:pointer;width:10%" onclick="descricaoItem('tipo')" scope="col">Tipo</th>
-          <th style="cursor:pointer;width:10%" onclick="descricaoItem('quantidade disponível')" scope="col">Quantidade Disponível</th>
-          <th style="cursor:pointer;width:10%" onclick="descricaoItem('quantidade')" scope="col">Quantidade</th>
-          <th style="cursor:pointer;width:25%" onclick="descricaoItem('valor')" scope="col">Valor</th>
-          <th style="cursor:pointer;width:5%" onclick="descricaoItem('subtotal')" scope="col">Subtotal</th>
+          <th style="cursor:pointer;width:10%" onclick="descricaoItem('Tipo')" scope="col">Tipo</th>
+          <th style="cursor:pointer;width:10%" onclick="descricaoItem('Quantidade disponível')" scope="col">Quantidade Disponível</th>
+          <th style="cursor:pointer;width:10%" onclick="descricaoItem('Quantidade')" scope="col">Quantidade</th>
+          <th style="cursor:pointer;width:25%" onclick="descricaoItem('Valor')" scope="col">Valor</th>
+          <th style="cursor:pointer;width:5%" onclick="descricaoItem('Subtotal')" scope="col">Subtotal</th>
           </tr>
           </thead>`);
         } else {
           tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
           <th style="width:50%" scope="col">Descrição</th>
-          <th style="cursor:pointer;width:10%" onclick="descricaoItem('quantidade disponível')" scope="col">Quantidade Disponível</th>
-          <th style="cursor:pointer;width:10%" onclick="descricaoItem('quantidade')"  scope="col">Quantidade</th>
-          <th style="cursor:pointer;width:20%" onclick="descricaoItem('valor')" scope="col">Valor</th>
-          <th style="cursor:pointer;width:10%" onclick="descricaoItem('subtotal')" scope="col">Subtotal</th>
+          <th style="cursor:pointer;width:10%" onclick="descricaoItem('Quantidade disponível')" scope="col">Quantidade Disponível</th>
+          <th style="cursor:pointer;width:10%" onclick="descricaoItem('Quantidade')"  scope="col">Quantidade</th>
+          <th style="cursor:pointer;width:20%" onclick="descricaoItem('Valor')" scope="col">Valor</th>
+          <th style="cursor:pointer;width:10%" onclick="descricaoItem('Subtotal')" scope="col">Subtotal</th>
           </tr>
           </thead>`);
         }
@@ -723,10 +723,10 @@ function descricaoItem(valor){
 function descricaoItem2(itemDescrito){
   
   //frase inicial
-  document.getElementById("explicacao").innerHTML = itemDescrito.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
+  document.getElementById("explicacao").innerHTML = itemDescrito;
 
   //calculos para cada caso
-  if(itemDescrito == "subtotal"){
+  if(itemDescrito == "Subtotal"){
     document.getElementById("calculo").innerHTML = "Quantidade x Valor = " + itemDescrito;
   }else{
     document.getElementById("calculo").innerHTML = "misterio";

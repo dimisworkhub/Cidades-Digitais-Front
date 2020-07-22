@@ -4,6 +4,7 @@ function mascara(){
     $('.percentual').inputmask('[99]9.99%', {reverse: true, numericInput:true});
     $('.data').mask('00/00/0000');
     $('.data2').mask('00/00');
+    $('.quebrados').mask('[999]9,99');
     $('.preco').inputmask('[9.999.999.99]9,99', {reverse: true, numericInput:true, prefix: "R$ ", placeholder: "0"});
     // $(".preco").inputmask('decimal', {
     //   'alias': 'numeric',
