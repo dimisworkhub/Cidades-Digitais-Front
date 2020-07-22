@@ -723,7 +723,7 @@ function descricaoItem(valor){
 function descricaoItem2(itemDescrito){
   
   //frase inicial
-  document.getElementById("explicacao").innerHTML = "<h2>Calculo para encontrar o valor de " + itemDescrito + ":</h2>";
+  document.getElementById("explicacao").innerHTML = itemDescrito.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
 
   //calculos para cada caso
   if(itemDescrito == "subtotal"){
