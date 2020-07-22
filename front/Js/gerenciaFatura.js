@@ -17,7 +17,7 @@ window.onload = function () {
   let data = localStorage.getItem("dt_nf");
   let dataSeparada = data.split("-");
   let dataEspecial = dataSeparada[2].split("T");
-  document.getElementById("data").value = dataEspecial[0]+dataSeparada[1]+dataSeparada[0];
+  document.getElementById("dt_nf").value = dataEspecial[0]+dataSeparada[1]+dataSeparada[0];
 
   mascara();
   adicionarItensFatura();
