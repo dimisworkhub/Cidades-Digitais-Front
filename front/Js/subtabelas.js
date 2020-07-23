@@ -90,8 +90,6 @@ function previsaoSub(valorCodigo) {
   });
 }
 
-
-
 //tabela pra empenho:
 
 function empenhoSub(valorCodigo) {
@@ -217,8 +215,6 @@ function empenhoSub(valorCodigo) {
   });
 }
 
-
-
 //tabela pra fatura:
 
 function faturaSub(valorCodigo) {
@@ -297,8 +293,6 @@ function faturaSub(valorCodigo) {
     }
   });
 }
-
-
 
 //tabela pra pagamento:
 
@@ -415,8 +409,11 @@ function sublinhar(valor,tamanho){
 }
 
 
+
+
+
 //função comum para os valores em itens:
-function splitPreco(preco) {
+function mascaraPreco(preco) {
 
   //para organizar a mascara
   let preco2,preco3,preco4;
@@ -440,7 +437,6 @@ function splitPreco(preco) {
   return preco4;
 
 }
-
 
 //lote itens
 
@@ -517,7 +513,7 @@ function editarItemLote() {
     //cria json para edição
     //função splitPreco é usada aqui dentro
     edicaoItem[i] = {
-      "preco": parseFloat(splitPreco(document.getElementById("preco" + i).value)),
+      "preco": parseFloat(mascaraPreco(document.getElementById("preco" + i).value)),
     };
 
     if (listaItem[i]["preco"] != edicaoItem[i]["preco"]) {
@@ -604,20 +600,20 @@ function itensFinanceamento(caminho) {
           <th style="width:30%" scope="col">Descrição</th>
           <th style="width:10%" scope="col">Empenho</th>
           <th style="cursor:pointer;width:10%" onclick="descricaoItem('Tipo')" scope="col">Tipo</th>
-          <th style="cursor:pointer;width:10%" onclick="descricaoItem('Quantidade disponível')" scope="col">Quantidade Disponível</th>
-          <th style="cursor:pointer;width:10%" onclick="descricaoItem('Quantidade')" scope="col">Quantidade</th>
-          <th style="cursor:pointer;width:25%" onclick="descricaoItem('Valor')" scope="col">Valor</th>
-          <th style="cursor:pointer;width:5%" onclick="descricaoItem('Subtotal')" scope="col">Subtotal</th>
+          <th style="cursor:pointer;width:5%" onclick="descricaoItem('Quantidade disponível')" scope="col">Quantidade Disponível</th>
+          <th style="cursor:pointer;width:5%" onclick="descricaoItem('Quantidade')" scope="col">Quantidade</th>
+          <th style="cursor:pointer;width:20%" onclick="descricaoItem('Valor')" scope="col">Valor</th>
+          <th style="cursor:pointer;width:20%" onclick="descricaoItem('Subtotal')" scope="col">Subtotal</th>
           </tr>
           </thead>`);
         } else {
           tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
           <th style="width:50%" scope="col">Descrição</th>
-          <th style="cursor:pointer;width:10%" onclick="descricaoItem('Quantidade disponível')" scope="col">Quantidade Disponível</th>
-          <th style="cursor:pointer;width:10%" onclick="descricaoItem('Quantidade')"  scope="col">Quantidade</th>
+          <th style="cursor:pointer;width:5%" onclick="descricaoItem('Quantidade disponível')" scope="col">Quantidade Disponível</th>
+          <th style="cursor:pointer;width:5%" onclick="descricaoItem('Quantidade')"  scope="col">Quantidade</th>
           <th style="cursor:pointer;width:20%" onclick="descricaoItem('Valor')" scope="col">Valor</th>
-          <th style="cursor:pointer;width:10%" onclick="descricaoItem('Subtotal')" scope="col">Subtotal</th>
+          <th style="cursor:pointer;width:20%" onclick="descricaoItem('Subtotal')" scope="col">Subtotal</th>
           </tr>
           </thead>`);
         }
@@ -625,7 +621,7 @@ function itensFinanceamento(caminho) {
         //armazenando para edição
         listaItem = json;
 
-        //calculo do total
+        //calculo do total dos valores de cada linha
         let total = 0;
         let totalFinal = 0;
 
@@ -661,12 +657,13 @@ function itensFinanceamento(caminho) {
           tabela += (`<input value="` + listaItem[i]["quantidade"] + `" id="quantidade` + i + `" type="text" size="10"></input>`);
           tabela += (`</td> <td>`);
           tabela += (`R$ <input value="` + (listaItem[i]["valor"]*100) + `" class="preco" id="valor` + i + `" type="text" size="15"></input>`);
-          tabela += (`</td> <td>`);
+          tabela += (`</td> <td class="preco">`);
 
           //calculo do subtotal
           total = (listaItem[i]["quantidade"] * listaItem[i]["valor"]);
-          tabela += total;
           totalFinal = totalFinal + total;
+
+          tabela +="R$ " + arredondamento(total);
           tabela += (`</td>`);
           tabela += (`</tr>`);
         }
@@ -695,7 +692,7 @@ function itensFinanceamento(caminho) {
 
         //valor final
         tabela += (`<td>`);
-        tabela += totalFinal;
+        tabela +="R$ " + arredondamento(totalFinal);
         tabela += (`</td>`);
 
         tabela += (`</tr>`);
@@ -710,6 +707,20 @@ function itensFinanceamento(caminho) {
       erros(response.status);
     }
   });
+}
+
+function arredondamento(valor){
+
+  //split para arredondar valores nos campos subtotal e total
+  let redondo = JSON.stringify(valor);
+  let splitRedondo = redondo.split(".");
+
+  //necessario para garantir que o campo possua
+  let garantia = splitRedondo[1]+"00";
+  let splitRedondo2 = garantia.split("");
+  let redondoFinal = splitRedondo[0]+splitRedondo2[0]+splitRedondo2[1];
+
+  return redondoFinal;
 }
 
 function descricaoItem(valor){
@@ -741,7 +752,7 @@ function editarItem(caminho) {
     //função splitPreco é usada aqui dentro
     edicaoItem[i] = {
       "quantidade": parseFloat(document.getElementById("quantidade" + i).value),
-      "valor": parseFloat(splitPreco(document.getElementById("valor" + i).value)),
+      "valor": parseFloat(mascaraPreco(document.getElementById("valor" + i).value)),
     };
 
     let caminhoFinal;
