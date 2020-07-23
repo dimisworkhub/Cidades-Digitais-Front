@@ -1,39 +1,11 @@
-//tratamento de erros
-function erros(value) {
-	if (value == 400) {
-		window.location.href = "./errors/400.html";
-	} else if (value == 401) {
-		window.location.href = "./errors/401.html";
-	} else if (value == 403) {
-		window.location.href = "./errors/403.html";
-	} else if (value == 404) {
-		window.location.href = "./errors/404.html";
-	} else if (value == 409) {
-		alert("Erro: Adição já existente.");
-	} else if (value == 412) {
-		alert("Erro: Informação colocada é incorreta.");
-	} else if (value == 422) {
-		alert("Erro: Usuário ou senha incorreto(s).");
-	} else if (value == 500) {
-		window.location.href = "./errors/500.html";
-	} else if (value == 504) {
-		window.location.href = "./errors/504.html";
-	} else {
-		alert("ERRO DESCONHECIDO");
-	}
-}
-
-
-
-//para definir o ip do servidor (ou algo do tipo, podem corrigir)
-let servidor = "http://localhost:8080/";
-
 //caso os cookies não estejam habilitados
 if (navigator.cookieEnabled == false) {
-  alert("Cookies estão desabilitados em seu navegador, o que é um problema para a navegação nesse site. Por favor permita cookies no seu navegador.");
+  alert("Cookies estão desabilitados em seu navegador, o que é um problema para a navegação nesse site. Por favor permita cookies em seu navegador.");
 }
 
-//faz com que se possa ir pro proximo input com enter
+
+
+//formula para ir de input para input com enter no formulário de login
 let input = document.getElementById("login");
 input.addEventListener("keyup", function (event) {
   if (event.keyCode === 13) {
@@ -41,6 +13,7 @@ input.addEventListener("keyup", function (event) {
     document.getElementById("senha").select();
   }
 });
+
 let input2 = document.getElementById("senha");
 input2.addEventListener("keyup", function (event) {
   if (event.keyCode === 13) {
@@ -49,16 +22,15 @@ input2.addEventListener("keyup", function (event) {
   }
 });
 
-//o json usado para mandar as informações pelo fetch
-let info = {
-  "login": " ",
-  "senha": " ",
-};
+
 
 function entrar() {
-  //captura o valor e guarda o valor no info
-  info.login = document.getElementById("login").value;
-  info.senha = document.getElementById("senha").value;
+
+  //o formato usado para mandar as informações pelo fetch
+  let info = {
+    "login": document.getElementById("login").value,
+    "senha": document.getElementById("senha").value,
+  };
 
   //guarda o login para futuras referencias
   localStorage.setItem("logado", info.login);
