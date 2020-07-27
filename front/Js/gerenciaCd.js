@@ -47,31 +47,31 @@ function enviar() {
 
   console.log(info)
 
-  // //transforma as informações do token em json
-  // let corpo = JSON.stringify(info);
-  // //função fetch para mandar
-  // fetch(servidor + 'read/cd/' + meuCodigo, {
-  //   method: 'PUT',
-  //   body: corpo,
-  //   headers: {
-  //     'Authorization': 'Bearer ' + meuToken
-  //   },
-  // }).then(function (response) {
+  //transforma as informações do token em json
+  let corpo = JSON.stringify(info);
+  //função fetch para mandar
+  fetch(servidor + 'read/cd/' + meuCodigo, {
+    method: 'PUT',
+    body: corpo,
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
 
-  //   //checar o status do pedido
-  //   //console.log(response);
+    //checar o status do pedido
+    //console.log(response);
 
-  //   //tratamento dos erros
-  //   if (response.status == 200 || response.status == 201) {
-  //     //checar o json
-  //     //response.json().then(function (json) {
-  //     //console.log(json);
-  //     //});
-  //     window.location.replace("./cd.html");
-  //   } else {
-  //     erros(response.status);
-  //   }
-  // });
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      //checar o json
+      //response.json().then(function (json) {
+      //console.log(json);
+      //});
+      window.location.replace("./cd.html");
+    } else {
+      erros(response.status);
+    }
+  });
 }
 
 
