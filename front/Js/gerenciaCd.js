@@ -158,18 +158,13 @@ function itens() {
 }
 
 function editarItemCD() {
-  let i1, i2, qpe, qti;
 
   for (let i = 0; i < listaItem.length; i++) {
-    i1 = document.getElementById("quantidade_projeto_executivo" + i).value
-    qpe = i1.split(",")
 
-    i2 = document.getElementById("quantidade_termo_instalacao" + i).value
-    qti = i2.split(",")
     edicaoItem[i] = {
       "quantidade_previsto": parseInt(document.getElementById("quantidade_previsto" + i).value),
-      "quantidade_projeto_executivo": parseFloat(qpe[0]+qpe[1])/100,
-      "quantidade_termo_instalacao": parseFloat(qti[0]+qti[1])/100,
+      "quantidade_projeto_executivo": parseFloat(mascaraQuebrados(document.getElementById("quantidade_projeto_executivo" + i).value)),
+      "quantidade_termo_instalacao": parseFloat(mascaraQuebrados(document.getElementById("quantidade_termo_instalacao" + i).value)),
     };
 
     // console.log(edicaoItem)

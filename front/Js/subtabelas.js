@@ -123,7 +123,7 @@ function empenhoSub(valorCodigo) {
       //pegar o json que possui a tabela
       response.json().then(function (json) {
 
-        console.log(json);
+        //console.log(json);
 
         let tabela = "";
         if(valorCodigo=='1'){
@@ -327,6 +327,7 @@ function pagamentoSub(valorCodigo) {
 
         let j = 0;
         for (let i = 0; i < json.length; i++) {
+          //filtro ainda sera alterado quando for criado
         //  if (valorCodigo == json[i]["num_nf"]) {
             listaFinal[j] = json[i];
             j++;
@@ -411,32 +412,6 @@ function sublinhar(valor,tamanho){
 
 
 
-
-//função comum para os valores em itens:
-function mascaraPreco(preco) {
-
-  //para organizar a mascara
-  let preco2,preco3,preco4;
-
-  //console.log(preco.toString().length)
-
-  //Verifica se o númera possui uma casa de milhar
-  if((preco.toString()).length > 6){
-    preco2 = preco.split(".");
-    preco3 = preco2[1].split(",");
-
-    preco4 = (preco2[0] + preco3[0] + preco3[1])/100;
-    
-    
-  }else{
-    preco2 = preco.split(",");
-    
-    preco4 = (preco2[0] + preco2[1])/100;
-  }
-
-  return preco4;
-
-}
 
 //lote itens
 
@@ -654,7 +629,7 @@ function itensFinanceamento(caminho) {
           tabela += (`</td> <td>`);
           tabela += listaItem[i]["quantidade_disponivel"];
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["quantidade"] + `" id="quantidade` + i + `" type="text" size="10"></input>`);
+          tabela += (`<input value="` + listaItem[i]["quantidade"] + `" class="quebrados" id="quantidade` + i + `" type="text" size="10"></input>`);
           tabela += (`</td> <td>`);
           tabela += (`R$ <input value="` + (listaItem[i]["valor"]*100) + `" class="preco" id="valor` + i + `" type="text" size="15"></input>`);
           tabela += (`</td> <td class="preco">`);
@@ -709,20 +684,6 @@ function itensFinanceamento(caminho) {
   });
 }
 
-function arredondamento(valor){
-
-  //split para arredondar valores nos campos subtotal e total
-  let redondo = JSON.stringify(valor);
-  let splitRedondo = redondo.split(".");
-
-  //necessario para garantir que o campo possua
-  let garantia = splitRedondo[1]+"00";
-  let splitRedondo2 = garantia.split("");
-  let redondoFinal = splitRedondo[0]+splitRedondo2[0]+splitRedondo2[1];
-
-  return redondoFinal;
-}
-
 function descricaoItem(valor){
   $("#descricaoItem").modal({
     show: true
@@ -751,7 +712,7 @@ function editarItem(caminho) {
 
     //função splitPreco é usada aqui dentro
     edicaoItem[i] = {
-      "quantidade": parseFloat(document.getElementById("quantidade" + i).value),
+      "quantidade": parseFloat(mascaraQuebrados(document.getElementById("quantidade" + i).value)),
       "valor": parseFloat(mascaraPreco(document.getElementById("valor" + i).value)),
     };
 
@@ -765,7 +726,7 @@ function editarItem(caminho) {
     if (listaItem[i]["quantidade"] != edicaoItem[i]["quantidade"] || listaItem[i]["valor"] != edicaoItem[i]["valor"]) {
       //transforma as informações do token em json
       let corpo = JSON.stringify(edicaoItem[i]);
-      //console.log(corpo);
+      console.log(corpo);
 
       //função fetch para mandar
       fetch(caminhoFinal, {
