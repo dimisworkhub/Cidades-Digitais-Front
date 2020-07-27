@@ -81,3 +81,26 @@ function mascaraQuebrados(valor){
 
   return (qMudado[0]+qMudado[1])/100;
 }
+  
+function arrumaData(data){
+  
+  // console.log(data)
+
+  if(data === null || data === undefined || data === ''){
+
+    let dataFinal = null;
+    return dataFinal 
+    
+  }else{
+    
+    //utiliza split
+    let dataSeparada = data.split("-");
+  
+    //retirar o horario que aparece normalmente junto ao formato de data
+    let dataEspecial = dataSeparada[2].split("T");
+  
+    //junta todas as informações para ficar no padrão brasileiro
+    let dataFinal = dataEspecial[0] + dataSeparada[1] + dataSeparada[0];
+  
+    return dataFinal;
+  }
