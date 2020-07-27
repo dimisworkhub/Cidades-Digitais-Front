@@ -16,15 +16,20 @@ window.onload = function () {
 
   //estes campos precisam de adaptações para serem aceitos com o padrão yyyy-MM-dd
 
-  let data1 = new Date(localStorage.getItem("data_pe"));
-  let data2 = new Date(localStorage.getItem("data_imp"));
+  let data1 = localStorage.getItem("data_pe");
+  let data2 = localStorage.getItem("data_imp");
 
-  let dataFinal1 = String(data1.getFullYear()).padStart(4, '0') + "-" + String(data1.getMonth() + 1).padStart(2, '0') + "-" + String(data1.getDate()).padStart(2, '0');
-  let dataFinal2 = String(data2.getFullYear()).padStart(4, '0') + "-" + String(data2.getMonth() + 1).padStart(2, '0') + "-" + String(data2.getDate()).padStart(2, '0');
+  let dataFinal1 = arrumaData(data1);
+  let dataFinal2 = arrumaData(data2);
+
+  // let dataFinal1 = String(data1.getFullYear()).padStart(4, '0') + "-" + String(data1.getMonth() + 1).padStart(2, '0') + "-" + String(data1.getDate()).padStart(2, '0');
+  // let dataFinal2 = String(data2.getFullYear()).padStart(4, '0') + "-" + String(data2.getMonth() + 1).padStart(2, '0') + "-" + String(data2.getDate()).padStart(2, '0');
 
   document.getElementById("data_pe").value = dataFinal1;
   document.getElementById("data_imp").value = dataFinal2;
 
+  // console.log(data1)
+  mascara()
 }
 
 
@@ -40,31 +45,33 @@ function enviar() {
     "data_imp": document.getElementById("data_imp").value,
   };
 
-  //transforma as informações do token em json
-  let corpo = JSON.stringify(info);
-  //função fetch para mandar
-  fetch(servidor + 'read/cd/' + meuCodigo, {
-    method: 'PUT',
-    body: corpo,
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
+  console.log(info)
 
-    //checar o status do pedido
-    //console.log(response);
+  // //transforma as informações do token em json
+  // let corpo = JSON.stringify(info);
+  // //função fetch para mandar
+  // fetch(servidor + 'read/cd/' + meuCodigo, {
+  //   method: 'PUT',
+  //   body: corpo,
+  //   headers: {
+  //     'Authorization': 'Bearer ' + meuToken
+  //   },
+  // }).then(function (response) {
 
-    //tratamento dos erros
-    if (response.status == 200 || response.status == 201) {
-      //checar o json
-      //response.json().then(function (json) {
-      //console.log(json);
-      //});
-      window.location.replace("./cd.html");
-    } else {
-      erros(response.status);
-    }
-  });
+  //   //checar o status do pedido
+  //   //console.log(response);
+
+  //   //tratamento dos erros
+  //   if (response.status == 200 || response.status == 201) {
+  //     //checar o json
+  //     //response.json().then(function (json) {
+  //     //console.log(json);
+  //     //});
+  //     window.location.replace("./cd.html");
+  //   } else {
+  //     erros(response.status);
+  //   }
+  // });
 }
 
 
