@@ -60,15 +60,15 @@ function paginacao() {
           tabela += filtrado[i]["cod_lote"];
           tabela += (`</td> <td>`);
           tabela += filtrado[i]["os_pe"];
-          tabela += (`</td> <td>`);
-          let data1 = new Date(filtrado[i]["data_pe"]);
-          let dataf1 = String(data1.getDate()).padStart(2, '0') + '/' + String(data1.getMonth() + 1).padStart(2, '0') + '/' + String(data1.getFullYear()).padStart(4, '0');
+          tabela += (`</td> <td class="data">`);
+          let data1 = filtrado[i]["data_pe"];
+          let dataf1 = arrumaData(data1);
           tabela += dataf1;
           tabela += (`</td> <td>`);
           tabela += filtrado[i]["os_imp"];
-          tabela += (`</td> <td>`);
-          let data2 = new Date(filtrado[i]["data_imp"]);
-          let dataf2 = String(data2.getDate()).padStart(2, '0') + '/' + String(data2.getMonth() + 1).padStart(2, '0') + '/' + String(data2.getFullYear()).padStart(4, '0');
+          tabela += (`</td> <td class="data">`);
+          let data2 = filtrado[i]["data_imp"];
+          let dataf2 = arrumaData(data2);
           tabela += dataf2;
           tabela += (`</td> <td> 
                 <span class="d-flex">
@@ -81,7 +81,7 @@ function paginacao() {
 
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
-
+        mascara()
         paginasOrganizadas(filtrado,comeco,fim);
       });
     } else {
