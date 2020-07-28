@@ -214,10 +214,9 @@ function editarReajuste() {
 
   for (i = 0; i < listaReajuste.length; i++) {
 
-    //asd.asd.asd
     //ajustar percentual:
     percent = document.getElementById("percentual" +i).value;
-    percent2 = percent.split(".");
+    percent2 = percent.split(",");
     percent3 = percent2[1].split("%");
     percent4 = (percent2[0] + percent3[0])/100;
     

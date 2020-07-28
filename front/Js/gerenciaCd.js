@@ -16,15 +16,20 @@ window.onload = function () {
 
   //estes campos precisam de adaptações para serem aceitos com o padrão yyyy-MM-dd
 
-  let data1 = new Date(localStorage.getItem("data_pe"));
-  let data2 = new Date(localStorage.getItem("data_imp"));
+  let data1 = localStorage.getItem("data_pe");
+  let data2 = localStorage.getItem("data_imp");
 
-  let dataFinal1 = String(data1.getFullYear()).padStart(4, '0') + "-" + String(data1.getMonth() + 1).padStart(2, '0') + "-" + String(data1.getDate()).padStart(2, '0');
-  let dataFinal2 = String(data2.getFullYear()).padStart(4, '0') + "-" + String(data2.getMonth() + 1).padStart(2, '0') + "-" + String(data2.getDate()).padStart(2, '0');
+  let dataFinal1 = arrumaData(data1);
+  let dataFinal2 = arrumaData(data2);
+
+  // let dataFinal1 = String(data1.getFullYear()).padStart(4, '0') + "-" + String(data1.getMonth() + 1).padStart(2, '0') + "-" + String(data1.getDate()).padStart(2, '0');
+  // let dataFinal2 = String(data2.getFullYear()).padStart(4, '0') + "-" + String(data2.getMonth() + 1).padStart(2, '0') + "-" + String(data2.getDate()).padStart(2, '0');
 
   document.getElementById("data_pe").value = dataFinal1;
   document.getElementById("data_imp").value = dataFinal2;
 
+  // console.log(data1)
+  mascara()
 }
 
 
@@ -39,6 +44,8 @@ function enviar() {
     "os_imp": document.getElementById("os_imp").value,
     "data_imp": document.getElementById("data_imp").value,
   };
+
+  console.log(info)
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
@@ -151,18 +158,13 @@ function itens() {
 }
 
 function editarItemCD() {
-  let i1, i2, qpe, qti;
 
   for (let i = 0; i < listaItem.length; i++) {
-    i1 = document.getElementById("quantidade_projeto_executivo" + i).value
-    qpe = i1.split(",")
 
-    i2 = document.getElementById("quantidade_termo_instalacao" + i).value
-    qti = i2.split(",")
     edicaoItem[i] = {
       "quantidade_previsto": parseInt(document.getElementById("quantidade_previsto" + i).value),
-      "quantidade_projeto_executivo": parseFloat(qpe[0]+qpe[1])/100,
-      "quantidade_termo_instalacao": parseFloat(qti[0]+qti[1])/100,
+      "quantidade_projeto_executivo": parseFloat(mascaraQuebrados(document.getElementById("quantidade_projeto_executivo" + i).value)),
+      "quantidade_termo_instalacao": parseFloat(mascaraQuebrados(document.getElementById("quantidade_termo_instalacao" + i).value)),
     };
 
     // console.log(edicaoItem)
