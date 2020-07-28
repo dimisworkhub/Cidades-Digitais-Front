@@ -22,30 +22,31 @@ window.onload = function () {
   let dataFinal1 = arrumaData(data1);
   let dataFinal2 = arrumaData(data2);
 
-  // let dataFinal1 = String(data1.getFullYear()).padStart(4, '0') + "-" + String(data1.getMonth() + 1).padStart(2, '0') + "-" + String(data1.getDate()).padStart(2, '0');
-  // let dataFinal2 = String(data2.getFullYear()).padStart(4, '0') + "-" + String(data2.getMonth() + 1).padStart(2, '0') + "-" + String(data2.getDate()).padStart(2, '0');
-
   document.getElementById("data_pe").value = dataFinal1;
   document.getElementById("data_imp").value = dataFinal2;
 
   // console.log(data1)
-  mascara()
+  mascara();
 }
 
 
 function enviar() {
+
+  let data1,data2;
+  data1=mascaraData(document.getElementById("data_pe").value);
+  data2=mascaraData(document.getElementById("data_imp").value);
 
   //JSON usado para mandar as informações no fetch
   let info = {
     "cod_ibge": parseInt(meuCodigo),
     "cod_lote": parseInt(meuLote),
     "os_pe": document.getElementById("os_pe").value,
-    "data_pe": document.getElementById("data_pe").value,
+    "data_pe": data1,
     "os_imp": document.getElementById("os_imp").value,
-    "data_imp": document.getElementById("data_imp").value,
+    "data_imp": data2,
   };
 
-  console.log(info)
+  console.log(info);
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
@@ -67,9 +68,9 @@ function enviar() {
       //response.json().then(function (json) {
       //console.log(json);
       //});
-      window.location.replace("./cd.html");
+      //window.location.replace("./cd.html");
     } else {
-      erros(response.status);
+      //erros(response.status);
     }
   });
 }
