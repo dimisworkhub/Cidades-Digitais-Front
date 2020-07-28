@@ -6,7 +6,7 @@ function mascara(){
     $('.data2').mask('00/00');
     $('.quebrados').inputmask('[999]9,99', {reverse: true, numericInput:true, placeholder: "0"});
     $('.inteiros').inputmask('[9999999999]9', {reverse: true, numericInput:true});
-    $('.preco').inputmask('[9.999.999.99]9,99', {reverse: true, numericInput:true, prefix: "R$ ", placeholder: "0"});
+    $('.preco').inputmask({mask: "[9.999.999.99]9,99", reverse: true, numericInput:true, prefix: "R$ ", placeholder: "0", greedy: false});
     // $(".preco").inputmask('decimal', {
     //   'alias': 'numeric',
     //   'groupSeparator': ',',
@@ -105,4 +105,20 @@ function arrumaData(data){
     return dataFinal;
   }
 
+}
+
+function mascaraData(data){
+  let dataFinal;
+  if(data === null || data === undefined || data === ''){
+    dataFinal = null;
+  }
+  else{
+    //utiliza split
+    let dataSeparada = data.split("/");
+
+    //junta todas as informações para ficar no padrão brasileiro
+    dataFinal = dataSeparada[2] + "-" + dataSeparada[1] + "-" + dataSeparada[0];
+  }
+  
+  return dataFinal;
 }

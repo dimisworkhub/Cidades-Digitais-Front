@@ -20,10 +20,7 @@ window.onload = function () {
   document.getElementById("cod_previsao_empenho").value = meuCodigoSec + " - " + localStorage.getItem("descricao") + " - " + tipo;
 
   //este campo precisa de adaptação para ser aceito, como yyyy-MM-dd
-  let data = localStorage.getItem("data");
-  let dataSeparada = data.split("-");
-  let dataEspecial = dataSeparada[2].split("T");
-  document.getElementById("data").value = dataEspecial[0]+dataSeparada[1]+dataSeparada[0];
+  document.getElementById("data").value = arrumaData(localStorage.getItem("data"));
 
   mascara();
 }
