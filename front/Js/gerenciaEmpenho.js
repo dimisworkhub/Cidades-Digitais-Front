@@ -19,7 +19,7 @@ window.onload = function () {
   }
   document.getElementById("cod_previsao_empenho").value = meuCodigoSec + " - " + localStorage.getItem("descricao") + " - " + tipo;
 
-  //este campo precisa de adaptação para ser aceito, como yyyy-MM-dd
+  //estes campos precisam de adaptações para utilizar de suas mascaras
   document.getElementById("data").value = arrumaData(localStorage.getItem("data"));
 
   mascara();

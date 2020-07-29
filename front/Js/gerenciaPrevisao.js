@@ -14,7 +14,7 @@ window.onload = function () {
   document.getElementById("tipo").innerHTML = "<option value='o'>Original</option><option value='r'>Reajuste</option>";
   document.getElementById("tipo").value = localStorage.getItem("tipo");
 
-  //este campo precisa de adaptação para ser aceito, como yyyy-MM-dd
+  //estes campos precisam de adaptações para utilizar de suas mascaras
 
   let data = localStorage.getItem("data");
   let dataSeparada = data.split("-");
