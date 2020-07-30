@@ -8,7 +8,7 @@ function mascara(){
     $('.inteiros').inputmask('[9999999999]9', {reverse: true, numericInput:true});
     // Função que remove a máscara ao enviar pro banco
     // removeMaskOnSubmit: true,
-    $('.preco').inputmask({mask: "[99.999.999.99]9,99", reverse: true, numericInput:true, prefix: "R$ ", placeholder: "", greedy: false});
+    $('.preco').inputmask({mask: "[R$ 9.999.999.99]9,99", reverse: true, numericInput:true, prefix: "R$ ", placeholder: "", greedy: false});
     // $(".preco").inputmask('decimal', {
     //   'alias': 'numeric',
     //   'groupSeparator': ',',

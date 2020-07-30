@@ -14,39 +14,27 @@ window.onload = function () {
   document.getElementById("os_pe").value = localStorage.getItem("os_pe");
   document.getElementById("os_imp").value = localStorage.getItem("os_imp");
 
-  //estes campos precisam de adaptações para serem aceitos com o padrão yyyy-MM-dd
+  //estes campos precisam de adaptações para utilizar de suas mascaras
+  document.getElementById("data_pe").value = arrumaData(localStorage.getItem("data_pe"));
+  document.getElementById("data_imp").value = arrumaData(localStorage.getItem("data_imp"));
 
-  let data1 = localStorage.getItem("data_pe");
-  let data2 = localStorage.getItem("data_imp");
-
-  let dataFinal1 = arrumaData(data1);
-  let dataFinal2 = arrumaData(data2);
-
-  document.getElementById("data_pe").value = dataFinal1;
-  document.getElementById("data_imp").value = dataFinal2;
-
-  // console.log(data1)
   mascara();
 }
 
 
 function enviar() {
 
-  let data1,data2;
-  data1=mascaraData(document.getElementById("data_pe").value);
-  data2=mascaraData(document.getElementById("data_imp").value);
-
   //JSON usado para mandar as informações no fetch
   let info = {
     "cod_ibge": parseInt(meuCodigo),
     "cod_lote": parseInt(meuLote),
     "os_pe": document.getElementById("os_pe").value,
-    "data_pe": data1,
+    "data_pe": mascaraData(document.getElementById("data_pe").value),
     "os_imp": document.getElementById("os_imp").value,
-    "data_imp": data2,
+    "data_imp": mascaraData(document.getElementById("data_imp").value),
   };
 
-  console.log(info);
+  //console.log(info);
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);

@@ -558,7 +558,7 @@ function itensFinanceamento(caminho) {
 
     //tratamento dos erros
     if (response.status == 200) {
-      console.log(response.statusText);
+      //console.log(response.statusText);
 
       //pegar o json que possui a tabela
       response.json().then(function (json) {
@@ -567,6 +567,9 @@ function itensFinanceamento(caminho) {
         //console.log(json);
 
         let tabela;
+
+        //armazenando para edição
+        listaItem = json;
 
         //mudanças feitas para fatura funcionar
         if (caminho == "itensfatura") {
@@ -593,9 +596,6 @@ function itensFinanceamento(caminho) {
           </thead>`);
         }
 
-        //armazenando para edição
-        listaItem = json;
-
         //calculo do total dos valores de cada linha
         let total = 0;
         let totalFinal = 0;
@@ -612,7 +612,7 @@ function itensFinanceamento(caminho) {
           tabela += (`<td>`);
           tabela += listaItem[i]["cod_tipo_item"] + '.' + listaItem[i]["cod_item"] + ' - ' + listaItem[i]["descricao"];
 
-          //para fatura
+          //apenas para fatura
           if (caminho == "itensfatura") {
             tabela += (`</td> <td>`);
             tabela += listaItem[i]["cod_empenho"];
@@ -631,14 +631,14 @@ function itensFinanceamento(caminho) {
           tabela += (`</td> <td>`);
           tabela += (`<input value="` + listaItem[i]["quantidade"] + `" class="quebrados" id="quantidade` + i + `" type="text" size="10"></input>`);
           tabela += (`</td> <td>`);
-          tabela += (`R$ <input value="` + (listaItem[i]["valor"]*100) + `" class="preco" id="valor` + i + `" type="text" size="15"></input>`);
+          tabela += (`<input value="` + (listaItem[i]["valor"]*100) + `" class="preco" id="valor` + i + `" type="text" size="15"></input>`);
           tabela += (`</td> <td class="preco">`);
 
           //calculo do subtotal
           total = (listaItem[i]["quantidade"] * listaItem[i]["valor"]);
           totalFinal = totalFinal + total;
 
-          tabela +="R$ " + arredondamento(total);
+          tabela += arredondamento(total);
           tabela += (`</td>`);
           tabela += (`</tr>`);
         }
@@ -666,8 +666,8 @@ function itensFinanceamento(caminho) {
         }
 
         //valor final
-        tabela += (`<td>`);
-        tabela +="R$ " + arredondamento(totalFinal);
+        tabela += (`<td  class="preco">`);
+        tabela += arredondamento(totalFinal);
         tabela += (`</td>`);
 
         tabela += (`</tr>`);
@@ -716,36 +716,60 @@ function editarItem(caminho) {
       "valor": parseFloat(mascaraPreco(document.getElementById("valor" + i).value)),
     };
 
-    let caminhoFinal;
-    if (caminho == "itensfatura") {
-      caminhoFinal = servidor + 'read/' + caminho + '/' + meuCodigo + '/' + meuCodigoSec + '/' + meuEmpenho[i] + '/' + meuItem[i] + '/' + meuTipo[i];
-    } else {
-      caminhoFinal = servidor + 'read/' + caminho + '/' + meuCodigo + '/' + meuItem[i] + '/' + meuTipo[i];
-    }
-
+    //identifica se o item foi alterado
     if (listaItem[i]["quantidade"] != edicaoItem[i]["quantidade"] || listaItem[i]["valor"] != edicaoItem[i]["valor"]) {
-      //transforma as informações do token em json
-      let corpo = JSON.stringify(edicaoItem[i]);
-      console.log(corpo);
 
-      //função fetch para mandar
-      fetch(caminhoFinal, {
-        method: 'PUT',
-        body: corpo,
-        headers: {
-          'Authorization': 'Bearer ' + meuToken
-        },
-      }).then(function (response) {
-        //checar o status do pedido
-        //console.log(response.statusText);
+      //processo para 
+      let caminhoFinal;
 
-        //tratamento dos erros
-        if (response.status == 200 || response.status == 201) {
-          location.reload();
-        } else {
-          erros(response.status);
-        }
-      });
+      if (caminho == "itensfatura") {
+        caminhoFinal = servidor + 'read/' + caminho + '/' + meuCodigo + '/' + meuCodigoSec + '/' + meuEmpenho[i] + '/' + meuItem[i] + '/' + meuTipo[i];
+      } else {
+        caminhoFinal = servidor + 'read/' + caminho + '/' + meuCodigo + '/' + meuItem[i] + '/' + meuTipo[i];
+      }
+
+      //para os casos especificos em tipos de item 8,9 e 10
+      if(listaItem[i].cod_tipo_item == "8" || listaItem[i].cod_tipo_item == "9" || listaItem[i].cod_tipo_item == "10" && listaItem[i].cod_item > "0" && listaItem[i].cod_item <= "5"){
+        //preciso:
+        //pegar valores base, diferenciar eles (array?), calcular tudo e garantir que não passa (if final. caso errado apenas apareceum alert);
+        
+        //usar esse array para armazenar os 5 organizadamente, com 0 sendo qD, 1 q, e 2 val;
+        let valorMax = [ [],[],[] ];
+
+        // if(){
+
+        // }else{
+        //   fetchFinanciamento(caminhoFinal);
+        // }
+        console.log("");
+      } else {
+        fetchFinanciamento(caminhoFinal);
+      }
     }
   }
+}
+
+function fetchFinanciamento(meuPath){
+  //transforma as informações do token em json
+  let corpo = JSON.stringify(edicaoItem[i]);
+  //console.log(corpo);
+
+  //função fetch para mandar
+  fetch(meuPath, {
+    method: 'PUT',
+    body: corpo,
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+    //checar o status do pedido
+    //console.log(response.statusText);
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      location.reload();
+    } else {
+      erros(response.status);
+    }
+  });
 }

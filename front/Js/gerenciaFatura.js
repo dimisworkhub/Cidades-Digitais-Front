@@ -13,7 +13,7 @@ window.onload = function () {
   //esta função preenche o campo de municipio
   document.getElementById("cod_ibge").value = localStorage.getItem("nome_municipio") + " - " + localStorage.getItem("uf") + " - " + localStorage.getItem("cod_ibge");
 
-  //estes campos precisam de adaptações para serem aceitos com o padrão yyyy-MM-dd
+  //estes campos precisam de adaptações para utilizar de suas mascaras
   let data = localStorage.getItem("dt_nf");
   let dataSeparada = data.split("-");
   let dataEspecial = dataSeparada[2].split("T");
@@ -36,6 +36,8 @@ function adicionarItensFatura(){
   document.getElementById("id_empenho").disabled = true;
   document.getElementById("itens_disponiveis").disabled = true;
   document.getElementById("quantidade_disponivel").disabled = true;
+  document.getElementById("quantidade").disabled = true;
+  document.getElementById("valor").disabled = true;
 }
 
 
@@ -196,6 +198,8 @@ function itensReajuste(caminho){
 function enabler3(){
 
   document.getElementById("quantidade_disponivel").disabled = false;
+  document.getElementById("quantidade").disabled = false;
+  document.getElementById("valor").disabled = false;
 
   //variaveis
   let empenho = document.getElementById("id_empenho").value;
@@ -234,7 +238,7 @@ function enabler3(){
 }
 
 
-function novoItensFatura(){
+function enviarItensFatura(){
 
   //trata os valores de itens disponiveis
   let stringValores = document.getElementById("itens_disponiveis").value;
@@ -247,8 +251,8 @@ function novoItensFatura(){
     "id_empenho": parseInt(document.getElementById("id_empenho").value),
     "cod_item": parseInt(valoresJuntos[0]),
     "cod_tipo_item": parseInt(valoresJuntos[1]),
-    "quantidade": parseFloat(document.getElementById("quantidade").value),
-    "valor": parseFloat(document.getElementById("valor").value),
+    "quantidade": parseFloat(mascaraQuebrados(document.getElementById("quantidade").value)),
+    "valor": parseFloat(mascaraPreco(document.getElementById("valor").value)),
   };
 
   //transforma as informações em string para mandar
