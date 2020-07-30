@@ -25,6 +25,38 @@ window.onload = function () {
 
 
 
+function enviar() {
+
+  //estrutura usada para mandar as informações no fetch
+  let info = {
+    "dt_nf": document.getElementById("dt_nf").value,
+  };
+
+  //transforma as informações em string para mandar
+  let corpo = JSON.stringify(info);
+  //função fetch para mandar
+  fetch(servidor + 'read/fatura/', {
+    method: 'PUT',
+    body: corpo,
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //checar o status do pedido
+    //console.log(response);
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      window.location.replace("./fiscFatura.html");
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+
+
 function adicionarItensFatura(){
 
   //criando labels dentro do campo
@@ -39,8 +71,6 @@ function adicionarItensFatura(){
   document.getElementById("quantidade").disabled = true;
   document.getElementById("valor").disabled = true;
 }
-
-
 
 function enabler1(){
 
@@ -72,7 +102,7 @@ function original(){
         //variavel alterada para usar em enabler()
         itemSelecionado=json;
         
-        continuacaoEnabler1();
+        reajusteEOriginal();
       });
     } else {
       erros(response.status);
@@ -97,7 +127,7 @@ function reajuste(){
         //variavel alterada para usar em enabler()
         itemSelecionado=json;
         
-        continuacaoEnabler1();
+        reajusteEOriginal();
       });
     } else {
       erros(response.status);
@@ -105,7 +135,7 @@ function reajuste(){
   });
 }
 
-function continuacaoEnabler1(){
+function reajusteEOriginal(){
 
   document.getElementById("id_empenho").disabled = false;
 
@@ -132,8 +162,6 @@ function continuacaoEnabler1(){
 
   document.getElementById("id_empenho").innerHTML = x;
 }
-
-
 
 function enabler2(){
 
@@ -193,15 +221,12 @@ function itensReajuste(caminho){
   });
 }
 
-
-
 function enabler3(){
 
   document.getElementById("quantidade_disponivel").disabled = false;
   document.getElementById("quantidade").disabled = false;
   document.getElementById("valor").disabled = false;
 
-  //variaveis
   let empenho = document.getElementById("id_empenho").value;
 
   //spliting para pegar o valor de itens puro
@@ -237,7 +262,6 @@ function enabler3(){
   document.getElementById("quantidade_disponivel").disabled = true;
 }
 
-
 function enviarItensFatura(){
 
   //trata os valores de itens disponiveis
@@ -269,38 +293,6 @@ function enviarItensFatura(){
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
       location.reload();
-    } else {
-      erros(response.status);
-    }
-  });
-}
-
-
-
-function enviar() {
-
-  //estrutura usada para mandar as informações no fetch
-  let info = {
-    "dt_nf": document.getElementById("dt_nf").value,
-  };
-
-  //transforma as informações em string para mandar
-  let corpo = JSON.stringify(info);
-  //função fetch para mandar
-  fetch(servidor + 'read/fatura/', {
-    method: 'PUT',
-    body: corpo,
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-
-    //checar o status do pedido
-    //console.log(response);
-
-    //tratamento dos erros
-    if (response.status == 200 || response.status == 201) {
-      window.location.replace("./fiscFatura.html");
     } else {
       erros(response.status);
     }
