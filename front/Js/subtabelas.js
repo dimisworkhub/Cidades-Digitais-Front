@@ -708,6 +708,9 @@ function descricaoItem2(itemDescrito){
 
 function editarItem(caminho) {
 
+  //variavel do caminho
+  let caminhoFinal;
+
   for (let i = 0; i < listaItem.length; i++) {
 
     //função splitPreco é usada aqui dentro
@@ -719,9 +722,6 @@ function editarItem(caminho) {
     //identifica se o item foi alterado
     if (listaItem[i]["quantidade"] != edicaoItem[i]["quantidade"] || listaItem[i]["valor"] != edicaoItem[i]["valor"]) {
 
-      //processo para 
-      let caminhoFinal;
-
       if (caminho == "itensfatura") {
         caminhoFinal = servidor + 'read/' + caminho + '/' + meuCodigo + '/' + meuCodigoSec + '/' + meuEmpenho[i] + '/' + meuItem[i] + '/' + meuTipo[i];
       } else {
@@ -729,20 +729,24 @@ function editarItem(caminho) {
       }
 
       //para os casos especificos em tipos de item 8,9 e 10
-      if(listaItem[i].cod_tipo_item == "8" || listaItem[i].cod_tipo_item == "9" || listaItem[i].cod_tipo_item == "10" && listaItem[i].cod_item > "0" && listaItem[i].cod_item <= "5"){
+      if(listaItem[i].cod_tipo_item == "8" || listaItem[i].cod_tipo_item == "9" || listaItem[i].cod_tipo_item == "10" && listaItem[i].cod_item <= "5"){
         //preciso:
-        //pegar valores base, diferenciar eles (array?), calcular tudo e garantir que não passa (if final. caso errado apenas apareceum alert);
+        //pegar valores base, diferenciar eles (array?), calcular tudo e garantir que não passa;
         
-        //usar esse array para armazenar os 5 organizadamente, com 0 sendo qD, 1 q, e 2 val;
-        let valorMax = [ [],[],[] ];
+        //só para teste
+        let valorMax = 2;
+        let valorSoma = 1;
 
-        // if(){
+        if(valorMax<valorSoma){
+          //mensagem com certeza irá mudar
+          alert("Não foi possivel completar a edição pois algum valor especial está ultrapassando o limite.");
 
-        // }else{
-        //   fetchFinanciamento(caminhoFinal);
-        // }
-        console.log("");
+          //
+        }else{
+          fetchFinanciamento(caminhoFinal);
+        }
       } else {
+        //console.log("objetivo");
         fetchFinanciamento(caminhoFinal);
       }
     }
@@ -752,7 +756,7 @@ function editarItem(caminho) {
 function fetchFinanciamento(meuPath){
   //transforma as informações do token em json
   let corpo = JSON.stringify(edicaoItem[i]);
-  //console.log(corpo);
+  console.log(corpo);
 
   //função fetch para mandar
   fetch(meuPath, {
@@ -767,7 +771,7 @@ function fetchFinanciamento(meuPath){
 
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
-      location.reload();
+      //location.reload();
     } else {
       erros(response.status);
     }

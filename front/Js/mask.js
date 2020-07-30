@@ -43,24 +43,24 @@ function arredondamento(valor){
 function mascaraPreco(preco) {
 
   //para organizar a mascara
-  let preco2,preco2L,preco3,preco4;
+  let preco1,preco2,preco2L,preco3,preco4;
   let preco2A = "";
-
-  //console.log(preco.toString().length)
 
   //Verifica se o númera possui uma casa de milhar
   if((preco.toString()).length > 6){
-    preco2 = preco.split(".");
+    preco1 = preco.split("R$ ");
+    preco2 = preco1[1].split(".");
+
     //para garantir que todas as partes dos valores sejam pegas
     preco2L = preco2.length;
-    preco3 = preco2[(preco2L-1)].split(",");
 
-    for(let i = 0; i < (preco2L-1); i++){
+    for(let i = 0; i < preco2L; i++){
       preco2A += preco2[i];
     }
 
-    preco4 = (preco2A + preco3[0] + preco3[1])/100;
-    
+    preco3 = preco2A.split(",");
+
+    preco4 = (preco3[0] + preco3[1])/100;
     
   }else{
     preco2 = preco.split(",");
