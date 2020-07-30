@@ -60,17 +60,17 @@ function enviar() {
   }).then(function (response) {
 
     //checar o status do pedido
-    //console.log(response);
+    console.log(response);
 
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
       //checar o json
-      //response.json().then(function (json) {
-      //console.log(json);
-      //});
-      //window.location.replace("./cd.html");
+      response.json().then(function (json) {
+      console.log(json);
+      });
+      window.location.replace("./cd.html");
     } else {
-      //erros(response.status);
+      erros(response.status);
     }
   });
 }
