@@ -129,16 +129,23 @@ window.onload = function () {
 }
 
 function enviar() {
+  mascara();
+
+  data1 = document.getElementById("dt_inicio_vig").value;
+  data2 = document.getElementById("dt_final_vig").value;
+  data3 = document.getElementById("dt_reajuste").value;
 
   //estrutura usada para mandar o JSON no fetch
   let info = {
     "cod_lote": parseFloat(document.getElementById("cod_lote").value),
     "cnpj": document.getElementById("cnpj").value,
     "contrato": document.getElementById("contrato").value,
-    "dt_inicio_vig": document.getElementById("dt_inicio_vig").value,
-    "dt_final_vig": document.getElementById("dt_final_vig").value,
-    "dt_reajuste": document.getElementById("dt_reajuste").value,
+    "dt_inicio_vig": mascaraData(data1),
+    "dt_final_vig": mascaraData(data2),
+    "dt_reajuste": mascaraData(data3),
   };
+
+  // console.log(info)
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);

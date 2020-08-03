@@ -4,6 +4,8 @@ function mascara(){
     $('.percentual').inputmask('[99]9,99%', {reverse: true, numericInput:true});
     $('.data').mask('00/00/0000');
     $('.data2').mask('00/00');
+    $('.contrato').mask('999-9999');
+    $('.cnpj').inputmask('99.999.999/9999-99', {removeMaskOnSubmit: true, numericInput:true});
     $('.quebrados').inputmask('[999]9,99', {reverse: true, numericInput:true, placeholder: "0"});
     $('.inteiros').inputmask('[9999999999]9', {reverse: true, numericInput:true});
     // Função que remove a máscara ao enviar pro banco
@@ -100,7 +102,7 @@ function arrumaData(data){
   
     //retirar o horario que aparece normalmente junto ao formato de data
     let dataEspecial = dataSeparada[2].split("T");
-  
+    
     //junta todas as informações para ficar no padrão brasileiro
     let dataFinal = dataEspecial[0] + dataSeparada[1] + dataSeparada[0];
   
@@ -113,13 +115,25 @@ function mascaraData(data){
   let dataFinal;
   if(data === null || data === undefined || data === ''){
     dataFinal = null;
+
+    return dataFinal;
   }
   else{
+
     //utiliza split
     let dataSeparada = data.split("/");
 
-    //junta todas as informações para ficar no padrão brasileiro
-    dataFinal = dataSeparada[2] + "-" + dataSeparada[1] + "-" + dataSeparada[0];
+    if((data.toString().length)<6){
+
+      //junta todas as informações para ficar no padrão brasileiro
+      dataFinal = "0000-" + dataSeparada[1] + "-" + dataSeparada[0];
+      return dataFinal;
+      
+    }else{
+      
+      //junta todas as informações para ficar no padrão brasileiro
+      dataFinal = dataSeparada[2] + "-" + dataSeparada[1] + "-" + dataSeparada[0];
+      return dataFinal;
+    }
   }
-  return dataFinal;
 }

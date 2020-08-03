@@ -166,7 +166,7 @@ function enabler2(){
   for (i = 0; i < itemFinal.length; i++) {
     x[i+1] = "<option value='"+ itemFinal[i].cod_item + " " + itemFinal[i].cod_tipo_item + "'>" + itemFinal[i].cod_tipo_item + "." + itemFinal[i].cod_item + " - " + itemFinal[i].descricao + "</option>";
   }
-
+  console.log(x)
   document.getElementById("itens_disponiveis").innerHTML = x;
 }
 
