@@ -141,23 +141,31 @@ function reajusteEOriginal(){
 
   //variaveis
   let i, j = 0;
-  let x = [], empenhoFinal = [];
-
+  let empenhoID = [], empenhoCod = [], empenhoFinalID = [], empenhoFinalCod = [];
 
   //para filtrar e tirar repetições
   for (i = 0; i < itemSelecionado.length; i++) {
-    if (itemSelecionado[i-1] != undefined && itemSelecionado[i].id_empenho != itemSelecionado[i-1].id_empenho) {
-      empenhoFinal[j] = itemSelecionado[i];
+
+    //guardando em uma variavel para garantir que "undefined" não seja lido
+    empenhoCod[i] = itemSelecionado[i].cod_empenho;
+    empenhoID[i] = itemSelecionado[i].id_empenho;
+
+    //o filtro mesmo
+    if (empenhoID[i] != empenhoID[i-1]) {
+      empenhoFinalID[j] = empenhoID[i];
+      empenhoFinalCod[j] = empenhoCod[i];
       j++;
     }
   }
 
+  let x = [];
+
   //preenche "id_empenho"
   x[0] = "<option value=''>Empenho</option>";
-  for (i = 0; i < empenhoFinal.length; i++) {
+  for (i = 0; i < empenhoFinalID.length; i++) {
 
     //mudar para cod_empenho quando possivel
-    x[i+1] = "<option value=" + empenhoFinal[i].id_empenho + ">" + empenhoFinal[i].cod_empenho + "</option>";
+    x[i+1] = "<option value=" + empenhoFinalID[i] + ">" + empenhoFinalCod[i] + "</option>";
   }
 
   document.getElementById("id_empenho").innerHTML = x;
@@ -185,6 +193,8 @@ function enabler2(){
 
   else if(tipo=="r"){
     itensReajuste(empenho);
+
+    //apenas para adaptar a variavel à linha seguinte
     itemFinal = itemSelecionado;
   }
 
@@ -210,7 +220,7 @@ function itensReajuste(caminho){
     //tratamento dos erros
     if (response.status == 200) {
       return response.json().then(function (json) {
-        console.log(json);
+        //console.log(json);
 
         //variavel alterada para usar em enabler()
         itemSelecionado=json;
@@ -235,10 +245,11 @@ function enabler3(){
 
   //valor usado no filtro
   let item = valoresJuntos[0];
+  let tipoItem = valoresJuntos[1];
   let i, quantidade_disponivel="", quantidade="", valor="";
 
   for (i = 0; i < itemSelecionado.length; i++) {
-    if (itemSelecionado[i].cod_item == item && itemSelecionado[i].id_empenho == empenho) {
+    if (itemSelecionado[i].cod_item == item && itemSelecionado[i].cod_tipo_item == tipoItem && itemSelecionado[i].id_empenho == empenho) {
       quantidade_disponivel += itemSelecionado[i].quantidade_disponivel;
       quantidade += itemSelecionado[i].quantidade;
       valor += itemSelecionado[i].valor;
@@ -247,8 +258,8 @@ function enabler3(){
 
   //colocar os valores nos campos
   document.getElementById("quantidade_disponivel").value = quantidade_disponivel;
-  document.getElementById("quantidade").value = quantidade;
-  document.getElementById("valor").value = valor;
+  document.getElementById("quantidade").value = (quantidade*100);
+  document.getElementById("valor").value = (valor*100);
 
   //mudar cor se necessario
   if(quantidade_disponivel < 0){
