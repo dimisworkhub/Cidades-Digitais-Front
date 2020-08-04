@@ -20,6 +20,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.2.6/jquery.inputmask.bundle.min.js"></script>
 </head>
 
 <body>
@@ -118,7 +119,7 @@
                                                 <input type="date" class="form-control data" id="data"></input>
                                             </div>
                                             <div class="col-12 col-sm-6 mt-4">
-                                                <input type="text" class="form-control" id="ano_referencia"
+                                                <input type="text" class="form-control anos" maxlength="4" id="ano_referencia"
                                                     placeholder="Ano de Referência"></input>
                                             </div>
                                             <div class="button-row d-flex mt-4">
@@ -148,6 +149,7 @@
 <script src="./Js/paginacao.js"></script>
 <script src="./Js/modernizr.js"></script> <!-- Modernizr -->
 <script src="./Js/main.js"></script> <!-- Resource jQuery -->
+<script src="./Js/mask.js"></script>
 
 <script src="./Js/global.js"></script>
 </html>

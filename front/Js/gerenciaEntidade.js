@@ -18,7 +18,7 @@ window.onload = function () {
       'Authorization': 'Bearer ' + meuToken
     },
   }).then(function (response) {
-
+    mascara()
     //tratamento dos erros
     if (response.status == 200) {
       return response.json().then(function (json) {

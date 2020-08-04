@@ -5,7 +5,7 @@ function mascara(){
     $('.data').mask('00/00/0000');
     $('.data2').mask('00/00');
     $('.contrato').mask('999-9999');
-    $('.cnpj').inputmask('99.999.999/9999-99', {removeMaskOnSubmit: true, numericInput:true});
+    $('.cnpj').inputmask('99.999.999/9999-99', {autoUnmask: true, removeMaskOnSubmit: true});
     $('.quebrados').inputmask('[999]9,99', {reverse: true, numericInput:true, placeholder: "0"});
     $('.inteiros').inputmask('[9999999999]9', {reverse: true, numericInput:true});
     // Função que remove a máscara ao enviar pro banco

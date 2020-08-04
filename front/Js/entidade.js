@@ -107,7 +107,7 @@ function paginacao() {
         jsonFinal=filtrado;
 
         for (let i = comeco; i < fim && i < filtrado.length; i++) {
-          tabela += (`<td>`);
+          tabela += (`<td class="cnpj">`);
           tabela += filtrado[i]["cnpj"];
           tabela += (`</td> <td>`);
           tabela += filtrado[i]["nome"]
@@ -135,7 +135,7 @@ function paginacao() {
         }
         tabela += (`</tr> </tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
-
+        mascara();
         paginasOrganizadas(filtrado,comeco,fim);
       });
     } else {
@@ -181,6 +181,7 @@ function enviar() {
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
 
+  console.log(corpo)
   //função fetch para mandar
   fetch(servidor + 'read/entidade', {
     method: 'POST',
