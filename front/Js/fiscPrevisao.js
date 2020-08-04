@@ -72,7 +72,7 @@ function paginacao() {
             let dataFinal1 = String(data1.getDate()).padStart(2, '0') + "/" + String(data1.getMonth() + 1).padStart(2, '0') + "/" + String(data1.getFullYear()).padStart(4, '0');
             tabela += dataFinal1;
             tabela += (`</td>`);
-            tabela += (`<td>`);
+            tabela += (`<td class="ano">`);
             tabela += filtrado[i]["ano_referencia"];
             tabela += (`</td>`);
             tabela += (`<td> 
@@ -85,7 +85,7 @@ function paginacao() {
         }
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
-
+        mascara();
         paginasOrganizadas(filtrado,comeco,fim);
       });
     } else {
