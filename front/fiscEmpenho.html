@@ -20,6 +20,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.2.6/jquery.inputmask.bundle.min.js"></script>
 </head>
 
 <body>
@@ -101,10 +102,10 @@
                                         <div class="form-row">
 
                                             <div class="col-12 col-sm-12">
-                                                <input type="text" class="form-control" id="cod_empenho" maxlength="13" placeholder="Código de Empenho"></input>
+                                                <input type="text" class="form-control" id="cod_empenho" maxlength="11" placeholder="Código de Empenho"></input>
                                             </div>
                                             <div class="col-12 col-sm-12 mt-4">
-                                                <input type="date" class="form-control" id="data" placeholder="Data"></input>
+                                                <input type="text" class="form-control data" id="data" placeholder="Data"></input>
                                             </div>
                                             <div class="col-12 col-sm-12 mt-4">
                                                 <select type="text" class="form-control" id="cod_natureza_despesa" onclick="enabler()"></select>
@@ -141,6 +142,7 @@
 <script src="./Js/paginacao.js"></script>
 <script src="./Js/modernizr.js"></script> <!-- Modernizr -->
 <script src="./Js/main.js"></script> <!-- Resource jQuery -->
+<script src="./Js/mask.js"></script>
 
 <script src="./Js/global.js"></script>
 </html>

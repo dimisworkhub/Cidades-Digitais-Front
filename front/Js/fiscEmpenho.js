@@ -82,7 +82,7 @@ function paginacao() {
         }
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
-
+        mascara();
         paginasOrganizadas(filtrado,comeco,fim);
       });
     } else {
@@ -172,9 +172,11 @@ function enviar() {
     "data": "",
   };
 
+  data = document.getElementById("data").value;
+
   info.cod_previsao_empenho = parseInt(document.getElementById("cod_previsao_empenho").value);
   info.cod_empenho = document.getElementById("cod_empenho").value;
-  info.data = document.getElementById("data").value;
+  info.data = mascaraData(data)
 
   //transforma as informações em string para mandar
   let corpo = JSON.stringify(info);

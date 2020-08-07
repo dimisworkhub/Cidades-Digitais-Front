@@ -223,12 +223,15 @@ function enviar() {
     "data_imp": " "
   };
 
+  data1 = document.getElementById("data_pe").value;
+  data2 = document.getElementById("data_imp").value;
+  
   info.cod_ibge = parseInt(document.getElementById("cod_ibge").value);
   info.cod_lote = parseInt(document.getElementById("cod_lote").value);
   info.os_pe = document.getElementById("os_pe").value;
-  info.data_pe = document.getElementById("data_pe").value;
+  info.data_pe = mascaraData(data1);
   info.os_imp = document.getElementById("os_imp").value;
-  info.data_imp = document.getElementById("data_imp").value;
+  info.data_imp = mascaraData(data2);
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
