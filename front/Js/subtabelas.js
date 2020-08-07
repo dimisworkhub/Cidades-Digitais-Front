@@ -629,7 +629,7 @@ function itensFinanceamento(caminho) {
           tabela += (`</td> <td>`);
           tabela += listaItem[i]["quantidade_disponivel"];
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["quantidade"] + `" class="quebrados" id="quantidade` + i + `" type="text" size="10"></input>`);
+          tabela += (`<input value="` + (listaItem[i]["quantidade"]*100) + `" class="quebrados" id="quantidade` + i + `" type="text" size="10"></input>`);
           tabela += (`</td> <td>`);
           tabela += (`<input value="` + (listaItem[i]["valor"]*100) + `" class="preco" id="valor` + i + `" type="text" size="15"></input>`);
           tabela += (`</td> <td class="preco">`);
@@ -713,7 +713,7 @@ function editarItem(caminho) {
 
   for (let i = 0; i < listaItem.length; i++) {
 
-    //função splitPreco é usada aqui dentro
+    //funções de mascara são usadas aqui para retornar os valores ao processável pelo banco
     edicaoItem[i] = {
       "quantidade": parseFloat(mascaraQuebrados(document.getElementById("quantidade" + i).value)),
       "valor": parseFloat(mascaraPreco(document.getElementById("valor" + i).value)),
@@ -722,58 +722,97 @@ function editarItem(caminho) {
     //identifica se o item foi alterado
     if (listaItem[i]["quantidade"] != edicaoItem[i]["quantidade"] || listaItem[i]["valor"] != edicaoItem[i]["valor"]) {
 
+      //itens fatura precisa de um caminho especial
       if (caminho == "itensfatura") {
         caminhoFinal = servidor + 'read/' + caminho + '/' + meuCodigo + '/' + meuCodigoSec + '/' + meuEmpenho[i] + '/' + meuItem[i] + '/' + meuTipo[i];
       } else {
         caminhoFinal = servidor + 'read/' + caminho + '/' + meuCodigo + '/' + meuItem[i] + '/' + meuTipo[i];
       }
 
-      //para os casos especificos em tipos de item 8,9 e 10
-      if(listaItem[i].cod_tipo_item == "8" || listaItem[i].cod_tipo_item == "9" || listaItem[i].cod_tipo_item == "10" && listaItem[i].cod_item <= "5"){
-        //preciso:
-        //pegar valores base, diferenciar eles (array?), calcular tudo e garantir que não passa;
+      if(edicaoItem[i].quantidade > listaItem[i].quantidade_disponivel){
+
+        //mensagem com certeza irá mudar
+        alert("Não foi possivel completar a edição pois o item" + listaItem[i].cod_tipo_item + "." + listaItem[i].cod_item + "." + " está ultrapassando o limite de quantidade.");
         
-        //só para teste
-        let valorMax = 2;
-        let valorSoma = 1;
+      }
+
+      //Para os casos especificos em tipos de item 8,9 e 10. Validos apenas em itens de 1 a 5 e de fatura ou previsão.
+      else if((listaItem[i].cod_tipo_item == "8" || listaItem[i].cod_tipo_item == "9" || listaItem[i].cod_tipo_item == "10") && listaItem[i].cod_item <= "5" && (caminho == "itensfatura" || caminho == "itensprevisao") && listaItem[i].tipo == "o"){
+        
+        //valor de limite
+        //utiliza os valores atualizados
+        let valorMax = listaItem[i].quantidade_disponivel*edicaoItem[i].valor;
+
+        //processo para pegar os outros valores:
+        let valorSoma = "";
+        for(let j=0;j<listaItem.length;j++){
+          //garantindo ser um dos valores com mesmo item e do mesmo grupo de tipos
+          if((listaItem[j].cod_tipo_item == "8" || listaItem[j].cod_tipo_item == "9" || listaItem[j].cod_tipo_item == "10") && listaItem[j].cod_item == listaItem[i].cod_item){
+
+            //somando todos os compativeis pela ultima mudança deles
+            valorSoma = (edicaoItem[j].valor * edicaoItem[j].quantidade) + valorSoma;
+          }
+        }
 
         if(valorMax<valorSoma){
-          //mensagem com certeza irá mudar
-          alert("Não foi possivel completar a edição pois algum valor especial está ultrapassando o limite.");
 
-          //
-        }else{
-          fetchFinanciamento(caminhoFinal);
+          //mensagem com certeza irá mudar
+          alert("Não foi possivel completar a edição pois o item" + listaItem[i].cod_tipo_item + "." + listaItem[i].cod_item + "." + " está ultrapassando o limite de valor.");
+        
         }
-      } else {
-        //console.log("objetivo");
-        fetchFinanciamento(caminhoFinal);
+        else{
+
+        //função ainda não funciona
+          //transforma as informações do token em json
+          let corpo = JSON.stringify(edicaoItem[i]);
+
+          //função fetch para mandar
+          fetch(caminhoFinal, {
+            method: 'PUT',
+            body: corpo,
+            headers: {
+              'Authorization': 'Bearer ' + meuToken
+            },
+          }).then(function (response) {
+            //checar o status do pedido
+            //console.log(response.statusText);
+
+            //tratamento dos erros
+            if (response.status == 200 || response.status == 201) {
+              location.reload();
+            } else {
+              erros(response.status);
+            }
+          });
+        }
+      }
+
+      //caso não tenha problemas
+      else {
+
+      //função ainda não funciona
+        //transforma as informações do token em json
+        let corpo = JSON.stringify(edicaoItem[i]);
+
+        //função fetch para mandar
+        fetch(caminhoFinal, {
+          method: 'PUT',
+          body: corpo,
+          headers: {
+            'Authorization': 'Bearer ' + meuToken
+          },
+        }).then(function (response) {
+          //checar o status do pedido
+          //console.log(response.statusText);
+
+          //tratamento dos erros
+          if (response.status == 200 || response.status == 201) {
+            location.reload();
+          } else {
+            erros(response.status);
+          }
+        });
       }
     }
   }
-}
-
-function fetchFinanciamento(meuPath){
-  //transforma as informações do token em json
-  let corpo = JSON.stringify(edicaoItem[i]);
-  console.log(corpo);
-
-  //função fetch para mandar
-  fetch(meuPath, {
-    method: 'PUT',
-    body: corpo,
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-    //checar o status do pedido
-    //console.log(response.statusText);
-
-    //tratamento dos erros
-    if (response.status == 200 || response.status == 201) {
-      //location.reload();
-    } else {
-      erros(response.status);
-    }
-  });
 }
