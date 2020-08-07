@@ -69,7 +69,7 @@ function paginacao() {
         }
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
-
+        mascara();
         paginasOrganizadas(filtrado,comeco,fim);
       });
     } else {
@@ -164,9 +164,11 @@ function enviar() {
     "dt_nf": "",
   };
 
+  data = document.getElementById("dt_nf").value;
+
   info.num_nf = parseInt(document.getElementById("num_nf").value);
   info.cod_ibge = parseInt(document.getElementById("cod_ibge").value);
-  info.dt_nf = document.getElementById("dt_nf").value;
+  info.dt_nf = mascaraData(data);
 
   //transforma as informações em string para mandar
   let corpo = JSON.stringify(info);

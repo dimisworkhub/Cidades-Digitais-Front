@@ -159,9 +159,11 @@ function enviar() {
     "ano_referencia": "",
   };
 
+  data = document.getElementById("data").value;
+
   info.cod_lote = parseInt(document.getElementById("cod_lote").value);
   info.cod_natureza_despesa = parseInt(document.getElementById("cod_natureza_despesa").value);
-  info.data = document.getElementById("data").value;
+  info.data = mascaraData(data);
   info.tipo = document.getElementById("tipo").value;
   info.ano_referencia = parseInt(document.getElementById("ano_referencia").value);
 
