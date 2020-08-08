@@ -53,17 +53,17 @@ func (itensEmpenho *ItensEmpenho) FindAllItensEmpenho(db *gorm.DB, idEmpenho, co
 		return &[]ItensEmpenho{}, err
 	}
 
-	/* Calculo da quantidade de itens que ainda nao foi empenhado
+	/* Calculo da quantidade de itens que ainda nao foi empenhado, independente se eh do tipo original ou reajuste, pois para os dois o calculo eh o mesmo
 	-- Pega o primeiro Select e faz a diferenca deste com o segundo
 
-	-- Seleciona e soma todas as quantidades de um determinado item
+	-- Seleciona e soma todas as quantidades de um determinado item na previsao de empenho
 	-- (ex.: pegas todos itens 1.1 e soma suas quantidades)
 	SELECT ROUND((SELECT SUM(itens_previsao_empenho.quantidade) AS quantidade_previsao_empenho
 	FROM itens_previsao_empenho
 	WHERE itens_previsao_empenho.cod_item = ?
 	AND itens_previsao_empenho.cod_tipo_item = ?
 	AND itens_previsao_empenho.cod_previsao_empenho = ?)
-	--(menos)
+	-- (menos)
 
 	-
 
