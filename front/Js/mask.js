@@ -9,7 +9,7 @@ function mascara(){
     $('.cnpj').inputmask('99.999.999/9999-99', {autoUnmask: true, removeMaskOnSubmit: true});
     $('.quebrados').inputmask('[99999]9,99', {reverse: true, numericInput:true, placeholder: "0"});
     $('.inteiros').inputmask('[9999999999]9', {reverse: true, numericInput:true});
-    $('.preco').inputmask({mask: "[R$ 9.999.999.99]9,99", reverse: true, numericInput:true, prefix: "R$ ", placeholder: "", greedy: false});
+    $('.preco').inputmask({mask: "[R$ 9.999.999.99]9,99", reverse: true, numericInput:true, placeholder: "0"});
 
     // Função que remove a máscara ao enviar pro banco (em teoria, mas tem o fato de não utilizarmos o submit para enviar.)
     // removeMaskOnSubmit: true,
