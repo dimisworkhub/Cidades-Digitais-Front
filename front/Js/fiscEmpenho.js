@@ -200,6 +200,7 @@ function enviar() {
 function editarEmpenho(valor) {
   localStorage.setItem("id_empenho", jsonFinal[valor].id_empenho);
   localStorage.setItem("cod_empenho", jsonFinal[valor].cod_empenho);
+  localStorage.setItem("cod_lote", jsonFinal[valor].cod_lote);
   localStorage.setItem("cod_previsao_empenho", jsonFinal[valor].cod_previsao_empenho);
   localStorage.setItem("natureza_despesa", jsonFinal[valor].natureza_despesa);
   localStorage.setItem("descricao", jsonFinal[valor].descricao);

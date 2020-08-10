@@ -97,7 +97,7 @@ function original(){
     //tratamento dos erros
     if (response.status == 200) {
       return response.json().then(function (json) {
-        //console.log(json);
+        console.log(json);
 
         //variavel alterada para usar em enabler()
         itemSelecionado=json;
@@ -122,7 +122,7 @@ function reajuste(){
     //tratamento dos erros
     if (response.status == 200) {
       return response.json().then(function (json) {
-        //console.log(json);
+        console.log(json);
 
         //variavel alterada para usar em enabler()
         itemSelecionado=json;
@@ -173,8 +173,6 @@ function reajusteEOriginal(){
 
 function enabler2(){
 
-  document.getElementById("itens_disponiveis").disabled = false;
-
   //variaveis
   let tipo = document.getElementById("tipo").value;
   let empenho = document.getElementById("id_empenho").value;
@@ -204,7 +202,7 @@ function enabler2(){
   for (i = 0; i < itemFinal.length; i++) {
     x[i+1] = "<option value='"+ itemFinal[i].cod_item + " " + itemFinal[i].cod_tipo_item + "'>" + itemFinal[i].cod_tipo_item + "." + itemFinal[i].cod_item + " - " + itemFinal[i].descricao + "</option>";
   }
-  console.log(x)
+  //console.log(x)
   document.getElementById("itens_disponiveis").innerHTML = x;
 }
 
@@ -221,6 +219,8 @@ function itensReajuste(caminho){
     if (response.status == 200) {
       return response.json().then(function (json) {
         //console.log(json);
+
+        document.getElementById("itens_disponiveis").disabled = false;
 
         //variavel alterada para usar em enabler()
         itemSelecionado=json;
