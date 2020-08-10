@@ -533,7 +533,7 @@ function editarItemLote() {
 
 
 
-//Itens de financeamento
+//Itens de fiscalizacao
 
 let listaItem = [],
   meuItem = [],
@@ -544,7 +544,7 @@ let listaItem = [],
 //caso itensfatura seja o selecionado
 let meuEmpenho = [];
 
-function itensFinanceamento(caminho) {
+function itensFiscalizacao(caminho) {
 
   if (caminho == "itensfatura") {
     //cria o botão para editar
