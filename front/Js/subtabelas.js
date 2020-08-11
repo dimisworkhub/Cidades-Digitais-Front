@@ -619,12 +619,6 @@ function itensFiscalizacao(caminho) {
           meuTipo[i] = listaItem[i]["cod_tipo_item"];
           meuItem[i] = listaItem[i]["cod_item"];
 
-          if(caminho == "itensfatura"){
-
-          }
-          else{
-            
-          }
           tabela += (`<tr>`);
           tabela += (`<td>`);
           tabela += listaItem[i]["cod_tipo_item"] + '.' + listaItem[i]["cod_item"] + ' - ' + listaItem[i]["descricao"];
@@ -646,6 +640,7 @@ function itensFiscalizacao(caminho) {
 
           tabela += (`</td> <td>`);
           tabela += listaItem[i]["quantidade_disponivel"];
+          console.log(listaItem);
           tabela += (`</td> <td>`);
           tabela += (`<input value="` + (listaItem[i]["quantidade"]*100) + `" class="quebrados" id="quantidade` + i + `" type="text" size="10"></input>`);
           tabela += (`</td> <td>`);
@@ -734,7 +729,7 @@ function editarItem(caminho) {
     //funções de mascara são usadas aqui para retornar os valores ao processável pelo banco
     edicaoItem[i] = {
       "quantidade": parseFloat(mascaraQuebrados(document.getElementById("quantidade" + i).value)),
-      "valor": parseFloat(mascaraPreco(document.getElementById("valor" + i).value)),
+      "valor": parseFloat(mascaraQuebrados(document.getElementById("valor" + i).value)),
     };
 
     //identifica se o item foi alterado
@@ -750,7 +745,7 @@ function editarItem(caminho) {
       if(edicaoItem[i].quantidade > listaItem[i].quantidade_disponivel){
 
         //mensagem com certeza irá mudar
-        alert("Não foi possivel completar a edição pois o item" + listaItem[i].cod_tipo_item + "." + listaItem[i].cod_item + "." + " está ultrapassando o limite de quantidade.");
+        alert("Não foi possivel completar a edição do item" + listaItem[i].cod_tipo_item + "." + listaItem[i].cod_item + "." + " pois este está ultrapassando o limite da quantidade disponível.");
         
       }
 
@@ -775,7 +770,7 @@ function editarItem(caminho) {
         if(valorMax<valorSoma){
 
           //mensagem com certeza irá mudar
-          alert("Não foi possivel completar a edição pois o item" + listaItem[i].cod_tipo_item + "." + listaItem[i].cod_item + "." + " está ultrapassando o limite de valor.");
+          alert("Não foi possivel completar a edição do item" + listaItem[i].cod_tipo_item + "." + listaItem[i].cod_item + "." + " pois este está ultrapassando o limite de valor.");
         
         }
         else{
