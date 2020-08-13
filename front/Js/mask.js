@@ -7,40 +7,21 @@ function mascara(){
     $('.contrato').mask('999-9999');
     $('.ano').inputmask('9999');
     $('.cnpj').inputmask('99.999.999/9999-99', {autoUnmask: true, removeMaskOnSubmit: true});
-    $('.quebrados').inputmask('decimal',{"autoUnmask": true, radixPoint:",", groupSeparator: ".", allowMinus: true, digits: 2, digitsOptional: false, unmaskAsNumber: true, reverse: true});
+    $('.quebrados').inputmask('[999999]9,99',{autoUnmask: true, unmaskAsNumber: true, reverse: true, greedy: false, numericInput:true, placeholder: ""});
     $('.inteiros').inputmask('[9999999999]9', {reverse: true, numericInput:true});
-    $('.preco').inputmask( 'currency',{"autoUnmask": true, radixPoint:",", groupSeparator: ".", allowMinus: false, prefix: 'R$ ', digits: 2, digitsOptional: false, unmaskAsNumber: true, reverse: true});
-
-    // Função que remove a máscara ao enviar pro banco (em teoria, mas tem o fato de não utilizarmos o submit para enviar.)
-    // removeMaskOnSubmit: true,
-
-    //possivel placeholder
-    // {"placeholder": "mm/dd/yyyy",
-    // onincomplete: function() {
-    //   $(this).val('');
-    // }
-  
-    //possivel caminho para moldar o placeholder
-    // $(selector).inputmask("9-a{1,3}9{1,3}"); //mask with dynamic syntax
-
-    // $(".preco").inputmask('decimal', {
-    //   'alias': 'numeric',
-    //   'groupSeparator': ',',
-    //   'autoGroup': true,
-    //   'digits': 2,
-    //   'radixPoint': ".",
-    //   'digitsOptional': false,
-    //   'allowMinus': false,
-    //   'prefix': 'R$ ',
-    //   'numericInput': true,
-    // });
-    // usando id: $("#percentual").inputmask("999.99%",{reverse: true,numericInput:true, placeholder:"0"});
+    $('.preco').inputmask( '[R$ 999999999]9,99',{autoUnmask: true, unmaskAsNumber: true, reverse: true, greedy: false, numericInput:true, placeholder: ""});
   });
 }
 
+//usar a função e a inspiração para colocar os pontos no lugar da mascara
+
+// jeito de usar funçãos dentro
+
+
+
 //mascaras usadas
 
-//especifica para dinheiro.
+//especifica para dinheiro (e quebrados?)
 function arredondamento(valor){
 
   //split para arredondar valores nos campos subtotal e total
@@ -56,37 +37,37 @@ function arredondamento(valor){
 }
 
 //função comum para os valores em itens: não será mais necessária se eu (dimi) estiver correto
-// function mascaraPreco(preco) {
+/* function mascaraPreco(preco) {
 
-//   //para organizar a mascara
-//   let preco1,preco2,preco2L,preco3,preco4;
-//   let preco2A = "";
+  //para organizar a mascara
+  let preco1,preco2,preco2L,preco3,preco4;
+  let preco2A = "";
 
-//   //Verifica se o númera possui uma casa de milhar
-//   if((preco.toString()).length > 6){
-//     preco1 = preco.split("R$ ");
-//     preco2 = preco1[1].split(".");
+  //Verifica se o númera possui uma casa de milhar
+  if((preco.toString()).length > 6){
+    preco1 = preco.split("R$ ");
+    preco2 = preco1[1].split(".");
 
-//     //para garantir que todas as partes dos valores sejam pegas
-//     preco2L = preco2.length;
+    //para garantir que todas as partes dos valores sejam pegas
+    preco2L = preco2.length;
 
-//     for(let i = 0; i < preco2L; i++){
-//       preco2A += preco2[i];
-//     }
+    for(let i = 0; i < preco2L; i++){
+      preco2A += preco2[i];
+    }
 
-//     preco3 = preco2A.split(",");
+    preco3 = preco2A.split(",");
 
-//     preco4 = (preco3[0] + preco3[1])/100;
+    preco4 = (preco3[0] + preco3[1])/100;
     
-//   }else{
-//     preco2 = preco.split(",");
+  }else{
+    preco2 = preco.split(",");
     
-//     preco4 = (preco2[0] + preco2[1])/100;
-//   }
+    preco4 = (preco2[0] + preco2[1])/100;
+  }
 
-//   return preco4;
+  return preco4;
 
-// }
+} */
 
 //especifica para dinheiro.
 function mascaraQuebrados(valor){
@@ -94,9 +75,7 @@ function mascaraQuebrados(valor){
 }
   
 function arrumaData(data){
-  
-  // console.log(data)
-
+  // console.log(data);
   if(data === null || data === undefined || data === ''){
 
     let dataFinal = null;
@@ -115,7 +94,6 @@ function arrumaData(data){
   
     return dataFinal;
   }
-
 }
 
 function mascaraData(data){

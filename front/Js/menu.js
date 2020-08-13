@@ -1,6 +1,4 @@
-//ATENÇÃO
-//este js é utilizado para contenção de estruturas que possam ser utilizadas em qualquer tabel1a
-
+//barra de menu e suas funções
 document.write(`
 	<section>
 		<div class="container-fluid">
@@ -40,8 +38,8 @@ let now = new Date().getTime();
 let setupTime = localStorage.getItem('setupTime');
 if (setupTime == null) {
 	localStorage.setItem('setupTime', now);
-} else {
-	if (now - setupTime > hours * 60 * 60 * 1000) {
+} else {                        //seg    min  h    13h
+	if (now - setupTime > hours * 1000 * 60 * 60 * 13) {
 		window.location.replace("./index.html");
 		localStorage.clear();
 	}
