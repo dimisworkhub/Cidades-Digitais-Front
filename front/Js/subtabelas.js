@@ -170,7 +170,15 @@ function empenhoSub(valorCodigo) {
 
             //else if feito assim para pegar o valor do i na tabela normal
             else if(json[i]["cod_empenho"] == listaItem[valorUsado]["cod_empenho"]){
-              return i;
+              localStorage.setItem("id_empenho", json[i].id_empenho);
+              localStorage.setItem("cod_empenho", json[i].cod_empenho);
+              localStorage.setItem("cod_lote", json[i].cod_lote);
+              localStorage.setItem("cod_previsao_empenho", json[i].cod_previsao_empenho);
+              localStorage.setItem("cod_natureza_despesa", json[i].cod_natureza_despesa);
+              localStorage.setItem("descricao", json[i].descricao);
+              localStorage.setItem("tipo", json[i].tipo);
+              localStorage.setItem("data", json[i].data);
+              window.location.href = "./gerenciaEmpenho.html";
             }
           }
   
@@ -348,11 +356,14 @@ function pagamentoSub(valorCodigo) {
   });
 }
 
-//para o caso especial
+
+
+//usado apenas caso seja necessário pegar empenho de itens fatura
 let valorUsado;
 
 //função necessaria para o funcionamento dos links nas subtabelas
 function redirecionar(valor, caminhoFinal){
+  console.log("chega aqui");
   if(caminhoFinal == "previsao"){
     localStorage.setItem("cod_previsao_empenho", listaFinal[valor].cod_previsao_empenho);
     localStorage.setItem("cod_lote", listaFinal[valor].cod_lote);
@@ -390,19 +401,10 @@ function redirecionar(valor, caminhoFinal){
     window.location.href = "./gerenciaPagamento.html";
   }
   //caso especial da função empenho
-  else if(caminhoFinal == "empItensFaura"){
+  else if(caminhoFinal == "empItensFatura"){
     //valores usados no caso especial
     valorUsado = valor;
-    let i = empenhoSub("0");
-    localStorage.setItem("id_empenho", listaFinal[i].id_empenho);
-    localStorage.setItem("cod_empenho", listaFinal[i].cod_empenho);
-    localStorage.setItem("cod_lote", jsonFinal[i].cod_lote);
-    localStorage.setItem("cod_previsao_empenho", listaFinal[i].cod_previsao_empenho);
-    localStorage.setItem("cod_natureza_despesa", listaFinal[i].cod_natureza_despesa);
-    localStorage.setItem("descricao", listaFinal[i].descricao);
-    localStorage.setItem("tipo", listaFinal[i].tipo);
-    localStorage.setItem("data", listaFinal[i].data);
-    window.location.href = "./gerenciaEmpenho.html";
+    empenhoSub("0");
   }
 }
 
@@ -626,9 +628,9 @@ function itensFiscalizacao(caminho) {
           //apenas para fatura
           if (caminho == "itensfatura") {
             //caso especial da função empenho
-            tabela += (`</td> <td> <a onclick="redirecionar(` + i + "," + "'empItensFatura'" + `)" onmouseover="sublinhar(` + i + "," + listaItem.length + `)">`);
+            tabela += (`</td> <td style="cursor:pointer" onclick="redirecionar(` + i + "," + "'empItensFatura'" + `)" onmouseover="sublinhar(` + i + "," + listaItem.length + `)">`);
             tabela += listaItem[i]["cod_empenho"];
-            tabela += (`</a></td><td>`);
+            tabela += (`</td><td>`);
             if(listaItem[i]["tipo"]=="o"){
               tabela += "Original";
             }
@@ -640,11 +642,10 @@ function itensFiscalizacao(caminho) {
 
           tabela += (`</td> <td>`);
           tabela += listaItem[i]["quantidade_disponivel"];
-          console.log(listaItem);
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + (listaItem[i]["quantidade"]*100) + `" class="quebrados" id="quantidade` + i + `" type="text" size="10"></input>`);
+          tabela += (`<input value="` + (listaItem[i]["quantidade"]*100) + `" class="quebrados" id="quantidade` + i + `" type="text" size="10" style="text-align: right;"></input>`);
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + (listaItem[i]["valor"]*100) + `" class="preco" id="valor` + i + `" type="text" size="15"></input>`);
+          tabela += (`<input value="` + (listaItem[i]["valor"]*100) + `" class="preco" id="valor` + i + `" type="text" size="15" style="text-align: right;"></input>`);
           tabela += (`</td> <td class="preco">`);
 
           //calculo do subtotal
@@ -750,7 +751,7 @@ function editarItem(caminho) {
       }
 
       //Para os casos especificos em tipos de item 8,9 e 10. Validos apenas em itens de 1 a 5 e de fatura ou previsão.
-      else if((listaItem[i].cod_tipo_item == "8" || listaItem[i].cod_tipo_item == "9" || listaItem[i].cod_tipo_item == "10") && (caminho == "itensfatura" || caminho == "itensprevisao") && listaItem[i].tipo == "o"){
+      else if(listaItem[i].cod_tipo_item >= "8" && listaItem[i].cod_tipo_item <= "10" && (caminho == "itensfatura" || caminho == "itensprevisao") && listaItem[i].tipo == "o"){
         
         //valor de limite
         //utiliza os valores atualizados
@@ -760,7 +761,7 @@ function editarItem(caminho) {
         let valorSoma = "";
         for(let j=0;j<listaItem.length;j++){
           //garantindo ser um dos valores com mesmo item e do mesmo grupo de tipos
-          if((listaItem[j].cod_tipo_item == "8" || listaItem[j].cod_tipo_item == "9" || listaItem[j].cod_tipo_item == "10") && listaItem[j].cod_item == listaItem[i].cod_item){
+          if(listaItem[i].cod_tipo_item >= "8" && listaItem[i].cod_tipo_item <= "10" && listaItem[j].cod_item == listaItem[i].cod_item){
 
             //somando todos os compativeis pela ultima mudança deles
             valorSoma = (edicaoItem[j].valor * edicaoItem[j].quantidade) + valorSoma;
@@ -778,6 +779,7 @@ function editarItem(caminho) {
         //função ainda não funciona
           //transforma as informações do token em json
           let corpo = JSON.stringify(edicaoItem[i]);
+          console.log(edicaoItem[i])
 
           //função fetch para mandar
           fetch(caminhoFinal, {
@@ -806,6 +808,7 @@ function editarItem(caminho) {
       //função ainda não funciona
         //transforma as informações do token em json
         let corpo = JSON.stringify(edicaoItem[i]);
+        console.log(edicaoItem[i])
 
         //função fetch para mandar
         fetch(caminhoFinal, {
