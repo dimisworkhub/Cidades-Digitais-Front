@@ -87,6 +87,7 @@ function enabler1(){
 }
 
 function original(){
+
   fetch(servidor + 'read/itensfatura/' + meuCodigoSec, {
     method: 'GET',
     headers: {
@@ -97,7 +98,7 @@ function original(){
     //tratamento dos erros
     if (response.status == 200) {
       return response.json().then(function (json) {
-        console.log(json);
+        //console.log(json);
 
         //variavel alterada para usar em enabler()
         itemSelecionado=json;
@@ -122,7 +123,7 @@ function reajuste(){
     //tratamento dos erros
     if (response.status == 200) {
       return response.json().then(function (json) {
-        console.log(json);
+        //console.log(json);
 
         //variavel alterada para usar em enabler()
         itemSelecionado=json;
@@ -136,8 +137,6 @@ function reajuste(){
 }
 
 function reajusteEOriginal(){
-
-  document.getElementById("id_empenho").disabled = false;
 
   //variaveis
   let i, j = 0;
@@ -168,6 +167,8 @@ function reajusteEOriginal(){
     x[i+1] = "<option value=" + empenhoFinalID[i] + ">" + empenhoFinalCod[i] + "</option>";
   }
 
+  document.getElementById("id_empenho").disabled = false;
+
   document.getElementById("id_empenho").innerHTML = x;
 }
 
@@ -196,14 +197,18 @@ function enabler2(){
     itemFinal = itemSelecionado;
   }
 
+  //garante que che
+  if(){
   //preenche "itens disponiveis"
   x[0] = "<option value='A'>Item Selecionado</option>";
   //precisa juntar os valores para pegar ambos
   for (i = 0; i < itemFinal.length; i++) {
     x[i+1] = "<option value='"+ itemFinal[i].cod_item + " " + itemFinal[i].cod_tipo_item + "'>" + itemFinal[i].cod_tipo_item + "." + itemFinal[i].cod_item + " - " + itemFinal[i].descricao + "</option>";
   }
-  //console.log(x)
+
+  document.getElementById("itens_disponiveis").disabled = false;
   document.getElementById("itens_disponiveis").innerHTML = x;
+  }
 }
 
 //função separada pelo back
@@ -219,9 +224,6 @@ function itensReajuste(caminho){
     if (response.status == 200) {
       return response.json().then(function (json) {
         //console.log(json);
-
-        document.getElementById("itens_disponiveis").disabled = false;
-
         //variavel alterada para usar em enabler()
         itemSelecionado=json;
       });
