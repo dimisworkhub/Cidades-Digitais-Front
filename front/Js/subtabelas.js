@@ -408,6 +408,8 @@ function redirecionar(valor, caminhoFinal){
   }
 }
 
+
+
 //função decorativa para facilitar a vizualização do link
 function sublinhar(valor,tamanho){
   for(i=0;i<tamanho;i++){
@@ -418,6 +420,20 @@ function sublinhar(valor,tamanho){
     else{
       document.getElementById("linha"+i).style.color = "black";
       document.getElementById("linha"+i).style.textDecoration = "none";
+    }
+  }
+}
+
+//para empenho em itensfatura
+function sublinhar2(valor,tamanho){
+  for(i=0;i<tamanho;i++){
+    if(i==valor){
+      document.getElementById("empenho"+i).style.color = "blue";
+      document.getElementById("empenho"+i).style.textDecoration = "underline";
+    }
+    else{
+      document.getElementById("empenho"+i).style.color = "black";
+      document.getElementById("empenho"+i).style.textDecoration = "none";
     }
   }
 }
@@ -628,7 +644,7 @@ function itensFiscalizacao(caminho) {
           //apenas para fatura
           if (caminho == "itensfatura") {
             //caso especial da função empenho
-            tabela += (`</td> <td style="cursor:pointer" onclick="redirecionar(` + i + "," + "'empItensFatura'" + `)" onmouseover="sublinhar(` + i + "," + listaItem.length + `)">`);
+            tabela += (`</td> <td id ="empenho` + i + `" style="cursor:pointer" onclick="redirecionar(` + i + "," + "'empItensFatura'" + `)" onmouseover="sublinhar2(` + i + "," + listaItem.length + `)">`);
             tabela += listaItem[i]["cod_empenho"];
             tabela += (`</td><td>`);
             if(listaItem[i]["tipo"]=="o"){
