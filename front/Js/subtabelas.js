@@ -746,7 +746,7 @@ function editarItem(caminho) {
       if(edicaoItem[i].quantidade > listaItem[i].quantidade_disponivel){
 
         //mensagem com certeza irá mudar
-        alert("Não foi possivel completar a edição do item" + listaItem[i].cod_tipo_item + "." + listaItem[i].cod_item + "." + " pois este está ultrapassando o limite da quantidade disponível.");
+        alert("Não foi possivel completar a edição do item " + listaItem[i].cod_tipo_item + "." + listaItem[i].cod_item + " pois este está ultrapassando o limite da quantidade disponível.");
         
       }
 
@@ -767,43 +767,10 @@ function editarItem(caminho) {
             valorSoma = (edicaoItem[j].valor * edicaoItem[j].quantidade) + valorSoma;
           }
         }
-
-        if(valorMax<valorSoma){
-
-          //mensagem com certeza irá mudar
-          alert("Não foi possivel completar a edição do item" + listaItem[i].cod_tipo_item + "." + listaItem[i].cod_item + "." + " pois este está ultrapassando o limite de valor.");
-        
-        }
-        else{
-
-        //função ainda não funciona
-          //transforma as informações do token em json
-          let corpo = JSON.stringify(edicaoItem[i]);
-          console.log(edicaoItem[i])
-
-          //função fetch para mandar
-          fetch(caminhoFinal, {
-            method: 'PUT',
-            body: corpo,
-            headers: {
-              'Authorization': 'Bearer ' + meuToken
-            },
-          }).then(function (response) {
-            //checar o status do pedido
-            //console.log(response.statusText);
-
-            //tratamento dos erros
-            if (response.status == 200 || response.status == 201) {
-              location.reload();
-            } else {
-              erros(response.status);
-            }
-          });
-        }
       }
 
       //caso não tenha problemas
-      else {
+      else{
 
       //função ainda não funciona
         //transforma as informações do token em json
