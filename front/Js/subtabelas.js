@@ -665,7 +665,7 @@ function itensFiscalizacao(caminho) {
           tabela += (`</td> <td class="preco">`);
 
           //calculo do subtotal
-          total = (listaItem[i]["quantidade"] * listaItem[i]["valor"]);
+          total = (listaItem[i]["quantidade"] * listaItem[i]["valor"] * 100);
           totalFinal = totalFinal + total;
 
           tabela += arredondamento(total);
@@ -759,7 +759,7 @@ function editarItem(caminho) {
         caminhoFinal = servidor + 'read/' + caminho + '/' + meuCodigo + '/' + meuItem[i] + '/' + meuTipo[i];
       }
 
-      if(edicaoItem[i].quantidade > listaItem[i].quantidade_disponivel){
+      if(edicaoItem[i].quantidade > (listaItem[i].quantidade_disponivel+listaItem[i].quantidade)){
 
         //mensagem com certeza irá mudar
         alert("Não foi possivel completar a edição do item " + listaItem[i].cod_tipo_item + "." + listaItem[i].cod_item + " pois este está ultrapassando o limite da quantidade disponível.");
@@ -783,35 +783,34 @@ function editarItem(caminho) {
             valorSoma = (edicaoItem[j].valor * edicaoItem[j].quantidade) + valorSoma;
           }
         }
+        if(valorMax<valorSoma){
+          alert("Problema");
+        }
       }
 
-      //caso não tenha problemas
-      else{
+      //transforma as informações do token em json
+      let corpo = JSON.stringify(edicaoItem[i]);
+      //console.log(edicaoItem[i]);
 
-      //função ainda não funciona
-        //transforma as informações do token em json
-        let corpo = JSON.stringify(edicaoItem[i]);
-        console.log(edicaoItem[i])
+      //função fetch para mandar
+      fetch(caminhoFinal, {
+        method: 'PUT',
+        body: corpo,
+        headers: {
+          'Authorization': 'Bearer ' + meuToken
+        },
+      }).then(function (response) {
+        //checar o status do pedido
+        //console.log(response.statusText);
 
-        //função fetch para mandar
-        fetch(caminhoFinal, {
-          method: 'PUT',
-          body: corpo,
-          headers: {
-            'Authorization': 'Bearer ' + meuToken
-          },
-        }).then(function (response) {
-          //checar o status do pedido
-          //console.log(response.statusText);
-
-          //tratamento dos erros
-          if (response.status == 200 || response.status == 201) {
-            location.reload();
-          } else {
-            erros(response.status);
-          }
-        });
-      }
+        //tratamento dos erros
+        if (response.status == 200 || response.status == 201) {
+          location.reload();
+        } else {
+          erros(response.status);
+        }
+      });
+      
     }
   }
 }

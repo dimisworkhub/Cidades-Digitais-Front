@@ -9,9 +9,21 @@ function mascara(){
     $('.cnpj').inputmask('99.999.999/9999-99', {autoUnmask: true, removeMaskOnSubmit: true});
     $('.quebrados').inputmask('[999999]9,99',{autoUnmask: true, unmaskAsNumber: true, reverse: true, greedy: false, numericInput:true, placeholder: ""});
     $('.inteiros').inputmask('[9999999999]9', {reverse: true, numericInput:true});
-    $('.preco').inputmask( '[R$ 999999999]9,99',{autoUnmask: true, unmaskAsNumber: true, reverse: true, greedy: false, numericInput:true, placeholder: ""});
+    $('.preco').inputmask( '[R$ 99999999]9,99',{autoUnmask: true, unmaskAsNumber: true, reverse: true, greedy: false, numericInput:true, placeholder: ""});
   });
 }
+
+//document.getElementById("").value
+function zeros(valor){
+  if(valor.toString().length==1){
+    valor="00"+valor;
+  }
+  else if(valor.toString().length==2){
+    valor="0"+valor;
+  }
+}
+
+//$(selector).inputmask({ mask: function () { /* do stuff */ return ["[1-]AAA-999", "[1-]999-AAA"]; }});
 
 //usar a função e a inspiração para colocar os pontos no lugar da mascara
 
@@ -35,39 +47,6 @@ function arredondamento(valor){
 
   return redondoFinal;
 }
-
-//função comum para os valores em itens: não será mais necessária se eu (dimi) estiver correto
-/* function mascaraPreco(preco) {
-
-  //para organizar a mascara
-  let preco1,preco2,preco2L,preco3,preco4;
-  let preco2A = "";
-
-  //Verifica se o númera possui uma casa de milhar
-  if((preco.toString()).length > 6){
-    preco1 = preco.split("R$ ");
-    preco2 = preco1[1].split(".");
-
-    //para garantir que todas as partes dos valores sejam pegas
-    preco2L = preco2.length;
-
-    for(let i = 0; i < preco2L; i++){
-      preco2A += preco2[i];
-    }
-
-    preco3 = preco2A.split(",");
-
-    preco4 = (preco3[0] + preco3[1])/100;
-    
-  }else{
-    preco2 = preco.split(",");
-    
-    preco4 = (preco2[0] + preco2[1])/100;
-  }
-
-  return preco4;
-
-} */
 
 //especifica para dinheiro.
 function mascaraQuebrados(valor){
