@@ -494,7 +494,7 @@ function itensLote() {
           tabela += (`<td>`);
           tabela += listaItem[i]["cod_item"] + "." + listaItem[i]["cod_tipo_item"] + " - " + listaItem[i]["descricao"];
           tabela += (`</td> <td>`);
-          tabela += (`R$ <input value="` + (listaItem[i]["preco"]*100) + `" id="preco` + i + `" type="text" class="preco" size="50">`);
+          tabela += (`<input value="` + (listaItem[i]["preco"]*100) + `" id="preco` + i + `" type="text" class="preco" size="50">`);
           tabela += (`</td>`);
           tabela += (`</tr>`);
         }
@@ -659,15 +659,15 @@ function itensFiscalizacao(caminho) {
           tabela += (`</td> <td>`);
           tabela += listaItem[i]["quantidade_disponivel"];
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + (listaItem[i]["quantidade"]*100) + `" class="quebrados" id="quantidade` + i + `" type="text" size="10" style="text-align: right;"></input>`);
+          tabela += (`<input value="` + zeros(listaItem[i]["quantidade"]*100) + `" class="quebrados" id="quantidade` + i + `" type="text" size="10" style="text-align: right;"></input>`);
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + (listaItem[i]["valor"]*100) + `" class="preco" id="valor` + i + `" type="text" size="15" style="text-align: right;"></input>`);
+          tabela += (`<input value="` + zeros(listaItem[i]["valor"]*100) + `" class="preco" id="valor` + i + `" type="text" size="15" style="text-align: right;"></input>`);
           tabela += (`</td> <td class="preco">`);
 
           //calculo do subtotal
           total = (listaItem[i]["quantidade"] * listaItem[i]["valor"] * 100);
           totalFinal = totalFinal + total;
-
+          
           tabela += arredondamento(total);
           tabela += (`</td>`);
           tabela += (`</tr>`);
