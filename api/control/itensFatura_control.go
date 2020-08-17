@@ -404,17 +404,17 @@ func (server *Server) GetItensFaturaOriginalDisponiveis(w http.ResponseWriter, r
 
 func (server *Server) GetIDEmpenho(w http.ResponseWriter, r *http.Request) {
 
-	itensEmpenho := models.ItensEmpenho{}
+	empenho := models.Empenho{}
 
-	//	itensEmpenhoGotten recebe o dado buscado no banco de dados
-	itensEmpenhoGotten, err := itensEmpenho.FindIDEmpenhoReajuste(server.DB)
+	//	empenhoGotten recebe o dado buscado no banco de dados
+	empenhoGotten, err := empenho.FindIDEmpenhoReajuste(server.DB)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))
 		return
 	}
 
-	bytes, _ := json.Marshal(itensEmpenhoGotten)
+	bytes, _ := json.Marshal(empenhoGotten)
 
 	w.Write(bytes)
 }

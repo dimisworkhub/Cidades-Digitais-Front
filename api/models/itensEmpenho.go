@@ -13,7 +13,7 @@ type ItensEmpenho struct {
 	CodItem              uint32  `gorm:"primary_key;foreign_key:CodItem;not null" json:"cod_item"`
 	CodTipoItem          uint32  `gorm:"primary_key;foreign_key:CodTipoItem;not null" json:"cod_tipo_item"`
 	CodPrevisaoEmpenho   uint32  `gorm:"foreign_key:CodPrevisaoEmpenho;not null" json:"cod_previsao_empenho"`
-	CodEmpenho           string  `gorm:"not null;size:13" json:"cod_empenho"`
+	CodEmpenho           string  `gorm:"default:null" json:"cod_empenho"`
 	Valor                float32 `gorm:"default:null" json:"valor"`
 	Quantidade           float32 `gorm:"default:null" json:"quantidade"`
 	Tipo                 string  `gorm:"default:null" json:"tipo"`
@@ -53,17 +53,17 @@ func (itensEmpenho *ItensEmpenho) FindAllItensEmpenho(db *gorm.DB, idEmpenho, co
 		return &[]ItensEmpenho{}, err
 	}
 
-	/* Calculo da quantidade de itens que ainda nao foi empenhado
+	/* Calculo da quantidade de itens que ainda nao foi empenhado, independente se eh do tipo original ou reajuste, pois para os dois o calculo eh o mesmo
 	-- Pega o primeiro Select e faz a diferenca deste com o segundo
 
-	-- Seleciona e soma todas as quantidades de um determinado item
+	-- Seleciona e soma todas as quantidades de um determinado item na previsao de empenho
 	-- (ex.: pegas todos itens 1.1 e soma suas quantidades)
 	SELECT ROUND((SELECT SUM(itens_previsao_empenho.quantidade) AS quantidade_previsao_empenho
 	FROM itens_previsao_empenho
 	WHERE itens_previsao_empenho.cod_item = ?
 	AND itens_previsao_empenho.cod_tipo_item = ?
 	AND itens_previsao_empenho.cod_previsao_empenho = ?)
-	--(menos)
+	-- (menos)
 
 	-
 
