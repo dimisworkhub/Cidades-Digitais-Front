@@ -9,36 +9,22 @@ function mascara(){
     $('.cnpj').inputmask('99.999.999/9999-99', {autoUnmask: true, removeMaskOnSubmit: true});
     $('.quebrados').inputmask('[999999]9,99',{autoUnmask: true, unmaskAsNumber: true, reverse: true, greedy: false, numericInput:true, placeholder: ""});
     $('.inteiros').inputmask('[9999999999]9', {reverse: true, numericInput:true});
+    $('.preco').inputmask( '[R$ 99999999]9,99',{autoUnmask: true, unmaskAsNumber: true, reverse: true, greedy: false, numericInput:true, placeholder: ""});
     //pagina com documentação
     // https://samarineproducts.com/plugins/jquery-inputmask/README.md
-    $('.preco').inputmask( '[R$ 99999999]9,99',{
-      mask: function () {
-        if(valor.toString().length==1){
-          valor="00"+valor;
-          
-        }
-        else if(valor.toString().length==2){
-          valor="0"+valor;
-        }
-      },
-      autoUnmask: true, 
-      unmaskAsNumber: true, 
-      reverse: true, 
-      greedy: false, 
-      numericInput:true, 
-      placeholder: ""});
   });
 }
 
 //document.getElementById("").value
-// function zeros(valor){
-//   if(valor.toString().length==1){
-//     valor="00"+valor;
-//   }
-//   else if(valor.toString().length==2){
-//     valor="0"+valor;
-//   }
-// }
+function zeros(valor){
+  if(valor.toString().length==1){
+    valor="00"+valor;
+  }
+  else if(valor.toString().length==2){
+    valor="0"+valor;
+  }
+  return valor;
+}
 
 //$(selector).inputmask({ mask: function () { /* do stuff */ return ["[1-]AAA-999", "[1-]999-AAA"]; }});
 
