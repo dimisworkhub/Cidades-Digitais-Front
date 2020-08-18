@@ -379,7 +379,7 @@ func (server *Server) GetItensFaturaOriginalDisponiveis(w http.ResponseWriter, r
 	vars := mux.Vars(r)
 
 	//	codIbge armazena a chave primaria da tabela itensFatura
-	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
+	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -393,9 +393,7 @@ func (server *Server) GetItensFaturaOriginalDisponiveis(w http.ResponseWriter, r
 		return
 	}
 
-	bytes, _ := json.Marshal(itensEmpenhoGotten)
-
-	w.Write(bytes)
+	responses.JSON(w, http.StatusOK, itensEmpenhoGotten)
 }
 
 /*  =========================
@@ -406,17 +404,25 @@ func (server *Server) GetIDEmpenho(w http.ResponseWriter, r *http.Request) {
 
 	empenho := models.Empenho{}
 
+	// Vars retorna as variaveis de rota
+	vars := mux.Vars(r)
+
+	//	codIbge armazena a chave primaria da tabela itensFatura
+	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 32)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
 	//	empenhoGotten recebe o dado buscado no banco de dados
-	empenhoGotten, err := empenho.FindIDEmpenhoReajuste(server.DB)
+	empenhoGotten, err := empenho.FindIDEmpenhoReajuste(server.DB, uint32(codIbge))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))
 		return
 	}
 
-	bytes, _ := json.Marshal(empenhoGotten)
-
-	w.Write(bytes)
+	responses.JSON(w, http.StatusOK, empenhoGotten)
 }
 
 /*  =========================
@@ -445,7 +451,5 @@ func (server *Server) GetItensFaturaReajusteDisponiveis(w http.ResponseWriter, r
 		return
 	}
 
-	bytes, _ := json.Marshal(itensEmpenhoGotten)
-
-	w.Write(bytes)
+	responses.JSON(w, http.StatusOK, itensEmpenhoGotten)
 }
