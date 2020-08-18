@@ -379,7 +379,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc("/read/itensfatura/{cod_ibge}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetItensFaturaOriginalDisponiveis))).Methods(http.MethodGet)
 
 	//	LISTAR ID EMPENHO REAJUSTE
-	r.HandleFunc("/read/itensfaturaidempenho", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetIDEmpenho))).Methods(http.MethodGet)
+	r.HandleFunc("/read/itensfaturaidempenho/{cod_ibge}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetIDEmpenho))).Methods(http.MethodGet)
 
 	//	LISTAR ITENS FATURA DISPONIVEL REAJUSTE (id_empenho)
 	r.HandleFunc("/read/itensfaturareajuste/{id_empenho}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetItensFaturaReajusteDisponiveis))).Methods(http.MethodGet)
