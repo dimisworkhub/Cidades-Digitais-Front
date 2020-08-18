@@ -633,14 +633,23 @@ func (itensEmpenho *ItensEmpenho) FindItensFaturaDisponiveisOriginal(db *gorm.DB
 	FUNCAO LISTAR TODAS ID EMPENHO DO TIPO REAJUSTE
 =========================  */
 
-func (empenho *Empenho) FindIDEmpenhoReajuste(db *gorm.DB) (*[]Empenho, error) {
+func (empenho *Empenho) FindIDEmpenhoReajuste(db *gorm.DB, codIbge uint32) (*[]Empenho, error) {
 
 	allEmpenho := []Empenho{}
 
+	//	Select usando anteriormente
+	// err := db.Debug().Table("empenho").
+	// 	Select("empenho.id_empenho, empenho.cod_empenho").
+	// 	Joins("JOIN previsao_empenho ON empenho.cod_previsao_empenho = previsao_empenho.cod_previsao_empenho AND previsao_empenho.tipo = 'r'").
+	// 	Group("empenho.id_empenho").
+	// 	Order("empenho.cod_empenho").
+	// 	Scan(&allEmpenho).Error
+
+	//	Busca por lote
 	err := db.Debug().Table("empenho").
 		Select("empenho.id_empenho, empenho.cod_empenho").
-		Joins("JOIN previsao_empenho ON empenho.cod_previsao_empenho = previsao_empenho.cod_previsao_empenho AND previsao_empenho.tipo = 'r'").
-		Group("empenho.id_empenho").
+		Joins("JOIN previsao_empenho ON empenho.cod_previsao_empenho = previsao_empenho.cod_previsao_empenho").
+		Where("previsao_empenho.tipo = 'r' AND previsao_empenho.cod_lote = (SELECT cd.cod_lote FROM cd WHERE cd.cod_ibge =  ?)", codIbge).
 		Order("empenho.cod_empenho").
 		Scan(&allEmpenho).Error
 
@@ -658,15 +667,34 @@ func (empenho *Empenho) FindIDEmpenhoReajuste(db *gorm.DB) (*[]Empenho, error) {
 func (itensEmpenho *ItensEmpenho) FindItensFaturaDisponiveisReajuste(db *gorm.DB, idEmpenho uint32) (*[]ItensEmpenho, error) {
 
 	allItensEmpenho := []ItensEmpenho{}
+	itensFaturaAux := []ItensFatura{}
+
+	codIbge := 2609105
 
 	err := db.Debug().Table("itens_empenho").
 		Select("itens_empenho.*").
 		Where("itens_empenho.id_empenho = ?", idEmpenho).
-		Order("cod_tipo_item, cod_item").
+		Order("itens_empenho.cod_tipo_item, itens_empenho.cod_item").
 		Scan(&allItensEmpenho).Error
+
+	for _, data := range allItensEmpenho {
+		fmt.Println(data)
+	}
 
 	if err != nil {
 		return &[]ItensEmpenho{}, err
+	}
+
+	err = db.Debug().Table("fatura").
+		Select("SUM(itens_fatura.quantidade) AS quantidade_disponivel, itens_fatura.cod_item, itens_fatura.cod_tipo_item, itens_fatura.id_empenho").
+		Joins("JOIN itens_fatura ON fatura.num_nf = itens_fatura.num_nf AND fatura.cod_ibge = itens_fatura.cod_ibge").
+		Where("fatura.cod_ibge IN (SELECT cd.cod_ibge FROM cd WHERE cd.cod_lote = (SELECT cd.cod_lote FROM cd WHERE cd.cod_ibge = ?)) AND (itens_fatura.id_empenho,itens_fatura.cod_item,itens_fatura.cod_tipo_item) IN (SELECT itens_empenho.id_empenho, itens_empenho.cod_item, itens_empenho.cod_tipo_item FROM itens_empenho WHERE itens_empenho.id_empenho = ?)", codIbge, idEmpenho).
+		Group("itens_fatura.id_empenho, itens_fatura.cod_item, itens_fatura.cod_tipo_item").
+		Order("itens_fatura.cod_tipo_item, itens_fatura.cod_item, itens_fatura.id_empenho").
+		Scan(&itensFaturaAux).Error
+
+	for _, data := range itensFaturaAux {
+		fmt.Println(data)
 	}
 
 	for i, data := range allItensEmpenho {
