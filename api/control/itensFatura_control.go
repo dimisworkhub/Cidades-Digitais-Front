@@ -98,35 +98,35 @@ func (server *Server) GetItensFaturaByID(w http.ResponseWriter, r *http.Request)
 	vars := mux.Vars(r)
 
 	//	numNF armazena a chave primaria da tabela itensFatura
-	numNF, err := strconv.ParseUint(vars["num_nf"], 10, 64)
+	numNF, err := strconv.ParseUint(vars["num_nf"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
 	//	codIbge armazena a chave primaria da tabela itensFatura
-	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
+	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
 	//	idEmpenho armazena a chave primaria da tabela itensFatura
-	idEmpenho, err := strconv.ParseUint(vars["id_empenho"], 10, 64)
+	idEmpenho, err := strconv.ParseUint(vars["id_empenho"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
 	//	codItem armazena a chave primaria da tabela itensFatura
-	codItem, err := strconv.ParseUint(vars["cod_item"], 10, 64)
+	codItem, err := strconv.ParseUint(vars["cod_item"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
 	//	codTipoItem armazena a chave primaria da tabela itensFatura
-	codTipoItem, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 64)
+	codTipoItem, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -163,14 +163,14 @@ func (server *Server) GetAllItensFatura(w http.ResponseWriter, r *http.Request) 
 	vars := mux.Vars(r)
 
 	//	numNF armazena a chave primaria da tabela itensFatura
-	numNF, err := strconv.ParseUint(vars["num_nf"], 10, 64)
+	numNF, err := strconv.ParseUint(vars["num_nf"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
 	//	codIbge armazena a chave primaria da tabela itensFatura
-	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
+	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -225,35 +225,35 @@ func (server *Server) UpdateItensFatura(w http.ResponseWriter, r *http.Request) 
 	vars := mux.Vars(r)
 
 	//	numNF armazena a chave primaria da tabela itensFatura
-	numNF, err := strconv.ParseUint(vars["num_nf"], 10, 64)
+	numNF, err := strconv.ParseUint(vars["num_nf"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
 	//	codIbge armazena a chave primaria da tabela itensFatura
-	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
+	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
 	//	idEmpenho armazena a chave primaria da tabela itensFatura
-	idEmpenho, err := strconv.ParseUint(vars["id_empenho"], 10, 64)
+	idEmpenho, err := strconv.ParseUint(vars["id_empenho"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
 	//	codItem armazena a chave primaria da tabela itensFatura
-	codItem, err := strconv.ParseUint(vars["cod_item"], 10, 64)
+	codItem, err := strconv.ParseUint(vars["cod_item"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
 	//	codTipoItem armazena a chave primaria da tabela itensFatura
-	codTipoItem, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 64)
+	codTipoItem, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -311,35 +311,35 @@ func (server *Server) DeleteItensFatura(w http.ResponseWriter, r *http.Request) 
 	logItensFatura := models.Log{}
 
 	//	numNF armazena a chave primaria da tabela itensFatura
-	numNF, err := strconv.ParseUint(vars["num_nf"], 10, 64)
+	numNF, err := strconv.ParseUint(vars["num_nf"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
 	//	codIbge armazena a chave primaria da tabela itensFatura
-	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
+	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
 	//	idEmpenho armazena a chave primaria da tabela itensFatura
-	idEmpenho, err := strconv.ParseUint(vars["id_empenho"], 10, 64)
+	idEmpenho, err := strconv.ParseUint(vars["id_empenho"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
 	//	codItem armazena a chave primaria da tabela itensFatura
-	codItem, err := strconv.ParseUint(vars["cod_item"], 10, 64)
+	codItem, err := strconv.ParseUint(vars["cod_item"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
 	//	codTipoItem armazena a chave primaria da tabela itensFatura
-	codTipoItem, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 64)
+	codTipoItem, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -437,14 +437,21 @@ func (server *Server) GetItensFaturaReajusteDisponiveis(w http.ResponseWriter, r
 	vars := mux.Vars(r)
 
 	//	idEmpenho armazena a chave primaria da tabela itensFatura
-	idEmpenho, err := strconv.ParseUint(vars["id_empenho"], 10, 64)
+	idEmpenho, err := strconv.ParseUint(vars["id_empenho"], 10, 32)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	//	codIbge armazena a chave primaria da tabela itensFatura
+	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
 	//	itensEmpenhoGotten recebe o dado buscado no banco de dados
-	itensEmpenhoGotten, err := itensEmpenho.FindItensFaturaDisponiveisReajuste(server.DB, uint32(idEmpenho))
+	itensEmpenhoGotten, err := itensEmpenho.FindItensFaturaDisponiveisReajuste(server.DB, uint32(idEmpenho), uint32(codIbge))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))
