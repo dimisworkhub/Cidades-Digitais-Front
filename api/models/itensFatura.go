@@ -81,6 +81,7 @@ func (itensFatura *ItensFatura) FindAllItensFatura(db *gorm.DB, numNF, codIbge u
 		WHERE itens_fatura.num_nf = 38 AND itens_fatura.cod_ibge = 2804904
 		ORDER BY itens_fatura.cod_tipo_item, itens_fatura.cod_item, itens_fatura.id_empenho;
 	*/
+	
 	err := db.Debug().Table("itens_fatura").
 		Select("itens_fatura.*, empenho.cod_empenho, previsao_empenho.tipo, itens.descricao").
 		Joins("JOIN empenho ON itens_fatura.id_empenho = empenho.id_empenho").
@@ -576,6 +577,28 @@ func (itensFatura *ItensFatura) DeleteItensFatura(db *gorm.DB, numNF, cod_ibge, 
 }
 
 /*  =========================
+	FUNCAO LISTAR TODAS ID EMPENHO DO TIPO ORIGINAL
+=========================  */
+
+func (empenho *Empenho) FindIDEmpenhoOriginal(db *gorm.DB, codIbge uint32) (*[]Empenho, error) {
+
+	allEmpenho := []Empenho{}
+
+	err := db.Debug().Table("empenho").
+		Select("empenho.id_empenho, empenho.cod_empenho").
+		Joins("INNER JOIN previsao_empenho ON empenho.cod_previsao_empenho = previsao_empenho.cod_previsao_empenho").
+		Where("previsao_empenho.tipo = 'o' AND previsao_empenho.cod_lote = (SELECT cd.cod_lote FROM cd WHERE cd.cod_ibge =  ?)", codIbge).
+		Order("empenho.cod_empenho").
+		Scan(&allEmpenho).Error
+
+	if err != nil {
+		return &[]Empenho{}, err
+	}
+
+	return &allEmpenho, err
+}
+
+/*  =========================
 	FUNCAO LISTAR TODAS ITENS FATURA DISPONIVEIS DO TIPO ORIGINAL
 =========================  */
 
@@ -585,8 +608,10 @@ func (itensEmpenho *ItensEmpenho) FindItensFaturaDisponiveisOriginal(db *gorm.DB
 	itensFaturaAux := []ItensFatura{}
 
 	err := db.Debug().Table("previsao_empenho").
-		Select("previsao_empenho.tipo, itens_empenho.*").
+		Select("previsao_empenho.tipo, itens_empenho.*, itens.descricao AS descricao, empenho.cod_empenho AS cod_empenho").
 		Joins("INNER JOIN itens_empenho ON previsao_empenho.cod_previsao_empenho = itens_empenho.cod_previsao_empenho").
+		Joins("INNER JOIN itens ON itens_empenho.cod_item = itens.cod_item AND itens_empenho.cod_tipo_item = itens.cod_tipo_item").
+		Joins("INNER JOIN empenho ON empenho.cod_previsao_empenho = previsao_empenho.cod_previsao_empenho").
 		Where("previsao_empenho.tipo = 'o' AND previsao_empenho.cod_lote = (SELECT cd.cod_lote FROM cd WHERE cd.cod_ibge = ?)", codIbge).
 		Order("itens_empenho.id_empenho, itens_empenho.cod_tipo_item, itens_empenho.cod_item").
 		Scan(&allItensEmpenho).Error
@@ -613,7 +638,7 @@ func (itensEmpenho *ItensEmpenho) FindItensFaturaDisponiveisOriginal(db *gorm.DB
 	for i, data := range allItensEmpenho {
 		//	Busca um elemento no banco de dados a partir de sua chave primaria
 		err := db.Debug().
-			Raw("SELECT ROUND((SELECT itens_empenho.quantidade FROM itens_empenho WHERE id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?) - (SELECT SUM(itens_fatura.quantidade) AS quantidade_fatura FROM fatura INNER JOIN itens_fatura ON fatura.num_nf = itens_fatura.num_nf AND fatura.cod_ibge = itens_fatura.cod_ibge WHERE fatura.cod_ibge IN (SELECT cd.cod_ibge FROM cd where cd.cod_lote = (SELECT cd.cod_lote FROM cd WHERE cd.cod_ibge = ?)) AND id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?), 2) AS quantidade_disponivel, itens.descricao AS descricao, empenho.cod_empenho FROM itens_empenho INNER JOIN itens ON itens_empenho.cod_item = itens.cod_item AND itens_empenho.cod_tipo_item = itens.cod_tipo_item INNER JOIN empenho ON itens_empenho.id_empenho = empenho.id_empenho WHERE itens_empenho.id_empenho = ? AND itens_empenho.cod_item = ? AND itens_empenho.cod_tipo_item = ?", data.IDEmpenho, data.CodItem, data.CodTipoItem, codIbge, data.IDEmpenho, data.CodItem, data.CodTipoItem, data.IDEmpenho, data.CodItem, data.CodTipoItem).
+			Raw("SELECT ROUND((SELECT itens_empenho.quantidade FROM itens_empenho WHERE id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?) - (SELECT SUM(itens_fatura.quantidade) AS quantidade_fatura FROM fatura INNER JOIN itens_fatura ON fatura.num_nf = itens_fatura.num_nf AND fatura.cod_ibge = itens_fatura.cod_ibge WHERE fatura.cod_ibge IN (SELECT cd.cod_ibge FROM cd where cd.cod_lote = (SELECT cd.cod_lote FROM cd WHERE cd.cod_ibge = ?)) AND id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?), 2) AS quantidade_disponivel", data.IDEmpenho, data.CodItem, data.CodTipoItem, codIbge, data.IDEmpenho, data.CodItem, data.CodTipoItem).
 			Scan(&allItensEmpenho[i]).Error
 		if err != nil {
 			return &[]ItensEmpenho{}, err
