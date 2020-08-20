@@ -375,14 +375,17 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	SALVA ITENS FATURA
 	r.HandleFunc(config.ITENS_FATURA_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateItensFatura))).Methods(http.MethodPost)
 
-	//	LISTAR ITENS FATURA DISPONIVEL ORIGINAL (cod_ibge)
-	r.HandleFunc("/read/itensfatura/{cod_ibge}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetItensFaturaOriginalDisponiveis))).Methods(http.MethodGet)
+	//	LISTAR ID EMPENHO ORIGINAL (cod_ibge)
+	r.HandleFunc("/read/itensfaturaidempenhooriginal/{cod_ibge}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetIDEmpenhoOriginal))).Methods(http.MethodGet)
 
-	//	LISTAR ID EMPENHO REAJUSTE
-	r.HandleFunc("/read/itensfaturaidempenho", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetIDEmpenho))).Methods(http.MethodGet)
+	//	LISTAR ITENS FATURA DISPONIVEL ORIGINAL (id_empenho, cod_ibge)
+	r.HandleFunc("/read/itensfaturaoriginal/{id_empenho}/{cod_ibge}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetItensFaturaOriginalDisponiveis))).Methods(http.MethodGet)
 
-	//	LISTAR ITENS FATURA DISPONIVEL REAJUSTE (id_empenho)
-	r.HandleFunc("/read/itensfaturareajuste/{id_empenho}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetItensFaturaReajusteDisponiveis))).Methods(http.MethodGet)
+	//	LISTAR ID EMPENHO REAJUSTE (cod_ibge)
+	r.HandleFunc("/read/itensfaturaidempenhoreajuste/{cod_ibge}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetIDEmpenhoReajuste))).Methods(http.MethodGet)
+
+	//	LISTAR ITENS FATURA DISPONIVEL REAJUSTE (id_empenho, cod_ibge)
+	r.HandleFunc("/read/itensfaturareajuste/{id_empenho}/{cod_ibge}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetItensFaturaReajusteDisponiveis))).Methods(http.MethodGet)
 
 	//	LISTA ITENS FATURA (num_nf, cod_ibge)
 	r.HandleFunc(config.ITENS_FATURA_GET_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllItensFatura))).Methods(http.MethodGet)

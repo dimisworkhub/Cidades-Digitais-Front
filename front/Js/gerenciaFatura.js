@@ -197,18 +197,19 @@ function enabler2(){
     itemFinal = itemSelecionado;
   }
 
-  //garante que che
-  if(){
   //preenche "itens disponiveis"
   x[0] = "<option value='A'>Item Selecionado</option>";
   //precisa juntar os valores para pegar ambos
-  for (i = 0; i < itemFinal.length; i++) {
+  for (let i = 0; i < itemFinal.length; i++) {
     x[i+1] = "<option value='"+ itemFinal[i].cod_item + " " + itemFinal[i].cod_tipo_item + "'>" + itemFinal[i].cod_tipo_item + "." + itemFinal[i].cod_item + " - " + itemFinal[i].descricao + "</option>";
+  }
+
+  if(itemFinal[i].cod_item != 0){
+    document.getElementById("itens_disponiveis").disabled = false;
   }
 
   document.getElementById("itens_disponiveis").disabled = false;
   document.getElementById("itens_disponiveis").innerHTML = x;
-  }
 }
 
 //função separada pelo back

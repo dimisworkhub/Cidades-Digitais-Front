@@ -644,9 +644,10 @@ function itensFiscalizacao(caminho) {
           //apenas para fatura
           if (caminho == "itensfatura") {
             //caso especial da função empenho
-            tabela += (`</td> <td id ="empenho` + i + `" style="cursor:pointer" onclick="redirecionar(` + i + "," + "'empItensFatura'" + `)" onmouseover="sublinhar2(` + i + "," + listaItem.length + `)">`);
+            tabela += (`</td> <td id="empenho` + i + `" style="cursor:pointer" onclick="redirecionar(` + i + "," + "'empItensFatura'" + `)" onmouseover="sublinhar2(` + i + "," + listaItem.length + `)">`);
             tabela += listaItem[i]["cod_empenho"];
             tabela += (`</td><td>`);
+
             if(listaItem[i]["tipo"]=="o"){
               tabela += "Original";
             }
@@ -659,9 +660,11 @@ function itensFiscalizacao(caminho) {
           tabela += (`</td> <td>`);
           tabela += listaItem[i]["quantidade_disponivel"];
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + zeros(listaItem[i]["quantidade"]*100) + `" class="quebrados" id="quantidade` + i + `" type="text" size="10" style="text-align: right;"></input>`);
+          // depois colocar equivalente a onchange="zeros(` + document.getElementById("quantidade"+i).value + `)"
+          tabela += (`<input value="` + listaItem[i]["quantidade"]*100 + `" class="quebrados" id="quantidade` + i + `" type="text" size="10" style="text-align: right;"></input>`);
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + zeros(listaItem[i]["valor"]*100) + `" class="preco" id="valor` + i + `" type="text" size="15" style="text-align: right;"></input>`);
+          // depois colocar equivalente a onchange="zeros(` + document.getElementById("valor"+i).value + `)"
+          tabela += (`<input value="` + listaItem[i]["valor"]*100 + `" class="preco" id="valor` + i + `" type="text" size="15" style="text-align: right;"></input>`);
           tabela += (`</td> <td class="preco">`);
 
           //calculo do subtotal

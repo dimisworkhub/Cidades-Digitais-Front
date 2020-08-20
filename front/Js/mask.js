@@ -7,34 +7,36 @@ function mascara(){
     $('.contrato').mask('999-9999');
     $('.ano').inputmask('9999');
     $('.cnpj').inputmask('99.999.999/9999-99', {autoUnmask: true, removeMaskOnSubmit: true});
-    $('.quebrados').inputmask('[999999]9,99',{autoUnmask: true, unmaskAsNumber: true, reverse: true, greedy: false, numericInput:true, placeholder: ""});
+    $('.quebrados').inputmask('9{1,9},99',{autoUnmask: true, unmaskAsNumber: true, reverse: true, greedy: false, numericInput:true, placeholder: "0"});
     $('.inteiros').inputmask('[9999999999]9', {reverse: true, numericInput:true});
-    $('.preco').inputmask( '[R$ 99999999]9,99',{autoUnmask: true, unmaskAsNumber: true, reverse: true, greedy: false, numericInput:true, placeholder: ""});
-    //pagina com documentação
-    // https://samarineproducts.com/plugins/jquery-inputmask/README.md
+    $('.preco').inputmask( 'R$ 9{1,9},99',{autoUnmask: true, unmaskAsNumber: true, reverse: true, greedy: false, numericInput:true, placeholder: "0"});
   });
 }
 
-//document.getElementById("").value
-function zeros(valor){
-  if(valor.toString().length==1){
-    valor="00"+valor;
-  }
-  else if(valor.toString().length==2){
-    valor="0"+valor;
-  }
-  return valor;
-}
+// arrumar o problema de pegar o campo vazio
+// é assim que eu vou arrumar os pontos tbm
+// function zeros(valor){
+//   if(valor.toString().length==1){
+//     valor="00"+valor;
+//   }
+//   else if(valor.toString().length==2){
+//     valor="0"+valor;
+//   }
+//   else{
+//     //retirar os zeros extras do valor
+//     let valorCortado,valorSemZero;
+//     valorCortado = valor.split("");
 
-//$(selector).inputmask({ mask: function () { /* do stuff */ return ["[1-]AAA-999", "[1-]999-AAA"]; }});
+//     //retira os zeros da frente 1 por 1
+//     for(let i=0;valorCortado==0;i++){
+//       valorSemZero = valorCortado;
+//     }
+//     valor = valorSemZero;
+//   }
+//   return valor;
+// }
 
-//usar a função e a inspiração para colocar os pontos no lugar da mascara
-
-// jeito de usar funçãos dentro
-
-
-
-//mascaras usadas
+//funções usadas para alterar mascaras
 
 //especifica para dinheiro (e quebrados?)
 function arredondamento(valor){
