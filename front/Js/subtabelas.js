@@ -765,7 +765,7 @@ function editarItem(caminho) {
       if(edicaoItem[i].quantidade > (listaItem[i].quantidade_disponivel+listaItem[i].quantidade)){
 
         //mensagem com certeza irá mudar
-        alert("Não foi possivel completar a edição do item " + listaItem[i].cod_tipo_item + "." + listaItem[i].cod_item + " pois este está ultrapassando o limite da quantidade disponível.");
+        alert("Há um problema no item " + listaItem[i].cod_tipo_item + "." + listaItem[i].cod_item + ". Ele está ultrapassando o limite da quantidade disponível.");
         
       }
 
@@ -787,7 +787,7 @@ function editarItem(caminho) {
           }
         }
         if(valorMax<valorSoma){
-          alert("Problema");
+          alert("Há um problema no item " + listaItem[i].cod_tipo_item + "." + listaItem[i].cod_item + ". Ele está ultrapassando o limite do seu grupo.");
         }
       }
 

@@ -76,19 +76,17 @@ function enabler1(){
 
   //unica variavel necessária aqui
   let tipo = document.getElementById("tipo").value;
+  let caminho;
 
   //filtro entre reajuste e original
   if(tipo=="o"){
-    original();
+    caminho = "read/itensfaturaidempenhooriginal/";
   }
   else if(tipo=="r"){
-    reajuste();
+    caminho = "read/itensfaturaidempenhoreajuste/";
   }
-}
 
-function original(){
-
-  fetch(servidor + 'read/itensfatura/' + meuCodigoSec, {
+  fetch(servidor + caminho + meuCodigoSec, {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -103,7 +101,38 @@ function original(){
         //variavel alterada para usar em enabler()
         itemSelecionado=json;
         
-        reajusteEOriginal();
+        //variaveis
+        let i, j = 0;
+        let empenhoID = [], empenhoCod = [], empenhoFinalID = [], empenhoFinalCod = [];
+
+        //para filtrar e tirar repetições
+        for (i = 0; i < itemSelecionado.length; i++) {
+
+          //guardando em uma variavel para garantir que "undefined" não seja lido
+          empenhoCod[i] = itemSelecionado[i].cod_empenho;
+          empenhoID[i] = itemSelecionado[i].id_empenho;
+
+          //o filtro mesmo
+          if (empenhoID[i] != empenhoID[i-1]) {
+            empenhoFinalID[j] = empenhoID[i];
+            empenhoFinalCod[j] = empenhoCod[i];
+            j++;
+          }
+        }
+
+        let x = [];
+
+        //preenche "id_empenho"
+        x[0] = "<option value=''>Empenho</option>";
+        for (i = 0; i < empenhoFinalID.length; i++) {
+
+          //mudar para cod_empenho quando possivel
+          x[i+1] = "<option value=" + empenhoFinalID[i] + ">" + empenhoFinalCod[i] + "</option>";
+        }
+
+        document.getElementById("id_empenho").disabled = false;
+
+        document.getElementById("id_empenho").innerHTML = x;
       });
     } else {
       erros(response.status);
@@ -111,110 +140,24 @@ function original(){
   });
 }
 
-//função separada pelo back
-function reajuste(){
-  fetch(servidor + 'read/itensfaturaidempenho', {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-
-    //tratamento dos erros
-    if (response.status == 200) {
-      return response.json().then(function (json) {
-        //console.log(json);
-
-        //variavel alterada para usar em enabler()
-        itemSelecionado=json;
-        
-        reajusteEOriginal();
-      });
-    } else {
-      erros(response.status);
-    }
-  });
-}
-
-function reajusteEOriginal(){
-
-  //variaveis
-  let i, j = 0;
-  let empenhoID = [], empenhoCod = [], empenhoFinalID = [], empenhoFinalCod = [];
-
-  //para filtrar e tirar repetições
-  for (i = 0; i < itemSelecionado.length; i++) {
-
-    //guardando em uma variavel para garantir que "undefined" não seja lido
-    empenhoCod[i] = itemSelecionado[i].cod_empenho;
-    empenhoID[i] = itemSelecionado[i].id_empenho;
-
-    //o filtro mesmo
-    if (empenhoID[i] != empenhoID[i-1]) {
-      empenhoFinalID[j] = empenhoID[i];
-      empenhoFinalCod[j] = empenhoCod[i];
-      j++;
-    }
-  }
-
-  let x = [];
-
-  //preenche "id_empenho"
-  x[0] = "<option value=''>Empenho</option>";
-  for (i = 0; i < empenhoFinalID.length; i++) {
-
-    //mudar para cod_empenho quando possivel
-    x[i+1] = "<option value=" + empenhoFinalID[i] + ">" + empenhoFinalCod[i] + "</option>";
-  }
-
-  document.getElementById("id_empenho").disabled = false;
-
-  document.getElementById("id_empenho").innerHTML = x;
-}
 
 function enabler2(){
 
   //variaveis
   let tipo = document.getElementById("tipo").value;
   let empenho = document.getElementById("id_empenho").value;
-  let i, j = 0;
-  let x = [], itemFinal = [];
+  let x = [], itemSelecionado = [];
+  let caminho;
 
   if(tipo=="o"){
-    //para filtrar apenas
-    for (i = 0; i < itemSelecionado.length; i++) {
-      if (itemSelecionado[i].id_empenho == empenho) {
-        itemFinal[j] = itemSelecionado[i];
-        j++;
-      }
-    }
+    caminho="read/itensfaturaoriginal/";
   }
 
   else if(tipo=="r"){
-    itensReajuste(empenho);
-
-    //apenas para adaptar a variavel à linha seguinte
-    itemFinal = itemSelecionado;
+    caminho="read/itensfaturareajuste/";
   }
 
-  //preenche "itens disponiveis"
-  x[0] = "<option value='A'>Item Selecionado</option>";
-  //precisa juntar os valores para pegar ambos
-  for (let i = 0; i < itemFinal.length; i++) {
-    x[i+1] = "<option value='"+ itemFinal[i].cod_item + " " + itemFinal[i].cod_tipo_item + "'>" + itemFinal[i].cod_tipo_item + "." + itemFinal[i].cod_item + " - " + itemFinal[i].descricao + "</option>";
-  }
-
-  if(itemFinal[i].cod_item != 0){
-    document.getElementById("itens_disponiveis").disabled = false;
-  }
-
-  document.getElementById("itens_disponiveis").disabled = false;
-  document.getElementById("itens_disponiveis").innerHTML = x;
-}
-
-//função separada pelo back
-function itensReajuste(caminho){
-  fetch(servidor + 'read/itensfaturareajuste/' + caminho , {
+  fetch(servidor + caminho + empenho + "/" + meuCodigoSec, {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -224,9 +167,20 @@ function itensReajuste(caminho){
     //tratamento dos erros
     if (response.status == 200) {
       return response.json().then(function (json) {
-        //console.log(json);
+        console.log(json);
         //variavel alterada para usar em enabler()
         itemSelecionado=json;
+
+        //preenche "itens disponiveis"
+        x[0] = "<option value='A'>Item Selecionado</option>";
+        //precisa juntar os valores para pegar ambos
+        for (let i = 0; i < itemSelecionado.length; i++) {
+          x[i+1] = "<option value='"+ itemSelecionado[i].cod_item + " " + itemSelecionado[i].cod_tipo_item + "'>" + itemSelecionado[i].cod_tipo_item + "." + itemSelecionado[i].cod_item + " - " + itemSelecionado[i].descricao + "</option>";
+        }
+
+        document.getElementById("itens_disponiveis").disabled = false;
+        document.getElementById("itens_disponiveis").innerHTML = x;
+
       });
     } else {
       erros(response.status);
@@ -250,6 +204,8 @@ function enabler3(){
   let item = valoresJuntos[0];
   let tipoItem = valoresJuntos[1];
   let i, quantidade_disponivel="", quantidade="", valor="";
+
+  console.log(itemSelecionado);
 
   for (i = 0; i < itemSelecionado.length; i++) {
     if (itemSelecionado[i].cod_item == item && itemSelecionado[i].cod_tipo_item == tipoItem && itemSelecionado[i].id_empenho == empenho) {
