@@ -68,14 +68,11 @@ function previsaoSub(valorCodigo) {
           else{
             tabela += "Reajuste";
           }
-          tabela += (`</td> <td class="data">`);
-          let data = listaFinal[i]["data"];
-          let dataSeparada = data.split("-");
-          let dataEspecial = dataSeparada[2].split("T");
+          tabela += (`</td><td class="data">`);
 
           mascara();
 
-          tabela += dataEspecial[0] + dataSeparada[1] + dataSeparada[0];
+          tabela += arrumaData(listaFinal[i]["data"]);
           tabela += (`</td><td>`);
           tabela += listaFinal[i]["ano_referencia"];
           tabela += (`</td>`);
@@ -97,15 +94,14 @@ function empenhoSub(valorCodigo) {
   document.getElementById("editar").innerHTML = (`<br>`);
   document.getElementById("editar2").innerHTML = (`<br>`);
 
-  //filtro de subtabelas pelo codigo escolhido (1 para previsao, 2 para lote)
+  //filtro de subtabelas pelo codigo escolhido (1 para previsao, 2 para lote, 3 para cidades digitais)
   let caminhoEmpenho;
 
   if(valorCodigo=='1'){
     caminhoEmpenho = 'read/empenhocodprevisaoempenho/' + meuCodigo;
   }
 
-  //caso não seja em previsão
-  else if(valorCodigo=='2' || valorCodigo=='3'){
+  else{
     caminhoEmpenho = 'read/empenho';
   }
 
@@ -125,92 +121,102 @@ function empenhoSub(valorCodigo) {
 
         //console.log(json);
 
-        let tabela = "";
-        if(valorCodigo=='1'){
-          tabela += (`<thead style="background: #4b5366; color:white; font-size:15px">
-          <tr>
-          <th style="width:50%" scope="col">Código de Empenho</th>
-          <th style="width:50%" scope="col">Data</th>
-          </tr>
-          </thead>`);
-        }
-
-        //caso não seja em previsão
-        else if(valorCodigo=='2' || valorCodigo=='3'){
-          tabela += (`<thead style="background: #4b5366; color:white; font-size:15px">
-          <tr>
-          <th style="width:20%" scope="col">Código de Empenho</th>
-          <th style="width:40%" scope="col">Natureza de Despesa</th>
-          <th style="width:15%" scope="col">Tipo</th>
-          <th style="width:25%" scope="col">Data</th>
-          </tr>
-          </thead>`);
-        }
-        tabela += (`<tbody>`);
-
-        let j = 0;
-        for (let i = 0; i < json.length; i++) {
-
+          let tabela = "";
           if(valorCodigo=='1'){
-            if (meuCodigo == json[i]["cod_previsao_empenho"]) {
-              listaFinal[j] = json[i];
-              j++;
-            }
+            tabela += (`<thead style="background: #4b5366; color:white; font-size:15px">
+            <tr>
+            <th style="width:50%" scope="col">Código de Empenho</th>
+            <th style="width:50%" scope="col">Data</th>
+            </tr>
+            </thead>`);
           }
-
-          else if(valorCodigo=='2'){
-            if (meuCodigo == json[i]["cod_lote"]) {
-              listaFinal[j] = json[i];
-              j++;
-            }
-          }
-
-          else if(valorCodigo=='3'){
-            if (meuLote == json[i]["cod_lote"]) {
-              listaFinal[j] = json[i];
-              j++;
-            }
-          }
-        }
-
-        for (i = 0; i < listaFinal.length; i++) {
-          //captura itens para tabela
-          tabela += (`<tr style="cursor:pointer" id="linha` + i + `" onmouseover="sublinhar(` + i + "," + json.length + `)" onclick="redirecionar(` + i + "," + "'empenho'" + `)">`);
-          tabela += (`<td>`);
-          tabela += listaFinal[i]["cod_empenho"];
-          tabela += (`</td>`);
-
+  
           //caso não seja em previsão
-          if(valorCodigo=='2' || valorCodigo=='3'){
-            tabela += (`<td>`);
-            tabela += listaFinal[i]["cod_natureza_despesa"] + " - " + listaFinal[i]["descricao"];
-            tabela += (`</td>`);
-            tabela += (`<td>`);
-            if(listaFinal[i]["tipo"]=="o"){
-              tabela += "Original";
-            }
-            else{
-              tabela += "Reajuste";
-            }
-            tabela += (`</td>`);
+          else if(valorCodigo=='2' || valorCodigo=='3'){
+            tabela += (`<thead style="background: #4b5366; color:white; font-size:15px">
+            <tr>
+            <th style="width:20%" scope="col">Código de Empenho</th>
+            <th style="width:40%" scope="col">Natureza de Despesa</th>
+            <th style="width:15%" scope="col">Tipo</th>
+            <th style="width:25%" scope="col">Data</th>
+            </tr>
+            </thead>`);
           }
+          tabela += (`<tbody>`);
+  
+          let j = 0;
+          for (let i = 0; i < json.length; i++) {
+  
+            if(valorCodigo=='1'){
+              if (meuCodigo == json[i]["cod_previsao_empenho"]) {
+                listaFinal[j] = json[i];
+                j++;
+              }
+            }
+  
+            else if(valorCodigo=='2'){
+              if (meuCodigo == json[i]["cod_lote"]) {
+                listaFinal[j] = json[i];
+                j++;
+              }
+            }
+  
+            else if(valorCodigo=='3'){
+              if (meuLote == json[i]["cod_lote"]) {
+                listaFinal[j] = json[i];
+                j++;
+              }
+            }
 
-          tabela += (`<td class="data">`);
-          let data = listaFinal[i]["data"];
-          let dataSeparada = data.split("-");
-          let dataEspecial = dataSeparada[2].split("T");
-
-          mascara();
-
-          tabela += dataEspecial[0] + dataSeparada[1] + dataSeparada[0];
-          tabela += (`</td>`);
-          tabela += (`</tr>`);
-        }
-        tabela += (`</tbody>`);
-        document.getElementById("tabela").innerHTML = tabela;
+            //else if feito assim para pegar o valor do i na tabela normal
+            else if(json[i]["cod_empenho"] == listaItem[valorUsado]["cod_empenho"]){
+              localStorage.setItem("id_empenho", json[i].id_empenho);
+              localStorage.setItem("cod_empenho", json[i].cod_empenho);
+              localStorage.setItem("cod_lote", json[i].cod_lote);
+              localStorage.setItem("cod_previsao_empenho", json[i].cod_previsao_empenho);
+              localStorage.setItem("cod_natureza_despesa", json[i].cod_natureza_despesa);
+              localStorage.setItem("descricao", json[i].descricao);
+              localStorage.setItem("tipo", json[i].tipo);
+              localStorage.setItem("data", json[i].data);
+              window.location.href = "./gerenciaEmpenho.html";
+            }
+          }
+  
+          for (i = 0; i < listaFinal.length; i++) {
+            //captura itens para tabela
+            tabela += (`<tr style="cursor:pointer" id="linha` + i + `" onmouseover="sublinhar(` + i + "," + json.length + `)" onclick="redirecionar(` + i + "," + "'empenho'" + `)">`);
+            tabela += (`<td>`);
+            tabela += listaFinal[i]["cod_empenho"];
+            tabela += (`</td>`);
+  
+            //caso não seja em previsão
+            if(valorCodigo=='2' || valorCodigo=='3'){
+              tabela += (`<td>`);
+              tabela += listaFinal[i]["cod_natureza_despesa"] + " - " + listaFinal[i]["descricao"];
+              tabela += (`</td>`);
+              tabela += (`<td>`);
+              if(listaFinal[i]["tipo"]=="o"){
+                tabela += "Original";
+              }
+              else{
+                tabela += "Reajuste";
+              }
+              tabela += (`</td>`);
+            }
+  
+            tabela += (`<td class="data">`);
+  
+            mascara();
+  
+            tabela += arrumaData(listaFinal[i]["data"]);
+            tabela += (`</td>`);
+            tabela += (`</tr>`);
+          }
+          tabela += (`</tbody>`);
+          document.getElementById("tabela").innerHTML = tabela;
       });
     } else {
-      //erros(response.status);
+      erros(response.status);
     }
   });
 }
@@ -273,14 +279,11 @@ function faturaSub(valorCodigo) {
           tabela += (`</td><td>`);
           tabela += listaFinal[i]["nome_municipio"] + " - " + listaFinal[i]["uf"] + " - " + listaFinal[i]["cod_ibge"];
 
-          tabela += (`</td> <td class="data">`);
-          let data = listaFinal[i]["dt_nf"];
-          let dataSeparada = data.split("-");
-          let dataEspecial = dataSeparada[2].split("T");
+          tabela += (`</td><td class="data">`);
 
           mascara();
 
-          tabela += dataEspecial[0] + dataSeparada[1] + dataSeparada[0];
+          tabela += arrumaData(listaFinal[i]["data"]);
           tabela += (`</td>`);
 
           tabela += (`</tr>`);
@@ -355,8 +358,12 @@ function pagamentoSub(valorCodigo) {
 
 
 
+//usado apenas caso seja necessário pegar empenho de itens fatura
+let valorUsado;
+
 //função necessaria para o funcionamento dos links nas subtabelas
 function redirecionar(valor, caminhoFinal){
+  console.log("chega aqui");
   if(caminhoFinal == "previsao"){
     localStorage.setItem("cod_previsao_empenho", listaFinal[valor].cod_previsao_empenho);
     localStorage.setItem("cod_lote", listaFinal[valor].cod_lote);
@@ -371,10 +378,10 @@ function redirecionar(valor, caminhoFinal){
   else if(caminhoFinal == "empenho"){
     localStorage.setItem("id_empenho", listaFinal[valor].id_empenho);
     localStorage.setItem("cod_empenho", listaFinal[valor].cod_empenho);
-    localStorage.setItem("cod_previsao_empenho", listaFinal[valor].cod_previsao_empenho);
+    localStorage.setItem("cod_lote", meuCodigoSec);
+    localStorage.setItem("cod_previsao_empenho", meuCodigo);
     localStorage.setItem("cod_natureza_despesa", listaFinal[valor].cod_natureza_despesa);
     localStorage.setItem("descricao", listaFinal[valor].descricao);
-    console.log(listaFinal[valor].descricao);
     localStorage.setItem("tipo", listaFinal[valor].tipo);
     localStorage.setItem("data", listaFinal[valor].data);
     window.location.href = "./gerenciaEmpenho.html";
@@ -393,7 +400,15 @@ function redirecionar(valor, caminhoFinal){
     localStorage.setItem("dt_pgto", listaFinal[valor]["dt_pgto"]);
     window.location.href = "./gerenciaPagamento.html";
   }
+  //caso especial da função empenho
+  else if(caminhoFinal == "empItensFatura"){
+    //valores usados no caso especial
+    valorUsado = valor;
+    empenhoSub("0");
+  }
 }
+
+
 
 //função decorativa para facilitar a vizualização do link
 function sublinhar(valor,tamanho){
@@ -402,9 +417,23 @@ function sublinhar(valor,tamanho){
       document.getElementById("linha"+i).style.color = "blue";
       document.getElementById("linha"+i).style.textDecoration = "underline";
     }
-    else if(document.getElementById("linha"+i).style.color == "blue"){
+    else{
       document.getElementById("linha"+i).style.color = "black";
       document.getElementById("linha"+i).style.textDecoration = "none";
+    }
+  }
+}
+
+//para empenho em itensfatura
+function sublinhar2(valor,tamanho){
+  for(i=0;i<tamanho;i++){
+    if(i==valor){
+      document.getElementById("empenho"+i).style.color = "blue";
+      document.getElementById("empenho"+i).style.textDecoration = "underline";
+    }
+    else{
+      document.getElementById("empenho"+i).style.color = "black";
+      document.getElementById("empenho"+i).style.textDecoration = "none";
     }
   }
 }
@@ -465,7 +494,7 @@ function itensLote() {
           tabela += (`<td>`);
           tabela += listaItem[i]["cod_item"] + "." + listaItem[i]["cod_tipo_item"] + " - " + listaItem[i]["descricao"];
           tabela += (`</td> <td>`);
-          tabela += (`R$ <input value="` + (listaItem[i]["preco"]*100) + `" id="preco` + i + `" type="text" class="preco" size="50">`);
+          tabela += (`<input value="` + (listaItem[i]["preco"]*100) + `" id="preco` + i + `" type="text" class="preco" size="50">`);
           tabela += (`</td>`);
           tabela += (`</tr>`);
         }
@@ -522,7 +551,7 @@ function editarItemLote() {
 
 
 
-//Itens de financeamento
+//Itens de fiscalizacao
 
 let listaItem = [],
   meuItem = [],
@@ -533,7 +562,7 @@ let listaItem = [],
 //caso itensfatura seja o selecionado
 let meuEmpenho = [];
 
-function itensFinanceamento(caminho) {
+function itensFiscalizacao(caminho) {
 
   if (caminho == "itensfatura") {
     //cria o botão para editar
@@ -566,7 +595,7 @@ function itensFinanceamento(caminho) {
         //testar o json
         //console.log(json);
 
-        let tabela;
+        let tabela = "";
 
         //armazenando para edição
         listaItem = json;
@@ -614,9 +643,11 @@ function itensFinanceamento(caminho) {
 
           //apenas para fatura
           if (caminho == "itensfatura") {
-            tabela += (`</td> <td>`);
+            //caso especial da função empenho
+            tabela += (`</td> <td id="empenho` + i + `" style="cursor:pointer" onclick="redirecionar(` + i + "," + "'empItensFatura'" + `)" onmouseover="sublinhar2(` + i + "," + listaItem.length + `)">`);
             tabela += listaItem[i]["cod_empenho"];
             tabela += (`</td><td>`);
+
             if(listaItem[i]["tipo"]=="o"){
               tabela += "Original";
             }
@@ -629,15 +660,17 @@ function itensFinanceamento(caminho) {
           tabela += (`</td> <td>`);
           tabela += listaItem[i]["quantidade_disponivel"];
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + (listaItem[i]["quantidade"]*100) + `" class="quebrados" id="quantidade` + i + `" type="text" size="10"></input>`);
+          // depois colocar equivalente a onchange="zeros(` + document.getElementById("quantidade"+i).value + `)"
+          tabela += (`<input value="` + listaItem[i]["quantidade"]*100 + `" class="quebrados" id="quantidade` + i + `" type="text" size="10" style="text-align: right;"></input>`);
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + (listaItem[i]["valor"]*100) + `" class="preco" id="valor` + i + `" type="text" size="15"></input>`);
+          // depois colocar equivalente a onchange="zeros(` + document.getElementById("valor"+i).value + `)"
+          tabela += (`<input value="` + listaItem[i]["valor"]*100 + `" class="preco" id="valor` + i + `" type="text" size="15" style="text-align: right;"></input>`);
           tabela += (`</td> <td class="preco">`);
 
           //calculo do subtotal
-          total = (listaItem[i]["quantidade"] * listaItem[i]["valor"]);
+          total = (listaItem[i]["quantidade"] * listaItem[i]["valor"] * 100);
           totalFinal = totalFinal + total;
-
+          
           tabela += arredondamento(total);
           tabela += (`</td>`);
           tabela += (`</tr>`);
@@ -716,7 +749,7 @@ function editarItem(caminho) {
     //funções de mascara são usadas aqui para retornar os valores ao processável pelo banco
     edicaoItem[i] = {
       "quantidade": parseFloat(mascaraQuebrados(document.getElementById("quantidade" + i).value)),
-      "valor": parseFloat(mascaraPreco(document.getElementById("valor" + i).value)),
+      "valor": parseFloat(mascaraQuebrados(document.getElementById("valor" + i).value)),
     };
 
     //identifica se o item foi alterado
@@ -729,15 +762,15 @@ function editarItem(caminho) {
         caminhoFinal = servidor + 'read/' + caminho + '/' + meuCodigo + '/' + meuItem[i] + '/' + meuTipo[i];
       }
 
-      if(edicaoItem[i].quantidade > listaItem[i].quantidade_disponivel){
+      if(edicaoItem[i].quantidade > (listaItem[i].quantidade_disponivel+listaItem[i].quantidade)){
 
         //mensagem com certeza irá mudar
-        alert("Não foi possivel completar a edição pois o item" + listaItem[i].cod_tipo_item + "." + listaItem[i].cod_item + "." + " está ultrapassando o limite de quantidade.");
+        alert("Não foi possivel completar a edição do item " + listaItem[i].cod_tipo_item + "." + listaItem[i].cod_item + " pois este está ultrapassando o limite da quantidade disponível.");
         
       }
 
       //Para os casos especificos em tipos de item 8,9 e 10. Validos apenas em itens de 1 a 5 e de fatura ou previsão.
-      else if((listaItem[i].cod_tipo_item == "8" || listaItem[i].cod_tipo_item == "9" || listaItem[i].cod_tipo_item == "10") && listaItem[i].cod_item <= "5" && (caminho == "itensfatura" || caminho == "itensprevisao") && listaItem[i].tipo == "o"){
+      else if(listaItem[i].cod_tipo_item >= "8" && listaItem[i].cod_tipo_item <= "10" && (caminho == "itensfatura" || caminho == "itensprevisao") && listaItem[i].tipo == "o"){
         
         //valor de limite
         //utiliza os valores atualizados
@@ -747,72 +780,40 @@ function editarItem(caminho) {
         let valorSoma = "";
         for(let j=0;j<listaItem.length;j++){
           //garantindo ser um dos valores com mesmo item e do mesmo grupo de tipos
-          if((listaItem[j].cod_tipo_item == "8" || listaItem[j].cod_tipo_item == "9" || listaItem[j].cod_tipo_item == "10") && listaItem[j].cod_item == listaItem[i].cod_item){
+          if(listaItem[i].cod_tipo_item >= "8" && listaItem[i].cod_tipo_item <= "10" && listaItem[j].cod_item == listaItem[i].cod_item){
 
             //somando todos os compativeis pela ultima mudança deles
             valorSoma = (edicaoItem[j].valor * edicaoItem[j].quantidade) + valorSoma;
           }
         }
-
         if(valorMax<valorSoma){
-
-          //mensagem com certeza irá mudar
-          alert("Não foi possivel completar a edição pois o item" + listaItem[i].cod_tipo_item + "." + listaItem[i].cod_item + "." + " está ultrapassando o limite de valor.");
-        
-        }
-        else{
-
-        //função ainda não funciona
-          //transforma as informações do token em json
-          let corpo = JSON.stringify(edicaoItem[i]);
-
-          //função fetch para mandar
-          fetch(caminhoFinal, {
-            method: 'PUT',
-            body: corpo,
-            headers: {
-              'Authorization': 'Bearer ' + meuToken
-            },
-          }).then(function (response) {
-            //checar o status do pedido
-            //console.log(response.statusText);
-
-            //tratamento dos erros
-            if (response.status == 200 || response.status == 201) {
-              location.reload();
-            } else {
-              erros(response.status);
-            }
-          });
+          alert("Problema");
         }
       }
 
-      //caso não tenha problemas
-      else {
+      //transforma as informações do token em json
+      let corpo = JSON.stringify(edicaoItem[i]);
+      //console.log(edicaoItem[i]);
 
-      //função ainda não funciona
-        //transforma as informações do token em json
-        let corpo = JSON.stringify(edicaoItem[i]);
+      //função fetch para mandar
+      fetch(caminhoFinal, {
+        method: 'PUT',
+        body: corpo,
+        headers: {
+          'Authorization': 'Bearer ' + meuToken
+        },
+      }).then(function (response) {
+        //checar o status do pedido
+        //console.log(response.statusText);
 
-        //função fetch para mandar
-        fetch(caminhoFinal, {
-          method: 'PUT',
-          body: corpo,
-          headers: {
-            'Authorization': 'Bearer ' + meuToken
-          },
-        }).then(function (response) {
-          //checar o status do pedido
-          //console.log(response.statusText);
-
-          //tratamento dos erros
-          if (response.status == 200 || response.status == 201) {
-            location.reload();
-          } else {
-            erros(response.status);
-          }
-        });
-      }
+        //tratamento dos erros
+        if (response.status == 200 || response.status == 201) {
+          location.reload();
+        } else {
+          erros(response.status);
+        }
+      });
+      
     }
   }
 }

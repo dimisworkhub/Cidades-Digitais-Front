@@ -9,6 +9,8 @@ window.onload = function () {
   //preenche os campos
   document.getElementById("cod_empenho").value = localStorage.getItem("cod_empenho");
 
+  document.getElementById("cod_lote").value = localStorage.getItem("cod_lote");
+
   //adiciona a descrição e o tipo à previsão e coloca no local
   let tipo=localStorage.getItem("tipo");
   if(tipo=="o"){

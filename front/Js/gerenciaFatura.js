@@ -87,6 +87,7 @@ function enabler1(){
 }
 
 function original(){
+
   fetch(servidor + 'read/itensfatura/' + meuCodigoSec, {
     method: 'GET',
     headers: {
@@ -137,8 +138,6 @@ function reajuste(){
 
 function reajusteEOriginal(){
 
-  document.getElementById("id_empenho").disabled = false;
-
   //variaveis
   let i, j = 0;
   let empenhoID = [], empenhoCod = [], empenhoFinalID = [], empenhoFinalCod = [];
@@ -168,12 +167,12 @@ function reajusteEOriginal(){
     x[i+1] = "<option value=" + empenhoFinalID[i] + ">" + empenhoFinalCod[i] + "</option>";
   }
 
+  document.getElementById("id_empenho").disabled = false;
+
   document.getElementById("id_empenho").innerHTML = x;
 }
 
 function enabler2(){
-
-  document.getElementById("itens_disponiveis").disabled = false;
 
   //variaveis
   let tipo = document.getElementById("tipo").value;
@@ -201,10 +200,15 @@ function enabler2(){
   //preenche "itens disponiveis"
   x[0] = "<option value='A'>Item Selecionado</option>";
   //precisa juntar os valores para pegar ambos
-  for (i = 0; i < itemFinal.length; i++) {
+  for (let i = 0; i < itemFinal.length; i++) {
     x[i+1] = "<option value='"+ itemFinal[i].cod_item + " " + itemFinal[i].cod_tipo_item + "'>" + itemFinal[i].cod_tipo_item + "." + itemFinal[i].cod_item + " - " + itemFinal[i].descricao + "</option>";
   }
-  console.log(x)
+
+  if(itemFinal[i].cod_item != 0){
+    document.getElementById("itens_disponiveis").disabled = false;
+  }
+
+  document.getElementById("itens_disponiveis").disabled = false;
   document.getElementById("itens_disponiveis").innerHTML = x;
 }
 
@@ -221,7 +225,6 @@ function itensReajuste(caminho){
     if (response.status == 200) {
       return response.json().then(function (json) {
         //console.log(json);
-
         //variavel alterada para usar em enabler()
         itemSelecionado=json;
       });

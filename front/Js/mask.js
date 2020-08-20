@@ -7,31 +7,38 @@ function mascara(){
     $('.contrato').mask('999-9999');
     $('.ano').inputmask('9999');
     $('.cnpj').inputmask('99.999.999/9999-99', {autoUnmask: true, removeMaskOnSubmit: true});
-    $('.quebrados').inputmask('[99999]9,99', {reverse: true, numericInput:true, placeholder: "0"});
+    $('.quebrados').inputmask('9{1,9},99',{autoUnmask: true, unmaskAsNumber: true, reverse: true, greedy: false, numericInput:true, placeholder: "0"});
     $('.inteiros').inputmask('[9999999999]9', {reverse: true, numericInput:true});
-    $('.preco').inputmask({mask: "[R$ 9.999.999.99]9,99", reverse: true, numericInput:true, prefix: "R$ ", placeholder: "", greedy: false});
-
-    // Função que remove a máscara ao enviar pro banco (em teoria, mas tem o fato de não utilizarmos o submit para enviar.)
-    // removeMaskOnSubmit: true,
-
-    // $(".preco").inputmask('decimal', {
-    //   'alias': 'numeric',
-    //   'groupSeparator': ',',
-    //   'autoGroup': true,
-    //   'digits': 2,
-    //   'radixPoint': ".",
-    //   'digitsOptional': false,
-    //   'allowMinus': false,
-    //   'prefix': 'R$ ',
-    //   'numericInput': true,
-    // });
-    // usando id: $("#percentual").inputmask("999.99%",{reverse: true,numericInput:true, placeholder:"0"});
+    $('.preco').inputmask( 'R$ 9{1,9},99',{autoUnmask: true, unmaskAsNumber: true, reverse: true, greedy: false, numericInput:true, placeholder: "0"});
   });
 }
 
-//mascaras usadas
+// arrumar o problema de pegar o campo vazio
+// é assim que eu vou arrumar os pontos tbm
+// function zeros(valor){
+//   if(valor.toString().length==1){
+//     valor="00"+valor;
+//   }
+//   else if(valor.toString().length==2){
+//     valor="0"+valor;
+//   }
+//   else{
+//     //retirar os zeros extras do valor
+//     let valorCortado,valorSemZero;
+//     valorCortado = valor.split("");
 
-//especifica para dinheiro.
+//     //retira os zeros da frente 1 por 1
+//     for(let i=0;valorCortado==0;i++){
+//       valorSemZero = valorCortado;
+//     }
+//     valor = valorSemZero;
+//   }
+//   return valor;
+// }
+
+//funções usadas para alterar mascaras
+
+//especifica para dinheiro (e quebrados?)
 function arredondamento(valor){
 
   //split para arredondar valores nos campos subtotal e total
@@ -46,57 +53,17 @@ function arredondamento(valor){
   return redondoFinal;
 }
 
-//função comum para os valores em itens:
-function mascaraPreco(preco) {
-
-  //para organizar a mascara
-  let preco1,preco2,preco2L,preco3,preco4;
-  let preco2A = "";
-
-  //Verifica se o númera possui uma casa de milhar
-  if((preco.toString()).length > 6){
-    preco1 = preco.split("R$ ");
-    preco2 = preco1[1].split(".");
-
-    //para garantir que todas as partes dos valores sejam pegas
-    preco2L = preco2.length;
-
-    for(let i = 0; i < preco2L; i++){
-      preco2A += preco2[i];
-    }
-
-    preco3 = preco2A.split(",");
-
-    preco4 = (preco3[0] + preco3[1])/100;
-    
-  }else{
-    preco2 = preco.split(",");
-    
-    preco4 = (preco2[0] + preco2[1])/100;
-  }
-
-  return preco4;
-
-}
-
 //especifica para dinheiro.
 function mascaraQuebrados(valor){
-  let qOriginal, qMudado;
-
-  qOriginal = valor;
-  qMudado = qOriginal.split(",")
-
-  return (qMudado[0]+qMudado[1])/100;
+  return valor/100;
 }
   
 function arrumaData(data){
-  
-  // console.log(data)
-
+  // console.log(data);
   if(data === null || data === undefined || data === ''){
 
     let dataFinal = null;
-    return dataFinal 
+    return dataFinal;
     
   }else{
     
@@ -111,7 +78,6 @@ function arrumaData(data){
   
     return dataFinal;
   }
-
 }
 
 function mascaraData(data){
@@ -128,13 +94,13 @@ function mascaraData(data){
 
     if((data.toString().length)<6){
 
-      //junta todas as informações para ficar no padrão brasileiro
+      //junta todas as informações para ficar no padrão do banco de dados
       dataFinal = "0000-" + dataSeparada[1] + "-" + dataSeparada[0];
       return dataFinal;
       
     }else{
       
-      //junta todas as informações para ficar no padrão brasileiro
+      //junta todas as informações para ficar no padrão do banco de dados
       dataFinal = dataSeparada[2] + "-" + dataSeparada[1] + "-" + dataSeparada[0];
       return dataFinal;
     }
