@@ -950,7 +950,7 @@ func (empenho *Empenho) FindIDEmpenhoReajuste(db *gorm.DB, codIbge uint32) (*[]E
 	FUNCAO LISTAR TODAS ITENS FATURA DISPONIVEIS DO TIPO REAJUSTE
 =========================  */
 
-func (itensEmpenho *ItensEmpenho) FindItensFaturaDisponiveisReajuste(db *gorm.DB, idEmpenho uint32) (*[]ItensEmpenho, error) {
+func (itensEmpenho *ItensEmpenho) FindItensFaturaDisponiveisReajuste(db *gorm.DB, idEmpenho, codIbge uint32) (*[]ItensEmpenho, error) {
 
 	allItensEmpenho := []ItensEmpenho{}
 	itensFatura := ItensFatura{}
@@ -974,7 +974,7 @@ func (itensEmpenho *ItensEmpenho) FindItensFaturaDisponiveisReajuste(db *gorm.DB
 		db.Debug().Table("fatura").
 			Select("SUM(itens_fatura.quantidade) AS quantidade_disponivel").
 			Joins("JOIN itens_fatura ON fatura.num_nf = itens_fatura.num_nf AND fatura.cod_ibge = itens_fatura.cod_ibge").
-			Where("itens_fatura.id_empenho = ? AND itens_fatura.cod_item = ? AND itens_fatura.cod_tipo_item = ?", data.IDEmpenho, data.CodItem, data.CodTipoItem).
+			Where("fatura.cod_ibge IN (SELECT cd.cod_ibge FROM cd WHERE cd.cod_lote = (SELECT cd.cod_lote FROM cd WHERE cd.cod_ibge = ?)) AND itens_fatura.id_empenho = ? AND itens_fatura.cod_item = ? AND itens_fatura.cod_tipo_item = ?", codIbge, data.IDEmpenho, data.CodItem, data.CodTipoItem).
 			Scan(&itensFatura)
 
 		s := fmt.Sprintf("%.2f", allItensEmpenho[i].Quantidade-itensFatura.QuantidadeDisponivel)
