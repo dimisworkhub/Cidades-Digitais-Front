@@ -1,6 +1,9 @@
 package models
 
 import (
+	"fmt"
+	"strconv"
+
 	"github.com/jinzhu/gorm"
 )
 
@@ -47,7 +50,9 @@ func (itensEmpenho *ItensEmpenho) FindAllItensEmpenho(db *gorm.DB, idEmpenho, co
 	// Busca todos elementos contidos no banco de dados
 	err := db.Debug().Table("itens_empenho").
 		Select("itens.descricao, itens_empenho.*").
-		Joins("JOIN itens ON itens_empenho.cod_item = itens.cod_item AND itens_empenho.cod_tipo_item = itens.cod_tipo_item WHERE itens_empenho.id_empenho = ? AND itens_empenho.cod_previsao_empenho = ? ORDER BY cod_tipo_item, cod_item ASC", idEmpenho, codPrevisaoEmpenho).
+		Joins("JOIN itens ON itens_empenho.cod_item = itens.cod_item AND itens_empenho.cod_tipo_item = itens.cod_tipo_item").
+		Where("itens_empenho.id_empenho = ? AND itens_empenho.cod_previsao_empenho = ?", idEmpenho, codPrevisaoEmpenho).
+		Order("itens_empenho.cod_tipo_item, itens_empenho.cod_item").
 		Scan(&allItensEmpenho).Error
 	if err != nil {
 		return &[]ItensEmpenho{}, err
@@ -78,13 +83,18 @@ func (itensEmpenho *ItensEmpenho) FindAllItensEmpenho(db *gorm.DB, idEmpenho, co
 	*/
 
 	for i, data := range allItensEmpenho {
+
 		//	Busca um elemento no banco de dados a partir de sua chave primaria
-		err := db.Debug().
-			Raw("SELECT ROUND((SELECT SUM(itens_previsao_empenho.quantidade) AS quantidade_previsao_empenho FROM itens_previsao_empenho WHERE itens_previsao_empenho.cod_item = ? AND itens_previsao_empenho.cod_tipo_item = ? AND itens_previsao_empenho.cod_previsao_empenho = ?) - (SELECT SUM(itens_empenho.quantidade) AS quantidade_empenho FROM itens_empenho WHERE itens_empenho.cod_item = ? AND itens_empenho.cod_tipo_item = ? AND itens_empenho.cod_previsao_empenho = ?), 2) AS quantidade_disponivel", data.CodItem, data.CodTipoItem, codPrevisaoEmpenho, data.CodItem, data.CodTipoItem, codPrevisaoEmpenho).
-			Scan(&allItensEmpenho[i]).Error
-		if err != nil {
-			return &[]ItensEmpenho{}, err
-		}
+		db.Debug().
+			Raw("SELECT (SELECT SUM(itens_previsao_empenho.quantidade) AS quantidade_previsao_empenho FROM itens_previsao_empenho WHERE itens_previsao_empenho.cod_item = ? AND itens_previsao_empenho.cod_tipo_item = ? AND itens_previsao_empenho.cod_previsao_empenho = ?) - (SELECT SUM(itens_empenho.quantidade) AS quantidade_empenho FROM itens_empenho WHERE itens_empenho.cod_item = ? AND itens_empenho.cod_tipo_item = ? AND itens_empenho.cod_previsao_empenho = ?) AS quantidade_disponivel", data.CodItem, data.CodTipoItem, codPrevisaoEmpenho, data.CodItem, data.CodTipoItem, codPrevisaoEmpenho).
+			Scan(&allItensEmpenho[i])
+
+		s := fmt.Sprintf("%.2f", allItensEmpenho[i].QuantidadeDisponivel)
+
+		aux, _ := strconv.ParseFloat(s, 32)
+
+		allItensEmpenho[i].QuantidadeDisponivel = float32(aux)
+
 	}
 
 	return &allItensEmpenho, err
