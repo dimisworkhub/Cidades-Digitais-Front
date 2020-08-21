@@ -180,224 +180,202 @@ func (itensFatura *ItensFatura) FindAllItensFatura(db *gorm.DB, numNF, codIbge u
 	*/
 
 	for i, data := range allItensFatura {
-		//	Busca um elemento no banco de dados a partir de sua chave primaria
 
-		if allItensFatura[i].Tipo == "o" {
-			if data.CodTipoItem == 8 {
+		if data.CodTipoItem == 8 && allItensFatura[i].Tipo == "o" {
 
-				/*	Busca dos precos de lote_itens para o calculo de quantidade_disponivel */
-				db.Debug().Table("lote_itens").
-					Select("lote_itens.*").
-					Where("lote_itens.cod_lote = (SELECT cd.cod_lote FROM cd WHERE cd.cod_ibge = ?) AND lote_itens.cod_item = ? AND lote_itens.cod_tipo_item IN (8, 9, 10)", data.CodIbge, data.CodItem).
-					Order("lote_itens.cod_tipo_item, lote_itens.cod_item").
-					Scan(&loteItens)
+			/*	Busca dos precos de lote_itens para o calculo de quantidade_disponivel */
+			db.Debug().Table("lote_itens").
+				Select("lote_itens.*").
+				Where("lote_itens.cod_lote = (SELECT cd.cod_lote FROM cd WHERE cd.cod_ibge = ?) AND lote_itens.cod_item = ? AND lote_itens.cod_tipo_item IN (8, 9, 10)", data.CodIbge, data.CodItem).
+				Order("lote_itens.cod_tipo_item, lote_itens.cod_item").
+				Scan(&loteItens)
 
-				quantidadeDisponivel = (allItensEmpenho[i].Quantidade * loteItens[0].Preco) - (itensFaturaAux[i].QuantidadeDisponivel * loteItens[0].Preco)
+			quantidadeDisponivel = (allItensEmpenho[i].Quantidade * loteItens[0].Preco) - (itensFaturaAux[i].QuantidadeDisponivel * loteItens[0].Preco)
 
-				itensEmpenho.Quantidade = 0
+			itensEmpenho.Quantidade = 0
 
-				/*	Busca itens_empenho com o cod_tipo_item = 9	*/
-				db.Debug().Table("itens_empenho").
-					Select("itens_empenho.*").
-					Where("itens_empenho.id_empenho = ? AND itens_empenho.cod_item = ? AND itens_empenho.cod_tipo_item = 9", data.IDEmpenho, data.CodItem).
-					Scan(&itensEmpenho)
+			/*	Busca itens_empenho com o cod_tipo_item = 9	*/
+			db.Debug().Table("itens_empenho").
+				Select("itens_empenho.*").
+				Where("itens_empenho.id_empenho = ? AND itens_empenho.cod_item = ? AND itens_empenho.cod_tipo_item = 9", data.IDEmpenho, data.CodItem).
+				Scan(&itensEmpenho)
 
-				quantidadeDisponivel += (itensEmpenho.Quantidade * loteItens[1].Preco)
+			quantidadeDisponivel += (itensEmpenho.Quantidade * loteItens[1].Preco)
 
-				itensFatura.QuantidadeDisponivel = 0
+			itensFatura.QuantidadeDisponivel = 0
 
-				/*	Busca itens_fatura com o cod_tipo_item = 9	*/
-				db.Debug().Table("fatura").
-					Select("SUM(itens_fatura.quantidade) AS quantidade_disponivel, itens_fatura.cod_item, itens_fatura.cod_tipo_item").
-					Joins("JOIN itens_fatura ON fatura.num_nf = itens_fatura.num_nf AND fatura.cod_ibge = itens_fatura.cod_ibge").
-					Where("fatura.cod_ibge IN (SELECT cd.cod_ibge FROM cd WHERE cd.cod_lote = (SELECT cd.cod_lote FROM cd WHERE cd.cod_ibge = ?)) AND itens_fatura.id_empenho = ? AND itens_fatura.cod_item = ? AND itens_fatura.cod_tipo_item = 9", data.CodIbge, data.IDEmpenho, data.CodItem).
-					Group("itens_fatura.id_empenho, itens_fatura.cod_item, itens_fatura.cod_tipo_item").
-					Order("itens_fatura.cod_tipo_item, itens_fatura.cod_item, itens_fatura.id_empenho").
-					Scan(&itensFatura)
+			/*	Busca itens_fatura com o cod_tipo_item = 9	*/
+			db.Debug().Table("fatura").
+				Select("SUM(itens_fatura.quantidade) AS quantidade_disponivel, itens_fatura.cod_item, itens_fatura.cod_tipo_item").
+				Joins("JOIN itens_fatura ON fatura.num_nf = itens_fatura.num_nf AND fatura.cod_ibge = itens_fatura.cod_ibge").
+				Where("fatura.cod_ibge IN (SELECT cd.cod_ibge FROM cd WHERE cd.cod_lote = (SELECT cd.cod_lote FROM cd WHERE cd.cod_ibge = ?)) AND itens_fatura.id_empenho = ? AND itens_fatura.cod_item = ? AND itens_fatura.cod_tipo_item = 9", data.CodIbge, data.IDEmpenho, data.CodItem).
+				Group("itens_fatura.id_empenho, itens_fatura.cod_item, itens_fatura.cod_tipo_item").
+				Order("itens_fatura.cod_tipo_item, itens_fatura.cod_item, itens_fatura.id_empenho").
+				Scan(&itensFatura)
 
-				quantidadeDisponivel -= (itensFatura.QuantidadeDisponivel * loteItens[1].Preco)
+			quantidadeDisponivel -= (itensFatura.QuantidadeDisponivel * loteItens[1].Preco)
 
-				itensEmpenho.Quantidade = 0
+			itensEmpenho.Quantidade = 0
 
-				/*	Busca itens_empenho com o cod_tipo_item = 10	*/
-				db.Debug().Table("itens_empenho").
-					Select("itens_empenho.*").
-					Where("itens_empenho.id_empenho = ? AND itens_empenho.cod_item = ? AND itens_empenho.cod_tipo_item = 10", data.IDEmpenho, data.CodItem).
-					Order("itens_empenho.cod_tipo_item, itens_empenho.cod_item, itens_empenho.id_empenho").
-					Scan(&itensEmpenho)
+			/*	Busca itens_empenho com o cod_tipo_item = 10	*/
+			db.Debug().Table("itens_empenho").
+				Select("itens_empenho.*").
+				Where("itens_empenho.id_empenho = ? AND itens_empenho.cod_item = ? AND itens_empenho.cod_tipo_item = 10", data.IDEmpenho, data.CodItem).
+				Order("itens_empenho.cod_tipo_item, itens_empenho.cod_item, itens_empenho.id_empenho").
+				Scan(&itensEmpenho)
 
-				quantidadeDisponivel += (itensEmpenho.Quantidade * loteItens[2].Preco)
+			quantidadeDisponivel += (itensEmpenho.Quantidade * loteItens[2].Preco)
 
-				itensFatura.QuantidadeDisponivel = 0
+			itensFatura.QuantidadeDisponivel = 0
 
-				/*	Busca itens_fatura com o cod_tipo_item = 10	*/
-				db.Debug().Table("fatura").
-					Select("SUM(itens_fatura.quantidade) AS quantidade_disponivel, itens_fatura.cod_item, itens_fatura.cod_tipo_item").
-					Joins("JOIN itens_fatura ON fatura.num_nf = itens_fatura.num_nf AND fatura.cod_ibge = itens_fatura.cod_ibge").
-					Where("fatura.cod_ibge IN (SELECT cd.cod_ibge FROM cd WHERE cd.cod_lote = (SELECT cd.cod_lote FROM cd WHERE cd.cod_ibge = ?)) AND itens_fatura.id_empenho = ? AND itens_fatura.cod_item = ? AND itens_fatura.cod_tipo_item = 10", data.CodIbge, data.IDEmpenho, data.CodItem).
-					Group("itens_fatura.id_empenho, itens_fatura.cod_item, itens_fatura.cod_tipo_item").
-					Order("itens_fatura.cod_tipo_item, itens_fatura.cod_item, itens_fatura.id_empenho").
-					Scan(&itensFatura)
+			/*	Busca itens_fatura com o cod_tipo_item = 10	*/
+			db.Debug().Table("fatura").
+				Select("SUM(itens_fatura.quantidade) AS quantidade_disponivel, itens_fatura.cod_item, itens_fatura.cod_tipo_item").
+				Joins("JOIN itens_fatura ON fatura.num_nf = itens_fatura.num_nf AND fatura.cod_ibge = itens_fatura.cod_ibge").
+				Where("fatura.cod_ibge IN (SELECT cd.cod_ibge FROM cd WHERE cd.cod_lote = (SELECT cd.cod_lote FROM cd WHERE cd.cod_ibge = ?)) AND itens_fatura.id_empenho = ? AND itens_fatura.cod_item = ? AND itens_fatura.cod_tipo_item = 10", data.CodIbge, data.IDEmpenho, data.CodItem).
+				Group("itens_fatura.id_empenho, itens_fatura.cod_item, itens_fatura.cod_tipo_item").
+				Order("itens_fatura.cod_tipo_item, itens_fatura.cod_item, itens_fatura.id_empenho").
+				Scan(&itensFatura)
 
-				quantidadeDisponivel -= (itensFatura.QuantidadeDisponivel * loteItens[2].Preco)
+			quantidadeDisponivel -= (itensFatura.QuantidadeDisponivel * loteItens[2].Preco)
 
-				//	Arredondamento para duas casas decimais
-				s := fmt.Sprintf("%.2f", quantidadeDisponivel/loteItens[0].Preco)
+			//	Arredondamento para duas casas decimais
+			s := fmt.Sprintf("%.2f", quantidadeDisponivel/loteItens[0].Preco)
 
-				aux, _ := strconv.ParseFloat(s, 32)
+			aux, _ := strconv.ParseFloat(s, 32)
 
-				allItensFatura[i].QuantidadeDisponivel = float32(aux)
+			allItensFatura[i].QuantidadeDisponivel = float32(aux)
 
-			} else if data.CodTipoItem == 9 {
+		} else if data.CodTipoItem == 9 && allItensFatura[i].Tipo == "o" {
 
-				/*	Busca dos precos de lote_itens para o calculo de quantidade_disponivel */
-				db.Debug().Table("lote_itens").
-					Select("lote_itens.*").
-					Where("lote_itens.cod_lote = (SELECT cd.cod_lote FROM cd WHERE cd.cod_ibge = ?) AND lote_itens.cod_item = ? AND lote_itens.cod_tipo_item IN (8, 9, 10)", data.CodIbge, data.CodItem).
-					Order("lote_itens.cod_tipo_item, lote_itens.cod_item").
-					Scan(&loteItens)
+			/*	Busca dos precos de lote_itens para o calculo de quantidade_disponivel */
+			db.Debug().Table("lote_itens").
+				Select("lote_itens.*").
+				Where("lote_itens.cod_lote = (SELECT cd.cod_lote FROM cd WHERE cd.cod_ibge = ?) AND lote_itens.cod_item = ? AND lote_itens.cod_tipo_item IN (8, 9, 10)", data.CodIbge, data.CodItem).
+				Order("lote_itens.cod_tipo_item, lote_itens.cod_item").
+				Scan(&loteItens)
 
-				quantidadeDisponivel = (allItensEmpenho[i].Quantidade * loteItens[1].Preco) - (itensFaturaAux[i].QuantidadeDisponivel * loteItens[1].Preco)
+			quantidadeDisponivel = (allItensEmpenho[i].Quantidade * loteItens[1].Preco) - (itensFaturaAux[i].QuantidadeDisponivel * loteItens[1].Preco)
 
-				itensEmpenho.Quantidade = 0
+			itensEmpenho.Quantidade = 0
 
-				/*	Busca itens_empenho com o cod_tipo_item = 8	*/
-				db.Debug().Table("itens_empenho").
-					Select("itens_empenho.*").
-					Where("itens_empenho.id_empenho = ? AND itens_empenho.cod_item = ? AND itens_empenho.cod_tipo_item = 8", data.IDEmpenho, data.CodItem).
-					Scan(&itensEmpenho)
+			/*	Busca itens_empenho com o cod_tipo_item = 8	*/
+			db.Debug().Table("itens_empenho").
+				Select("itens_empenho.*").
+				Where("itens_empenho.id_empenho = ? AND itens_empenho.cod_item = ? AND itens_empenho.cod_tipo_item = 8", data.IDEmpenho, data.CodItem).
+				Scan(&itensEmpenho)
 
-				quantidadeDisponivel += (itensEmpenho.Quantidade * loteItens[0].Preco)
+			quantidadeDisponivel += (itensEmpenho.Quantidade * loteItens[0].Preco)
 
-				itensFatura.QuantidadeDisponivel = 0
+			itensFatura.QuantidadeDisponivel = 0
 
-				/*	Busca itens_fatura com o cod_tipo_item = 8	*/
-				db.Debug().Table("fatura").
-					Select("SUM(itens_fatura.quantidade) AS quantidade_disponivel, itens_fatura.cod_item, itens_fatura.cod_tipo_item").
-					Joins("JOIN itens_fatura ON fatura.num_nf = itens_fatura.num_nf AND fatura.cod_ibge = itens_fatura.cod_ibge").
-					Where("fatura.cod_ibge IN (SELECT cd.cod_ibge FROM cd WHERE cd.cod_lote = (SELECT cd.cod_lote FROM cd WHERE cd.cod_ibge = ?)) AND itens_fatura.id_empenho = ? AND itens_fatura.cod_item = ? AND itens_fatura.cod_tipo_item = 8", data.CodIbge, data.IDEmpenho, data.CodItem).
-					Group("itens_fatura.id_empenho, itens_fatura.cod_item, itens_fatura.cod_tipo_item").
-					Order("itens_fatura.cod_tipo_item, itens_fatura.cod_item, itens_fatura.id_empenho").
-					Scan(&itensFatura)
+			/*	Busca itens_fatura com o cod_tipo_item = 8	*/
+			db.Debug().Table("fatura").
+				Select("SUM(itens_fatura.quantidade) AS quantidade_disponivel, itens_fatura.cod_item, itens_fatura.cod_tipo_item").
+				Joins("JOIN itens_fatura ON fatura.num_nf = itens_fatura.num_nf AND fatura.cod_ibge = itens_fatura.cod_ibge").
+				Where("fatura.cod_ibge IN (SELECT cd.cod_ibge FROM cd WHERE cd.cod_lote = (SELECT cd.cod_lote FROM cd WHERE cd.cod_ibge = ?)) AND itens_fatura.id_empenho = ? AND itens_fatura.cod_item = ? AND itens_fatura.cod_tipo_item = 8", data.CodIbge, data.IDEmpenho, data.CodItem).
+				Group("itens_fatura.id_empenho, itens_fatura.cod_item, itens_fatura.cod_tipo_item").
+				Order("itens_fatura.cod_tipo_item, itens_fatura.cod_item, itens_fatura.id_empenho").
+				Scan(&itensFatura)
 
-				quantidadeDisponivel -= (itensFatura.QuantidadeDisponivel * loteItens[0].Preco)
+			quantidadeDisponivel -= (itensFatura.QuantidadeDisponivel * loteItens[0].Preco)
 
-				itensEmpenho.Quantidade = 0
+			itensEmpenho.Quantidade = 0
 
-				/*	Busca itens_empenho com o cod_tipo_item = 10	*/
-				db.Debug().Table("itens_empenho").
-					Select("itens_empenho.*").
-					Where("itens_empenho.id_empenho = ? AND itens_empenho.cod_item = ? AND itens_empenho.cod_tipo_item = 10", data.IDEmpenho, data.CodItem).
-					Order("itens_empenho.cod_tipo_item, itens_empenho.cod_item, itens_empenho.id_empenho").
-					Scan(&itensEmpenho)
+			/*	Busca itens_empenho com o cod_tipo_item = 10	*/
+			db.Debug().Table("itens_empenho").
+				Select("itens_empenho.*").
+				Where("itens_empenho.id_empenho = ? AND itens_empenho.cod_item = ? AND itens_empenho.cod_tipo_item = 10", data.IDEmpenho, data.CodItem).
+				Order("itens_empenho.cod_tipo_item, itens_empenho.cod_item, itens_empenho.id_empenho").
+				Scan(&itensEmpenho)
 
-				quantidadeDisponivel += (itensEmpenho.Quantidade * loteItens[2].Preco)
+			quantidadeDisponivel += (itensEmpenho.Quantidade * loteItens[2].Preco)
 
-				itensFatura.QuantidadeDisponivel = 0
+			itensFatura.QuantidadeDisponivel = 0
 
-				/*	Busca itens_fatura com o cod_tipo_item = 10	*/
-				db.Debug().Table("fatura").
-					Select("SUM(itens_fatura.quantidade) AS quantidade_disponivel, itens_fatura.cod_item, itens_fatura.cod_tipo_item").
-					Joins("JOIN itens_fatura ON fatura.num_nf = itens_fatura.num_nf AND fatura.cod_ibge = itens_fatura.cod_ibge").
-					Where("fatura.cod_ibge IN (SELECT cd.cod_ibge FROM cd WHERE cd.cod_lote = (SELECT cd.cod_lote FROM cd WHERE cd.cod_ibge = ?)) AND itens_fatura.id_empenho = ? AND itens_fatura.cod_item = ? AND itens_fatura.cod_tipo_item = 10", data.CodIbge, data.IDEmpenho, data.CodItem).
-					Group("itens_fatura.id_empenho, itens_fatura.cod_item, itens_fatura.cod_tipo_item").
-					Order("itens_fatura.cod_tipo_item, itens_fatura.cod_item, itens_fatura.id_empenho").
-					Scan(&itensFatura)
+			/*	Busca itens_fatura com o cod_tipo_item = 10	*/
+			db.Debug().Table("fatura").
+				Select("SUM(itens_fatura.quantidade) AS quantidade_disponivel, itens_fatura.cod_item, itens_fatura.cod_tipo_item").
+				Joins("JOIN itens_fatura ON fatura.num_nf = itens_fatura.num_nf AND fatura.cod_ibge = itens_fatura.cod_ibge").
+				Where("fatura.cod_ibge IN (SELECT cd.cod_ibge FROM cd WHERE cd.cod_lote = (SELECT cd.cod_lote FROM cd WHERE cd.cod_ibge = ?)) AND itens_fatura.id_empenho = ? AND itens_fatura.cod_item = ? AND itens_fatura.cod_tipo_item = 10", data.CodIbge, data.IDEmpenho, data.CodItem).
+				Group("itens_fatura.id_empenho, itens_fatura.cod_item, itens_fatura.cod_tipo_item").
+				Order("itens_fatura.cod_tipo_item, itens_fatura.cod_item, itens_fatura.id_empenho").
+				Scan(&itensFatura)
 
-				quantidadeDisponivel -= (itensFatura.QuantidadeDisponivel * loteItens[2].Preco)
+			quantidadeDisponivel -= (itensFatura.QuantidadeDisponivel * loteItens[2].Preco)
 
-				//	Arredondamento para duas casas decimais
-				s := fmt.Sprintf("%.2f", quantidadeDisponivel/loteItens[1].Preco)
+			//	Arredondamento para duas casas decimais
+			s := fmt.Sprintf("%.2f", quantidadeDisponivel/loteItens[1].Preco)
 
-				aux, _ := strconv.ParseFloat(s, 32)
+			aux, _ := strconv.ParseFloat(s, 32)
 
-				allItensFatura[i].QuantidadeDisponivel = float32(aux)
+			allItensFatura[i].QuantidadeDisponivel = float32(aux)
 
-			} else if data.CodTipoItem == 10 {
+		} else if data.CodTipoItem == 10 && allItensFatura[i].Tipo == "o" {
 
-				/*	Busca dos precos de lote_itens para o calculo de quantidade_disponivel */
-				db.Debug().Table("lote_itens").
-					Select("lote_itens.*").
-					Where("lote_itens.cod_lote = (SELECT cd.cod_lote FROM cd WHERE cd.cod_ibge = ?) AND lote_itens.cod_item = ? AND lote_itens.cod_tipo_item IN (8, 9, 10)", data.CodIbge, data.CodItem).
-					Order("lote_itens.cod_tipo_item, lote_itens.cod_item").
-					Scan(&loteItens)
+			/*	Busca dos precos de lote_itens para o calculo de quantidade_disponivel */
+			db.Debug().Table("lote_itens").
+				Select("lote_itens.*").
+				Where("lote_itens.cod_lote = (SELECT cd.cod_lote FROM cd WHERE cd.cod_ibge = ?) AND lote_itens.cod_item = ? AND lote_itens.cod_tipo_item IN (8, 9, 10)", data.CodIbge, data.CodItem).
+				Order("lote_itens.cod_tipo_item, lote_itens.cod_item").
+				Scan(&loteItens)
 
-				quantidadeDisponivel = (allItensEmpenho[i].Quantidade * loteItens[2].Preco) - (itensFaturaAux[i].QuantidadeDisponivel * loteItens[2].Preco)
+			quantidadeDisponivel = (allItensEmpenho[i].Quantidade * loteItens[2].Preco) - (itensFaturaAux[i].QuantidadeDisponivel * loteItens[2].Preco)
 
-				itensEmpenho.Quantidade = 0
+			itensEmpenho.Quantidade = 0
 
-				/*	Busca itens_empenho com o cod_tipo_item = 8	*/
-				db.Debug().Table("itens_empenho").
-					Select("itens_empenho.*").
-					Where("itens_empenho.id_empenho = ? AND itens_empenho.cod_item = ? AND itens_empenho.cod_tipo_item = 8", data.IDEmpenho, data.CodItem).
-					Scan(&itensEmpenho)
+			/*	Busca itens_empenho com o cod_tipo_item = 8	*/
+			db.Debug().Table("itens_empenho").
+				Select("itens_empenho.*").
+				Where("itens_empenho.id_empenho = ? AND itens_empenho.cod_item = ? AND itens_empenho.cod_tipo_item = 8", data.IDEmpenho, data.CodItem).
+				Scan(&itensEmpenho)
 
-				quantidadeDisponivel += (itensEmpenho.Quantidade * loteItens[0].Preco)
+			quantidadeDisponivel += (itensEmpenho.Quantidade * loteItens[0].Preco)
 
-				itensFatura.QuantidadeDisponivel = 0
+			itensFatura.QuantidadeDisponivel = 0
 
-				/*	Busca itens_fatura com o cod_tipo_item = 8	*/
-				db.Debug().Table("fatura").
-					Select("SUM(itens_fatura.quantidade) AS quantidade_disponivel, itens_fatura.cod_item, itens_fatura.cod_tipo_item").
-					Joins("JOIN itens_fatura ON fatura.num_nf = itens_fatura.num_nf AND fatura.cod_ibge = itens_fatura.cod_ibge").
-					Where("fatura.cod_ibge IN (SELECT cd.cod_ibge FROM cd WHERE cd.cod_lote = (SELECT cd.cod_lote FROM cd WHERE cd.cod_ibge = ?)) AND itens_fatura.id_empenho = ? AND itens_fatura.cod_item = ? AND itens_fatura.cod_tipo_item = 8", data.CodIbge, data.IDEmpenho, data.CodItem).
-					Group("itens_fatura.id_empenho, itens_fatura.cod_item, itens_fatura.cod_tipo_item").
-					Order("itens_fatura.cod_tipo_item, itens_fatura.cod_item, itens_fatura.id_empenho").
-					Scan(&itensFatura)
+			/*	Busca itens_fatura com o cod_tipo_item = 8	*/
+			db.Debug().Table("fatura").
+				Select("SUM(itens_fatura.quantidade) AS quantidade_disponivel, itens_fatura.cod_item, itens_fatura.cod_tipo_item").
+				Joins("JOIN itens_fatura ON fatura.num_nf = itens_fatura.num_nf AND fatura.cod_ibge = itens_fatura.cod_ibge").
+				Where("fatura.cod_ibge IN (SELECT cd.cod_ibge FROM cd WHERE cd.cod_lote = (SELECT cd.cod_lote FROM cd WHERE cd.cod_ibge = ?)) AND itens_fatura.id_empenho = ? AND itens_fatura.cod_item = ? AND itens_fatura.cod_tipo_item = 8", data.CodIbge, data.IDEmpenho, data.CodItem).
+				Group("itens_fatura.id_empenho, itens_fatura.cod_item, itens_fatura.cod_tipo_item").
+				Order("itens_fatura.cod_tipo_item, itens_fatura.cod_item, itens_fatura.id_empenho").
+				Scan(&itensFatura)
 
-				quantidadeDisponivel -= (itensFatura.QuantidadeDisponivel * loteItens[0].Preco)
+			quantidadeDisponivel -= (itensFatura.QuantidadeDisponivel * loteItens[0].Preco)
 
-				itensEmpenho.Quantidade = 0
+			itensEmpenho.Quantidade = 0
 
-				/*	Busca itens_empenho com o cod_tipo_item = 9	*/
-				db.Debug().Table("itens_empenho").
-					Select("itens_empenho.*").
-					Where("itens_empenho.id_empenho = ? AND itens_empenho.cod_item = ? AND itens_empenho.cod_tipo_item = 9", data.IDEmpenho, data.CodItem).
-					Order("itens_empenho.cod_tipo_item, itens_empenho.cod_item, itens_empenho.id_empenho").
-					Scan(&itensEmpenho)
+			/*	Busca itens_empenho com o cod_tipo_item = 9	*/
+			db.Debug().Table("itens_empenho").
+				Select("itens_empenho.*").
+				Where("itens_empenho.id_empenho = ? AND itens_empenho.cod_item = ? AND itens_empenho.cod_tipo_item = 9", data.IDEmpenho, data.CodItem).
+				Order("itens_empenho.cod_tipo_item, itens_empenho.cod_item, itens_empenho.id_empenho").
+				Scan(&itensEmpenho)
 
-				quantidadeDisponivel += (itensEmpenho.Quantidade * loteItens[1].Preco)
+			quantidadeDisponivel += (itensEmpenho.Quantidade * loteItens[1].Preco)
 
-				itensFatura.QuantidadeDisponivel = 0
+			itensFatura.QuantidadeDisponivel = 0
 
-				/*	Busca itens_fatura com o cod_tipo_item = 9	*/
-				db.Debug().Table("fatura").
-					Select("SUM(itens_fatura.quantidade) AS quantidade_disponivel, itens_fatura.cod_item, itens_fatura.cod_tipo_item").
-					Joins("JOIN itens_fatura ON fatura.num_nf = itens_fatura.num_nf AND fatura.cod_ibge = itens_fatura.cod_ibge").
-					Where("fatura.cod_ibge IN (SELECT cd.cod_ibge FROM cd WHERE cd.cod_lote = (SELECT cd.cod_lote FROM cd WHERE cd.cod_ibge = ?)) AND itens_fatura.id_empenho = ? AND itens_fatura.cod_item = ? AND itens_fatura.cod_tipo_item = 9", data.CodIbge, data.IDEmpenho, data.CodItem).
-					Group("itens_fatura.id_empenho, itens_fatura.cod_item, itens_fatura.cod_tipo_item").
-					Order("itens_fatura.cod_tipo_item, itens_fatura.cod_item, itens_fatura.id_empenho").
-					Scan(&itensFatura)
+			/*	Busca itens_fatura com o cod_tipo_item = 9	*/
+			db.Debug().Table("fatura").
+				Select("SUM(itens_fatura.quantidade) AS quantidade_disponivel, itens_fatura.cod_item, itens_fatura.cod_tipo_item").
+				Joins("JOIN itens_fatura ON fatura.num_nf = itens_fatura.num_nf AND fatura.cod_ibge = itens_fatura.cod_ibge").
+				Where("fatura.cod_ibge IN (SELECT cd.cod_ibge FROM cd WHERE cd.cod_lote = (SELECT cd.cod_lote FROM cd WHERE cd.cod_ibge = ?)) AND itens_fatura.id_empenho = ? AND itens_fatura.cod_item = ? AND itens_fatura.cod_tipo_item = 9", data.CodIbge, data.IDEmpenho, data.CodItem).
+				Group("itens_fatura.id_empenho, itens_fatura.cod_item, itens_fatura.cod_tipo_item").
+				Order("itens_fatura.cod_tipo_item, itens_fatura.cod_item, itens_fatura.id_empenho").
+				Scan(&itensFatura)
 
-				quantidadeDisponivel -= (itensFatura.QuantidadeDisponivel * loteItens[1].Preco)
+			quantidadeDisponivel -= (itensFatura.QuantidadeDisponivel * loteItens[1].Preco)
 
-				//	Arredondamento para duas casas decimais
-				s := fmt.Sprintf("%.2f", quantidadeDisponivel/loteItens[2].Preco)
+			//	Arredondamento para duas casas decimais
+			s := fmt.Sprintf("%.2f", quantidadeDisponivel/loteItens[2].Preco)
 
-				aux, _ := strconv.ParseFloat(s, 32)
+			aux, _ := strconv.ParseFloat(s, 32)
 
-				allItensFatura[i].QuantidadeDisponivel = float32(aux)
+			allItensFatura[i].QuantidadeDisponivel = float32(aux)
 
-			} else {
-
-				quantidadeDisponivel = allItensEmpenho[i].Quantidade
-
-				itensFatura.QuantidadeDisponivel = 0
-
-				db.Debug().Table("fatura").
-					Select("SUM(itens_fatura.quantidade) AS quantidade_disponivel").
-					Joins("INNER JOIN itens_fatura ON fatura.num_nf = itens_fatura.num_nf AND fatura.cod_ibge = itens_fatura.cod_ibge").
-					Where("fatura.cod_ibge IN (SELECT cd.cod_ibge FROM cd where cd.cod_lote = (SELECT cd.cod_lote FROM cd WHERE cd.cod_ibge = ?)) AND id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?", data.CodIbge, data.IDEmpenho, data.CodItem, data.CodTipoItem).
-					Scan(&itensFatura)
-
-				quantidadeDisponivel -= itensFatura.QuantidadeDisponivel
-
-				s := fmt.Sprintf("%.2f", quantidadeDisponivel)
-
-				aux, _ := strconv.ParseFloat(s, 32)
-
-				allItensFatura[i].QuantidadeDisponivel = float32(aux)
-			}
 		} else {
 
 			quantidadeDisponivel = allItensEmpenho[i].Quantidade
