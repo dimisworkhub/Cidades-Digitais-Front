@@ -479,15 +479,8 @@ func (server *Server) GetItensFaturaReajusteDisponiveis(w http.ResponseWriter, r
 		return
 	}
 
-	//	codIbge armazena a chave primaria da tabela itensFatura
-	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 32)
-	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
-		return
-	}
-
 	//	itensEmpenhoGotten recebe o dado buscado no banco de dados
-	itensEmpenhoGotten, err := itensEmpenho.FindItensFaturaDisponiveisReajuste(server.DB, uint32(idEmpenho), uint32(codIbge))
+	itensEmpenhoGotten, err := itensEmpenho.FindItensFaturaDisponiveisReajuste(server.DB, uint32(idEmpenho))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))
