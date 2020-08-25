@@ -762,15 +762,8 @@ function editarItem(caminho) {
         caminhoFinal = servidor + 'read/' + caminho + '/' + meuCodigo + '/' + meuItem[i] + '/' + meuTipo[i];
       }
 
-      if(edicaoItem[i].quantidade > (listaItem[i].quantidade_disponivel+listaItem[i].quantidade)){
-
-        //mensagem com certeza irá mudar
-        alert("Não foi possivel completar a edição do item " + listaItem[i].cod_tipo_item + "." + listaItem[i].cod_item + " pois este está ultrapassando o limite da quantidade disponível.");
-        
-      }
-
       //Para os casos especificos em tipos de item 8,9 e 10. Validos apenas em itens de 1 a 5 e de fatura ou previsão.
-      else if(listaItem[i].cod_tipo_item >= "8" && listaItem[i].cod_tipo_item <= "10" && (caminho == "itensfatura" || caminho == "itensprevisao") && listaItem[i].tipo == "o"){
+      if(listaItem[i].cod_tipo_item >= "8" && listaItem[i].cod_tipo_item <= "10" && (caminho == "itensfatura" || caminho == "itensprevisao") && listaItem[i].tipo == "o"){
         
         //valor de limite
         //utiliza os valores atualizados
@@ -789,31 +782,106 @@ function editarItem(caminho) {
         if(valorMax<valorSoma){
           alert("Problema");
         }
+        
       }
 
-      //transforma as informações do token em json
-      let corpo = JSON.stringify(edicaoItem[i]);
-      //console.log(edicaoItem[i]);
+      if(edicaoItem[i].quantidade > (listaItem[i].quantidade_disponivel+listaItem[i].quantidade)){
 
-      //função fetch para mandar
-      fetch(caminhoFinal, {
-        method: 'PUT',
-        body: corpo,
-        headers: {
-          'Authorization': 'Bearer ' + meuToken
-        },
-      }).then(function (response) {
-        //checar o status do pedido
-        //console.log(response.statusText);
+        //Alerta inteligente que necessita de uma confirmação para continuar
+        Swal.fire(
+          {
+          title: 'Tem certeza?',
+          text: "A Quantidade inserida do item " + listaItem[i].cod_tipo_item + "." + listaItem[i].cod_item + " é maior que a Quantidade Disponível!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sim, tenho certeza!'
+        }).then((result) => {
+          if (result.value) {
+            let passe = true;
+            Swal.fire(
+              'Sucesso!',
+              'Item foi inserido!',
+              'success'
+            )
+            if(passe){
 
-        //tratamento dos erros
-        if (response.status == 200 || response.status == 201) {
-          location.reload();
-        } else {
-          erros(response.status);
-        }
-      });
+              //transforma as informações do token em json
+              let corpo = JSON.stringify(edicaoItem[i]);
+              //console.log(edicaoItem[i]);
+  
+              //função fetch para mandar
+              fetch(caminhoFinal, {
+                method: 'PUT',
+                body: corpo,
+                headers: {
+                  'Authorization': 'Bearer ' + meuToken
+                },
+              }).then(function (response) {
+                //checar o status do pedido
+                //console.log(response.statusText);
+  
+                //tratamento dos erros
+                if (response.status == 200 || response.status == 201) {
+                  location.reload();
+                } else {
+                  erros(response.status);
+                }
+              });
+            }
+          }else{
+            
+            //transforma as informações do token em json
+            let corpo = JSON.stringify(listaItem[i]);
+            //console.log(listaItem[i]);
+
+            //função fetch para mandar
+            fetch(caminhoFinal, {
+              method: 'PUT',
+              body: corpo,
+              headers: {
+                'Authorization': 'Bearer ' + meuToken
+              },
+            }).then(function (response) {
+              //checar o status do pedido
+              //console.log(response.statusText);
+
+              //tratamento dos erros
+              if (response.status == 200 || response.status == 201) {
+                location.reload();
+              } else {
+                erros(response.status);
+              }
+            });
+          }
+        })
       
+      }else{
+
+        //transforma as informações do token em json
+        let corpo = JSON.stringify(edicaoItem[i]);
+        //console.log(edicaoItem[i]);
+
+        //função fetch para mandar
+        fetch(caminhoFinal, {
+          method: 'PUT',
+          body: corpo,
+          headers: {
+            'Authorization': 'Bearer ' + meuToken
+          },
+        }).then(function (response) {
+          //checar o status do pedido
+          //console.log(response.statusText);
+
+          //tratamento dos erros
+          if (response.status == 200 || response.status == 201) {
+            location.reload();
+          } else {
+            erros(response.status);
+          }
+        });
+      }
     }
   }
 }
