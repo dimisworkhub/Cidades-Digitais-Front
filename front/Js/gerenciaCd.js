@@ -19,6 +19,7 @@ window.onload = function () {
   document.getElementById("data_imp").value = arrumaData(localStorage.getItem("data_imp"));
 
   mascara();
+  pegarCNPJ();
 }
 
 
@@ -181,4 +182,183 @@ function editarItemCD() {
       });
     }
   }
+}
+
+//CD Contatos
+
+function contatos() {
+
+  //cria o botão para editar
+  document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarContatoCD()" class="btn btn-success">Salvar Alterações</button>
+                                                  <button class="btn btn-success" data-toggle="modal" data-target="#adicionarContato">Novo Contato</button>`);
+  document.getElementById("editar2").innerHTML = (`<button id="editar" onclick="editarContatoCD()" class="btn btn-success">Salvar Alterações</button>`);
+
+  //função fetch para chamar contatos da tabela
+  fetch(servidor + 'read/contato', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //checar os status de pedidos
+    //console.log(response)
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      //console.log(response.statusText);
+
+      //pegar o json que possui a tabela
+      response.json().then(function (json) {
+
+        //console.log(json);
+
+        let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
+        <tr>
+        <th style="width:20%" scope="col">Código de Contato</th>
+        <th style="width:20%" scope="col">Nome</th>
+        <th style="width:20%" scope="col">E-mail</th>
+        <th style="width:20%" scope="col">Função</th>
+        </tr>
+        </thead>`);
+        tabela += (`<tbody>`);
+
+        //cria uma lista apenas com os itens do lote selecionado
+        let j = 0;
+        for (let i = 0; i < json.length; i++) {
+          if (json[i]["cod_ibge"] == meuCodigo) {
+            listaItem[j] = json[i];
+            j++;
+          }
+        }
+        for (i = 0; i < listaItem.length; i++) {
+
+          //salva os valores para edição
+          meuItem[i] = listaItem[i]["cod_item"];
+          meuTipo[i] = listaItem[i]["cod_tipo_item"];
+
+          tabela += (`<tr>`);
+          tabela += (`<td>`);
+          tabela += listaItem[i]["cod_contato"];
+          tabela += (`</td> <td>`);
+          tabela += (`<input value="` + listaItem[i]["nome"] + `"class="" id="nome` + i + `" type="text" size="30">`);
+          tabela += (`</td> <td>`);
+          tabela += (`<input value="` + listaItem[i]["email"] + `"class="" id="email` + i + `" type="text" size="30">`);
+          tabela += (`</td> <td>`);
+          tabela += (`<input value="` + listaItem[i]["funcao"] + `"class="" id="funcao` + i + `" type="text" size="30">`);
+          tabela += (`</td>`);
+          tabela += (`</tr>`);
+        }
+        tabela += (`</tbody>`);
+        document.getElementById("tabela").innerHTML = tabela;
+
+        //Máscara colocada separadamente para tabela
+        mascara();
+        
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+function editarContatoCD() {
+
+  for (let i = 0; i < listaItem.length; i++) {
+
+    edicaoItem[i] = {
+      "nome": document.getElementById("nome" + i).value,
+      "email": document.getElementById("email" + i).value,
+      "funcao": document.getElementById("funcao" + i).value,
+    };
+
+    console.log(listaItem[i])
+    console.log(edicaoItem[i])
+    if (edicaoItem[i]["nome"] != listaItem[i]["nome"] || edicaoItem[i]["email"] != listaItem[i]["email"] || edicaoItem[i]["funcao"] != listaItem[i]["funcao"]) {
+      //transforma as informações do token em json
+      let corpo = JSON.stringify(edicaoItem[i]);
+      //função fetch para mandar
+      fetch(servidor + 'read/contato/' + listaItem[i]["cod_contato"] , {
+        method: 'PUT',
+        body: corpo,
+        headers: {
+          'Authorization': 'Bearer ' + meuToken
+        },
+      }).then(function (response) {
+        //checar o status do pedido
+        console.log(response.statusText);
+
+        //tratamento dos erros
+        if (response.status == 200 || response.status == 201) {
+          location.reload();
+        } else {
+          erros(response.status);
+        }
+        window.location.replace("./gerenciaCd.html");
+      });
+    }
+  }
+}
+
+function novoContato() {
+
+  let infoContato = {
+    "cod_contato": parseInt(document.getElementById("cod_contato").value),
+    "cod_ibge": parseInt(meuCodigo),
+    "cnpj": document.getElementById("cnpj").value,
+    "nome": document.getElementById("nome").value,
+    "email": document.getElementById("email").value,
+    "funcao": document.getElementById("funcao").value,
+  };
+
+  console.log(infoContato)
+  //transforma as informações em string para mandar
+  let corpo = JSON.stringify(infoContato);
+  //função fetch para mandar
+  fetch(servidor + 'read/contato', {
+    method: 'POST',
+    body: corpo,
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      location.reload();
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+
+
+function pegarCNPJ() {
+  
+  //preenche os CNPJs
+  fetch(servidor + 'read/entidade', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      response.json().then(function (json) {
+        //cria variaveis
+        let i = 0;
+        let x = [];
+        x[0] += "<option value='00000000000000'>CNPJ</option>";
+        for (i = 0; i < json.length; i++) {
+          x[i + 1] += "<option>" + json[i].cnpj + "</option>";
+        }
+        
+        document.getElementById("cnpj").innerHTML = x;
+      });
+    } else {
+      erros(response.status);
+    }
+  });
 }

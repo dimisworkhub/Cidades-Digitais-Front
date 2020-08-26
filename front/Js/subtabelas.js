@@ -811,8 +811,12 @@ function editarItem(caminho) {
                 }
               });
             }
-          } else {
-            console.log("Esse não foi.");
+          }else{
+            Swal.fire(
+              'Cancelado!',
+              'O item não foi inserido!',
+              'error'
+            )
           }
         });
 
