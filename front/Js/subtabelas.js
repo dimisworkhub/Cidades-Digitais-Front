@@ -1,4 +1,3 @@
-
 //variavel usada nas subtabelas:
 let listaFinal = [];
 
@@ -40,13 +39,12 @@ function previsaoSub(valorCodigo) {
         for (let i = 0; i < json.length; i++) {
 
           //valorCodigo define se é no html de Lote (1), de Cidades Digitais (2)
-          if(valorCodigo=='1'){
+          if (valorCodigo == '1') {
             if (meuCodigo == json[i]["cod_lote"]) {
               listaFinal[j] = json[i];
               j++;
             }
-          }
-          else if(valorCodigo=='2'){
+          } else if (valorCodigo == '2') {
             if (meuLote == json[i]["cod_lote"]) {
               listaFinal[j] = json[i];
               j++;
@@ -62,10 +60,9 @@ function previsaoSub(valorCodigo) {
           tabela += (`</td><td>`);
           tabela += listaFinal[i]["natureza_despesa"];
           tabela += (`</td><td>`);
-          if(listaFinal[i]["tipo"]=="o"){
+          if (listaFinal[i]["tipo"] == "o") {
             tabela += "Original";
-          }
-          else{
+          } else {
             tabela += "Reajuste";
           }
           tabela += (`</td><td class="data">`);
@@ -97,11 +94,9 @@ function empenhoSub(valorCodigo) {
   //filtro de subtabelas pelo codigo escolhido (1 para previsao, 2 para lote, 3 para cidades digitais)
   let caminhoEmpenho;
 
-  if(valorCodigo=='1'){
+  if (valorCodigo == '1') {
     caminhoEmpenho = 'read/empenhocodprevisaoempenho/' + meuCodigo;
-  }
-
-  else{
+  } else {
     caminhoEmpenho = 'read/empenho';
   }
 
@@ -121,19 +116,19 @@ function empenhoSub(valorCodigo) {
 
         //console.log(json);
 
-          let tabela = "";
-          if(valorCodigo=='1'){
-            tabela += (`<thead style="background: #4b5366; color:white; font-size:15px">
+        let tabela = "";
+        if (valorCodigo == '1') {
+          tabela += (`<thead style="background: #4b5366; color:white; font-size:15px">
             <tr>
             <th style="width:50%" scope="col">Código de Empenho</th>
             <th style="width:50%" scope="col">Data</th>
             </tr>
             </thead>`);
-          }
-  
-          //caso não seja em previsão
-          else if(valorCodigo=='2' || valorCodigo=='3'){
-            tabela += (`<thead style="background: #4b5366; color:white; font-size:15px">
+        }
+
+        //caso não seja em previsão
+        else if (valorCodigo == '2' || valorCodigo == '3') {
+          tabela += (`<thead style="background: #4b5366; color:white; font-size:15px">
             <tr>
             <th style="width:20%" scope="col">Código de Empenho</th>
             <th style="width:40%" scope="col">Natureza de Despesa</th>
@@ -141,79 +136,74 @@ function empenhoSub(valorCodigo) {
             <th style="width:25%" scope="col">Data</th>
             </tr>
             </thead>`);
-          }
-          tabela += (`<tbody>`);
-  
-          let j = 0;
-          for (let i = 0; i < json.length; i++) {
-  
-            if(valorCodigo=='1'){
-              if (meuCodigo == json[i]["cod_previsao_empenho"]) {
-                listaFinal[j] = json[i];
-                j++;
-              }
-            }
-  
-            else if(valorCodigo=='2'){
-              if (meuCodigo == json[i]["cod_lote"]) {
-                listaFinal[j] = json[i];
-                j++;
-              }
-            }
-  
-            else if(valorCodigo=='3'){
-              if (meuLote == json[i]["cod_lote"]) {
-                listaFinal[j] = json[i];
-                j++;
-              }
-            }
+        }
+        tabela += (`<tbody>`);
 
-            //else if feito assim para pegar o valor do i na tabela normal
-            else if(json[i]["cod_empenho"] == listaItem[valorUsado]["cod_empenho"]){
-              localStorage.setItem("id_empenho", json[i].id_empenho);
-              localStorage.setItem("cod_empenho", json[i].cod_empenho);
-              localStorage.setItem("cod_lote", json[i].cod_lote);
-              localStorage.setItem("cod_previsao_empenho", json[i].cod_previsao_empenho);
-              localStorage.setItem("cod_natureza_despesa", json[i].cod_natureza_despesa);
-              localStorage.setItem("descricao", json[i].descricao);
-              localStorage.setItem("tipo", json[i].tipo);
-              localStorage.setItem("data", json[i].data);
-              window.location.href = "./gerenciaEmpenho.html";
+        let j = 0;
+        for (let i = 0; i < json.length; i++) {
+
+          if (valorCodigo == '1') {
+            if (meuCodigo == json[i]["cod_previsao_empenho"]) {
+              listaFinal[j] = json[i];
+              j++;
+            }
+          } else if (valorCodigo == '2') {
+            if (meuCodigo == json[i]["cod_lote"]) {
+              listaFinal[j] = json[i];
+              j++;
+            }
+          } else if (valorCodigo == '3') {
+            if (meuLote == json[i]["cod_lote"]) {
+              listaFinal[j] = json[i];
+              j++;
             }
           }
-  
-          for (i = 0; i < listaFinal.length; i++) {
-            //captura itens para tabela
-            tabela += (`<tr style="cursor:pointer" id="linha` + i + `" onmouseover="sublinhar(` + i + "," + json.length + `)" onclick="redirecionar(` + i + "," + "'empenho'" + `)">`);
+
+          //else if feito assim para pegar o valor do i na tabela normal
+          else if (json[i]["cod_empenho"] == listaItem[valorUsado]["cod_empenho"]) {
+            localStorage.setItem("id_empenho", json[i].id_empenho);
+            localStorage.setItem("cod_empenho", json[i].cod_empenho);
+            localStorage.setItem("cod_lote", json[i].cod_lote);
+            localStorage.setItem("cod_previsao_empenho", json[i].cod_previsao_empenho);
+            localStorage.setItem("cod_natureza_despesa", json[i].cod_natureza_despesa);
+            localStorage.setItem("descricao", json[i].descricao);
+            localStorage.setItem("tipo", json[i].tipo);
+            localStorage.setItem("data", json[i].data);
+            window.location.href = "./gerenciaEmpenho.html";
+          }
+        }
+
+        for (i = 0; i < listaFinal.length; i++) {
+          //captura itens para tabela
+          tabela += (`<tr style="cursor:pointer" id="linha` + i + `" onmouseover="sublinhar(` + i + "," + json.length + `)" onclick="redirecionar(` + i + "," + "'empenho'" + `)">`);
+          tabela += (`<td>`);
+          tabela += listaFinal[i]["cod_empenho"];
+          tabela += (`</td>`);
+
+          //caso não seja em previsão
+          if (valorCodigo == '2' || valorCodigo == '3') {
             tabela += (`<td>`);
-            tabela += listaFinal[i]["cod_empenho"];
+            tabela += listaFinal[i]["cod_natureza_despesa"] + " - " + listaFinal[i]["descricao"];
             tabela += (`</td>`);
-  
-            //caso não seja em previsão
-            if(valorCodigo=='2' || valorCodigo=='3'){
-              tabela += (`<td>`);
-              tabela += listaFinal[i]["cod_natureza_despesa"] + " - " + listaFinal[i]["descricao"];
-              tabela += (`</td>`);
-              tabela += (`<td>`);
-              if(listaFinal[i]["tipo"]=="o"){
-                tabela += "Original";
-              }
-              else{
-                tabela += "Reajuste";
-              }
-              tabela += (`</td>`);
+            tabela += (`<td>`);
+            if (listaFinal[i]["tipo"] == "o") {
+              tabela += "Original";
+            } else {
+              tabela += "Reajuste";
             }
-  
-            tabela += (`<td class="data">`);
-  
-            mascara();
-  
-            tabela += arrumaData(listaFinal[i]["data"]);
             tabela += (`</td>`);
-            tabela += (`</tr>`);
           }
-          tabela += (`</tbody>`);
-          document.getElementById("tabela").innerHTML = tabela;
+
+          tabela += (`<td class="data">`);
+
+          mascara();
+
+          tabela += arrumaData(listaFinal[i]["data"]);
+          tabela += (`</td>`);
+          tabela += (`</tr>`);
+        }
+        tabela += (`</tbody>`);
+        document.getElementById("tabela").innerHTML = tabela;
       });
     } else {
       erros(response.status);
@@ -231,12 +221,12 @@ function faturaSub(valorCodigo) {
   //filtro de subtabelas pelo codigo escolhido (1 para empenho, 2 para CD)
   let caminhoFatura;
 
-  if(valorCodigo=='1'){
+  if (valorCodigo == '1') {
     caminhoFatura = 'read/fatura/' + meuCodigo;
   }
 
   //caso não seja em empenho
-  else if(valorCodigo=='2'){
+  else if (valorCodigo == '2') {
     caminhoFatura = 'read/fatura';
   }
 
@@ -331,10 +321,10 @@ function pagamentoSub(valorCodigo) {
         let j = 0;
         for (let i = 0; i < json.length; i++) {
           //filtro ainda sera alterado quando for criado
-        //  if (valorCodigo == json[i]["num_nf"]) {
-            listaFinal[j] = json[i];
-            j++;
-        //  }
+          //  if (valorCodigo == json[i]["num_nf"]) {
+          listaFinal[j] = json[i];
+          j++;
+          //  }
         }
 
         for (i = 0; i < listaFinal.length; i++) {
@@ -362,9 +352,9 @@ function pagamentoSub(valorCodigo) {
 let valorUsado;
 
 //função necessaria para o funcionamento dos links nas subtabelas
-function redirecionar(valor, caminhoFinal){
+function redirecionar(valor, caminhoFinal) {
   console.log("chega aqui");
-  if(caminhoFinal == "previsao"){
+  if (caminhoFinal == "previsao") {
     localStorage.setItem("cod_previsao_empenho", listaFinal[valor].cod_previsao_empenho);
     localStorage.setItem("cod_lote", listaFinal[valor].cod_lote);
     localStorage.setItem("data", listaFinal[valor].data);
@@ -374,8 +364,7 @@ function redirecionar(valor, caminhoFinal){
     //para mostrar a descrição
     localStorage.setItem("natureza_despesa", listaFinal[valor].natureza_despesa);
     window.location.href = "./gerenciaPrevisao.html";
-  }
-  else if(caminhoFinal == "empenho"){
+  } else if (caminhoFinal == "empenho") {
     localStorage.setItem("id_empenho", listaFinal[valor].id_empenho);
     localStorage.setItem("cod_empenho", listaFinal[valor].cod_empenho);
     localStorage.setItem("cod_lote", meuCodigoSec);
@@ -385,23 +374,21 @@ function redirecionar(valor, caminhoFinal){
     localStorage.setItem("tipo", listaFinal[valor].tipo);
     localStorage.setItem("data", listaFinal[valor].data);
     window.location.href = "./gerenciaEmpenho.html";
-  }
-  else if(caminhoFinal == "fatura"){
+  } else if (caminhoFinal == "fatura") {
     localStorage.setItem("num_nf", listaFinal[valor]["num_nf"]);
     localStorage.setItem("cod_ibge", listaFinal[valor]["cod_ibge"]);
     localStorage.setItem("dt_nf", listaFinal[valor]["dt_nf"]);
     localStorage.setItem("uf", listaFinal[valor]["uf"]);
     localStorage.setItem("nome_municipio", listaFinal[valor]["nome_municipio"]);
     window.location.href = "./gerenciaFatura.html";
-    
-  }
-  else if(caminhoFinal == "pagamento"){
+
+  } else if (caminhoFinal == "pagamento") {
     localStorage.setItem("cod_otb", listaFinal[valor]["cod_otb"]);
     localStorage.setItem("dt_pgto", listaFinal[valor]["dt_pgto"]);
     window.location.href = "./gerenciaPagamento.html";
   }
   //caso especial da função empenho
-  else if(caminhoFinal == "empItensFatura"){
+  else if (caminhoFinal == "empItensFatura") {
     //valores usados no caso especial
     valorUsado = valor;
     empenhoSub("0");
@@ -409,29 +396,27 @@ function redirecionar(valor, caminhoFinal){
 }
 
 //função decorativa para facilitar a vizualização do link
-function sublinhar(valor,tamanho){
-  for(i=0;i<tamanho;i++){
-    if(i==valor){
-      document.getElementById("linha"+i).style.color = "blue";
-      document.getElementById("linha"+i).style.textDecoration = "underline";
-    }
-    else{
-      document.getElementById("linha"+i).style.color = "black";
-      document.getElementById("linha"+i).style.textDecoration = "none";
+function sublinhar(valor, tamanho) {
+  for (i = 0; i < tamanho; i++) {
+    if (i == valor) {
+      document.getElementById("linha" + i).style.color = "blue";
+      document.getElementById("linha" + i).style.textDecoration = "underline";
+    } else {
+      document.getElementById("linha" + i).style.color = "black";
+      document.getElementById("linha" + i).style.textDecoration = "none";
     }
   }
 }
 
 //para empenho em itensfatura
-function sublinhar2(valor,tamanho){
-  for(i=0;i<tamanho;i++){
-    if(i==valor){
-      document.getElementById("empenho"+i).style.color = "blue";
-      document.getElementById("empenho"+i).style.textDecoration = "underline";
-    }
-    else{
-      document.getElementById("empenho"+i).style.color = "black";
-      document.getElementById("empenho"+i).style.textDecoration = "none";
+function sublinhar2(valor, tamanho) {
+  for (i = 0; i < tamanho; i++) {
+    if (i == valor) {
+      document.getElementById("empenho" + i).style.color = "blue";
+      document.getElementById("empenho" + i).style.textDecoration = "underline";
+    } else {
+      document.getElementById("empenho" + i).style.color = "black";
+      document.getElementById("empenho" + i).style.textDecoration = "none";
     }
   }
 }
@@ -492,7 +477,7 @@ function itensLote() {
           tabela += (`<td>`);
           tabela += listaItem[i]["cod_item"] + "." + listaItem[i]["cod_tipo_item"] + " - " + listaItem[i]["descricao"];
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + (listaItem[i]["preco"]*100) + `" id="preco` + i + `" type="text" class="preco" size="50">`);
+          tabela += (`<input value="` + (listaItem[i]["preco"] * 100) + `" id="preco` + i + `" type="text" class="preco" size="50">`);
           tabela += (`</td>`);
           tabela += (`</tr>`);
         }
@@ -522,7 +507,7 @@ function editarItemLote() {
       //transforma as informações em string para mandar
       let corpo = JSON.stringify(edicaoItem[i]);
       //console.log(corpo);
-      
+
       //função fetch para mandar
       fetch(servidor + 'read/loteitens/' + meuCodigo + '/' + meuItem[i] + '/' + meuTipo[i], {
         method: 'PUT',
@@ -646,10 +631,9 @@ function itensFiscalizacao(caminho) {
             tabela += listaItem[i]["cod_empenho"];
             tabela += (`</td><td>`);
 
-            if(listaItem[i]["tipo"]=="o"){
+            if (listaItem[i]["tipo"] == "o") {
               tabela += "Original";
-            }
-            else{
+            } else {
               tabela += "Reajuste";
             }
             meuEmpenho[i] = listaItem[i]["id_empenho"];
@@ -659,16 +643,16 @@ function itensFiscalizacao(caminho) {
           tabela += listaItem[i]["quantidade_disponivel"];
           tabela += (`</td> <td>`);
           // depois colocar equivalente a onchange="zeros(` + document.getElementById("quantidade"+i).value + `)"
-          tabela += (`<input value="` + listaItem[i]["quantidade"]*100 + `" class="quebrados" id="quantidade` + i + `" type="text" size="10" style="text-align: right;"></input>`);
+          tabela += (`<input value="` + listaItem[i]["quantidade"] * 100 + `" class="quebrados" id="quantidade` + i + `" type="text" size="10" style="text-align: right;"></input>`);
           tabela += (`</td> <td>`);
           // depois colocar equivalente a onchange="zeros(` + document.getElementById("valor"+i).value + `)"
-          tabela += (`<input value="` + listaItem[i]["valor"]*100 + `" class="preco" id="valor` + i + `" type="text" size="15" style="text-align: right;"></input>`);
+          tabela += (`<input value="` + listaItem[i]["valor"] * 100 + `" class="preco" id="valor` + i + `" type="text" size="15" style="text-align: right;"></input>`);
           tabela += (`</td> <td class="preco">`);
 
           //calculo do subtotal
           total = (listaItem[i]["quantidade"] * listaItem[i]["valor"] * 100);
           totalFinal = totalFinal + total;
-          
+
           tabela += arredondamento(total);
           tabela += (`</td>`);
           tabela += (`</tr>`);
@@ -715,23 +699,23 @@ function itensFiscalizacao(caminho) {
   });
 }
 
-function descricaoItem(valor){
+function descricaoItem(valor) {
   $("#descricaoItem").modal({
     show: true
   });
-  
+
   descricaoItem2(valor);
 }
 
-function descricaoItem2(itemDescrito){
-  
+function descricaoItem2(itemDescrito) {
+
   //frase inicial
   document.getElementById("explicacao").innerHTML = itemDescrito;
 
   //calculos para cada caso
-  if(itemDescrito == "Subtotal"){
+  if (itemDescrito == "Subtotal") {
     document.getElementById("calculo").innerHTML = "Quantidade x Valor = " + itemDescrito;
-  }else{
+  } else {
     document.getElementById("calculo").innerHTML = "misterio";
   }
 
@@ -761,33 +745,32 @@ function editarItem(caminho) {
       }
 
       //Para os casos especificos em tipos de item 8,9 e 10. Validos apenas em itens de 1 a 5 e de fatura ou previsão.
-      if(listaItem[i].cod_tipo_item >= "8" && listaItem[i].cod_tipo_item <= "10" && (caminho == "itensfatura" || caminho == "itensprevisao") && listaItem[i].tipo == "o"){
-        
+      if (listaItem[i].cod_tipo_item >= "8" && listaItem[i].cod_tipo_item <= "10" && (caminho == "itensfatura" || caminho == "itensprevisao") && listaItem[i].tipo == "o") {
+
         //valor de limite
         //utiliza os valores atualizados
-        let valorMax = listaItem[i].quantidade_disponivel*edicaoItem[i].valor;
+        let valorMax = listaItem[i].quantidade_disponivel * edicaoItem[i].valor;
 
         //processo para pegar os outros valores:
         let valorSoma = "";
-        for(let j=0;j<listaItem.length;j++){
+        for (let j = 0; j < listaItem.length; j++) {
           //garantindo ser um dos valores com mesmo item e do mesmo grupo de tipos
-          if(listaItem[i].cod_tipo_item >= "8" && listaItem[i].cod_tipo_item <= "10" && listaItem[j].cod_item == listaItem[i].cod_item){
+          if (listaItem[i].cod_tipo_item >= "8" && listaItem[i].cod_tipo_item <= "10" && listaItem[j].cod_item == listaItem[i].cod_item) {
 
             //somando todos os compativeis pela ultima mudança deles
             valorSoma = (edicaoItem[j].valor * edicaoItem[j].quantidade) + valorSoma;
           }
         }
-        if(valorMax<valorSoma){
+        if (valorMax < valorSoma) {
           alert("Há um problema no item " + listaItem[i].cod_tipo_item + "." + listaItem[i].cod_item + ". Ele está ultrapassando o limite do seu grupo.");
         }
-        
+
       }
 
-      else if(edicaoItem[i].quantidade > (listaItem[i].quantidade_disponivel+listaItem[i].quantidade)){
+      if (edicaoItem[i].quantidade > (listaItem[i].quantidade_disponivel + listaItem[i].quantidade)) {
 
         //Alerta inteligente que necessita de uma confirmação para continuar
-        Swal.fire(
-          {
+        Swal.fire({
           title: 'Tem certeza?',
           text: "A Quantidade inserida do item " + listaItem[i].cod_tipo_item + "." + listaItem[i].cod_item + " é maior que a Quantidade Disponível!",
           icon: 'warning',
@@ -803,12 +786,12 @@ function editarItem(caminho) {
               'Item foi inserido!',
               'success'
             )
-            if(passe){
+            if (passe) {
 
               //transforma as informações do token em json
               let corpo = JSON.stringify(edicaoItem[i]);
               //console.log(edicaoItem[i]);
-  
+
               //função fetch para mandar
               fetch(caminhoFinal, {
                 method: 'PUT',
@@ -819,7 +802,7 @@ function editarItem(caminho) {
               }).then(function (response) {
                 //checar o status do pedido
                 //console.log(response.statusText);
-  
+
                 //tratamento dos erros
                 if (response.status == 200 || response.status == 201) {
                   location.reload();
@@ -828,34 +811,12 @@ function editarItem(caminho) {
                 }
               });
             }
-          }else{
-            
-            //transforma as informações do token em json
-            let corpo = JSON.stringify(listaItem[i]);
-            //console.log(listaItem[i]);
-
-            //função fetch para mandar
-            fetch(caminhoFinal, {
-              method: 'PUT',
-              body: corpo,
-              headers: {
-                'Authorization': 'Bearer ' + meuToken
-              },
-            }).then(function (response) {
-              //checar o status do pedido
-              //console.log(response.statusText);
-
-              //tratamento dos erros
-              if (response.status == 200 || response.status == 201) {
-                location.reload();
-              } else {
-                erros(response.status);
-              }
-            });
+          } else {
+            console.log("Esse não foi.");
           }
-        })
-      
-      }else{
+        });
+
+      } else {
 
         //transforma as informações do token em json
         let corpo = JSON.stringify(edicaoItem[i]);
