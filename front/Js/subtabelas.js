@@ -408,8 +408,6 @@ function redirecionar(valor, caminhoFinal){
   }
 }
 
-
-
 //função decorativa para facilitar a vizualização do link
 function sublinhar(valor,tamanho){
   for(i=0;i<tamanho;i++){
