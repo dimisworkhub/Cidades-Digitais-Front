@@ -408,8 +408,6 @@ function redirecionar(valor, caminhoFinal){
   }
 }
 
-
-
 //função decorativa para facilitar a vizualização do link
 function sublinhar(valor,tamanho){
   for(i=0;i<tamanho;i++){
@@ -780,12 +778,12 @@ function editarItem(caminho) {
           }
         }
         if(valorMax<valorSoma){
-          alert("Problema");
+          alert("Há um problema no item " + listaItem[i].cod_tipo_item + "." + listaItem[i].cod_item + ". Ele está ultrapassando o limite do seu grupo.");
         }
         
       }
 
-      if(edicaoItem[i].quantidade > (listaItem[i].quantidade_disponivel+listaItem[i].quantidade)){
+      else if(edicaoItem[i].quantidade > (listaItem[i].quantidade_disponivel+listaItem[i].quantidade)){
 
         //Alerta inteligente que necessita de uma confirmação para continuar
         Swal.fire(
