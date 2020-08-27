@@ -650,6 +650,7 @@ function itensFiscalizacao(caminho) {
           tabela += (`</td> <td class="preco">`);
 
           //calculo do subtotal
+          //multiplicado por 100 apenas para mostrar em reais e não em centavos
           total = (listaItem[i]["quantidade"] * listaItem[i]["valor"] * 100);
           totalFinal = totalFinal + total;
 
@@ -780,39 +781,41 @@ function editarItem(caminho) {
           confirmButtonText: 'Sim, tenho certeza!'
         }).then((result) => {
           if (result.value) {
-            let passe = true;
             Swal.fire(
               'Sucesso!',
               'Item foi inserido!',
               'success'
             )
-            if (passe) {
 
-              //transforma as informações do token em json
-              let corpo = JSON.stringify(edicaoItem[i]);
-              //console.log(edicaoItem[i]);
+            //transforma as informações do token em json
+            let corpo = JSON.stringify(edicaoItem[i]);
+            //console.log(edicaoItem[i]);
 
-              //função fetch para mandar
-              fetch(caminhoFinal, {
-                method: 'PUT',
-                body: corpo,
-                headers: {
-                  'Authorization': 'Bearer ' + meuToken
-                },
-              }).then(function (response) {
-                //checar o status do pedido
-                //console.log(response.statusText);
+            //função fetch para mandar
+            fetch(caminhoFinal, {
+              method: 'PUT',
+              body: corpo,
+              headers: {
+                'Authorization': 'Bearer ' + meuToken
+              },
+            }).then(function (response) {
+              //checar o status do pedido
+              //console.log(response.statusText);
 
-                //tratamento dos erros
-                if (response.status == 200 || response.status == 201) {
-                  location.reload();
-                } else {
-                  erros(response.status);
-                }
-              });
-            }
-          } else {
-            console.log("Esse não foi.");
+              //tratamento dos erros
+              if (response.status == 200 || response.status == 201) {
+                //location.reload();
+              } else {
+                erros(response.status);
+              }
+            });
+
+          } else{
+            Swal.fire(
+              'Cancelado!',
+              'O item não foi inserido!',
+              'error'
+            )
           }
         });
 
