@@ -153,20 +153,22 @@ function enabler2(){
   let empenho = document.getElementById("id_empenho").value;
   let x = [];
   let caminho;
-  
-  if(tipo=="o"){
-    caminho="read/itensfaturaoriginal/";
-  }
 
-  else if(tipo=="r"){
-    caminho="read/itensfaturareajuste/";
-  }
-  else{
-    alert("ERRO: por favor, escolha um tipo.");
-  }
 
   //garantindo que não seja enviado
-  if(empenho!="0" && tipo!="0"){
+  if(empenho>"0"){
+  
+    if(tipo=="o"){
+      caminho="read/itensfaturaoriginal/";
+    }
+
+    else if(tipo=="r"){
+      caminho="read/itensfaturareajuste/";
+    }
+    else{
+      alert("ERRO: por favor, escolha um tipo.");
+    }
+
     fetch(servidor + caminho + empenho + "/" + meuCodigoSec, {
       method: 'GET',
       headers: {
@@ -196,7 +198,8 @@ function enabler2(){
         erros(response.status);
       }
     });
-  } else if(empenho=="0"){
+
+  } else {
     alert("ERRO: por favor, escolha um empenho.");
   }
 }
