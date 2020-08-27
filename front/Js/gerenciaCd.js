@@ -70,6 +70,124 @@ function enviar() {
 
 
 
+//CD acompanhameno (pode ir pra subtabelas se necessário)
+
+let listaUacom = [], meuData = [];
+
+function uacom() {
+
+	//cria o botão para editar
+	document.getElementById("editar").innerHTML = "";
+	document.getElementById("editar2").innerHTML = (`<button id="editar" onclick="editarItemCD()" class="btn btn-success">Salvar Acompanhamento</button>`);
+  
+	//função fetch para chamar itens da tabela
+	fetch(servidor + 'read/uacom', {
+	  method: 'GET',
+	  headers: {
+		'Authorization': 'Bearer ' + meuToken
+	  },
+	}).then(function (response) {
+  
+	  //checar os status de pedidos
+	  //console.log(response)
+  
+	  //tratamento dos erros
+	  if (response.status == 200) {
+		//console.log(response.statusText);
+  
+		//pegar o json que possui a tabela
+		response.json().then(function (json) {
+  
+			//console.log(json);
+	
+			let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
+			<tr>
+			<th style="width:20%" scope="col">Data</th>
+			<th style="width:20%" scope="col">Titulo</th>
+			<th style="width:60%" scope="col">Relato</th>
+			</tr>
+			</thead>`);
+			tabela += (`<tbody>`);
+  
+			//cria uma lista apenas com os itens do lote selecionado
+			let j = 0;
+			for (let i = 0; i < json.length; i++) {
+				if (json[i]["cod_ibge"] == meuCodigo) {
+					listaUacom[j] = json[i];
+					j++;
+				}
+			}
+		    for (i = 0; i < listaUacom.length; i++) {
+  
+				//salva os valores para edição
+				meuData[i] = listaUacom[i]["data"];
+	
+				tabela += (`<tr>`);
+				tabela += (`<td>`);
+				tabela += (`<input value="` + listaUacom[i]["data"] + `" class="data" id="data` + i + `" type="text" size="15">`);
+				tabela += (`</td> <td>`);
+				tabela += (`<input value="` + listaUacom[i]["titulo"] + `" id="titulo` + i + `" type="text" size="15">`);
+				tabela += (`</td> <td>`);
+				tabela += (`<input value="` + listaUacom[i]["relato"] + `" id="relato` + i + `" type="text" size="60">`);
+				tabela += (`</td>`);
+				tabela += (`</tr>`);
+		    }
+		    tabela += (`</tbody>`);
+		    document.getElementById("tabela").innerHTML = tabela;
+  
+		    //Máscara colocada separadamente para tabela
+		    mascara();
+
+		});
+	  } else {
+		erros(response.status);
+	  }
+	});
+}
+  
+function editarUacom() {
+  
+	for (let i = 0; i < listaUacom.length; i++) {
+  
+	  edicaoUacom[i] = {
+		"data": parseInt(document.getElementById("data" + i).value),
+		"titulo": parseInt(document.getElementById("titulo" + i).value),
+		"relato": parseInt(document.getElementById("relato" + i).value),
+	  };
+  
+	  // console.log(edicaoUacom)
+	  if (edicaoUacom[i]["data"] != listaUacom[i]["data"] || edicaoUacom[i]["titulo"] != listaUacom[i]["titulo"] || edicaoUacom[i]["relato"] != listaUacom[i]["relato"]) {
+		//transforma as informações do token em json
+		let corpo = JSON.stringify(edicaoUacom[i]);
+		//função fetch para mandar
+		fetch(servidor + 'read/cditens/' + meuCodigo + '/' + meuData[i], {
+		  method: 'PUT',
+		  body: corpo,
+		  headers: {
+			'Authorization': 'Bearer ' + meuToken
+		  },
+		}).then(function (response) {
+		  //checar o status do pedido
+		  console.log(response.statusText);
+  
+		  //tratamento dos erros
+		  if (response.status == 200 || response.status == 201) {
+			location.reload();
+		  } else {
+			erros(response.status);
+		  }
+		  location.reload();
+		});
+	  }
+	}
+}
+
+
+
+
+
+
+
 //CD Itens
 
 function itens() {
@@ -178,7 +296,6 @@ function editarItemCD() {
         } else {
           erros(response.status);
         }
-        window.location.replace("./gerenciaCd.html");
       });
     }
   }

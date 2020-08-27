@@ -8,7 +8,7 @@ function mascara(){
     $('.ano').inputmask('9999');
     $('.cnpj').inputmask('99.999.999/9999-99', {autoUnmask: true, removeMaskOnSubmit: true});
     $('.quebrados').inputmask('9{1,9},99',{autoUnmask: true, unmaskAsNumber: true, reverse: true, greedy: false, numericInput:true, placeholder: "0"});
-    $('.inteiros').inputmask('[9999999999]9', {reverse: true, numericInput:true});
+    $('.inteiros').inputmask('[9999999999]9', {reverse: true, numericInput:true, placeholder:""});
     $('.preco').inputmask( 'R$ 9{1,9},99',{autoUnmask: true, unmaskAsNumber: true, reverse: true, greedy: false, numericInput:true, placeholder: "0"});
   });
 }
