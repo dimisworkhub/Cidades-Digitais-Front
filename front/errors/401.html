@@ -15,10 +15,11 @@
         <div style="text-align:center; width:100%">
             <h1 class="display-4">Erro 401</h1>
             <p class="lead">Este erro indica algum erro de autorização.</p>
-            <p class="lead">É recomendado retornar à página anterior ou ao menu principal.</p>
+            <p class="lead">É recomendado retornar à página anterior ou ao menu principal. Se o prolema persistir, recomendado fazer logoff.</p>
             <hr class="my-4">
-            <a class="btn btn-primary btn-lg" onclick="window.history.back();" role="button">Pagina anterior.</a>
-            <a class="btn btn-primary btn-lg" href="../home.html" role="button">Menu inicial.</a>
+            <a class="btn btn-primary btn-lg" role="button" onclick="window.history.back();">Pagina anterior.</a>
+            <a class="btn btn-primary btn-lg" role="button" onclick='window.location.replace("../home.html");'>Menu inicial.</a>
+            <a class="btn btn-primary btn-lg" role="button" onclick='window.location.replace("../index.html");localStorage.clear();'>Logoff.</a>
         </div>
     </div>
 </body>
