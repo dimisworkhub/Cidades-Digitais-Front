@@ -77,7 +77,7 @@ function uacom() {
 
 	//cria o botão para editar
 	document.getElementById("editar").innerHTML = "";
-	document.getElementById("editar2").innerHTML = (`<button id="editar" onclick="editarItemCD()" class="btn btn-success">Salvar Acompanhamento</button>`);
+	document.getElementById("editar2").innerHTML = (`<button id="editar" onclick="editarUacom()" class="btn btn-success">Salvar Acompanhamento</button>`);
   
 	//função fetch para chamar itens da tabela
 	fetch(servidor + 'read/uacom', {
@@ -102,8 +102,10 @@ function uacom() {
 			let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
 			<tr>
 			<th style="width:20%" scope="col">Data</th>
+			<th style="width:20%" scope="col">Assunto</th>
 			<th style="width:20%" scope="col">Titulo</th>
-			<th style="width:60%" scope="col">Relato</th>
+			<th style="width:35%" scope="col">Relato</th>
+			<th style="width:5%" scope="col">editar</th>
 			</tr>
 			</thead>`);
 			tabela += (`<tbody>`);
@@ -122,8 +124,8 @@ function uacom() {
 				meuData[i] = listaUacom[i]["data"];
 	
 				tabela += (`<tr>`);
-				tabela += (`<td>`);
-				tabela += (`<input value="` + listaUacom[i]["data"] + `" class="data" id="data` + i + `" type="text" size="15">`);
+				tabela += (`<td class="data">`);
+				tabela += arrumaData(listaUacom[i]["data"]);
 				tabela += (`</td> <td>`);
 				tabela += (`<input value="` + listaUacom[i]["titulo"] + `" id="titulo` + i + `" type="text" size="15">`);
 				tabela += (`</td> <td>`);
@@ -145,13 +147,14 @@ function uacom() {
 }
   
 function editarUacom() {
+
+  let edicaoUacom = [];
   
 	for (let i = 0; i < listaUacom.length; i++) {
   
 	  edicaoUacom[i] = {
-		"data": parseInt(document.getElementById("data" + i).value),
-		"titulo": parseInt(document.getElementById("titulo" + i).value),
-		"relato": parseInt(document.getElementById("relato" + i).value),
+		"titulo": document.getElementById("titulo" + i).value,
+		"relato": document.getElementById("relato" + i).value,
 	  };
   
 	  // console.log(edicaoUacom)
@@ -159,7 +162,7 @@ function editarUacom() {
 		//transforma as informações do token em json
 		let corpo = JSON.stringify(edicaoUacom[i]);
 		//função fetch para mandar
-		fetch(servidor + 'read/cditens/' + meuCodigo + '/' + meuData[i], {
+		fetch(servidor + 'read/uacom/' + meuCodigo + '/' + meuData[i], {
 		  method: 'PUT',
 		  body: corpo,
 		  headers: {
@@ -171,131 +174,11 @@ function editarUacom() {
   
 		  //tratamento dos erros
 		  if (response.status == 200 || response.status == 201) {
-			location.reload();
+			  location.reload();
 		  } else {
-			erros(response.status);
+			  erros(response.status);
 		  }
-		  location.reload();
 		});
 	  }
 	}
-}
-
-
-
-
-
-
-
-//CD Itens
-
-function itens() {
-
-  //cria o botão para editar
-  document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarItemCD()" class="btn btn-success">Salvar Alterações em Itens</button>`);
-  document.getElementById("editar2").innerHTML = (`<button id="editar" onclick="editarItemCD()" class="btn btn-success">Salvar Alterações em Itens</button>`);
-
-  //função fetch para chamar itens da tabela
-  fetch(servidor + 'read/cditens', {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-
-    //checar os status de pedidos
-    //console.log(response)
-
-    //tratamento dos erros
-    if (response.status == 200) {
-      //console.log(response.statusText);
-
-      //pegar o json que possui a tabela
-      response.json().then(function (json) {
-
-        //console.log(json);
-
-        let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
-        <tr>
-        <th style="width:40%" scope="col">Descrição</th>
-        <th style="width:20%" scope="col">Quantidade prevista</th>
-        <th style="width:20%" scope="col">Quantidade do projeto executivo</th>
-        <th style="width:20%" scope="col">Quantidade de termo de instalação </th>
-        </tr>
-        </thead>`);
-        tabela += (`<tbody>`);
-
-        //cria uma lista apenas com os itens do lote selecionado
-        let j = 0;
-        for (let i = 0; i < json.length; i++) {
-          if (json[i]["cod_ibge"] == meuCodigo) {
-            listaItem[j] = json[i];
-            j++;
-          }
-        }
-        for (i = 0; i < listaItem.length; i++) {
-
-          //salva os valores para edição
-          meuItem[i] = listaItem[i]["cod_item"];
-          meuTipo[i] = listaItem[i]["cod_tipo_item"];
-
-          tabela += (`<tr>`);
-          tabela += (`<td>`);
-          tabela += listaItem[i]["descricao"];
-          tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["quantidade_previsto"] + `"class="inteiros" id="quantidade_previsto` + i + `" type="text" size="15">`);
-          tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["quantidade_projeto_executivo"] + `"class="quebrados" id="quantidade_projeto_executivo` + i + `" type="text" size="15">`);
-          tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["quantidade_termo_instalacao"] + `"class="quebrados" id="quantidade_termo_instalacao` + i + `" type="text" size="15">`);
-          tabela += (`</td>`);
-          tabela += (`</tr>`);
-        }
-        tabela += (`</tbody>`);
-        document.getElementById("tabela").innerHTML = tabela;
-
-        //Máscara colocada separadamente para tabela
-        mascara();
-        
-      });
-    } else {
-      erros(response.status);
-    }
-  });
-}
-
-function editarItemCD() {
-
-  for (let i = 0; i < listaItem.length; i++) {
-
-    edicaoItem[i] = {
-      "quantidade_previsto": parseInt(document.getElementById("quantidade_previsto" + i).value),
-      "quantidade_projeto_executivo": parseFloat(mascaraQuebrados(document.getElementById("quantidade_projeto_executivo" + i).value)),
-      "quantidade_termo_instalacao": parseFloat(mascaraQuebrados(document.getElementById("quantidade_termo_instalacao" + i).value)),
-    };
-
-    // console.log(edicaoItem)
-    if (edicaoItem[i]["quantidade_previsto"] != listaItem[i]["quantidade_previsto"] || edicaoItem[i]["quantidade_projeto_executivo"] != listaItem[i]["quantidade_projeto_executivo"] || edicaoItem[i]["quantidade_termo_instalacao"] != listaItem[i]["quantidade_termo_instalacao"]) {
-      //transforma as informações do token em json
-      let corpo = JSON.stringify(edicaoItem[i]);
-      //função fetch para mandar
-      fetch(servidor + 'read/cditens/' + meuCodigo + '/' + meuItem[i] + '/' + meuTipo[i], {
-        method: 'PUT',
-        body: corpo,
-        headers: {
-          'Authorization': 'Bearer ' + meuToken
-        },
-      }).then(function (response) {
-        //checar o status do pedido
-        console.log(response.statusText);
-
-        //tratamento dos erros
-        if (response.status == 200 || response.status == 201) {
-          location.reload();
-        } else {
-          erros(response.status);
-        }
-      });
-    }
-  }
 }

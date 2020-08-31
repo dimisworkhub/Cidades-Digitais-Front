@@ -99,8 +99,8 @@ function editarCd(valor) {
   localStorage.setItem("data_pe", jsonFinal[valor].data_pe);
   localStorage.setItem("os_imp", jsonFinal[valor].os_imp);
   localStorage.setItem("data_imp", jsonFinal[valor].data_imp);
-  localStorage.setItem("nome_municipio", cidades[valor].nome_municipio);
-  localStorage.setItem("uf", cidades[valor].uf);
+  localStorage.setItem("nome_municipio", jsonFinal[valor].nome_municipio);
+  localStorage.setItem("uf", jsonFinal[valor].uf);
   window.location.href = "./gerenciaCd.html";
 }
 
@@ -144,7 +144,7 @@ function pegarMunicipio() {
   document.getElementById("cod_ibge").disabled = true;
 
   //preenche os campos para estado e municipio
-  let answer = fetch(servidor + 'read/municipio', {
+  fetch(servidor + 'read/municipio', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -160,8 +160,7 @@ function pegarMunicipio() {
 
         //cria variaveis
         let i, j = 0;
-        let x = [],
-          valorUF = [];
+        let x = [], valorUF = [];
 
         //para tirar repetições
         for (i = 0; i < json.length; i++) {
@@ -215,23 +214,13 @@ function enviar() {
 
   //estrutura usada para mandar o JSON no fetch
   let info = {
-    "cod_ibge": " ",
-    "cod_lote": " ",
-    "os_pe": " ",
-    "data_pe": " ",
-    "os_imp": " ",
-    "data_imp": " "
+    "cod_ibge": parseInt(document.getElementById("cod_ibge").value),
+    "cod_lote": parseInt(document.getElementById("cod_lote").value),
+    "os_pe": document.getElementById("os_pe").value,
+    "data_pe": mascaraData(document.getElementById("data_pe").value),
+    "os_imp": document.getElementById("os_imp").value,
+    "data_imp": mascaraData(document.getElementById("data_imp").value),
   };
-
-  data1 = document.getElementById("data_pe").value;
-  data2 = document.getElementById("data_imp").value;
-  
-  info.cod_ibge = parseInt(document.getElementById("cod_ibge").value);
-  info.cod_lote = parseInt(document.getElementById("cod_lote").value);
-  info.os_pe = document.getElementById("os_pe").value;
-  info.data_pe = mascaraData(data1);
-  info.os_imp = document.getElementById("os_imp").value;
-  info.data_imp = mascaraData(data2);
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
