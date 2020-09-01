@@ -889,8 +889,7 @@ function editarItem(caminho) {
 
         mensagem += listaItem[valor].cod_tipo_item + "." + listaItem[valor].cod_item + ", ";
 
-        guardaI[]=i;
-        ++;
+        guardaI = i++;
 
       } else {
         fetchEdit(i);

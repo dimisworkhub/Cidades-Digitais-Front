@@ -181,7 +181,7 @@ function editarUacom() {
 		});
 	  }
 	}
-  
+}
   
 
 //CD Contatos
@@ -320,9 +320,74 @@ function novoContato() {
 
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
-      location.reload();
+      alert('Contato inserido com sucesso!')
+      // location.reload();
     } else {
       erros(response.status);
     }
   });
+}
+
+function novoTelefone() {
+  let meuContato;
+
+  fetch(servidor + 'read/contato', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      response.json().then(function (json) {
+        
+        //Pega o ultimo contato salvo
+        for (let i = 0; i < json.length; i++) {
+          meuContato= json[i].cod_contato;
+        }
+        
+        console.log(meuContato);
+
+
+
+        let infoTelefone = {
+          "cod_contato": parseInt(meuContato),
+          "telefone": document.getElementById("telefone").value,
+          "tipo": document.getElementById("tipo").value,
+        };
+      
+        console.log(infoTelefone)
+        //transforma as informações em string para mandar
+        let corpo = JSON.stringify(infoTelefone);
+        //função fetch para mandar
+        fetch(servidor + 'read/telefone', {
+          method: 'POST',
+          body: corpo,
+          headers: {
+            'Authorization': 'Bearer ' + meuToken
+          },
+        }).then(function (response) {
+      
+          //tratamento dos erros
+          if (response.status == 200 || response.status == 201) {
+            alert('Telefone inserido com sucesso!')
+            document.getElementById('telefone').value='';
+            // location.reload();
+          } else {
+            erros(response.status);
+          }
+        });
+
+
+
+
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+
+
+  
 }
