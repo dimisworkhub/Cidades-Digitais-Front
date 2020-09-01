@@ -94,10 +94,23 @@ func (server *Server) GetAllContato(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//	Vars retorna as variaveis de rota
+	vars := mux.Vars(r)
+
+	//	codIbge armazena a chave primaria da tabela CD
+	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 32)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	//	cnpj armazena a chave primaria da tabela entidade
+	cnpj := vars["cnpj"]
+
 	contato := models.Contato{}
 
 	//	allContato armazena os dados buscados no banco de dados
-	allContato, err := contato.FindAllContato(server.DB)
+	allContato, err := contato.FindAllContato(server.DB, uint32(codIbge), cnpj)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))
