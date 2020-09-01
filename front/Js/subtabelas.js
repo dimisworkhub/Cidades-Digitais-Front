@@ -352,9 +352,9 @@ function pagamentoSub(valorCodigo) {
 let valorUsado;
 
 //função necessaria para o funcionamento dos links nas subtabelas
-function redirecionar(valor, caminhoFinal) {
+function redirecionar(valor, caminhoRedirect) {
   console.log("chega aqui");
-  if (caminhoFinal == "previsao") {
+  if (caminhoRedirect == "previsao") {
     localStorage.setItem("cod_previsao_empenho", listaFinal[valor].cod_previsao_empenho);
     localStorage.setItem("cod_lote", listaFinal[valor].cod_lote);
     localStorage.setItem("data", listaFinal[valor].data);
@@ -364,7 +364,7 @@ function redirecionar(valor, caminhoFinal) {
     //para mostrar a descrição
     localStorage.setItem("natureza_despesa", listaFinal[valor].natureza_despesa);
     window.location.href = "./gerenciaPrevisao.html";
-  } else if (caminhoFinal == "empenho") {
+  } else if (caminhoRedirect == "empenho") {
     localStorage.setItem("id_empenho", listaFinal[valor].id_empenho);
     localStorage.setItem("cod_empenho", listaFinal[valor].cod_empenho);
     localStorage.setItem("cod_lote", meuCodigoSec);
@@ -374,7 +374,7 @@ function redirecionar(valor, caminhoFinal) {
     localStorage.setItem("tipo", listaFinal[valor].tipo);
     localStorage.setItem("data", listaFinal[valor].data);
     window.location.href = "./gerenciaEmpenho.html";
-  } else if (caminhoFinal == "fatura") {
+  } else if (caminhoRedirect == "fatura") {
     localStorage.setItem("num_nf", listaFinal[valor]["num_nf"]);
     localStorage.setItem("cod_ibge", listaFinal[valor]["cod_ibge"]);
     localStorage.setItem("dt_nf", listaFinal[valor]["dt_nf"]);
@@ -382,13 +382,13 @@ function redirecionar(valor, caminhoFinal) {
     localStorage.setItem("nome_municipio", listaFinal[valor]["nome_municipio"]);
     window.location.href = "./gerenciaFatura.html";
 
-  } else if (caminhoFinal == "pagamento") {
+  } else if (caminhoRedirect == "pagamento") {
     localStorage.setItem("cod_otb", listaFinal[valor]["cod_otb"]);
     localStorage.setItem("dt_pgto", listaFinal[valor]["dt_pgto"]);
     window.location.href = "./gerenciaPagamento.html";
   }
   //caso especial da função empenho
-  else if (caminhoFinal == "empItensFatura") {
+  else if (caminhoRedirect == "empItensFatura") {
     //valores usados no caso especial
     valorUsado = valor;
     empenhoSub("0");
@@ -420,6 +420,19 @@ function sublinhar2(valor, tamanho) {
     }
   }
 }
+
+
+
+
+//variaveis comuns de itens:
+
+let listaItem = [],
+  meuItem = [],
+  meuTipo = [],
+  edicaoItem = [],
+  itemMudado = [];
+
+let caminhoFinal;
 
 
 
@@ -532,15 +545,127 @@ function editarItemLote() {
 
 
 
+//CD Itens
+
+function itensCD() {
+
+  //cria o botão para editar
+  document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarItemCD()" class="btn btn-success">Salvar Alterações em Itens</button>`);
+  document.getElementById("editar2").innerHTML = (`<button id="editar" onclick="editarItemCD()" class="btn btn-success">Salvar Alterações em Itens</button>`);
+
+  //função fetch para chamar itens da tabela
+  fetch(servidor + 'read/cditens', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //checar os status de pedidos
+    //console.log(response)
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      //console.log(response.statusText);
+
+      //pegar o json que possui a tabela
+      response.json().then(function (json) {
+
+        //console.log(json);
+
+        let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
+        <tr>
+        <th style="width:40%" scope="col">Descrição</th>
+        <th style="width:20%" scope="col">Quantidade prevista</th>
+        <th style="width:20%" scope="col">Quantidade do projeto executivo</th>
+        <th style="width:20%" scope="col">Quantidade de termo de instalação </th>
+        </tr>
+        </thead>`);
+        tabela += (`<tbody>`);
+
+        //cria uma lista apenas com os itens do lote selecionado
+        let j = 0;
+        for (let i = 0; i < json.length; i++) {
+          if (json[i]["cod_ibge"] == meuCodigo) {
+            listaItem[j] = json[i];
+            j++;
+          }
+        }
+        for (i = 0; i < listaItem.length; i++) {
+
+          //salva os valores para edição
+          meuItem[i] = listaItem[i]["cod_item"];
+          meuTipo[i] = listaItem[i]["cod_tipo_item"];
+
+          tabela += (`<tr>`);
+          tabela += (`<td>`);
+          tabela += listaItem[i]["descricao"];
+          tabela += (`</td> <td>`);
+          tabela += (`<input value="` + listaItem[i]["quantidade_previsto"] + `"class="inteiros" id="quantidade_previsto` + i + `" type="text" size="15">`);
+          tabela += (`</td> <td>`);
+          tabela += (`<input value="` + listaItem[i]["quantidade_projeto_executivo"] + `"class="quebrados" id="quantidade_projeto_executivo` + i + `" type="text" size="15">`);
+          tabela += (`</td> <td>`);
+          tabela += (`<input value="` + listaItem[i]["quantidade_termo_instalacao"] + `"class="quebrados" id="quantidade_termo_instalacao` + i + `" type="text" size="15">`);
+          tabela += (`</td>`);
+          tabela += (`</tr>`);
+        }
+        tabela += (`</tbody>`);
+        document.getElementById("tabela").innerHTML = tabela;
+
+        //Máscara colocada separadamente para tabela
+        mascara();
+        
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+function editarItemCD() {
+
+  for (let i = 0; i < listaItem.length; i++) {
+
+    edicaoItem[i] = {
+      "quantidade_previsto": parseInt(document.getElementById("quantidade_previsto" + i).value),
+      "quantidade_projeto_executivo": parseFloat(mascaraQuebrados(document.getElementById("quantidade_projeto_executivo" + i).value)),
+      "quantidade_termo_instalacao": parseFloat(mascaraQuebrados(document.getElementById("quantidade_termo_instalacao" + i).value)),
+    };
+
+    // console.log(edicaoItem)
+    if (edicaoItem[i]["quantidade_previsto"] != listaItem[i]["quantidade_previsto"] || edicaoItem[i]["quantidade_projeto_executivo"] != listaItem[i]["quantidade_projeto_executivo"] || edicaoItem[i]["quantidade_termo_instalacao"] != listaItem[i]["quantidade_termo_instalacao"]) {
+      //transforma as informações do token em json
+      let corpo = JSON.stringify(edicaoItem[i]);
+      //função fetch para mandar
+      fetch(servidor + 'read/cditens/' + meuCodigo + '/' + meuItem[i] + '/' + meuTipo[i], {
+        method: 'PUT',
+        body: corpo,
+        headers: {
+          'Authorization': 'Bearer ' + meuToken
+        },
+      }).then(function (response) {
+        //checar o status do pedido
+        console.log(response.statusText);
+
+        //tratamento dos erros
+        if (response.status == 200 || response.status == 201) {
+          location.reload();
+        } else {
+          erros(response.status);
+        }
+      });
+    }
+  }
+}
+
+
+
 
 
 //Itens de fiscalizacao
 
-let listaItem = [],
-  meuItem = [],
-  meuTipo = [],
-  edicaoItem = [],
-  itemMudado = [];
+//apenas até ser testado algo melhor
+let guardaI = "";
 
 //caso itensfatura seja o selecionado
 let meuEmpenho = [];
@@ -724,8 +849,7 @@ function descricaoItem2(itemDescrito) {
 
 function editarItem(caminho) {
 
-  //variavel do caminho
-  let caminhoFinal;
+  let mensagem = "";
 
   for (let i = 0; i < listaItem.length; i++) {
 
@@ -770,80 +894,84 @@ function editarItem(caminho) {
 
       if (edicaoItem[i].quantidade > (listaItem[i].quantidade_disponivel + listaItem[i].quantidade)) {
 
-        //Alerta inteligente que necessita de uma confirmação para continuar
-        Swal.fire({
-          title: 'Tem certeza?',
-          text: "A Quantidade inserida do item " + listaItem[i].cod_tipo_item + "." + listaItem[i].cod_item + " é maior que a Quantidade Disponível!",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Sim, tenho certeza!'
-        }).then((result) => {
-          if (result.value) {
-            Swal.fire(
-              'Sucesso!',
-              'Item foi inserido!',
-              'success'
-            )
+        mensagem += listaItem[i].cod_tipo_item + "." + listaItem[i].cod_item + ", ";
 
-            //transforma as informações do token em json
-            let corpo = JSON.stringify(edicaoItem[i]);
-            //console.log(edicaoItem[i]);
-
-            //função fetch para mandar
-            fetch(caminhoFinal, {
-              method: 'PUT',
-              body: corpo,
-              headers: {
-                'Authorization': 'Bearer ' + meuToken
-              },
-            }).then(function (response) {
-              //checar o status do pedido
-              //console.log(response.statusText);
-
-              //tratamento dos erros
-              if (response.status == 200 || response.status == 201) {
-                //location.reload();
-              } else {
-                erros(response.status);
-              }
-            });
-
-          } else{
-            Swal.fire(
-              'Cancelado!',
-              'O item não foi inserido!',
-              'error'
-            )
-          }
-        });
+        guardaI += i + "/";
 
       } else {
-
-        //transforma as informações do token em json
-        let corpo = JSON.stringify(edicaoItem[i]);
-        //console.log(edicaoItem[i]);
-
-        //função fetch para mandar
-        fetch(caminhoFinal, {
-          method: 'PUT',
-          body: corpo,
-          headers: {
-            'Authorization': 'Bearer ' + meuToken
-          },
-        }).then(function (response) {
-          //checar o status do pedido
-          //console.log(response.statusText);
-
-          //tratamento dos erros
-          if (response.status == 200 || response.status == 201) {
-            location.reload();
-          } else {
-            erros(response.status);
-          }
-        });
+        fetchEdit(i);
       }
     }
+
   }
+
+  //analise final
+  if(mensagem != ""){
+    modalconf(mensagem);
+  }
+  else{
+    location.reload();
+  }
+}
+
+
+
+function modalconf(mensagemFinal){
+  //Alerta inteligente que necessita de uma confirmação para continuar
+  Swal.fire({
+    title: 'Tem certeza?',
+    text: "A Quantidade inserida do(s) item(ns) " + mensagemFinal + " é maior que a Quantidade Disponível!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Sim, tenho certeza!'
+  }).then((result) => {
+    
+    if (result.value) {
+      let guardaI2 = guardaI.split("/");
+      for(i=0;i<guardaI2.length;i++){
+        fetchEdit(guardaI2[i]);
+      }
+      Swal.fire(
+        'Sucesso!',
+        'Item foi inserido!',
+        'success'
+      )
+
+    } else{
+      Swal.fire(
+        'Cancelado!',
+        'O item não foi inserido!',
+        'error'
+      )
+    }
+
+    //location.reload();
+  });
+}
+
+function fetchEdit(valor){
+
+  //transforma as informações do token em json
+  corpo = JSON.stringify(edicaoItem[valor]);
+  console.log(edicaoItem[valor]);
+
+  //função fetch para mandar
+  fetch(caminhoFinal, {
+    method: 'PUT',
+    body: corpo,
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+    //checar o status do pedido
+    //console.log(response.statusText);
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+    } else {
+      erros(response.status);
+    }
+  });
 }

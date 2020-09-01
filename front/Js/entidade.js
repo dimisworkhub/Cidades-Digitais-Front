@@ -85,16 +85,16 @@ function paginacao() {
 
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
             <tr>
-            <th scope="col">CNPJ</th>
-            <th scope="col">Nome</th>
-            <th scope="col">Endereço</th>
-            <th scope="col">Número</th>
-            <th scope="col">Bairro</th>
-            <th scope="col">CEP</th>
-            <th scope="col">UF</th>
-            <th scope="col">Município</th>
-            <th scope="col">Observações</th>
-            <th scope="col">Opções</th>
+            <th style="width:18%" scope="col">CNPJ</th>
+            <th style="width:10%" scope="col">Nome</th>
+            <th style="width:15%" scope="col">Endereço</th>
+            <th style="width:5%" scope="col">Número</th>
+            <th style="width:10%" scope="col">Bairro</th>
+            <th style="width:11%" scope="col">CEP</th>
+            <th style="width:2%" scope="col">UF</th>
+            <th style="width:14%" scope="col">Município</th>
+            <th style="width:10%" scope="col">Observações</th>
+            <th style="width:5%" scope="col">Opções</th>
             </tr>
             </thead>`);
         tabela += (`<tbody> <tr>`);
@@ -110,21 +110,21 @@ function paginacao() {
           tabela += (`<td class="cnpj">`);
           tabela += filtrado[i]["cnpj"];
           tabela += (`</td> <td>`);
-          tabela += filtrado[i]["nome"]
+          tabela += filtrado[i]["nome"];
           tabela += (`</td> <td>`);
-          tabela += filtrado[i]["endereco"]
+          tabela += filtrado[i]["endereco"];
           tabela += (`</td> <td>`);
-          tabela += filtrado[i]["numero"]
+          tabela += filtrado[i]["numero"];
           tabela += (`</td> <td>`);
-          tabela += filtrado[i]["bairro"]
+          tabela += filtrado[i]["bairro"];
+          tabela += (`</td> <td  class="cep">`);
+          tabela += filtrado[i]["cep"];
           tabela += (`</td> <td>`);
-          tabela += filtrado[i]["cep"]
+          tabela += filtrado[i]["uf"];
           tabela += (`</td> <td>`);
-          tabela += filtrado[i]["uf"]
+          tabela += filtrado[i]["nome_municipio"];
           tabela += (`</td> <td>`);
-          tabela += filtrado[i]["nome_municipio"]
-          tabela += (`</td> <td>`);
-          tabela += filtrado[i]["observacao"]
+          tabela += filtrado[i]["observacao"];
           tabela += (`</td> <td> 
                 <span class="d-flex">
                 <button onclick="editarEntidade(` + i + `)" class="btn btn-success">
@@ -150,38 +150,21 @@ function enviar() {
 
   //estrutura usada para mandar o JSON no fetch
   let info = {
-    "cnpj": " ",
-    "nome": " ",
-    "endereco": " ",
-    "numero": " ",
-    "bairro": " ",
-    "cep": " ",
-    "nome_municipio": " ",
-    "uf": " ",
-    "observacao": " "
+    "cnpj": document.getElementById("cnpj").value,
+    "nome": document.getElementById("nome").value,
+    "endereco": document.getElementById("endereco").value,
+    "numero": document.getElementById("numero").value,
+    "bairro": document.getElementById("bairro").value,
+    "cep": document.getElementById("cep").value,
+    "uf": document.getElementById("uf").value,
+    "nome_municipio": document.getElementById("nome_municipio").value,
+    "observacao": document.getElementById("observacao").value,
   };
-
-  let a = document.getElementById("cnpj");
-  info.cnpj = a.value;
-  let b = document.getElementById("nome");
-  info.nome = b.value;
-  let c = document.getElementById("endereco");
-  info.endereco = c.value;
-  let d = document.getElementById("numero");
-  info.numero = d.value;
-  let e = document.getElementById("bairro");
-  info.bairro = e.value;
-  let f = document.getElementById("cep");
-  info.cep = f.value;
-  let g = document.getElementById("observacao");
-  info.observacao = g.value;
-  let h = document.getElementById("nome_municipio");
-  info.nome_municipio = h.value;
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
+  //console.log(corpo);
 
-  console.log(corpo)
   //função fetch para mandar
   fetch(servidor + 'read/entidade', {
     method: 'POST',

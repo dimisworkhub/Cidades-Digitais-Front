@@ -77,7 +77,7 @@ function uacom() {
 
 	//cria o botão para editar
 	document.getElementById("editar").innerHTML = "";
-	document.getElementById("editar2").innerHTML = (`<button id="editar" onclick="editarItemCD()" class="btn btn-success">Salvar Acompanhamento</button>`);
+	document.getElementById("editar2").innerHTML = (`<button id="editar" onclick="editarUacom()" class="btn btn-success">Salvar Acompanhamento</button>`);
   
 	//função fetch para chamar itens da tabela
 	fetch(servidor + 'read/uacom', {
@@ -102,8 +102,10 @@ function uacom() {
 			let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
 			<tr>
 			<th style="width:20%" scope="col">Data</th>
+			<th style="width:20%" scope="col">Assunto</th>
 			<th style="width:20%" scope="col">Titulo</th>
-			<th style="width:60%" scope="col">Relato</th>
+			<th style="width:35%" scope="col">Relato</th>
+			<th style="width:5%" scope="col">editar</th>
 			</tr>
 			</thead>`);
 			tabela += (`<tbody>`);
@@ -122,12 +124,14 @@ function uacom() {
 				meuData[i] = listaUacom[i]["data"];
 	
 				tabela += (`<tr>`);
-				tabela += (`<td>`);
-				tabela += (`<input value="` + listaUacom[i]["data"] + `" class="data" id="data` + i + `" type="text" size="15">`);
+				tabela += (`<td class="data">`);
+				tabela += arrumaData(listaUacom[i]["data"]);
 				tabela += (`</td> <td>`);
-				tabela += (`<input value="` + listaUacom[i]["titulo"] + `" id="titulo` + i + `" type="text" size="15">`);
+        tabela += listaUacom[i]["assunto"];
+        tabela += (`</td> <td>`);
+				tabela += listaUacom[i]["titulo"];
 				tabela += (`</td> <td>`);
-				tabela += (`<input value="` + listaUacom[i]["relato"] + `" id="relato` + i + `" type="text" size="60">`);
+				tabela += listaUacom[i]["relato"];
 				tabela += (`</td>`);
 				tabela += (`</tr>`);
 		    }
@@ -145,13 +149,14 @@ function uacom() {
 }
   
 function editarUacom() {
+
+  let edicaoUacom = [];
   
 	for (let i = 0; i < listaUacom.length; i++) {
   
 	  edicaoUacom[i] = {
-		"data": parseInt(document.getElementById("data" + i).value),
-		"titulo": parseInt(document.getElementById("titulo" + i).value),
-		"relato": parseInt(document.getElementById("relato" + i).value),
+		"titulo": document.getElementById("titulo" + i).value,
+		"relato": document.getElementById("relato" + i).value,
 	  };
   
 	  // console.log(edicaoUacom)
@@ -159,7 +164,7 @@ function editarUacom() {
 		//transforma as informações do token em json
 		let corpo = JSON.stringify(edicaoUacom[i]);
 		//função fetch para mandar
-		fetch(servidor + 'read/cditens/' + meuCodigo + '/' + meuData[i], {
+		fetch(servidor + 'read/uacom/' + meuCodigo + '/' + meuData[i], {
 		  method: 'PUT',
 		  body: corpo,
 		  headers: {
@@ -171,32 +176,26 @@ function editarUacom() {
   
 		  //tratamento dos erros
 		  if (response.status == 200 || response.status == 201) {
-			location.reload();
+			  location.reload();
 		  } else {
-			erros(response.status);
+			  erros(response.status);
 		  }
-		  location.reload();
 		});
 	  }
 	}
 }
 
+//CD Contatos
 
-
-
-
-
-
-//CD Itens
-
-function itens() {
+function contatos() {
 
   //cria o botão para editar
-  document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarItemCD()" class="btn btn-success">Salvar Alterações em Itens</button>`);
-  document.getElementById("editar2").innerHTML = (`<button id="editar" onclick="editarItemCD()" class="btn btn-success">Salvar Alterações em Itens</button>`);
+  document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarContatoCD()" class="btn btn-success">Salvar Alterações</button>
+                                                  <button class="btn btn-success" data-toggle="modal" data-target="#adicionarContato">Novo Contato</button>`);
+  document.getElementById("editar2").innerHTML = (`<button id="editar" onclick="editarContatoCD()" class="btn btn-success">Salvar Alterações</button>`);
 
-  //função fetch para chamar itens da tabela
-  fetch(servidor + 'read/cditens', {
+  //função fetch para chamar contatos da tabela
+  fetch(servidor + 'read/contato', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -217,10 +216,9 @@ function itens() {
 
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
         <tr>
-        <th style="width:40%" scope="col">Descrição</th>
-        <th style="width:20%" scope="col">Quantidade prevista</th>
-        <th style="width:20%" scope="col">Quantidade do projeto executivo</th>
-        <th style="width:20%" scope="col">Quantidade de termo de instalação </th>
+        <th style="width:20%" scope="col">Nome</th>
+        <th style="width:20%" scope="col">Função</th>
+        <th style="width:20%" scope="col">E-mail</th>
         </tr>
         </thead>`);
         tabela += (`<tbody>`);
@@ -241,13 +239,11 @@ function itens() {
 
           tabela += (`<tr>`);
           tabela += (`<td>`);
-          tabela += listaItem[i]["descricao"];
+          tabela += (`<input value="` + listaItem[i]["nome"] + `"class="" id="nome` + i + `" type="text" size="30">`);
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["quantidade_previsto"] + `"class="inteiros" id="quantidade_previsto` + i + `" type="text" size="15">`);
+          tabela += (`<input value="` + listaItem[i]["funcao"] + `"class="" id="funcao` + i + `" type="text" size="30">`);
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["quantidade_projeto_executivo"] + `"class="quebrados" id="quantidade_projeto_executivo` + i + `" type="text" size="15">`);
-          tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["quantidade_termo_instalacao"] + `"class="quebrados" id="quantidade_termo_instalacao` + i + `" type="text" size="15">`);
+          tabela += (`<input value="` + listaItem[i]["email"] + `"class="" id="email` + i + `" type="text" size="30">`);
           tabela += (`</td>`);
           tabela += (`</tr>`);
         }
@@ -264,22 +260,23 @@ function itens() {
   });
 }
 
-function editarItemCD() {
+function editarContatoCD() {
 
   for (let i = 0; i < listaItem.length; i++) {
 
     edicaoItem[i] = {
-      "quantidade_previsto": parseInt(document.getElementById("quantidade_previsto" + i).value),
-      "quantidade_projeto_executivo": parseFloat(mascaraQuebrados(document.getElementById("quantidade_projeto_executivo" + i).value)),
-      "quantidade_termo_instalacao": parseFloat(mascaraQuebrados(document.getElementById("quantidade_termo_instalacao" + i).value)),
+      "nome": document.getElementById("nome" + i).value,
+      "email": document.getElementById("email" + i).value,
+      "funcao": document.getElementById("funcao" + i).value,
     };
 
-    // console.log(edicaoItem)
-    if (edicaoItem[i]["quantidade_previsto"] != listaItem[i]["quantidade_previsto"] || edicaoItem[i]["quantidade_projeto_executivo"] != listaItem[i]["quantidade_projeto_executivo"] || edicaoItem[i]["quantidade_termo_instalacao"] != listaItem[i]["quantidade_termo_instalacao"]) {
+    console.log(listaItem[i])
+    console.log(edicaoItem[i])
+    if (edicaoItem[i]["nome"] != listaItem[i]["nome"] || edicaoItem[i]["email"] != listaItem[i]["email"] || edicaoItem[i]["funcao"] != listaItem[i]["funcao"]) {
       //transforma as informações do token em json
       let corpo = JSON.stringify(edicaoItem[i]);
       //função fetch para mandar
-      fetch(servidor + 'read/cditens/' + meuCodigo + '/' + meuItem[i] + '/' + meuTipo[i], {
+      fetch(servidor + 'read/contato/' + listaItem[i]["cod_contato"] , {
         method: 'PUT',
         body: corpo,
         headers: {
@@ -295,7 +292,95 @@ function editarItemCD() {
         } else {
           erros(response.status);
         }
+        window.location.replace("./gerenciaCd.html");
       });
     }
   }
+}
+
+function novoContato() {
+
+  let infoContato = {
+    "cod_ibge": parseInt(meuCodigo),
+    "nome": document.getElementById("nome").value,
+    "email": document.getElementById("email").value,
+    "funcao": document.getElementById("funcao").value,
+  };
+
+  console.log(infoContato)
+  //transforma as informações em string para mandar
+  let corpo = JSON.stringify(infoContato);
+  //função fetch para mandar
+  fetch(servidor + 'read/contato', {
+    method: 'POST',
+    body: corpo,
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      alert('Contato inserido com sucesso!')
+      // location.reload();
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+function novoTelefone() {
+  let meuContato;
+
+  fetch(servidor + 'read/contato', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      response.json().then(function (json) {
+        
+        //Pega o ultimo contato salvo
+        for (let i = 0; i < json.length; i++) {
+          meuContato= json[i].cod_contato;
+        }
+        
+        console.log(meuContato);
+
+        let infoTelefone = {
+          "cod_contato": parseInt(meuContato),
+          "telefone": document.getElementById("telefone").value,
+          "tipo": document.getElementById("tipo").value,
+        };
+      
+        console.log(infoTelefone)
+        //transforma as informações em string para mandar
+        let corpo = JSON.stringify(infoTelefone);
+        //função fetch para mandar
+        fetch(servidor + 'read/telefone', {
+          method: 'POST',
+          body: corpo,
+          headers: {
+            'Authorization': 'Bearer ' + meuToken
+          },
+        }).then(function (response) {
+      
+          //tratamento dos erros
+          if (response.status == 200 || response.status == 201) {
+            alert('Telefone inserido com sucesso!')
+            document.getElementById('telefone').value='';
+            // location.reload();
+          } else {
+            erros(response.status);
+          }
+        });
+
+      });
+    } else {
+      erros(response.status);
+    }
+  });
 }
