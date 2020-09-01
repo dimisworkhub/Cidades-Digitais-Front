@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="bootstrap4\css\bootstrap.css"> <!-- CSS bootstrap -->
     <link rel="stylesheet" href="css/reset.css"> <!-- CSS reset -->
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="./css/multi.css">
     <!--Resource style -->
     <link rel="stylesheet" href="./css/style2.css">
     <script src="Js/modernizr.js"></script> <!-- Modernizr -->
@@ -139,11 +140,21 @@
                 </div>
                 <div class="modal-body" style="padding-bottom: 3rem;">
                     <div class="multisteps-form">
-
+                        <!--Barra de Progresso-->
+                        <div class="row">
+                            <div class="col-12 col-lg-12 ml-auto mr-auto mb-4">
+                                <div class="multisteps-form__progress">
+                                    <button class="multisteps-form__progress-btn js-active" type="button"
+                                        title="Cd Info">Informações do Contato</button>
+                                    <button class="multisteps-form__progress-btn" type="button"
+                                        title="OrdemServico">Telefone</button>
+                                </div>
+                            </div>
+                        </div>
                         <!--Formularios-->
                         <div class="row">
                             <div class="col-12 col-lg-12 m-auto">
-                                <form class="multisteps-form__form needs-validation" novalidate style="height: 350px;">
+                                <form class="multisteps-form__form needs-validation" style="height: 350px;">
                                     <!--Formulario 1 -->
                                     <div class="multisteps-form__panel shadow p-4 rounded bg-white js-active"
                                         data-animation="scaleIn">
@@ -166,11 +177,39 @@
                                             </div>
 
                                             <div class="button-row d-flex mt-4">
-                                                <button class="btn btn-primary multi-button ml-auto"
+                                                <button class="btn btn-primary multi-button ml-auto js-btn-next"
                                                     onclick="novoContato()" type="button">Cadastrar</button>
                                             </div>
                                         </div>
                                     </div>
+
+                                    <!--tabela telefone-->
+                                    <div class="multisteps-form__panel shadow p-4 rounded bg-white"
+                                        data-animation="scaleIn">
+                                        <h3 class="multisteps-form__title">Telefone</h3>
+                                        <div class="multisteps-form__content">
+                                            <div class="form-row mt-4">
+                                                <div class="col-12 col-sm-4">
+                                                    <input class="multisteps-form__input form-control" type="text"
+                                                        placeholder="Telefone" id="telefone" name="telefone" maxlength="11"/>
+                                                </div>
+                                                <div class="col-12 col-sm-6  ">
+
+                                                    <select class="multisteps-form__input form-control" name="tipo" id="tipo">
+                                                        <option value="WhatsApp">WhatsApp</option>
+                                                        <option value="Telefone">Telefone</option>
+                                                        <option value="Celular">Celular</option>
+                                                    </select>
+                                                </div>
+                                                
+                                                <div class="col-2 col-sm-2">
+                                                    <a class="js-btn-next"
+                                                        type="reset" onclick="novoTelefone()" title="Cadastrar"><img  src="img/add-icon.png" width="30px"></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </form>
                             </div>
                         </div>
@@ -186,6 +225,7 @@
 
 <script src="./Js/gerenciaCd.js"></script>
 <script src="./Js/subtabelas.js"></script>
+<script src="./Js/multi.js"></script>
 <script src="./Js/main.js"></script> <!-- Resource jQuery -->
 <script src="./Js/mask.js"></script>
 
