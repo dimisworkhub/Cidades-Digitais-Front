@@ -189,13 +189,14 @@
                                         <h3 class="multisteps-form__title">Telefone</h3>
                                         <div class="multisteps-form__content">
                                             <div class="form-row mt-4">
-                                                <div class="col-12 col-sm-4">
-                                                    <input class="multisteps-form__input form-control" type="text"
-                                                        placeholder="Telefone" id="telefone" name="telefone" maxlength="11"/>
+                                                <div class="col-12 col-sm-5">
+                                                    <input class="multisteps-form__input form-control telefone" type="text"
+                                                        placeholder="Telefone" id="telefone" name="telefone"/>
                                                 </div>
-                                                <div class="col-12 col-sm-6  ">
+                                                <div class="col-12 col-sm-5  ">
 
                                                     <select class="multisteps-form__input form-control" name="tipo" id="tipo">
+                                                        <option value="">Tipo</option>
                                                         <option value="WhatsApp">WhatsApp</option>
                                                         <option value="Telefone">Telefone</option>
                                                         <option value="Celular">Celular</option>
@@ -206,6 +207,10 @@
                                                     <a class="js-btn-next"
                                                         type="reset" onclick="novoTelefone()" title="Cadastrar"><img  src="img/add-icon.png" width="30px"></a>
                                                 </div>
+                                            </div>
+                                            <div class="button-row d-flex mt-4">
+                                                <button style="text-align: center; width: 100%;" class="btn btn-primary multi-button ml-auto js-btn-next"
+                                                    type="button">Concluir</button>
                                             </div>
                                         </div>
                                     </div>
