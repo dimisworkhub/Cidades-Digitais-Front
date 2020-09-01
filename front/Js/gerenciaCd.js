@@ -350,8 +350,6 @@ function novoTelefone() {
         
         console.log(meuContato);
 
-
-
         let infoTelefone = {
           "cod_contato": parseInt(meuContato),
           "telefone": document.getElementById("telefone").value,
@@ -380,15 +378,9 @@ function novoTelefone() {
           }
         });
 
-
-
-
       });
     } else {
       erros(response.status);
     }
   });
-
-
-  
 }
