@@ -88,7 +88,7 @@
                         <!-- arrumar depois para evitar problemas de espaço -->
                         <div class="col-md-12">
                             <div class="form-row">
-                                <button onclick="itens()" type="button" style="background-color:#959595"
+                                <button onclick="itensCD()" type="button" style="background-color:#959595"
                                     class="btn btn-primary">Itens</button>
                                 <button onclick="previsaoSub('2')" type="button" style="background-color:#959595"
                                     class="btn btn-primary">Previsão Empenho</button>
@@ -127,6 +127,58 @@
         </section>
         </div>
     </main>
+
+    <!-- Modal Contato -->
+    <div id="adicionarContato" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Adicionar Contato</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body" style="padding-bottom: 3rem;">
+                    <div class="multisteps-form">
+
+                        <!--Formularios-->
+                        <div class="row">
+                            <div class="col-12 col-lg-12 m-auto">
+                                <form class="multisteps-form__form needs-validation" novalidate style="height: 350px;">
+                                    <!--Formulario 1 -->
+                                    <div class="multisteps-form__panel shadow p-4 rounded bg-white js-active"
+                                        data-animation="scaleIn">
+                                        <h3 class="multisteps-form__title">Informações do Contato</h3>
+
+                                        <div class="multisteps-form__content">
+                                            <div class="form-row mt-4">
+                                                <div class="col-12 col-sm-12 mt-4">
+                                                    <input class="multisteps-form__input form-control " type="text" placeholder="Nome"
+                                                        name="nome" id="nome"  maxlength="50">
+                                                    </div>
+                                                <div class="col-12 col-sm-12 mt-4">
+                                                    <input class="multisteps-form__input form-control " type="text" placeholder="Função"
+                                                        name="funcao" id="funcao">
+                                                </div>
+                                                <div class="col-12 col-sm-12 mt-4">
+                                                    <input class="multisteps-form__input form-control " type="email" placeholder="E-mail"
+                                                        name="email" id="email">
+                                                </div>
+                                            </div>
+
+                                            <div class="button-row d-flex mt-4">
+                                                <button class="btn btn-primary multi-button ml-auto"
+                                                    onclick="novoContato()" type="button">Cadastrar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="fixed-bottom">
         <script height="100%" width="100%" src="./Js/menu.js"></script>
     </div>

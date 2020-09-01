@@ -187,7 +187,7 @@ function reajuste() {
           tabela += (`<td>`);
           tabela += listaReajuste[i]["ano_ref"];
           tabela += (`</td> <td>`);
-          tabela += (`<input class="percentual" value="` + (listaReajuste[i]["percentual"])*100 + `" id="percentual` + i + `" type="text">`);
+          tabela += (`<input class="percentual" value="` + listaReajuste[i]["percentual"] + `" id="percentual` + i + `" type="text">`);
           tabela += (`</td> <td>
           <button onclick=" apagado =` + listaReajuste[i]["ano_ref"] + `" class="btn btn-danger" data-toggle="modal" data-target="#deletarReajuste">
           <i class="material-icons"data-toggle="tooltip" title="Delete">&#xE872;</i>
@@ -209,20 +209,11 @@ function reajuste() {
 
 function editarReajuste() {
 
-  //para organizar a mascara
-  let percent,percent2,percent3,percent4;
-
   for (i = 0; i < listaReajuste.length; i++) {
-
-    //ajustar percentual:
-    percent = document.getElementById("percentual" +i).value;
-    percent2 = percent.split(",");
-    percent3 = percent2[1].split("%");
-    percent4 = (percent2[0] + percent3[0])/100;
     
     //cria json para edição
     edicaoReajuste[i] = {
-      "percentual": parseFloat(percent4),
+      "percentual": parseFloat(document.getElementById("percentual" +i).value),
     }
 
     if (edicaoReajuste[i]["percentual"] != listaReajuste[i]["percentual"]) {
@@ -259,7 +250,7 @@ function novoReajuste() {
   let infoReajuste = {
     "cod_lote": parseInt(meuCodigo),
     "ano_ref": parseInt(document.getElementById("ano_ref").value),
-    "percentual": parseFloat(percent2[0]),
+    "percentual": parseFloat(document.getElementById("percentual").value),
   };
 
   //transforma as informações em string para mandar
@@ -300,7 +291,7 @@ function apagarReajuste() {
       erros(response.status);
     }
     return response.json().then(function (json) {
-      console.log(json);
+      //console.log(json);
     });
   });
 }

@@ -1,7 +1,7 @@
 // máscara utilizada para varios campos
 function mascara(){
   $(document).ready(function(){
-    $('.percentual').inputmask('9{1,3},99%', {reverse: true, numericInput:true, placeholder: "0"});
+    $('.percentual').inputmask('9{1,3},99%', {autoUnmask: true, unmaskAsNumber: true, reverse: true, greedy: false, numericInput:true, placeholder: "0"});
     $('.data').mask('00/00/0000');
     $('.data2').mask('00/00');
     $('.contrato').mask('999-9999');
