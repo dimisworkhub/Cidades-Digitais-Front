@@ -127,9 +127,11 @@ function uacom() {
 				tabela += (`<td class="data">`);
 				tabela += arrumaData(listaUacom[i]["data"]);
 				tabela += (`</td> <td>`);
-				tabela += (`<input value="` + listaUacom[i]["titulo"] + `" id="titulo` + i + `" type="text" size="15">`);
+        tabela += listaUacom[i]["assunto"];
+        tabela += (`</td> <td>`);
+				tabela += listaUacom[i]["titulo"];
 				tabela += (`</td> <td>`);
-				tabela += (`<input value="` + listaUacom[i]["relato"] + `" id="relato` + i + `" type="text" size="60">`);
+				tabela += listaUacom[i]["relato"];
 				tabela += (`</td>`);
 				tabela += (`</tr>`);
 		    }
@@ -182,7 +184,6 @@ function editarUacom() {
 	  }
 	}
 }
-  
 
 //CD Contatos
 

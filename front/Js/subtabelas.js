@@ -424,6 +424,19 @@ function sublinhar2(valor, tamanho) {
 
 
 
+//variaveis comuns de itens:
+
+let listaItem = [],
+  meuItem = [],
+  meuTipo = [],
+  edicaoItem = [],
+  itemMudado = [];
+
+let caminhoFinal;
+
+
+
+
 
 //lote itens
 
@@ -534,7 +547,7 @@ function editarItemLote() {
 
 //CD Itens
 
-function itens() {
+function itensCD() {
 
   //cria o botão para editar
   document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarItemCD()" class="btn btn-success">Salvar Alterações em Itens</button>`);
@@ -651,13 +664,8 @@ function editarItemCD() {
 
 //Itens de fiscalizacao
 
-let listaItem = [],
-  meuItem = [],
-  meuTipo = [],
-  edicaoItem = [],
-  itemMudado = [];
-
-let caminhoFinal;
+//apenas até ser testado algo melhor
+let guardaI = "";
 
 //caso itensfatura seja o selecionado
 let meuEmpenho = [];
@@ -842,7 +850,6 @@ function descricaoItem2(itemDescrito) {
 function editarItem(caminho) {
 
   let mensagem = "";
-  let guardaI = [];
 
   for (let i = 0; i < listaItem.length; i++) {
 
@@ -887,9 +894,9 @@ function editarItem(caminho) {
 
       if (edicaoItem[i].quantidade > (listaItem[i].quantidade_disponivel + listaItem[i].quantidade)) {
 
-        mensagem += listaItem[valor].cod_tipo_item + "." + listaItem[valor].cod_item + ", ";
+        mensagem += listaItem[i].cod_tipo_item + "." + listaItem[i].cod_item + ", ";
 
-        guardaI = i++;
+        guardaI += i + "/";
 
       } else {
         fetchEdit(i);
@@ -897,15 +904,19 @@ function editarItem(caminho) {
     }
 
   }
+
+  //analise final
   if(mensagem != ""){
-    modalconf(i, mensagem);
+    modalconf(mensagem);
   }
-  location.reload();
+  else{
+    location.reload();
+  }
 }
 
 
 
-function modalconf(valor, mensagemFinal){
+function modalconf(mensagemFinal){
   //Alerta inteligente que necessita de uma confirmação para continuar
   Swal.fire({
     title: 'Tem certeza?',
@@ -918,13 +929,15 @@ function modalconf(valor, mensagemFinal){
   }).then((result) => {
     
     if (result.value) {
+      let guardaI2 = guardaI.split("/");
+      for(i=0;i<guardaI2.length;i++){
+        fetchEdit(guardaI2[i]);
+      }
       Swal.fire(
         'Sucesso!',
         'Item foi inserido!',
         'success'
       )
-
-      fetchEdit(valor);
 
     } else{
       Swal.fire(
@@ -933,6 +946,8 @@ function modalconf(valor, mensagemFinal){
         'error'
       )
     }
+
+    //location.reload();
   });
 }
 
@@ -940,7 +955,7 @@ function fetchEdit(valor){
 
   //transforma as informações do token em json
   corpo = JSON.stringify(edicaoItem[valor]);
-  //console.log(edicaoItem[valor]);
+  console.log(edicaoItem[valor]);
 
   //função fetch para mandar
   fetch(caminhoFinal, {
@@ -955,7 +970,6 @@ function fetchEdit(valor){
 
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
-      //location.reload();
     } else {
       erros(response.status);
     }
