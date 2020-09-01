@@ -372,6 +372,7 @@ function novoTelefone() {
           if (response.status == 200 || response.status == 201) {
             alert('Telefone inserido com sucesso!')
             document.getElementById('telefone').value='';
+            document.getElementById('tipo').value='';
             // location.reload();
           } else {
             erros(response.status);
