@@ -1,7 +1,7 @@
 // máscara utilizada para varios campos
 function mascara(){
   $(document).ready(function(){
-    $('.telefone').inputmask({ mask: ["(99) 9999-9999", "(99) 99999-9999", ], keepStatic: true});
+    $('.telefone').inputmask({ mask: ["(99) 9999-9999", "(99) 99999-9999", ], autoUnmask: true, keepStatic: true});
     $('.percentual').inputmask('9{1,3},99%', {autoUnmask: true, unmaskAsNumber: true, reverse: true, greedy: false, numericInput:true, placeholder: "0"});
     $('.data').mask('00/00/0000');
     $('.data2').mask('00/00');
