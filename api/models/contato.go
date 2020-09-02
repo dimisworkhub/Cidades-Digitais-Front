@@ -47,11 +47,13 @@ func (contato *Contato) FindAllContato(db *gorm.DB, codIbge uint32, cnpj string)
 	if codIbge != 0 {
 		err = db.Debug().Select("contato.*").
 			Where("contato.cod_ibge = ?", codIbge).
-			Order("contato.nome").Error
+			Order("contato.nome").
+			Scan(&allContato).Error
 	} else {
 		err = db.Debug().Select("contato.*").
 			Where("contato.cnpj = ?", cnpj).
-			Order("contato.nome").Error
+			Order("contato.nome").
+			Scan(&allContato).Error
 	}
 
 	if err != nil {
