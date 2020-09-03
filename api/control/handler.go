@@ -82,7 +82,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	=========================	*/
 
 	//	LISTA CONTATO
-	r.HandleFunc(config.CONTATO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllContato))).Methods(http.MethodGet)
+	r.HandleFunc("/read/contato/{cod_ibge}/{cnpj}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllContato))).Methods(http.MethodGet)
 
 	//	SALVA CONTATO
 	r.HandleFunc(config.CONTATO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateContato))).Methods(http.MethodPost)
@@ -162,7 +162,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	=========================	*/
 
 	//	LISTA UACOM
-	r.HandleFunc(config.UACOM_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllUacom))).Methods(http.MethodGet)
+	r.HandleFunc("/read/uacom/{cod_ibge}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllUacom))).Methods(http.MethodGet)
 
 	//	SALVA UACOM
 	r.HandleFunc(config.UACOM_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateUacom))).Methods(http.MethodPost)
@@ -180,8 +180,14 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 		ROTAS EM UACOM ASSUNTO
 	=========================	*/
 
+	//	LISTA UACOM (cod_ibge, data)
+	r.HandleFunc("/read/uacom/{cod_ibge}/{data}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllUacomAssunto))).Methods(http.MethodGet)
+
 	//	SALVA UACOM ASSUNTO
 	r.HandleFunc(config.UACOM_ASSUNTO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateUacomAssunto))).Methods(http.MethodPost)
+
+	//	APAGA UACOM (cod_ibge, data, cod_assunto)
+	r.HandleFunc(config.UACOM_ASSUNTO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteUacomAssunto))).Methods(http.MethodDelete)
 
 	/*	=========================
 		ROTAS EM PONTO

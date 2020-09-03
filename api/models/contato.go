@@ -38,12 +38,24 @@ func (contato *Contato) SaveContato(db *gorm.DB) (*Contato, error) {
 	FUNCAO LISTAR TODOS CONTATO
 =========================  */
 
-func (contato *Contato) FindAllContato(db *gorm.DB) (*[]Contato, error) {
+func (contato *Contato) FindAllContato(db *gorm.DB, codIbge uint32, cnpj string) (*[]Contato, error) {
 
 	allContato := []Contato{}
+	var err error
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&Contato{}).Find(&allContato).Error
+	if codIbge != 0 {
+		err = db.Debug().Select("contato.*").
+			Where("contato.cod_ibge = ?", codIbge).
+			Order("contato.nome").
+			Scan(&allContato).Error
+	} else {
+		err = db.Debug().Select("contato.*").
+			Where("contato.cnpj = ?", cnpj).
+			Order("contato.nome").
+			Scan(&allContato).Error
+	}
+
 	if err != nil {
 		return &[]Contato{}, err
 	}
