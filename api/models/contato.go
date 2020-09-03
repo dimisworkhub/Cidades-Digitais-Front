@@ -54,7 +54,7 @@ func (contato *Contato) FindAllContato(db *gorm.DB, codIbge uint32, cnpj string)
 		err = db.Debug().Table("contato").
 			Select("contato.*").
 			Where("contato.cnpj = ?", cnpj).
-			Order("contato.nome").qq
+			Order("contato.nome").
 			Scan(&allContato).Error
 	}
 
