@@ -47,12 +47,16 @@ func (uacom *Uacom) FindUacomByID(db *gorm.DB, codIbge uint32, data string) (*Ua
 	FUNCAO LISTAR TODAS UACOM
 =========================  */
 
-func (uacom *Uacom) FindAllUacom(db *gorm.DB) (*[]Uacom, error) {
+func (uacom *Uacom) FindAllUacom(db *gorm.DB, codIbge uint32) (*[]Uacom, error) {
 
 	allUacom := []Uacom{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&Uacom{}).Find(&allUacom).Error
+	err := db.Debug().Select("uacom.*").
+		Where("uacom.cod_ibge = ?", codIbge).
+		Order("uacom.data").
+		Scan(&allUacom).Error
+
 	if err != nil {
 		return &[]Uacom{}, err
 	}
