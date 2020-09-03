@@ -152,15 +152,15 @@ func (itensPrevisaoEmpenho *ItensPrevisaoEmpenho) FindAllItensPrevisaoEmpenho(db
 				quantidadeDisponivel = 0
 				itensPrevisaoEmpenho.QuantidadeDisponivel = 0
 
-				//	Busca a soma de todos cd_itens.quantidade_previsto, de acordo com a clausula WHERE
+				//	Busca a soma de todos cd_itens.quantidade_projeto_executivo, de acordo com a clausula WHERE
 				db.Debug().Table("itens_previsao_empenho").
-					Select("SUM(cd_itens.quantidade_previsto) AS quantidade_disponivel").
+					Select("SUM(cd_itens.quantidade_projeto_executivo) AS quantidade_disponivel").
 					Joins("INNER JOIN cd ON itens_previsao_empenho.cod_lote = cd.cod_lote").
 					Joins("INNER JOIN cd_itens ON cd.cod_ibge = cd_itens.cod_ibge AND itens_previsao_empenho.cod_item = cd_itens.cod_item AND itens_previsao_empenho.cod_tipo_item = cd_itens.cod_tipo_item").
 					Where("itens_previsao_empenho.cod_previsao_empenho = ? AND itens_previsao_empenho.cod_item = ? AND itens_previsao_empenho.cod_tipo_item = ?", codPrevisaoEmpenho, data.CodItem, data.CodTipoItem).
 					Scan(&itensPrevisaoEmpenho)
 
-				//	quantidadeDisponivel recebe a soma de todos cd_itens.quantidade_previsto
+				//	quantidadeDisponivel recebe a soma de todos cd_itens.quantidade_projeto_executivo
 				quantidadeDisponivel = itensPrevisaoEmpenho.QuantidadeDisponivel
 
 				itensPrevisaoEmpenho.QuantidadeDisponivel = 0
@@ -172,7 +172,7 @@ func (itensPrevisaoEmpenho *ItensPrevisaoEmpenho) FindAllItensPrevisaoEmpenho(db
 					Where("itens_previsao_empenho.cod_item = ? AND itens_previsao_empenho.cod_tipo_item = ? AND itens_previsao_empenho.cod_lote = ? AND previsao_empenho.tipo = 'o'", data.CodItem, data.CodTipoItem, codLote).
 					Scan(&itensPrevisaoEmpenho)
 
-				//	quantidadeDisponivel = (soma de todos cd_itens.quantidade_previsto) - (soma de todos itens_previsao_empenho.quantidade)
+				//	quantidadeDisponivel = (soma de todos cd_itens.quantidade_projeto_executivo) - (soma de todos itens_previsao_empenho.quantidade)
 				quantidadeDisponivel -= itensPrevisaoEmpenho.QuantidadeDisponivel
 
 				//	Arredondamento para duas casas decimais
