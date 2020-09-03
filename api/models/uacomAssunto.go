@@ -36,7 +36,8 @@ func (uacomAssunto *UacomAssunto) FindAllUacomAssunto(db *gorm.DB, codIbge uint3
 	allUacomAssunto := []UacomAssunto{}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err := db.Debug().Select("uacom_assunto.*").
+	err := db.Debug().Table("uacom_assunto").
+		Select("uacom_assunto.*").
 		Where("cod_ibge = ? AND data = ?", codIbge, data).
 		Order("uacom_assunto.cod_assunto").
 		Scan(&allUacomAssunto).Error
