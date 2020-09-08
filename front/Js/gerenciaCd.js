@@ -195,7 +195,7 @@ function contatos() {
   document.getElementById("editar2").innerHTML = (`<button id="editar" onclick="editarContatoCD()" class="btn btn-success">Salvar Alterações</button>`);
 
   //função fetch para chamar contatos da tabela
-  fetch(servidor + 'read/contato', {
+  fetch(servidor + 'read/contato/'+meuCodigo+'/0', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -330,9 +330,11 @@ function novoContato() {
 }
 
 function novoTelefone() {
-  let meuContato;
 
-  fetch(servidor + 'read/contato', {
+  let meuContato;
+  let infoTelefone= [];
+
+  fetch(servidor + 'read/contato/'+meuCodigo+'/0', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -348,40 +350,66 @@ function novoTelefone() {
           meuContato= json[i].cod_contato;
         }
         
-        console.log(meuContato);
+        maisInput(false);
 
-        let infoTelefone = {
-          "cod_contato": parseInt(meuContato),
-          "telefone": document.getElementById("telefone").value,
-          "tipo": document.getElementById("tipo").value,
-        };
-      
-        console.log(infoTelefone)
-        //transforma as informações em string para mandar
-        let corpo = JSON.stringify(infoTelefone);
-        //função fetch para mandar
-        fetch(servidor + 'read/telefone', {
-          method: 'POST',
-          body: corpo,
-          headers: {
-            'Authorization': 'Bearer ' + meuToken
-          },
-        }).then(function (response) {
-      
-          //tratamento dos erros
-          if (response.status == 200 || response.status == 201) {
-            alert('Telefone inserido com sucesso!')
-            document.getElementById('telefone').value='';
-            document.getElementById('tipo').value='';
-            
-          } else {
-            erros(response.status);
-          }
-        });
+        for (let i = 0; i < indice+1; i++) {
+          infoTelefone[i] = {
+            "cod_contato": parseInt(meuContato),
+            "telefone": document.getElementById("telefone"+i).value,
+            "tipo": document.getElementById("tipo"+i).value,
+          };
+        
 
+          //transforma as informações em string para mandar
+          let corpo = JSON.stringify(infoTelefone[i]);
+          console.log(infoTelefone[i]);
+          //função fetch para mandar
+          fetch(servidor + 'read/telefone', {
+            method: 'POST',
+            body: corpo,
+            headers: {
+              'Authorization': 'Bearer ' + meuToken
+            },
+          }).then(function (response) {
+
+            //tratamento dos erros
+            if (response.status == 200 || response.status == 201) {
+              // alert('O telefone: '+ infoTelefone[i].telefone +' do tipo: '+ infoTelefone[i].tipo +' cadastrado com sucesso!');
+            } else {
+              erros(response.status);
+            }
+          });
+        }
+        alert('O(s) telefone(s) foi(ram) cadastrado(s) com sucesso!');
+        location.reload();
       });
     } else {
       erros(response.status);
     }
   });
+}
+
+let indice = 0;
+function maisInput(passe){
+  if(passe == true){
+    $(document).ready(function(){
+      mascara();
+      $("side").append('<div class="form-row mt-4">'+
+                          '<div class="col-12 col-sm-6">'+
+                            '<input class="multisteps-form__input form-control telefone" type="text" placeholder="Telefone" id="telefone'+indice+'" name="telefone"/>'+
+                          '</div>'+
+                          '<div class="col-12 col-sm-6">'+
+                            '<select class="multisteps-form__input form-control" name="tipo" id="tipo'+ indice +'">'+
+                              '<option value="">Tipo</option>'+
+                              '<option value="WhatsApp">WhatsApp</option>'+
+                              '<option value="Casa">Casa</option>'+
+                              '<option value="Celular">Celular</option>'+
+                              '<option value="Trabalho">Trabalho</option>'+
+                            '</select>'+
+                          '</div>'+
+                        '</div>')
+    });
+    indice = indice + 1;
+  }
+  return indice;
 }

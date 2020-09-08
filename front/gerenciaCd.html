@@ -187,32 +187,35 @@
                                     <div class="multisteps-form__panel shadow p-4 rounded bg-white"
                                         data-animation="scaleIn">
                                         <h3 class="multisteps-form__title">Telefone</h3>
-                                        <div class="multisteps-form__content">
-                                            <div class="form-row mt-4">
-                                                <div class="col-12 col-sm-5">
+                                        <div class="multisteps-form__content ">
+                                            <div class="form-row mt-4 ">
+                                                <div class="col-12 col-sm-6">
                                                     <input class="multisteps-form__input form-control telefone" type="text"
-                                                        placeholder="Telefone" id="telefone" name="telefone"/>
+                                                        placeholder="Telefone" id="telefone0" name="telefone"/>
                                                 </div>
-                                                <div class="col-12 col-sm-5  ">
+                                                <div class="col-12 col-sm-6  ">
 
-                                                    <select class="multisteps-form__input form-control" name="tipo" id="tipo">
+                                                    <select class="multisteps-form__input form-control tipo" name="tipo" id="tipo0">
                                                         <option value="">Tipo</option>
                                                         <option value="WhatsApp">WhatsApp</option>
-                                                        <option value="Telefone">Telefone</option>
+                                                        <option value="Casa">Casa</option>
                                                         <option value="Celular">Celular</option>
+                                                        <option value="Trabalho">Trabalho</option>
                                                     </select>
                                                 </div>
-                                                
-                                                <div class="col-2 col-sm-2">
-                                                    <a class="js-btn-next"
-                                                        type="reset" onclick="novoTelefone()" title="Cadastrar"><img  src="img/add-icon.png" width="30px"></a>
-                                                </div>
+                                            
                                             </div>
-                                            <div class="button-row d-flex mt-4">
-                                                <button style="text-align: center; width: 100%;" class="btn btn-primary multi-button ml-auto js-btn-next"
-                                                    onclick="location.reload();" type="button">Concluir</button>
-                                            </div>
+
+                                            <side id="maisTelefone"></side>
+                                            
+                                            
                                         </div>
+                                        <div class="button-row d-flex mt-4">
+                                            <a class="js-btn-next" type="reset" id="clicaTelefone" onclick="maisInput(true);" title="Adicionar"><img  src="img/add-icon.png" width="30px"></a>
+                                            <button  class="btn btn-primary multi-button ml-auto js-btn-next" onclick="novoTelefone();" type="button">Concluir</button>
+                                        </div>
+
+                                    
                                     </div>
 
                                 </form>
