@@ -76,11 +76,11 @@ let listaUacom = [], meuData = [];
 function uacom() {
 
 	//cria o botão para editar
-	document.getElementById("editar").innerHTML = "";
-	document.getElementById("editar2").innerHTML = (`<button id="editar" onclick="editarUacom()" class="btn btn-success">Salvar Acompanhamento</button>`);
+	document.getElementById("editar").innerHTML = (`<button class="btn btn-success" data-toggle="modal" data-target="#adicionarUacom">Novo Acompanhamento</button>`);
+	document.getElementById("editar2").innerHTML = "";
   
 	//função fetch para chamar itens da tabela
-	fetch(servidor + 'read/uacom', {
+	fetch(servidor + 'read/uacom/' + meuCodigo, {
 	  method: 'GET',
 	  headers: {
 		'Authorization': 'Bearer ' + meuToken
@@ -97,7 +97,9 @@ function uacom() {
 		//pegar o json que possui a tabela
 		response.json().then(function (json) {
   
-			//console.log(json);
+      //console.log(json);
+      
+      listaUacom=json;
 	
 			let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
 			<tr>
@@ -110,14 +112,6 @@ function uacom() {
 			</thead>`);
 			tabela += (`<tbody>`);
   
-			//cria uma lista apenas com os itens do lote selecionado
-			let j = 0;
-			for (let i = 0; i < json.length; i++) {
-				if (json[i]["cod_ibge"] == meuCodigo) {
-					listaUacom[j] = json[i];
-					j++;
-				}
-			}
 		    for (i = 0; i < listaUacom.length; i++) {
   
 				//salva os valores para edição
@@ -127,12 +121,18 @@ function uacom() {
 				tabela += (`<td class="data">`);
 				tabela += arrumaData(listaUacom[i]["data"]);
 				tabela += (`</td> <td>`);
-        tabela += listaUacom[i]["assunto"];
+        tabela += listaAssunto(i);
         tabela += (`</td> <td>`);
 				tabela += listaUacom[i]["titulo"];
 				tabela += (`</td> <td>`);
 				tabela += listaUacom[i]["relato"];
-				tabela += (`</td>`);
+        tabela += (`</td>`);
+        tabela += (`</td> <td> 
+                  <span class="d-flex">
+                  <button onclick="editarUacom(` + i + `)" class="btn btn-success">
+                  <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
+                  </button>
+                  </span> </td>`);
 				tabela += (`</tr>`);
 		    }
 		    tabela += (`</tbody>`);
@@ -143,47 +143,171 @@ function uacom() {
 
 		});
 	  } else {
-		erros(response.status);
+		  //erros(response.status);
 	  }
 	});
 }
-  
-function editarUacom() {
 
-  let edicaoUacom = [];
-  
-	for (let i = 0; i < listaUacom.length; i++) {
-  
-	  edicaoUacom[i] = {
-		"titulo": document.getElementById("titulo" + i).value,
-		"relato": document.getElementById("relato" + i).value,
-	  };
-  
-	  // console.log(edicaoUacom)
-	  if (edicaoUacom[i]["data"] != listaUacom[i]["data"] || edicaoUacom[i]["titulo"] != listaUacom[i]["titulo"] || edicaoUacom[i]["relato"] != listaUacom[i]["relato"]) {
-		//transforma as informações do token em json
-		let corpo = JSON.stringify(edicaoUacom[i]);
-		//função fetch para mandar
-		fetch(servidor + 'read/uacom/' + meuCodigo + '/' + meuData[i], {
-		  method: 'PUT',
-		  body: corpo,
-		  headers: {
-			'Authorization': 'Bearer ' + meuToken
-		  },
-		}).then(function (response) {
-		  //checar o status do pedido
-		  console.log(response.statusText);
-  
-		  //tratamento dos erros
-		  if (response.status == 200 || response.status == 201) {
-			  location.reload();
-		  } else {
-			  erros(response.status);
-		  }
-		});
-	  }
-	}
+function listaAssunto(valor){
+  fetch(servidor + 'read/uacom/' + meuCodigo + "/" + meuData[valor], {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      response.json().then(function (json) {
+        
+        let assuntos;
+
+        console.log(json);
+        // seleciona o Uacom
+
+
+        return assuntos;
+
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+  return "Assuntos vão aqui.";
 }
+  
+// function editarUacom(valor) {
+
+//   document.getElementById("data").value = arrumaData(listaUacom[i]["data"]);
+//   document.getElementById("titulo").value = listaUacom[i]["titulo"];
+//   document.getElementById("relato").value = listaUacom[i]["relato"];
+
+//   let edicaoUacom = [];
+  
+// 	for (let i = 0; i < listaUacom.length; i++) {
+  
+// 	  edicaoUacom[i] = {
+// 		"titulo": document.getElementById("titulo" + i).value,
+// 		"relato": document.getElementById("relato" + i).value,
+// 	  };
+  
+// 	  // console.log(edicaoUacom)
+// 	  if (edicaoUacom[i]["data"] != listaUacom[i]["data"] || edicaoUacom[i]["titulo"] != listaUacom[i]["titulo"] || edicaoUacom[i]["relato"] != listaUacom[i]["relato"]) {
+//       //transforma as informações do token em json
+//       let corpo = JSON.stringify(edicaoUacom[i]);
+//       //função fetch para mandar
+//       fetch(servidor + 'read/uacom/' + meuCodigo + '/' + meuData[i], {
+//         method: 'PUT',
+//         body: corpo,
+//         headers: {
+//         'Authorization': 'Bearer ' + meuToken
+//         },
+//       }).then(function (response) {
+//         //checar o status do pedido
+//         console.log(response.statusText);
+    
+//         //tratamento dos erros
+//         if (response.status == 200 || response.status == 201) {
+//           location.reload();
+//         } else {
+//           erros(response.status);
+//         }
+//       });
+// 	  }
+// 	}
+// }
+
+function novoUacom() {
+
+  let infoUacom = {
+    "cod_ibge": parseInt(meuCodigo),
+    "data": mascaraData(document.getElementById("data").value),
+    "relato": document.getElementById("relato").value,
+    "titulo": document.getElementById("titulo").value,
+  };
+
+  //transforma as informações em string para mandar
+  let corpo = JSON.stringify(infoUacom);
+
+  console.log(corpo);
+  //função fetch para mandar
+  fetch(servidor + 'read/uacom', {
+    method: 'POST',
+    body: corpo,
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      alert('Acompanhamento inserido com sucesso!');
+      // location.reload();
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+function novoassunto() {
+
+  fetch(servidor + 'read/assunto', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      response.json().then(function (json) {
+        
+        //Pega o ultimo Uacom salvo
+        for (let i = 0; i < json.length; i++) {
+          meuData= json[i].cod_uacom;
+        }
+
+        let infoAssunto = {
+          "cod_uacom": parseInt(meuData),
+          "assunto": document.getElementById("assunto").value,
+          "descricao": document.getElementById("descricao").value,
+        };
+      
+        console.log(infoAssunto);
+        //transforma as informações em string para mandar
+        let corpo = JSON.stringify(infoAssunto);
+        //função fetch para mandar
+        fetch(servidor + 'read/assunto', {
+          method: 'POST',
+          body: corpo,
+          headers: {
+            'Authorization': 'Bearer ' + meuToken
+          },
+        }).then(function (response) {
+      
+          //tratamento dos erros
+          if (response.status == 200 || response.status == 201) {
+            alert('Assunto inserido com sucesso!')
+            document.getElementById('assunto').value='';
+            document.getElementById('tipo').value='';
+            
+          } else {
+            erros(response.status);
+          }
+        });
+
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+
+
+
+
+
 
 //CD Contatos
 
