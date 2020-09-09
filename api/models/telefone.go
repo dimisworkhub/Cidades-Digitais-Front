@@ -29,15 +29,19 @@ func (telefone *Telefone) SaveTelefone(db *gorm.DB) (*Telefone, error) {
 }
 
 /*  =========================
-	FUNCAO LISTAR TODAS TELEFONE
+	FUNCAO LISTAR TODOS TELEFONE
 =========================  */
 
-func (telefone *Telefone) FindAllTelefone(db *gorm.DB) (*[]Telefone, error) {
+func (telefone *Telefone) FindAllTelefone(db *gorm.DB, codContato uint32) (*[]Telefone, error) {
 
 	allTelefone := []Telefone{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&Telefone{}).Find(&allTelefone).Error
+	err := db.Debug().Table("telefone").
+		Select("telefone.*").
+		Where("telefone.cod_contato = ?", codContato).
+		Order("telefone.cod_telefone").
+		Scan(&allTelefone).Error
 	if err != nil {
 		return &[]Telefone{}, err
 	}
