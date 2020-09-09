@@ -91,10 +91,20 @@ func (server *Server) GetAllTelefone(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//	Vars retorna as variaveis de rota
+	vars := mux.Vars(r)
+
+	//	codContato armazena a chave primaria da tabela CD
+	codContato, err := strconv.ParseUint(vars["cod_contato"], 10, 32)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
 	telefone := models.Telefone{}
 
 	//	telefones armazena os dados buscados no banco de dados
-	allTelefone, err := telefone.FindAllTelefone(server.DB)
+	allTelefone, err := telefone.FindAllTelefone(server.DB, uint32(codContato))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))
