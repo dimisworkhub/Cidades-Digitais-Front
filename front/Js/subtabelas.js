@@ -423,7 +423,6 @@ function sublinhar2(valor, tamanho) {
 
 
 
-
 //variaveis comuns de itens:
 
 let listaItem = [],
@@ -433,8 +432,6 @@ let listaItem = [],
   itemMudado = [];
 
 let caminhoFinal;
-
-
 
 
 
@@ -513,7 +510,7 @@ function editarItemLote() {
     //cria json para edição
     //função splitPreco é usada aqui dentro
     edicaoItem[i] = {
-      "preco": parseFloat(mascaraPreco(document.getElementById("preco" + i).value)),
+      "preco": parseFloat(mascaraQuebrados(document.getElementById("preco" + i).value)),
     };
 
     if (listaItem[i]["preco"] != edicaoItem[i]["preco"]) {
@@ -657,8 +654,6 @@ function editarItemCD() {
     }
   }
 }
-
-
 
 
 
@@ -870,92 +865,112 @@ function editarItem(caminho) {
       }
 
       //Para os casos especificos em tipos de item 8,9 e 10. Validos apenas em itens de 1 a 5 e de fatura ou previsão.
-      if (listaItem[i].cod_tipo_item >= "8" && listaItem[i].cod_tipo_item <= "10" && (caminho == "itensfatura" || caminho == "itensprevisao") && listaItem[i].tipo == "o") {
+      // if (listaItem[i].cod_tipo_item >= "8" && listaItem[i].cod_tipo_item <= "10" && (caminho == "itensfatura" || caminho == "itensprevisao") && listaItem[i].tipo == "o") {
 
-        //valor de limite
-        //utiliza os valores atualizados
-        let valorMax = listaItem[i].quantidade_disponivel * edicaoItem[i].valor;
+      //   //valor de limite
+      //   //utiliza os valores atualizados
+      //   let valorMax = listaItem[i].quantidade_disponivel * edicaoItem[i].valor;
 
-        //processo para pegar os outros valores:
-        let valorSoma = "";
-        for (let j = 0; j < listaItem.length; j++) {
-          //garantindo ser um dos valores com mesmo item e do mesmo grupo de tipos
-          if (listaItem[i].cod_tipo_item >= "8" && listaItem[i].cod_tipo_item <= "10" && listaItem[j].cod_item == listaItem[i].cod_item) {
+      //   //processo para pegar os outros valores:
+      //   let valorSoma = "";
+      //   for (let j = 0; j < listaItem.length; j++) {
+      //     //garantindo ser um dos valores com mesmo item e do mesmo grupo de tipos
+      //     if (listaItem[i].cod_tipo_item >= "8" && listaItem[i].cod_tipo_item <= "10" && listaItem[j].cod_item == listaItem[i].cod_item) {
 
-            //somando todos os compativeis pela ultima mudança deles
-            valorSoma = (edicaoItem[j].valor * edicaoItem[j].quantidade) + valorSoma;
-          }
-        }
-        if (valorMax < valorSoma) {
-          alert("Há um problema no item " + listaItem[i].cod_tipo_item + "." + listaItem[i].cod_item + ". Ele está ultrapassando o limite do seu grupo.");
-        }
+      //       if(edicaoItem[j].valor != undefined && edicaoItem[j].quantidade != undefined){
+      //         //somando todos os compativeis pela ultima mudança deles
+      //         valorSoma = (edicaoItem[j].valor * edicaoItem[j].quantidade) + valorSoma;
+      //       }else{
+      //         //somando todos os compativeis pela ultima mudança deles
+      //         valorSoma = (listaItem[j].valor * listaItem[j].quantidade) + valorSoma;
+      //       }
+      //     }
+      //   }
+      //   if (valorMax < valorSoma) {
+      //     alert("Há um problema no item " + listaItem[i].cod_tipo_item + "." + listaItem[i].cod_item + ". Ele está ultrapassando o limite do seu grupo.");
+      //   }
+
+      // }
+
+      //processo necessário para poder enviar quando entra no modal regulador de quantidade
+      if (edicaoItem[i].quantidade > (listaItem[i].quantidade_disponivel + listaItem[i].quantidade)) {
+
+        //para colocar na mensagem de aviso
+        mensagem += listaItem[i].cod_tipo_item + "." + listaItem[i].cod_item + ", ";
+        //carrega todos os valores que foram alterados
+        guardaI += i + "/";
 
       }
 
-      if (edicaoItem[i].quantidade > (listaItem[i].quantidade_disponivel + listaItem[i].quantidade)) {
-
-        mensagem += listaItem[i].cod_tipo_item + "." + listaItem[i].cod_item + ", ";
-
-        guardaI += i + "/";
-
-      } else {
+      //casos normais
+      else {
         fetchEdit(i);
       }
     }
 
   }
 
-  //analise final
+  //analise final quando alguma quantidade passa do disponível (envia para o modal se necessário)
   if(mensagem != ""){
-    modalconf(mensagem);
+
+    //Alerta inteligente que necessita de uma confirmação para continuar
+    Swal.fire({
+      title: 'Tem certeza?',
+      text: "A Quantidade inserida do(s) item(ns) " + mensagem + " é maior que a Quantidade Disponível!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sim, tenho certeza!'
+    }).then((result) => {
+      
+      if (result.value) {
+        resultado=true;
+
+        Swal.fire(
+          'Sucesso!',
+          'Item foi inserido!',
+          'success'
+        )
+
+        fetchEditEspecial();
+        //location.reload();
+
+      } else{
+        resultado=false;
+
+        Swal.fire(
+          'Cancelado!',
+          'O item não foi inserido!',
+          'error'
+        )
+
+      }
+    });
   }
+
+  //caso não haja nenhuma quantidade que passe
   else{
     location.reload();
   }
+
 }
 
+//caso especial para quando passa. Serve apenas para passar todos os que passaram pelo fetch normal
+function fetchEditEspecial(){
 
+  let iDeAgora = guardaI.split("/");
 
-function modalconf(mensagemFinal){
-  //Alerta inteligente que necessita de uma confirmação para continuar
-  Swal.fire({
-    title: 'Tem certeza?',
-    text: "A Quantidade inserida do(s) item(ns) " + mensagemFinal + " é maior que a Quantidade Disponível!",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Sim, tenho certeza!'
-  }).then((result) => {
-    
-    if (result.value) {
-      let guardaI2 = guardaI.split("/");
-      for(i=0;i<guardaI2.length;i++){
-        fetchEdit(guardaI2[i]);
-      }
-      Swal.fire(
-        'Sucesso!',
-        'Item foi inserido!',
-        'success'
-      )
-
-    } else{
-      Swal.fire(
-        'Cancelado!',
-        'O item não foi inserido!',
-        'error'
-      )
-    }
-
-    //location.reload();
-  });
+  for(let i = 0; i < (iDeAgora.length-1); i++){
+    console.log(iDeAgora[i]);
+    fetchEdit(iDeAgora[i]);
+  }
 }
 
 function fetchEdit(valor){
 
   //transforma as informações do token em json
   corpo = JSON.stringify(edicaoItem[valor]);
-  console.log(edicaoItem[valor]);
 
   //função fetch para mandar
   fetch(caminhoFinal, {
@@ -970,6 +985,7 @@ function fetchEdit(valor){
 
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
+      console.log(corpo + " OK");
     } else {
       erros(response.status);
     }

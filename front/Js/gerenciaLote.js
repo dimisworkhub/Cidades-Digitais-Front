@@ -42,29 +42,9 @@ window.onload = function () {
 
   //estes campos precisam de adaptações para a mascara
 
-  //exemplo:
-  //primeiro separar o valor inicial em uma variavel
-  let data1 = localStorage.getItem("dt_inicio_vig");
-  //depois utilizar split
-  let dataSeparada1 = data1.split("-");
-  //por fim, retirar o horario que aparece normalmente junto ao formato de data
-  let dataEspecial1 = dataSeparada1[2].split("T");
-
-  //o mesmo se aplica nos outros 2
-
-  let data2 = localStorage.getItem("dt_final_vig");
-  let dataSeparada2 = data2.split("-");
-  let dataEspecial2 = dataSeparada2[2].split("T");
-
-  let data3 = localStorage.getItem("dt_reajuste");
-  let dataSeparada3 = data3.split("-");
-  let dataEspecial3 = dataSeparada3[2].split("T");
-
-  //colocar os valores nos campos necessarios
-
-  document.getElementById("dt_inicio_vig").value = dataEspecial1[0] + dataSeparada1[1] + dataSeparada1[0];
-  document.getElementById("dt_final_vig").value = dataEspecial2[0] + dataSeparada2[1] + dataSeparada2[0];
-  document.getElementById("dt_reajuste").value = dataEspecial3[0] + dataSeparada3[1];
+  document.getElementById("dt_inicio_vig").value = arrumaData(localStorage.getItem("dt_inicio_vig"));
+  document.getElementById("dt_final_vig").value = arrumaData(localStorage.getItem("dt_final_vig"));
+  document.getElementById("dt_reajuste").value = arrumaData(localStorage.getItem("dt_reajuste"));
 
   //esta função preenche o campo de lote
   pegarEntidade();
@@ -72,29 +52,14 @@ window.onload = function () {
 
 function enviar() {
 
-  let data1 = document.getElementById("dt_inicio_vig").value;
-  let dataSeparada1 = data1.split("");
-  //formato de data original (retirando mascara)
-  let dataFinal1 = dataSeparada1[6] + dataSeparada1[7] + dataSeparada1[8] + dataSeparada1[9] + "-" + dataSeparada1[3] + dataSeparada1[4] + "-" + dataSeparada1[0] + dataSeparada1[1];
-
-  let data2 = document.getElementById("dt_final_vig").value;
-  let dataSeparada2 = data2.split("");
-  //formato de data original (retirando mascara)
-  let dataFinal2 = dataSeparada2[6] + dataSeparada2[7] + dataSeparada2[8] + dataSeparada2[9] + "-" + dataSeparada2[3] + dataSeparada2[4] + "-" + dataSeparada2[0] + dataSeparada2[1];
-
-  let data3 = document.getElementById("dt_reajuste").value;
-  let dataSeparada3 = data3.split("");
-  //formato de data original (retirando mascara)
-  let dataFinal3 = "0000-" + dataSeparada3[3] + dataSeparada3[4] + "-" + dataSeparada3[0] + dataSeparada3[1];
-
   //JSON usado para mandar as informações no fetch
   let info = {
     "cod_lote": parseFloat(document.getElementById("cod_lote").value),
     "cnpj": document.getElementById("cnpj").value,
     "contrato": document.getElementById("contrato").value,
-    "dt_inicio_vig": dataFinal1,
-    "dt_final_vig": dataFinal2,
-    "dt_reajuste": dataFinal3,
+    "dt_inicio_vig": mascaraData(document.getElementById("dt_inicio_vig").value),
+    "dt_final_vig": mascaraData(document.getElementById("dt_final_vig").value),
+    "dt_reajuste": mascaraData(document.getElementById("dt_reajuste").value),
   };
 
   //transforma as informações em string para mandar

@@ -223,6 +223,86 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Uacom -->
+    <div id="adicionarUacom" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Acompanhamento</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body" style="padding-bottom: 3rem;">
+                    <div class="multisteps-form">
+                        <!--Formularios-->
+                        <div class="row">
+                            <div class="col-12 col-lg-12 m-auto">
+                                <form class="multisteps-form__form needs-validation" style="height: 350px;">
+                                    <!--Formulario 1 -->
+                                    <div class="multisteps-form__panel shadow p-4 rounded bg-white js-active"
+                                        data-animation="scaleIn">
+                                        <h3 class="multisteps-form__title">Informações do Acompanhamento</h3>
+
+                                        <div class="multisteps-form__content">
+                                            <div class="form-row mt-4">
+                                                <div class="col-12 col-sm-12 mt-4">
+                                                    <input class="multisteps-form__input form-control " type="text" placeholder="Titulo"
+                                                        name="titulo" id="titulo">
+                                                </div>
+                                                <div class="col-12 col-sm-10 mt-4">
+                                                    <select class="multisteps-form__input form-control data" type="text" placeholder="Assunto"
+                                                        name="assunto" id="assunto"  maxlength="50"></select>
+                                                </div>
+                                                <div class="col-2 col-sm-2 mt-4">
+                                                    <a class="js-btn-next"
+                                                        type="reset" onclick="anotaAssunto()" title="Adicionar"><img  src="img/add-icon.png" width="30px"></a>
+                                                </div>
+                                                <div class="col-12 col-sm-12 mt-4">
+                                                    <input class="multisteps-form__input form-control " type="text" placeholder="Relato"
+                                                        name="relato" id="relato">
+                                                </div>
+                                            </div>
+
+                                            <div class="button-row d-flex mt-4">
+                                                <button class="btn btn-primary multi-button ml-auto js-btn-next"
+                                                    onclick="novoUacom()" type="button">Cadastrar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--tabela assunto-->
+                                    <div class="multisteps-form__panel shadow p-4 rounded bg-white"
+                                        data-animation="scaleIn">
+                                        <h3 class="multisteps-form__title">Assunto</h3>
+                                        <div class="multisteps-form__content">
+                                            <div class="form-row mt-4">
+                                                <div class="col-12 col-sm-8">
+                                                    <select class="multisteps-form__input form-control" type="text" id="assunto" name="assunto"></select>
+                                                </div>
+                                                
+                                                
+
+                                                <div class="col-2 col-sm-2">
+                                                    <button id="portabotoes">Cadastrar</button>
+                                                </div>
+                                            </div>
+                                            <div class="button-row d-flex mt-4">
+                                                <button style="text-align: center; width: 100%;" class="btn btn-primary multi-button ml-auto js-btn-next"
+                                                    onclick="novoAssunto();location.reload();" type="button">Cadastrar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="fixed-bottom">
         <script height="100%" width="100%" src="./Js/menu.js"></script>
     </div>
