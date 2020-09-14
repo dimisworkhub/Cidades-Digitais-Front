@@ -100,9 +100,6 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	LISTA TELEFONE
 	r.HandleFunc(config.TELEFONE_ID_CONTATO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllTelefone))).Methods(http.MethodGet)
 
-	//	LISTA TELEFONE CONCATENADO
-	r.HandleFunc(config.TELEFONE_CONCAT_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllTelefoneConcat))).Methods(http.MethodGet)
-
 	//	SALVA TELEFONE
 	r.HandleFunc(config.TELEFONE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateTelefone))).Methods(http.MethodPost)
 

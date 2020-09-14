@@ -116,42 +116,6 @@ func (server *Server) GetAllTelefone(w http.ResponseWriter, r *http.Request) {
 }
 
 /*  =========================
-	FUNCAO LISTAR TODOS TELEFONE CONCATENADOS
-=========================  */
-
-func (server *Server) GetAllTelefoneConcat(w http.ResponseWriter, r *http.Request) {
-
-	//	Autorizacao de Modulo
-	if config.AuthMod(w, r, 12002) != nil && config.AuthMod(w, r, 13082) != nil {
-		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
-		return
-	}
-
-	//	Vars retorna as variaveis de rota
-	vars := mux.Vars(r)
-
-	//	codContato armazena a chave primaria
-	codContato, err := strconv.ParseUint(vars["cod_contato"], 10, 32)
-	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
-		return
-	}
-
-	telefone := models.Telefone{}
-
-	//	telefoneGotten armazena os dados buscados no banco de dados
-	telefoneGotten, err := telefone.FindAllTelefoneConcat(server.DB, uint32(codContato))
-	if err != nil {
-		formattedError := config.FormatError(err.Error())
-		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))
-		return
-	}
-
-	//	Retorna o Status 200 e o JSON da struct buscada
-	responses.JSON(w, http.StatusOK, telefoneGotten)
-}
-
-/*  =========================
 	FUNCAO DELETAR TELEFONE
 =========================  */
 
