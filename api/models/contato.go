@@ -11,12 +11,13 @@ import (
 =========================  */
 
 type Contato struct {
-	CodContato uint32 `gorm:"primary_key;auto_increment;not null" json:"cod_contato"`
-	Cnpj       string `gorm:"foreign_key:Cnpj;default:null;size:14" json:"cnpj"`
-	CodIbge    uint32 `gorm:"foreign_key:CodIbge;default:null" json:"cod_ibge"`
-	Nome       string `gorm:"default:null;size:50" json:"nome"`
-	Email      string `gorm:"default:null;size:100" json:"email"`
-	Funcao     string `gorm:"default:null" json:"funcao"`
+	CodContato     uint32 `gorm:"primary_key;auto_increment;not null" json:"cod_contato"`
+	Cnpj           string `gorm:"foreign_key:Cnpj;default:null;size:14" json:"cnpj"`
+	CodIbge        uint32 `gorm:"foreign_key:CodIbge;default:null" json:"cod_ibge"`
+	Nome           string `gorm:"default:null;size:50" json:"nome"`
+	Email          string `gorm:"default:null;size:100" json:"email"`
+	Funcao         string `gorm:"default:null" json:"funcao"`
+	TelefoneConcat string `gorm:"default:null" json:"telefone_concat"`
 }
 
 /*  =========================
@@ -46,14 +47,18 @@ func (contato *Contato) FindAllContato(db *gorm.DB, codIbge uint32, cnpj string)
 	// Busca todos elementos contidos no banco de dados
 	if codIbge != 0 {
 		err = db.Debug().Table("contato").
-			Select("contato.*").
+			Select("contato.*, GROUP_CONCAT(CONCAT(telefone.telefone, ' - ', telefone.tipo) ORDER BY telefone.telefone SEPARATOR ';\n') AS telefone_concat").
+			Joins("LEFT JOIN telefone ON contato.cod_contato = telefone.cod_contato").
 			Where("contato.cod_ibge = ?", codIbge).
+			Group("contato.cod_contato").
 			Order("contato.cod_contato").
 			Scan(&allContato).Error
 	} else {
 		err = db.Debug().Table("contato").
-			Select("contato.*").
+			Select("contato.*, GROUP_CONCAT(CONCAT(telefone.telefone, ' - ', telefone.tipo) ORDER BY telefone.telefone SEPARATOR ';\n') AS telefone_concat").
+			Joins("LEFT JOIN telefone ON contato.cod_contato = telefone.cod_contato").
 			Where("contato.cnpj = ?", cnpj).
+			Group("contato.cod_contato").
 			Order("contato.cod_contato").
 			Scan(&allContato).Error
 	}
