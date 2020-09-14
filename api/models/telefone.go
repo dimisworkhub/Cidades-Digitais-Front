@@ -58,8 +58,9 @@ func (telefone *Telefone) FindAllTelefoneConcat(db *gorm.DB, codContato uint32) 
 
 	// Busca e concatena todos telefones que compartilham a mesma chave primaria
 	err := db.Debug().Table("telefone").
-		Select("group_concat(telefone.telefone order by telefone.telefone asc separator '; \n') AS telefone_concat").
+		Select("telefone.cod_contato, group_concat(telefone.telefone order by telefone.telefone asc separator '; \n') AS telefone_concat").
 		Where("telefone.cod_contato = ?", codContato).
+		Group("telefone.cod_contato").
 		Scan(&telefone).Error
 	if err != nil {
 		return &Telefone{}, err
