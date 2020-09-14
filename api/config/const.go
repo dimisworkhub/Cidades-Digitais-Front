@@ -56,6 +56,7 @@ const (
 	TELEFONE_PATH            = "/read/telefone"
 	TELEFONE_ID_PATH         = "/read/telefone/{cod_telefone}"
 	TELEFONE_ID_CONTATO_PATH = "/read/telefone/{cod_contato}"
+	TELEFONE_CONCAT_PATH     = "/read/telefoneconcat/{cod_contato}"
 )
 
 /*  =========================

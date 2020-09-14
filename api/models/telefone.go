@@ -7,10 +7,11 @@ import "github.com/jinzhu/gorm"
 =========================  */
 
 type Telefone struct {
-	CodTelefone uint32 `gorm:"primary_key;auto_increment;not null;size:11" json:"cod_telefone"`
-	CodContato  uint32 `gorm:"foreign_key:CodContato;not null;size:11" json:"cod_contato"`
-	Telefone    string `gorm:"default:null;size:11" json:"telefone"`
-	Tipo        string `gorm:"default:null;size:10" json:"tipo"`
+	CodTelefone    uint32 `gorm:"primary_key;auto_increment;not null;size:11" json:"cod_telefone"`
+	CodContato     uint32 `gorm:"foreign_key:CodContato;not null;size:11" json:"cod_contato"`
+	Telefone       string `gorm:"default:null;size:11" json:"telefone"`
+	Tipo           string `gorm:"default:null;size:10" json:"tipo"`
+	TelefoneConcat string `gorm: "default:null" json:"telefone_concat"`
 }
 
 /*  =========================
@@ -47,6 +48,24 @@ func (telefone *Telefone) FindAllTelefone(db *gorm.DB, codContato uint32) (*[]Te
 	}
 
 	return &allTelefone, err
+}
+
+/*  =========================
+	FUNCAO LISTAR TODOS TELEFONE CONCATENADOS
+=========================  */
+
+func (telefone *Telefone) FindAllTelefoneConcat(db *gorm.DB, codContato uint32) (*Telefone, error) {
+
+	// Busca e concatena todos telefones que compartilham a mesma chave primaria
+	err := db.Debug().Table("telefone").
+		Select("group_concat(telefone.telefone order by telefone.telefone asc separator '; \n') AS telefone_concat").
+		Where("telefone.cod_contato = ?", codContato).
+		Scan(&telefone).Error
+	if err != nil {
+		return &Telefone{}, err
+	}
+
+	return telefone, err
 }
 
 /*  =========================
