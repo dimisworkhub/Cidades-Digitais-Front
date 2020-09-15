@@ -284,7 +284,7 @@ function novoAssunto(){
 		"titulo": document.getElementById("titulo" + i).value,
 		"relato": document.getElementById("relato" + i).value,
 	  };
-  
+  }
 
 // 	  // console.log(edicaoUacom)
 // 	  if (edicaoUacom[i]["titulo"] != listaUacom[i]["titulo"] || edicaoUacom[i]["relato"] != listaUacom[i]["relato"]) {
@@ -350,11 +350,12 @@ function contatos() {
         <th style="width:20%" scope="col">Função</th>
         <th style="width:20%" scope="col">E-mail</th>
         <th style="width:20%" scope="col">Telefones</th>
+        <th style="width:20%" scope="col">Tipo</th>
         <th style="width:10%" scope="col">Opções</th>
         </tr>
         </thead>`);
         tabela += (`<tbody>`);
-        // console.log(json)
+        console.log(json)
         //cria uma lista apenas com os itens do lote selecionado
         let j = 0;
         for (let i = 0; i < json.length; i++) {
@@ -377,7 +378,9 @@ function contatos() {
           tabela += (`</td> <td>`);
           tabela += (`<span id="email style="white-space: pre-line">` + listaItem[i]["email"] + `</span>`);
           tabela += (`</td> <td>`);
-          tabela += (`<span class="" id="telefone" style="white-space: pre-line">` + listaItem[i].telefone_concat + `</span>`);
+          tabela += (`<span class="" id="telefone" style="white-space: pre-line">` + listaItem[i].telefone + `</span>`);
+          tabela += (`</td> <td>`);
+          tabela += (`<span class="" id="tipo" style="white-space: pre-line">` + listaItem[i].tipo + `</span>`);
           tabela += (`</td><td> 
           <span class="d-flex">
           <button onclick="visualizarContato(`+  listaItem[i].cod_contato+`,'`+ listaItem[i].nome +`','`+ listaItem[i].funcao +`','`+ listaItem[i].email +`','`+i+`')" data-toggle="modal" href="#visualizar" class="btn btn-success">
