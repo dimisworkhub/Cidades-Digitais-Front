@@ -657,10 +657,9 @@ function editarItemCD() {
 
 
 
-//Itens de fiscalizacao
 
-//apenas até ser testado algo melhor
-let guardaI = "";
+
+//Itens de fiscalizacao
 
 //caso itensfatura seja o selecionado
 let meuEmpenho = [];
@@ -746,7 +745,9 @@ function itensFiscalizacao(caminho) {
 
           //apenas para fatura
           if (caminho == "itensfatura") {
-            //caso especial da função empenho
+            meuEmpenho[i] = listaItem[i]["id_empenho"];
+
+            //coluna especial de empenho
             tabela += (`</td> <td id="empenho` + i + `" style="cursor:pointer" onclick="redirecionar(` + i + "," + "'empItensFatura'" + `)" onmouseover="sublinhar2(` + i + "," + listaItem.length + `)">`);
             tabela += listaItem[i]["cod_empenho"];
             tabela += (`</td><td>`);
@@ -756,22 +757,19 @@ function itensFiscalizacao(caminho) {
             } else {
               tabela += "Reajuste";
             }
-            meuEmpenho[i] = listaItem[i]["id_empenho"];
           }
 
           tabela += (`</td> <td>`);
           tabela += listaItem[i]["quantidade_disponivel"];
           tabela += (`</td> <td>`);
-          // depois colocar equivalente a onchange="zeros(` + document.getElementById("quantidade"+i).value + `)"
-          tabela += (`<input value="` + listaItem[i]["quantidade"] * 100 + `" class="quebrados" id="quantidade` + i + `" type="text" size="10" style="text-align: right;"></input>`);
+          tabela += (`<input value="` + listaItem[i]["quantidade"] * 100 + `" class="quebrados" id="quantidade` + i + `" onchange="checarQuantidade(` + i + `)" type="text" size="10" style="text-align: right;"></input>`);
           tabela += (`</td> <td>`);
-          // depois colocar equivalente a onchange="zeros(` + document.getElementById("valor"+i).value + `)"
           tabela += (`<input value="` + listaItem[i]["valor"] * 100 + `" class="preco" id="valor` + i + `" type="text" size="15" style="text-align: right;"></input>`);
           tabela += (`</td> <td class="preco">`);
 
           //calculo do subtotal
-          //multiplicado por 100 apenas para mostrar em reais e não em centavos
-          total = (listaItem[i]["quantidade"] * listaItem[i]["valor"] * 100);
+          //multiplicado por 100 porque a máscara foi feita com base em preencher as centenas primeiro
+          total = (listaItem[i]["quantidade"] * listaItem[i]["valor"]);
           totalFinal = totalFinal + total;
 
           tabela += arredondamento(total);
@@ -802,7 +800,7 @@ function itensFiscalizacao(caminho) {
         }
 
         //valor final
-        tabela += (`<td  class="preco">`);
+        tabela += (`<td class="preco">`);
         tabela += arredondamento(totalFinal);
         tabela += (`</td>`);
 
@@ -842,20 +840,51 @@ function descricaoItem2(itemDescrito) {
 
 }
 
-function editarItem(caminho) {
+function checarQuantidade(valor){
 
-  let mensagem = "";
+  if (mascaraQuebrados(document.getElementById("quantidade" + valor).value) > (listaItem[valor].quantidade_disponivel + listaItem[valor].quantidade)) {
+
+    //Alerta inteligente que necessita de uma confirmação para continuar
+    Swal.fire({
+      title: 'Tem certeza?',
+      text: "A Quantidade inserida no item " + listaItem[valor].cod_tipo_item + "." + listaItem[valor].cod_item + " é maior que a Quantidade Disponível!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sim, tenho certeza!'
+    }).then((result) => {
+      
+      if (result.value) {
+
+        Swal.fire(
+          'Sucesso!',
+          'Item foi inserido!',
+          'success'
+        )
+
+      } else {
+
+        document.getElementById("quantidade" + valor).value = listaItem[valor].quantidade;
+
+        Swal.fire(
+          'Cancelado!',
+          'O item não foi inserido!',
+          'error'
+        )
+
+      }
+    });
+
+  }
+}
+
+function editarItem(caminho) {
 
   for (let i = 0; i < listaItem.length; i++) {
 
-    //funções de mascara são usadas aqui para retornar os valores ao processável pelo banco
-    edicaoItem[i] = {
-      "quantidade": parseFloat(mascaraQuebrados(document.getElementById("quantidade" + i).value)),
-      "valor": parseFloat(mascaraQuebrados(document.getElementById("valor" + i).value)),
-    };
-
     //identifica se o item foi alterado
-    if (listaItem[i]["quantidade"] != edicaoItem[i]["quantidade"] || listaItem[i]["valor"] != edicaoItem[i]["valor"]) {
+    if (listaItem[i]["quantidade"] != mascaraQuebrados(document.getElementById("quantidade" + i).value) || listaItem[i]["valor"] != mascaraQuebrados(document.getElementById("valor" + i).value)) {
 
       //itens fatura precisa de um caminho especial
       if (caminho == "itensfatura") {
@@ -865,6 +894,7 @@ function editarItem(caminho) {
       }
 
       //Para os casos especificos em tipos de item 8,9 e 10. Validos apenas em itens de 1 a 5 e de fatura ou previsão.
+      //preciso ajustar para ficar bom (talvez o thiago queira que eu acople)
       // if (listaItem[i].cod_tipo_item >= "8" && listaItem[i].cod_tipo_item <= "10" && (caminho == "itensfatura" || caminho == "itensprevisao") && listaItem[i].tipo == "o") {
 
       //   //valor de limite
@@ -877,117 +907,49 @@ function editarItem(caminho) {
       //     //garantindo ser um dos valores com mesmo item e do mesmo grupo de tipos
       //     if (listaItem[i].cod_tipo_item >= "8" && listaItem[i].cod_tipo_item <= "10" && listaItem[j].cod_item == listaItem[i].cod_item) {
 
-      //       if(edicaoItem[j].valor != undefined && edicaoItem[j].quantidade != undefined){
-      //         //somando todos os compativeis pela ultima mudança deles
-      //         valorSoma = (edicaoItem[j].valor * edicaoItem[j].quantidade) + valorSoma;
-      //       }else{
-      //         //somando todos os compativeis pela ultima mudança deles
-      //         valorSoma = (listaItem[j].valor * listaItem[j].quantidade) + valorSoma;
-      //       }
+      //       valorSoma = (mascaraQuebrados(document.getElementById("valor" + i).value) * mascaraQuebrados(document.getElementById("quantidade" + i).value)) + valorSoma;
+
       //     }
       //   }
+
       //   if (valorMax < valorSoma) {
       //     alert("Há um problema no item " + listaItem[i].cod_tipo_item + "." + listaItem[i].cod_item + ". Ele está ultrapassando o limite do seu grupo.");
       //   }
 
       // }
 
-      //processo necessário para poder enviar quando entra no modal regulador de quantidade
-      if (edicaoItem[i].quantidade > (listaItem[i].quantidade_disponivel + listaItem[i].quantidade)) {
-
-        //para colocar na mensagem de aviso
-        mensagem += listaItem[i].cod_tipo_item + "." + listaItem[i].cod_item + ", ";
-        //carrega todos os valores que foram alterados
-        guardaI += i + "/";
-
-      }
-
-      //casos normais
-      else {
-        fetchEdit(i);
-      }
-    }
-
-  }
-
-  //analise final quando alguma quantidade passa do disponível (envia para o modal se necessário)
-  if(mensagem != ""){
-
-    //Alerta inteligente que necessita de uma confirmação para continuar
-    Swal.fire({
-      title: 'Tem certeza?',
-      text: "A Quantidade inserida do(s) item(ns) " + mensagem + " é maior que a Quantidade Disponível!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Sim, tenho certeza!'
-    }).then((result) => {
+      //independente do alerta
       
-      if (result.value) {
-        resultado=true;
+      edicaoItem[i] = {
+        "quantidade": parseFloat(mascaraQuebrados(document.getElementById("quantidade" + i).value)),
+        "valor": parseFloat(mascaraQuebrados(document.getElementById("valor" + i).value)),
+      };
 
-        Swal.fire(
-          'Sucesso!',
-          'Item foi inserido!',
-          'success'
-        )
+      //transforma as informações do token em json
+      corpo = JSON.stringify(edicaoItem[i]);
 
-        fetchEditEspecial();
-        //location.reload();
+      //função fetch para mandar
+      fetch(caminhoFinal, {
+        method: 'PUT',
+        body: corpo,
+        headers: {
+          'Authorization': 'Bearer ' + meuToken
+        },
+      }).then(function (response) {
+        //checar o status do pedido
+        //console.log(response.statusText);
 
-      } else{
-        resultado=false;
-
-        Swal.fire(
-          'Cancelado!',
-          'O item não foi inserido!',
-          'error'
-        )
-
-      }
-    });
-  }
-
-  //caso não haja nenhuma quantidade que passe
-  else{
-    location.reload();
-  }
-
-}
-
-//caso especial para quando passa. Serve apenas para passar todos os que passaram pelo fetch normal
-function fetchEditEspecial(){
-
-  let iDeAgora = guardaI.split("/");
-
-  for(let i = 0; i < (iDeAgora.length-1); i++){
-    console.log(iDeAgora[i]);
-    fetchEdit(iDeAgora[i]);
-  }
-}
-
-function fetchEdit(valor){
-
-  //transforma as informações do token em json
-  corpo = JSON.stringify(edicaoItem[valor]);
-
-  //função fetch para mandar
-  fetch(caminhoFinal, {
-    method: 'PUT',
-    body: corpo,
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-    //checar o status do pedido
-    //console.log(response.statusText);
-
-    //tratamento dos erros
-    if (response.status == 200 || response.status == 201) {
-      console.log(corpo + " OK");
-    } else {
-      erros(response.status);
+        //tratamento dos erros
+        if (response.status == 200 || response.status == 201) {
+          //console.log(corpo + " OK");
+        } else {
+          erros(response.status);
+        }
+      });
     }
-  });
+
+  }
+
+  location.reload();
+
 }

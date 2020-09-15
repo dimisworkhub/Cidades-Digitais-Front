@@ -34,8 +34,6 @@ function enviar() {
     "data_imp": mascaraData(document.getElementById("data_imp").value),
   };
 
-  //console.log(info);
-
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
   //função fetch para mandar
@@ -48,13 +46,15 @@ function enviar() {
   }).then(function (response) {
 
     //checar o status do pedido
-    console.log(response);
+    //console.log(response);
 
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
       //checar o json
       response.json().then(function (json) {
-      console.log(json);
+
+      //console.log(json);
+
       });
       window.location.replace("./cd.html");
     } else {
@@ -71,13 +71,51 @@ function enviar() {
 
 //CD acompanhameno (pode ir pra subtabelas se necessário)
 
-let listaUacom = [], meuData = [];
+let listaUacom = [], listaAssunto = [], meuData = [];
+
+//usado para fazer o id dos botões de assunto
+let contaAssunto = 0;
+
+//usado para contar o total de botões
+let totalAssunto = 0;
+
+//assuntoSelecionado guarda os assuntos que serão adicionados
+let listaDeAssuntos, assuntoSelecionado = "";
+
+function pegarAssunto(){
+  //fetch de assunto
+  fetch(servidor + 'read/assunto', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      response.json().then(function (json) {
+
+        listaAssunto=json;
+
+        let x="";
+        for(let i=0; i<json.length; i++){
+          x += "<option value=" + json[i].cod_assunto + ">" + json[i].descricao + "</option>";
+        }
+        document.getElementById("assunto").innerHTML = x;
+
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
 
 function uacom() {
 
 	//cria o botão para editar
-	document.getElementById("editar").innerHTML = "";
-	document.getElementById("editar2").innerHTML = (`<button id="editar" onclick="editarUacom()" class="btn btn-success">Salvar Acompanhamento</button>`);
+	document.getElementById("editar").innerHTML = (`<button class="btn btn-success" data-toggle="modal" data-target="#adicionarUacom" onclick="pegarAssunto()">Novo Acompanhamento</button>`);
+	document.getElementById("editar2").innerHTML = "";
+
   
 	//função fetch para chamar itens da tabela
 	fetch(servidor + 'read/uacom', {
@@ -119,15 +157,19 @@ function uacom() {
 				}
 			}
 		    for (i = 0; i < listaUacom.length; i++) {
-  
+
+
+
 				//salva os valores para edição
 				meuData[i] = listaUacom[i]["data"];
 	
 				tabela += (`<tr>`);
 				tabela += (`<td class="data">`);
 				tabela += arrumaData(listaUacom[i]["data"]);
-				tabela += (`</td> <td>`);
-        tabela += listaUacom[i]["assunto"];
+        tabela += (`</td> <td>`);
+        tabela += "Ainda trabalhando nisso.";
+        //tabela += listaDeAssuntos;
+
         tabela += (`</td> <td>`);
 				tabela += listaUacom[i]["titulo"];
 				tabela += (`</td> <td>`);
@@ -143,14 +185,98 @@ function uacom() {
 
 		});
 	  } else {
-		erros(response.status);
+
+		  erros(response.status);
 	  }
 	});
 }
-  
-function editarUacom() {
 
-  let edicaoUacom = [];
+function anotaAssunto() {
+
+  assuntoSelecionado = `<a class="btn btn-success" id="adicao` + contaAssunto + `" onclick="removerAssunto(` + contaAssunto + `)"> Assunto `+ document.getElementById("assunto").value +`</a>`;
+
+  document.getElementById("adicoes").innerHTML += assuntoSelecionado;
+
+  contaAssunto++;
+  totalAssunto++;
+}
+
+function removerAssunto(valor){
+
+  document.getElementById("adicao"+valor).innerHTML = "";
+
+  totalAssunto--;
+  console.log(totalAssunto);
+}
+
+function novoUacom() {
+
+  let infoUacom = {
+    "cod_ibge": parseInt(meuCodigo),
+    "relato": document.getElementById("relato").value,
+    "titulo": document.getElementById("titulo").value,
+  };
+
+  //transforma as informações em string para mandar
+  let corpo = JSON.stringify(infoUacom);
+
+  console.log(corpo);
+  //função fetch para mandar
+  fetch(servidor + 'read/uacom', {
+    method: 'POST',
+    body: corpo,
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      alert('Acompanhamento inserido com sucesso!');
+      novoAssunto();
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+function novoAssunto(){
+  for(let i = 0; i <= totalAssunto; i++){
+    
+
+    //transforma as informações em string para mandar
+    let corpo = JSON.stringify(infoAssunto[i]);
+
+    console.log(corpo);
+    //função fetch para mandar
+    fetch(servidor + 'read/uacom', {
+      method: 'POST',
+      body: corpo,
+      headers: {
+        'Authorization': 'Bearer ' + meuToken
+      },
+    }).then(function (response) {
+
+      //tratamento dos erros
+      if (response.status == 200 || response.status == 201) {
+        alert('Assunto inserido com sucesso!');
+        location.reload();
+      } else {
+        erros(response.status);
+      }
+    });
+  }
+}
+
+
+
+// function editarUacom(valor) {
+
+//   document.getElementById("titulo").value = listaUacom[i]["titulo"];
+//   document.getElementById("relato").value = listaUacom[i]["relato"];
+
+//   let edicaoUacom = [];
+
   
 	for (let i = 0; i < listaUacom.length; i++) {
   
@@ -159,31 +285,35 @@ function editarUacom() {
 		"relato": document.getElementById("relato" + i).value,
 	  };
   
-	  // console.log(edicaoUacom)
-	  if (edicaoUacom[i]["data"] != listaUacom[i]["data"] || edicaoUacom[i]["titulo"] != listaUacom[i]["titulo"] || edicaoUacom[i]["relato"] != listaUacom[i]["relato"]) {
-		//transforma as informações do token em json
-		let corpo = JSON.stringify(edicaoUacom[i]);
-		//função fetch para mandar
-		fetch(servidor + 'read/uacom/' + meuCodigo + '/' + meuData[i], {
-		  method: 'PUT',
-		  body: corpo,
-		  headers: {
-			'Authorization': 'Bearer ' + meuToken
-		  },
-		}).then(function (response) {
-		  //checar o status do pedido
-		  console.log(response.statusText);
-  
-		  //tratamento dos erros
-		  if (response.status == 200 || response.status == 201) {
-			  location.reload();
-		  } else {
-			  erros(response.status);
-		  }
-		});
-	  }
-	}
-}
+
+// 	  // console.log(edicaoUacom)
+// 	  if (edicaoUacom[i]["titulo"] != listaUacom[i]["titulo"] || edicaoUacom[i]["relato"] != listaUacom[i]["relato"]) {
+//       //transforma as informações do token em json
+//       let corpo = JSON.stringify(edicaoUacom[i]);
+//       //função fetch para mandar
+//       fetch(servidor + 'read/uacom/' + meuCodigo + '/' + meuData[i], {
+//         method: 'PUT',
+//         body: corpo,
+//         headers: {
+//         'Authorization': 'Bearer ' + meuToken
+//         },
+//       }).then(function (response) {
+//         //checar o status do pedido
+//         console.log(response.statusText);
+    
+//         //tratamento dos erros
+//         if (response.status == 200 || response.status == 201) {
+//           location.reload();
+//         } else {
+//           erros(response.status);
+//         }
+//       });
+// 	  }
+// 	}
+// }
+
+
+
 
 //CD Contatos
 

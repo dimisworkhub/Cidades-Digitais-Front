@@ -61,7 +61,7 @@ function pegarMunicipio(){
 }
 
 window.onload = function () {
-  this.pegarMunicipio();
+  pegarMunicipio();
 }
 
 function paginacao() {
