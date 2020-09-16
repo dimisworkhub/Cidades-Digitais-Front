@@ -80,7 +80,7 @@ let contaAssunto = 0;
 let totalAssunto = 0;
 
 //assuntoSelecionado guarda os assuntos que serão adicionados
-let listaDeAssuntos, assuntoSelecionado = "";
+let dataAssunto, listaDeAssuntos, assuntoSelecionado = "";
 
 function pegarAssunto(){
   //fetch de assunto
@@ -167,7 +167,7 @@ function uacom() {
 				tabela += (`</td> <td>`);
 				tabela += listaUacom[i]["relato"];
         tabela += (`</td>`);
-        tabela += (`</td> <td> 
+        tabela += (`<td> 
                   <span class="d-flex">
                   <button onclick="editarUacom(` + i + `)" class="btn btn-success">
                   <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
@@ -190,7 +190,9 @@ function uacom() {
 
 function anotaAssunto() {
 
-  assuntoSelecionado = `<a class="btn btn-success" id="adicao` + contaAssunto + `" onclick="removerAssunto(` + contaAssunto + `)"> Assunto `+ document.getElementById("assunto").value +`</a>`;
+  let valoresAssunto = document.getElementById("assunto").value;
+
+  assuntoSelecionado = `<a class="btn btn-success" id="adicao` + contaAssunto + `" onclick="removerAssunto(` + contaAssunto + `)" value="` + + `"> Assunto `+  +`</a>`;
 
   document.getElementById("adicoes").innerHTML += assuntoSelecionado;
 
@@ -229,8 +231,14 @@ function novoUacom() {
 
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
+
       alert('Acompanhamento inserido com sucesso!');
+
+      response.json().then(function (json) {
+      dataAssunto = json.data;
       novoAssunto();
+      });
+
     } else {
       erros(response.status);
     }
@@ -240,6 +248,13 @@ function novoUacom() {
 function novoAssunto(){
   for(let i = 0; i <= totalAssunto; i++){
     
+    let infoAssunto = [];
+
+    infoAssunto[i] = {
+      "cod_ibge": parseInt(meuCodigo),
+      "data": dataAssunto,
+      "cod_assunto": document.getElementById("assunto"+i).value,
+    };
 
     //transforma as informações em string para mandar
     let corpo = JSON.stringify(infoAssunto[i]);
