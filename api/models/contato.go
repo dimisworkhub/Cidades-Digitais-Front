@@ -43,32 +43,36 @@ func (contato *Contato) SaveContato(db *gorm.DB) (*Contato, error) {
 func (contato *Contato) FindAllContato(db *gorm.DB, codIbge uint32, cnpj string) (*[]Contato, error) {
 
 	allContato := []Contato{}
-	var err error
 
 	// Busca todos elementos contidos no banco de dados
 	if codIbge != 0 {
-		err = db.Debug().Table("contato").
+		err := db.Debug().Table("contato").
 			Select("contato.*, GROUP_CONCAT(telefone.telefone ORDER BY telefone.cod_telefone SEPARATOR '\n') AS telefone, GROUP_CONCAT(IFNULL(telefone.tipo, '\n') ORDER BY telefone.cod_telefone SEPARATOR '\n') AS tipo").
 			Joins("LEFT JOIN telefone ON contato.cod_contato = telefone.cod_contato").
 			Where("contato.cod_ibge = ?", codIbge).
 			Group("contato.cod_contato").
 			Order("contato.cod_contato").
 			Scan(&allContato).Error
+
+		if err != nil {
+			return &[]Contato{}, err
+		}
+
 	} else {
-		err = db.Debug().Table("contato").
+		err := db.Debug().Table("contato").
 			Select("contato.*, GROUP_CONCAT(telefone.telefone ORDER BY telefone.cod_telefone SEPARATOR '\n') AS telefone, GROUP_CONCAT(IFNULL(telefone.tipo, '\n') ORDER BY telefone.cod_telefone SEPARATOR '\n') AS tipo").
 			Joins("LEFT JOIN telefone ON contato.cod_contato = telefone.cod_contato").
 			Where("contato.cnpj = ?", cnpj).
 			Group("contato.cod_contato").
 			Order("contato.cod_contato").
 			Scan(&allContato).Error
+
+		if err != nil {
+			return &[]Contato{}, err
+		}
 	}
 
-	if err != nil {
-		return &[]Contato{}, err
-	}
-
-	return &allContato, err
+	return &allContato, nil
 }
 
 /*  =========================
