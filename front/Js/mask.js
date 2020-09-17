@@ -5,6 +5,7 @@ function mascara(){
     $('.percentual').inputmask('9{1,3},99%', {autoUnmask: true, unmaskAsNumber: true, reverse: true, greedy: false, numericInput:true, placeholder: "0"});
     $('.data').mask('00/00/0000');
     $('.data2').mask('00/00');
+    $('.data3').mask('00/00/0000 00:00:00');
     $('.contrato').mask('999-9999');
     $('.ano').inputmask('9999');
     $('.cep').inputmask('99999-999', {autoUnmask: true, unmaskAsNumber: true, numericInput:true});
@@ -70,6 +71,28 @@ function arrumaData(data){
     
     //junta todas as informações para ficar no padrão brasileiro
     let dataFinal = dataEspecial[0] + dataSeparada[1] + dataSeparada[0];
+  
+    return dataFinal;
+  }
+}
+
+function arrumaData2(data){
+  // console.log(data);
+  if(data === null || data === undefined || data === ''){
+
+    let dataFinal = null;
+    return dataFinal;
+    
+  }else{
+    
+    //utiliza split
+    let dataSeparada = data.split("-");
+  
+    //retirar o horario que aparece normalmente junto ao formato de data
+    let dataEspecial = dataSeparada[2].split("T");
+    
+    //junta todas as informações para ficar no padrão brasileiro
+    let dataFinal = dataEspecial[0] + dataSeparada[1] + dataSeparada[0] + " " + dataEspecial[1];
   
     return dataFinal;
   }

@@ -71,7 +71,7 @@ function enviar() {
 
 //CD acompanhamento
 
-let listaUacom = [], listaAssunto = [];
+let listaUacom = [];
 
 //usado para fazer o id dos botões de assunto
 let idAssunto = 0;
@@ -80,7 +80,7 @@ let idAssunto = 0;
 let contadorAssunto = 0;
 
 //assuntoSelecionado guarda os assuntos que serão adicionados
-let dataAssunto, listaDeAssuntos, assuntoSelecionado = "";
+let dataAssunto, listarAssuntos, assuntoSelecionado = "";
 
 function pegarAssuntos(){
   //fetch de assunto
@@ -108,44 +108,41 @@ function pegarAssuntos(){
   });
 }
 
-function assuntosTabela(dataSelecionada){
-  fetch(servidor + 'read/uacomassunto/' + meuCodigo + "/" + dataSelecionada , {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
+// function assuntosTabela(dataSelecionada){
+//   fetch(servidor + 'read/uacomassunto/' + meuCodigo + "/" + dataSelecionada , {
+//     method: 'GET',
+//     headers: {
+//       'Authorization': 'Bearer ' + meuToken
+//     },
+//   }).then(function (response) {
 
-    //tratamento dos erros
-    if (response.status == 200 || response.status == 201) {
-      response.json().then(function (json) {
-
-        console.log(json);
-
-        let x="";
-        for(let i=0; i<json.length; i++){
-          x += json[i].cod_assunto;
-        }
-        listaDeAssuntos = x;
-
-        return listaDeAssuntos;
-
-      });
-    } else {
-      erros(response.status);
-    }
-  });
-}
+//     //tratamento dos erros
+//     if (response.status == 200 || response.status == 201) {
+//       response.json().then(function (json) {
+        
+//         let x="";
+//         x += json[0].cod_assunto;
+//         for(let i=1; i<json.length; i++){
+//           x += ", "
+//           x += json[i].cod_assunto;
+//         }
+//         listarAssuntos = x;
+//         console.log(listarAssuntos);
+//       });
+//     } else {
+//       erros(response.status);
+//     }
+//   });
+// }
 
 function uacom() {
 
 	//cria o botão para editar
 	document.getElementById("editar").innerHTML = (`<button class="btn btn-success" data-toggle="modal" data-target="#adicionarUacom" onclick="pegarAssuntos()">Novo Acompanhamento</button>`);
 	document.getElementById("editar2").innerHTML = "";
-
   
 	//função fetch para chamar itens da tabela
-	fetch(servidor + 'read/uacom', {
+	fetch(servidor + 'read/uacom/' + meuCodigo, {
 	  method: 'GET',
 	  headers: {
 		'Authorization': 'Bearer ' + meuToken
@@ -162,7 +159,9 @@ function uacom() {
 		//pegar o json que possui a tabela
 		response.json().then(function (json) {
   
-			//console.log(json);
+      //console.log(json);
+      
+      listaUacom=json;
 	
 			let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
 			<tr>
@@ -178,10 +177,10 @@ function uacom() {
 		  for (i = 0; i < listaUacom.length; i++) {
 	
 				tabela += (`<tr>`);
-				tabela += (`<td class="data">`);
-				tabela += arrumaData(listaUacom[i]["data"]);
+				tabela += (`<td class="data3">`);
+				tabela += arrumaData2(listaUacom[i]["data"]);
         tabela += (`</td> <td>`);
-        tabela += assuntosTabela(listaUacom[i]["data"]);
+        tabela += listaUacom[i]["descricao"];
         tabela += (`</td> <td>`);
 				tabela += listaUacom[i]["titulo"];
 				tabela += (`</td> <td>`);
@@ -204,7 +203,6 @@ function uacom() {
 
 		});
 	  } else {
-
 		  erros(response.status);
 	  }
 	});
@@ -292,10 +290,9 @@ function novoAssunto(){
 
       //tratamento dos erros
       if (response.status == 200 || response.status == 201) {
-        //alert('Assunto inserido com sucesso!');
         location.reload();
       } else {
-        //erros(response.status);
+        erros(response.status);
       }
     });
   }
@@ -303,28 +300,25 @@ function novoAssunto(){
 
 
 
-// function editarUacom(valor) {
+function editarUacom(valor) {
 
-//   document.getElementById("titulo").value = listaUacom[i]["titulo"];
-//   document.getElementById("relato").value = listaUacom[i]["relato"];
+  document.getElementById("titulo").value = listaUacom[valor]["titulo"];
+  document.getElementById("relato").value = listaUacom[valor]["relato"];
 
-//   let edicaoUacom = [];
 
-  
-	for (let i = 0; i < listaUacom.length; i++) {
-  
-	  edicaoUacom[i] = {
-		"titulo": document.getElementById("titulo" + i).value,
-		"relato": document.getElementById("relato" + i).value,
-	  };
-  }
+}
 
-// 	  // console.log(edicaoUacom)
-// 	  if (edicaoUacom[i]["titulo"] != listaUacom[i]["titulo"] || edicaoUacom[i]["relato"] != listaUacom[i]["relato"]) {
+
+//coisas para a segunda parte
+
+//   let edicaoUacom = {
+// 		"titulo": document.getElementById("titulo").value,
+// 		"relato": document.getElementById("relato").value,
+// 	  };
+
 //       //transforma as informações do token em json
-//       let corpo = JSON.stringify(edicaoUacom[i]);
+//       let corpo = JSON.stringify(edicaoUacom);
 
-//       //função fetch para mandar                         meuData ainda não foi criado
 //       fetch(servidor + 'read/uacom/' + meuCodigo + '/' + meuData[i], {
 //         method: 'PUT',
 //         body: corpo,
@@ -344,7 +338,7 @@ function novoAssunto(){
 //       });
 // 	  }
 // 	}
-// }
+
 
 
 
@@ -383,13 +377,10 @@ function contatos() {
         <th style="width:20%" scope="col">Nome</th>
         <th style="width:20%" scope="col">Função</th>
         <th style="width:20%" scope="col">E-mail</th>
-        <th style="width:20%" scope="col">Telefones</th>
-        <th style="width:20%" scope="col">Tipo</th>
-        <th style="width:10%" scope="col">Opções</th>
         </tr>
         </thead>`);
         tabela += (`<tbody>`);
-        console.log(json)
+
         //cria uma lista apenas com os itens do lote selecionado
         let j = 0;
         for (let i = 0; i < json.length; i++) {
@@ -399,30 +390,20 @@ function contatos() {
           }
         }
         for (i = 0; i < listaItem.length; i++) {
-          
+
           //salva os valores para edição
           meuItem[i] = listaItem[i]["cod_item"];
           meuTipo[i] = listaItem[i]["cod_tipo_item"];
-          
+
           tabela += (`<tr>`);
           tabela += (`<td>`);
-          tabela += (`<span id="nome style="white-space: pre-line">` + listaItem[i]["nome"] + `</span>`);
+          tabela += (`<input value="` + listaItem[i]["nome"] + `"class="" id="nome` + i + `" type="text" size="30">`);
           tabela += (`</td> <td>`);
-          tabela += (`<span id="funcao style="white-space: pre-line">` + listaItem[i]["funcao"] + `</span>`);
+          tabela += (`<input value="` + listaItem[i]["funcao"] + `"class="" id="funcao` + i + `" type="text" size="30">`);
           tabela += (`</td> <td>`);
-          tabela += (`<span id="email style="white-space: pre-line">` + listaItem[i]["email"] + `</span>`);
-          tabela += (`</td> <td>`);
-          tabela += (`<span class="" id="telefone" style="white-space: pre-line">` + listaItem[i].telefone + `</span>`);
-          tabela += (`</td> <td>`);
-          tabela += (`<span class="" id="tipo" style="white-space: pre-line">` + listaItem[i].tipo + `</span>`);
-          tabela += (`</td><td> 
-          <span class="d-flex">
-          <button onclick="visualizarContato(`+  listaItem[i].cod_contato+`,'`+ listaItem[i].nome +`','`+ listaItem[i].funcao +`','`+ listaItem[i].email +`','`+i+`')" data-toggle="modal" href="#visualizar" class="btn btn-success">
-          <i class="material-icons"data-toggle="tooltip" title="Visualizar">content_paste</i>
-          </button>
-          </span> </td>`);
+          tabela += (`<input value="` + listaItem[i]["email"] + `"class="" id="email` + i + `" type="text" size="30">`);
+          tabela += (`</td>`);
           tabela += (`</tr>`);
-          // console.log(tabela)
         }
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
@@ -437,111 +418,42 @@ function contatos() {
   });
 }
 
+function editarContatoCD() {
 
-function visualizarContato(cod_contato,nome,funcao,email,identificador) {
-  identificador= parseInt(identificador)
-  
-  fetch(servidor + 'read/telefone/' + cod_contato, {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
+  for (let i = 0; i < listaItem.length; i++) {
 
-    //checar os status de pedidos
-    //console.log(response)
+    edicaoItem[i] = {
+      "nome": document.getElementById("nome" + i).value,
+      "email": document.getElementById("email" + i).value,
+      "funcao": document.getElementById("funcao" + i).value,
+    };
 
-    //tratamento dos erros
-    if (response.status == 200) {
-      //console.log(response.statusText);
+    console.log(listaItem[i])
+    console.log(edicaoItem[i])
+    if (edicaoItem[i]["nome"] != listaItem[i]["nome"] || edicaoItem[i]["email"] != listaItem[i]["email"] || edicaoItem[i]["funcao"] != listaItem[i]["funcao"]) {
+      //transforma as informações do token em json
+      let corpo = JSON.stringify(edicaoItem[i]);
+      //função fetch para mandar
+      fetch(servidor + 'read/contato/' + listaItem[i]["cod_contato"] , {
+        method: 'PUT',
+        body: corpo,
+        headers: {
+          'Authorization': 'Bearer ' + meuToken
+        },
+      }).then(function (response) {
+        //checar o status do pedido
+        console.log(response.statusText);
 
-      //pegar o json que possui a tabela
-      response.json().then(function (json) {
-
-        let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
-          <tr>
-            <th style="width:20%" scope="col">Nome</th>
-            <th style="width:20%" scope="col">Função</th>
-            <th style="width:20%" scope="col">E-mail</th>
-            <th style="width:20%" scope="col" rowspan="`+ json.length +`">Telefone</th>
-            <th style="width:9%" scope="col">Ação</th>
-          </tr>
-          </thead>
-        <tbody>
-          <tr>`);
-        tabela += (`<td><input value="` + nome + `" id="nome`+identificador+`" type="text" class="nome"></td>`);
-        tabela += (`<td><input value="` + funcao + `" id="funcao`+identificador+`" type="text" class="funcao"></td>`);
-        tabela += (`<td><input value="` + email + `" id="email`+identificador+`" type="text" class="email"></td>`);
-
-
-        tabela += (`<td>`);
-        for (i = 0; i < json.length; i++) {
-          tabela += (`<input value="` + json[i].telefone + `" id="telefone`+i+`" type="text" class="telefone" size="14">`);
-          tabela += (`&nbsp&nbsp&nbsp<select name="tipo" id="tipo`+i+`">
-          <option value="`+json[i].tipo+`">`+json[i].tipo+`</option>
-          <option value="WhatsApp">WhatsApp</option>
-          <option value="Casa">Casa</option>
-          <option value="Celular">Celular</option>
-          <option value="Trabalho">Trabalho</option>
-          </select>
-          `);
-          
+        //tratamento dos erros
+        if (response.status == 200 || response.status == 201) {
+          location.reload();
+        } else {
+          erros(response.status);
         }
-        tabela += (`</td>`);
-        tabela += (`</td><td> 
-          <span class="d-flex">
-          <button onclick="editarContatoCD(`+ identificador +`,`+cod_contato+`)" data-toggle="modal" href="#visualizar" class="btn ">
-          <i class="material-icons"data-toggle="tooltip" title="Editar">&#xE254;</i>
-          </button>
-          </span> </td>`);
-        tabela += (`</tr></tbody>`);
-        // console.log(tabela)
-        document.getElementById("visualiza").innerHTML = tabela;
-        mascara();
+        window.location.replace("./gerenciaCd.html");
       });
-    } else {
-      erros(response.status);
     }
-  });
-  // document.getElementById("tabela").innerHTML = tabela;
-}
-
-
-
-function editarContatoCD(id,cod_contato) {
-
-
-  edicaoItem = {
-    "nome": document.getElementById("nome"+id).value,
-    "email": document.getElementById("email"+id).value,
-    "funcao": document.getElementById("funcao"+id).value,
-  };
-
-  console.log(edicaoItem)
-  if (edicaoItem["nome"] != listaItem["nome"] || edicaoItem["email"] != listaItem["email"] || edicaoItem["funcao"] != listaItem["funcao"]) {
-    //transforma as informações do token em json
-    let corpo = JSON.stringify(edicaoItem);
-    //função fetch para mandar
-    fetch(servidor + 'read/contato/' + cod_contato , {
-      method: 'PUT',
-      body: corpo,
-      headers: {
-        'Authorization': 'Bearer ' + meuToken
-      },
-    }).then(function (response) {
-      //checar o status do pedido
-      console.log(response.statusText);
-
-      //tratamento dos erros
-      if (response.status == 200 || response.status == 201) {
-        location.reload();
-      } else {
-        erros(response.status);
-      }
-      window.location.replace("./gerenciaCd.html");
-    });
   }
-  
 }
 
 function novoContato() {
