@@ -762,7 +762,7 @@ function itensFiscalizacao(caminho) {
           tabela += (`</td> <td>`);
           tabela += listaItem[i]["quantidade_disponivel"];
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["quantidade"] * 100 + `" class="quebrados" id="quantidade` + i + `" onchange="checarQuantidade(` + i + `)" type="text" size="10" style="text-align: right;"></input>`);
+          tabela += (`<input value="` + listaItem[i]["quantidade"] * 100 + `" class="quebrados" id="quantidade` + i + `" onchange="checarQuantidade(` + i + `);checarCasos(` + caminho + "," + i + `)" type="text" size="10" style="text-align: right;"></input>`);
           tabela += (`</td> <td>`);
           tabela += (`<input value="` + listaItem[i]["valor"] * 100 + `" class="preco" id="valor` + i + `" type="text" size="15" style="text-align: right;"></input>`);
           tabela += (`</td> <td class="preco">`);
@@ -876,6 +876,10 @@ function checarQuantidade(valor){
       }
     });
   }
+
+}
+
+function checarCasos(caminho,valor){
 
   //Para os casos especificos em tipos de item 8,9 e 10. Validos apenas em itens de 1 a 5 e de fatura ou previsão.
   if (listaItem[valor].cod_tipo_item >= "8" && listaItem[valor].cod_tipo_item <= "10" && (caminho == "itensfatura" || caminho == "itensprevisao") && listaItem[valor].tipo == "o") {

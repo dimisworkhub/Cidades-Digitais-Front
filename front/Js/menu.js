@@ -33,13 +33,14 @@ function logoff() {
 
 //define o total de horas para o login atual
 let hours = 13;
+
 //script que mantêm o login apenas até o tempo limite
 let now = new Date().getTime();
 let setupTime = localStorage.getItem('setupTime');
 if (setupTime == null) {
 	localStorage.setItem('setupTime', now);
-} else {                        //seg    min  h    13h
-	if (now - setupTime > hours * 1000 * 60 * 60 * 13) {
+} else {                        //seg    min  h
+	if (now - setupTime > hours * 1000 * 60 * 60) {
 		window.location.replace("./index.html");
 		localStorage.clear();
 	}
