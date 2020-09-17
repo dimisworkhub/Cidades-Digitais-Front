@@ -116,6 +116,76 @@ func (server *Server) GetAllTelefone(w http.ResponseWriter, r *http.Request) {
 }
 
 /*  =========================
+	FUNCAO EDITAR TELEFONE
+=========================  */
+
+func (server *Server) UpdateTelefone(w http.ResponseWriter, r *http.Request) {
+
+	//	Autorizacao de Modulo
+	if config.AuthMod(w, r, 12003) != nil && config.AuthMod(w, r, 13083) != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
+
+	//	Vars retorna as variaveis de rota
+	vars := mux.Vars(r)
+
+	//	codTelefone armazena a chave primaria da tabela contato
+	codTelefone, err := strconv.ParseUint(vars["cod_telefone"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] it couldn't read the 'body', %v\n", err))
+		return
+	}
+
+	//	Extrai o cod_usuario do body
+	tokenID, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+
+	telefone := models.Telefone{}
+	logTelefone := models.Log{}
+
+	err = json.Unmarshal(body, &telefone)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
+		return
+	}
+
+	if err = validation.Validator.Struct(telefone); err != nil {
+		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
+		w.WriteHeader(http.StatusPreconditionFailed)
+		return
+	}
+
+	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logTelefone.LogTelefone(server.DB, uint32(codTelefone), "telefone", "u", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
+		return
+	}
+
+	//	updateTelefone recebe o novo telefone, a que foi alterada
+	updateTelefone, err := telefone.UpdateTelefone(server.DB, uint32(codTelefone))
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))
+		return
+	}
+
+	//	Retorna o Status 200 e o JSON da struct alterada
+	responses.JSON(w, http.StatusOK, updateTelefone)
+}
+
+/*  =========================
 	FUNCAO DELETAR TELEFONE
 =========================  */
 

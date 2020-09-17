@@ -103,6 +103,9 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	SALVA TELEFONE
 	r.HandleFunc(config.TELEFONE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateTelefone))).Methods(http.MethodPost)
 
+	//	EDITA TELEFONE (cod_telefone)
+	r.HandleFunc(config.TELEFONE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateTelefone))).Methods(http.MethodPut)
+
 	//	APAGA TELEFONE (cod_telefone)
 	r.HandleFunc(config.TELEFONE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteTelefone))).Methods(http.MethodDelete)
 
