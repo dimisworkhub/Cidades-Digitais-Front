@@ -389,7 +389,7 @@ function contatos() {
         </tr>
         </thead>`);
         tabela += (`<tbody>`);
-        console.log(json)
+        // console.log(json)
         //cria uma lista apenas com os itens do lote selecionado
         let j = 0;
         for (let i = 0; i < json.length; i++) {
@@ -458,6 +458,7 @@ function visualizarContato(cod_contato,nome,funcao,email,identificador) {
       //pegar o json que possui a tabela
       response.json().then(function (json) {
 
+        console.log(json)
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
             <th style="width:20%" scope="col">Nome</th>
@@ -476,8 +477,8 @@ function visualizarContato(cod_contato,nome,funcao,email,identificador) {
 
         tabela += (`<td>`);
         for (i = 0; i < json.length; i++) {
-          tabela += (`<input value="` + json[i].telefone + `" id="telefone`+i+`" type="text" class="telefone" size="14">`);
-          tabela += (`&nbsp&nbsp&nbsp<select name="tipo" id="tipo`+i+`">
+          tabela += (`<input value="` + json[i].telefone + `" id="telefone`+ parseInt(1+ i) +`" type="text" class="telefone" size="14">`);
+          tabela += (`&nbsp&nbsp&nbsp<select name="tipo" id="tipo`+ parseInt(1+ i) +`">
           <option value="`+json[i].tipo+`">`+json[i].tipo+`</option>
           <option value="WhatsApp">WhatsApp</option>
           <option value="Casa">Casa</option>
@@ -490,12 +491,14 @@ function visualizarContato(cod_contato,nome,funcao,email,identificador) {
         tabela += (`</td>`);
         tabela += (`</td><td> 
           <span class="d-flex">
-          <button onclick="editarContatoCD(`+ identificador +`,`+cod_contato+`)" data-toggle="modal" href="#visualizar" class="btn ">
+          <button onclick="editarContatoCD(`+ identificador +`,`+cod_contato+`);editarTelefone(`+ identificador +`,`+cod_contato+`);" data-toggle="modal" href="#visualizar" class="btn ">
           <i class="material-icons"data-toggle="tooltip" title="Editar">&#xE254;</i>
           </button>
           </span> </td>`);
         tabela += (`</tr></tbody>`);
         // console.log(tabela)
+
+        
         document.getElementById("visualiza").innerHTML = tabela;
         mascara();
       });
@@ -506,8 +509,68 @@ function visualizarContato(cod_contato,nome,funcao,email,identificador) {
   // document.getElementById("tabela").innerHTML = tabela;
 }
 
+function editarTelefone(id,cod_contato) {
+
+  fetch(servidor + 'read/telefone/' + cod_contato, {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //checar os status de pedidos
+    //console.log(response)
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      //console.log(response.statusText);
+
+      //pegar o json que possui a tabela
+      response.json().then(function (json) {
+        // console.log(json)
+        for (let i = 0; i < json.length; i++) {
+          
+          
+          // console.log(document.getElementById("telefone2").value)
+          edicaoItem[i] = {
+            "telefone": document.getElementById("telefone"+ parseInt(1+i)).value,
+            "tipo": document.getElementById("tipo"+parseInt(1+i)).value,
+          };
+        
+      
+          console.log(edicaoItem[i])
+          if (edicaoItem[i]["telefone"] != listaItem[i]["telefone"] || edicaoItem[i]["tipo"] != listaItem[i]["tipo"]) {
+            //transforma as informações do token em json
+            let corpo = JSON.stringify(edicaoItem[i]);
+            //função fetch para mandar
+            fetch(servidor + 'read/telefone/' + json[i].cod_telefone , {
+              method: 'PUT',
+              body: corpo,
+              headers: {
+                'Authorization': 'Bearer ' + meuToken
+              },
+            }).then(function (response) {
+              //checar o status do pedido
+              console.log(response.statusText);
+        
+              //tratamento dos erros
+              if (response.status == 200 || response.status == 201) {
+                location.reload();
+              } else {
+                erros(response.status);
+              }
+              // window.location.replace("./gerenciaCd.html");
+            });
+          }
+        }
+      });
 
 
+    } else {
+      erros(response.status);
+    }
+  });
+}
 function editarContatoCD(id,cod_contato) {
 
 
@@ -534,11 +597,11 @@ function editarContatoCD(id,cod_contato) {
 
       //tratamento dos erros
       if (response.status == 200 || response.status == 201) {
-        location.reload();
+        // location.reload();
       } else {
         erros(response.status);
       }
-      window.location.replace("./gerenciaCd.html");
+      // window.location.replace("./gerenciaCd.html");
     });
   }
   
