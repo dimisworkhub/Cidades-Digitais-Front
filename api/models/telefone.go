@@ -50,6 +50,27 @@ func (telefone *Telefone) FindAllTelefone(db *gorm.DB, codContato uint32) (*[]Te
 }
 
 /*  =========================
+	FUNCAO EDITAR TELEFONE
+=========================  */
+
+func (telefone *Telefone) UpdateTelefone(db *gorm.DB, codTelefone uint32) (*Telefone, error) {
+
+	//	Permite a atualizacao dos campos indicados
+	db = db.Debug().Exec("UPDATE telefone SET telefone = ?, tipo = ? WHERE cod_telefone = ?", telefone.Telefone, telefone.Tipo, codTelefone)
+	if db.Error != nil {
+		return &Telefone{}, db.Error
+	}
+
+	//	Busca um elemento no banco de dados a partir de sua chave primaria
+	err := db.Debug().Model(&Telefone{}).Where("cod_telefone = ?", codTelefone).Take(&telefone).Error
+	if err != nil {
+		return &Telefone{}, err
+	}
+
+	return telefone, err
+}
+
+/*  =========================
 	FUNCAO DELETAR TELEFONE
 =========================  */
 

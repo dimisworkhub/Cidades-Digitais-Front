@@ -103,6 +103,9 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	SALVA TELEFONE
 	r.HandleFunc(config.TELEFONE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateTelefone))).Methods(http.MethodPost)
 
+	//	EDITA TELEFONE (cod_telefone)
+	r.HandleFunc(config.TELEFONE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateTelefone))).Methods(http.MethodPut)
+
 	//	APAGA TELEFONE (cod_telefone)
 	r.HandleFunc(config.TELEFONE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteTelefone))).Methods(http.MethodDelete)
 
@@ -180,8 +183,8 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 		ROTAS EM UACOM ASSUNTO
 	=========================	*/
 
-	//	LISTA UACOM (cod_ibge, data)
-	r.HandleFunc("/read/uacom/{cod_ibge}/{data}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllUacomAssunto))).Methods(http.MethodGet)
+	//	LISTA UACOM ASSUNTO (cod_ibge, data)
+	r.HandleFunc("/read/uacomassunto/{cod_ibge}/{data}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllUacomAssunto))).Methods(http.MethodGet)
 
 	//	SALVA UACOM ASSUNTO
 	r.HandleFunc(config.UACOM_ASSUNTO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateUacomAssunto))).Methods(http.MethodPost)
