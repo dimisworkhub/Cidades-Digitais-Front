@@ -11,7 +11,7 @@ type Uacom struct {
 	Data      string `gorm:"primary_key;not null" json:"data"`
 	Titulo    string `gorm:"default:null" json:"titulo"`
 	Relato    string `gorm:"default:null" json:"relato"`
-	Descricao string `gorm:"defaul:null" json:"descricao"`
+	Descricao string `gorm:"default:null" json:"descricao"`
 }
 
 /*  =========================
