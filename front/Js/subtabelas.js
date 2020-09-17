@@ -762,7 +762,7 @@ function itensFiscalizacao(caminho) {
           tabela += (`</td> <td>`);
           tabela += listaItem[i]["quantidade_disponivel"];
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["quantidade"] * 100 + `" class="quebrados" id="quantidade` + i + `" onchange="checarQuantidade(` + i + `)" type="text" size="10" style="text-align: right;"></input>`);
+          tabela += (`<input value="` + listaItem[i]["quantidade"] * 100 + `" class="quebrados" id="quantidade` + i + `" onchange="checarQuantidade(` + i + `);checarCasos(` + caminho + "," + i + `)" type="text" size="10" style="text-align: right;"></input>`);
           tabela += (`</td> <td>`);
           tabela += (`<input value="` + listaItem[i]["valor"] * 100 + `" class="preco" id="valor` + i + `" type="text" size="15" style="text-align: right;"></input>`);
           tabela += (`</td> <td class="preco">`);
@@ -875,8 +875,66 @@ function checarQuantidade(valor){
 
       }
     });
-
   }
+
+}
+
+function checarCasos(caminho,valor){
+
+  //Para os casos especificos em tipos de item 8,9 e 10. Validos apenas em itens de 1 a 5 e de fatura ou previsão.
+  if (listaItem[valor].cod_tipo_item >= "8" && listaItem[valor].cod_tipo_item <= "10" && (caminho == "itensfatura" || caminho == "itensprevisao") && listaItem[valor].tipo == "o") {
+
+    //valor de limite
+    //utiliza os valores atualizados
+    let valorMax = listaItem[valor].quantidade_disponivel * mascaraQuebrados(document.getElementById("valor" + valor).value);
+
+    //processo para pegar os outros valores:
+    let valorSoma = "";
+    for (let i = 0; i < listaItem.length; i++) {
+      //garantindo ser um dos valores com mesmo item e do mesmo grupo de tipos
+      if (listaItem[valor].cod_tipo_item >= "8" && listaItem[valor].cod_tipo_item <= "10" && listaItem[i].cod_item == listaItem[valor].cod_item) {
+
+        valorSoma = (mascaraQuebrados(document.getElementById("valor" + valor).value) * mascaraQuebrados(document.getElementById("quantidade" + valor).value)) + valorSoma;
+
+      }
+    }
+
+    //o alerta em si
+    if (valorMax < valorSoma) {
+      //Alerta inteligente que necessita de uma confirmação para continuar
+      Swal.fire({
+        title: 'Tem certeza?',
+        text: "A Quantidade inserida no item " + listaItem[valor].cod_tipo_item + "." + listaItem[valor].cod_item + " está ultrapassando o limite do seu grupo!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sim, tenho certeza!'
+      }).then((result) => {
+        
+        if (result.value) {
+
+          Swal.fire(
+            'Sucesso!',
+            'Item foi inserido!',
+            'success'
+          )
+
+        } else {
+
+          document.getElementById("quantidade" + valor).value = listaItem[valor].quantidade;
+
+          Swal.fire(
+            'Cancelado!',
+            'O item não foi inserido!',
+            'error'
+          )
+
+        }
+      });
+    }
+  }
+
 }
 
 function editarItem(caminho) {
@@ -892,33 +950,6 @@ function editarItem(caminho) {
       } else {
         caminhoFinal = servidor + 'read/' + caminho + '/' + meuCodigo + '/' + meuItem[i] + '/' + meuTipo[i];
       }
-
-      //Para os casos especificos em tipos de item 8,9 e 10. Validos apenas em itens de 1 a 5 e de fatura ou previsão.
-      //preciso ajustar para ficar bom (talvez o thiago queira que eu acople)
-      // if (listaItem[i].cod_tipo_item >= "8" && listaItem[i].cod_tipo_item <= "10" && (caminho == "itensfatura" || caminho == "itensprevisao") && listaItem[i].tipo == "o") {
-
-      //   //valor de limite
-      //   //utiliza os valores atualizados
-      //   let valorMax = listaItem[i].quantidade_disponivel * edicaoItem[i].valor;
-
-      //   //processo para pegar os outros valores:
-      //   let valorSoma = "";
-      //   for (let j = 0; j < listaItem.length; j++) {
-      //     //garantindo ser um dos valores com mesmo item e do mesmo grupo de tipos
-      //     if (listaItem[i].cod_tipo_item >= "8" && listaItem[i].cod_tipo_item <= "10" && listaItem[j].cod_item == listaItem[i].cod_item) {
-
-      //       valorSoma = (mascaraQuebrados(document.getElementById("valor" + i).value) * mascaraQuebrados(document.getElementById("quantidade" + i).value)) + valorSoma;
-
-      //     }
-      //   }
-
-      //   if (valorMax < valorSoma) {
-      //     alert("Há um problema no item " + listaItem[i].cod_tipo_item + "." + listaItem[i].cod_item + ". Ele está ultrapassando o limite do seu grupo.");
-      //   }
-
-      // }
-
-      //independente do alerta
       
       edicaoItem[i] = {
         "quantidade": parseFloat(mascaraQuebrados(document.getElementById("quantidade" + i).value)),

@@ -69,20 +69,20 @@ function enviar() {
 
 
 
-//CD acompanhameno (pode ir pra subtabelas se necessário)
+//CD acompanhamento
 
-let listaUacom = [], listaAssunto = [], meuData = [];
+let listaUacom = [], listaAssunto = [];
 
 //usado para fazer o id dos botões de assunto
-let contaAssunto = 0;
+let idAssunto = 0;
 
 //usado para contar o total de botões
-let totalAssunto = 0;
+let contadorAssunto = 0;
 
 //assuntoSelecionado guarda os assuntos que serão adicionados
-let listaDeAssuntos, assuntoSelecionado = "";
+let dataAssunto, listaDeAssuntos, assuntoSelecionado = "";
 
-function pegarAssunto(){
+function pegarAssuntos(){
   //fetch de assunto
   fetch(servidor + 'read/assunto', {
     method: 'GET',
@@ -95,13 +95,40 @@ function pegarAssunto(){
     if (response.status == 200 || response.status == 201) {
       response.json().then(function (json) {
 
-        listaAssunto=json;
+        let x="";
+        for(let i=0; i<json.length; i++){
+          x += "<option value='" + json[i].cod_assunto + "   " + json[i].descricao + "'>" + json[i].descricao + "</option>";
+        }
+        document.getElementById("assunto").innerHTML = x;
+
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+function assuntosTabela(dataSelecionada){
+  fetch(servidor + 'read/uacomassunto/' + meuCodigo + "/" + dataSelecionada , {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      response.json().then(function (json) {
+
+        console.log(json);
 
         let x="";
         for(let i=0; i<json.length; i++){
-          x += "<option value=" + json[i].cod_assunto + ">" + json[i].descricao + "</option>";
+          x += json[i].cod_assunto;
         }
-        document.getElementById("assunto").innerHTML = x;
+        listaDeAssuntos = x;
+
+        return listaDeAssuntos;
 
       });
     } else {
@@ -113,7 +140,7 @@ function pegarAssunto(){
 function uacom() {
 
 	//cria o botão para editar
-	document.getElementById("editar").innerHTML = (`<button class="btn btn-success" data-toggle="modal" data-target="#adicionarUacom" onclick="pegarAssunto()">Novo Acompanhamento</button>`);
+	document.getElementById("editar").innerHTML = (`<button class="btn btn-success" data-toggle="modal" data-target="#adicionarUacom" onclick="pegarAssuntos()">Novo Acompanhamento</button>`);
 	document.getElementById("editar2").innerHTML = "";
 
   
@@ -146,42 +173,34 @@ function uacom() {
 			<th style="width:5%" scope="col">editar</th>
 			</tr>
 			</thead>`);
-			tabela += (`<tbody>`);
+      tabela += (`<tbody>`);
   
-			//cria uma lista apenas com os itens do lote selecionado
-			let j = 0;
-			for (let i = 0; i < json.length; i++) {
-				if (json[i]["cod_ibge"] == meuCodigo) {
-					listaUacom[j] = json[i];
-					j++;
-				}
-			}
-		    for (i = 0; i < listaUacom.length; i++) {
-
-
-
-				//salva os valores para edição
-				meuData[i] = listaUacom[i]["data"];
+		  for (i = 0; i < listaUacom.length; i++) {
 	
 				tabela += (`<tr>`);
 				tabela += (`<td class="data">`);
 				tabela += arrumaData(listaUacom[i]["data"]);
         tabela += (`</td> <td>`);
-        tabela += "Ainda trabalhando nisso.";
-        //tabela += listaDeAssuntos;
-
+        tabela += assuntosTabela(listaUacom[i]["data"]);
         tabela += (`</td> <td>`);
 				tabela += listaUacom[i]["titulo"];
 				tabela += (`</td> <td>`);
 				tabela += listaUacom[i]["relato"];
-				tabela += (`</td>`);
+        tabela += (`</td>`);
+        tabela += (`<td> 
+                  <span class="d-flex">
+                  <button onclick="editarUacom(` + i + `)" class="btn btn-success">
+                  <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
+                  </button>
+                  </span> </td>`);
 				tabela += (`</tr>`);
-		    }
-		    tabela += (`</tbody>`);
-		    document.getElementById("tabela").innerHTML = tabela;
-  
-		    //Máscara colocada separadamente para tabela
-		    mascara();
+      }
+
+      tabela += (`</tbody>`);
+      document.getElementById("tabela").innerHTML = tabela;
+
+      //Máscara colocada separadamente para tabela
+      mascara();
 
 		});
 	  } else {
@@ -193,20 +212,23 @@ function uacom() {
 
 function anotaAssunto() {
 
-  assuntoSelecionado = `<a class="btn btn-success" id="adicao` + contaAssunto + `" onclick="removerAssunto(` + contaAssunto + `)"> Assunto `+ document.getElementById("assunto").value +`</a>`;
+  let valoresAssunto = document.getElementById("assunto").value;
+  let valoresAssunto2 = valoresAssunto.split("   ");
 
-  document.getElementById("adicoes").innerHTML += assuntoSelecionado;
+  assuntoSelecionado += `<button class="btn btn-success" id="adicao` + idAssunto + `" onclick="removerAssunto(` + idAssunto + `)" value="` + valoresAssunto2[0] + `">`+ valoresAssunto2[1] +`</button>`;
 
-  contaAssunto++;
-  totalAssunto++;
+  document.getElementById("adicoes").innerHTML = assuntoSelecionado;
+
+  idAssunto++;
+  contadorAssunto++;
 }
 
 function removerAssunto(valor){
 
   document.getElementById("adicao"+valor).innerHTML = "";
 
-  totalAssunto--;
-  console.log(totalAssunto);
+  contadorAssunto--;
+  console.log(contadorAssunto);
 }
 
 function novoUacom() {
@@ -219,8 +241,8 @@ function novoUacom() {
 
   //transforma as informações em string para mandar
   let corpo = JSON.stringify(infoUacom);
+  //console.log(corpo);
 
-  console.log(corpo);
   //função fetch para mandar
   fetch(servidor + 'read/uacom', {
     method: 'POST',
@@ -232,8 +254,14 @@ function novoUacom() {
 
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
-      alert('Acompanhamento inserido com sucesso!');
+      //alert('Acompanhamento inserido com sucesso!');
+
+      //pegar a data para enviar no uacomassunto
+      response.json().then(function (json) {
+      dataAssunto = json.data;
       novoAssunto();
+      });
+
     } else {
       erros(response.status);
     }
@@ -241,15 +269,20 @@ function novoUacom() {
 }
 
 function novoAssunto(){
-  for(let i = 0; i <= totalAssunto; i++){
-    
+  for(let i = 0; i < contadorAssunto; i++){
+
+    let infoAssunto = {
+      "cod_ibge": parseInt(meuCodigo),
+      "data": dataAssunto,
+      "cod_assunto": parseInt(document.getElementById("adicao"+i).value),
+    };
 
     //transforma as informações em string para mandar
-    let corpo = JSON.stringify(infoAssunto[i]);
+    let corpo = JSON.stringify(infoAssunto);
+    //console.log(corpo);
 
-    console.log(corpo);
     //função fetch para mandar
-    fetch(servidor + 'read/uacom', {
+    fetch(servidor + 'read/uacomassunto', {
       method: 'POST',
       body: corpo,
       headers: {
@@ -259,10 +292,10 @@ function novoAssunto(){
 
       //tratamento dos erros
       if (response.status == 200 || response.status == 201) {
-        alert('Assunto inserido com sucesso!');
+        //alert('Assunto inserido com sucesso!');
         location.reload();
       } else {
-        erros(response.status);
+        //erros(response.status);
       }
     });
   }
@@ -290,7 +323,8 @@ function novoAssunto(){
 // 	  if (edicaoUacom[i]["titulo"] != listaUacom[i]["titulo"] || edicaoUacom[i]["relato"] != listaUacom[i]["relato"]) {
 //       //transforma as informações do token em json
 //       let corpo = JSON.stringify(edicaoUacom[i]);
-//       //função fetch para mandar
+
+//       //função fetch para mandar                         meuData ainda não foi criado
 //       fetch(servidor + 'read/uacom/' + meuCodigo + '/' + meuData[i], {
 //         method: 'PUT',
 //         body: corpo,
