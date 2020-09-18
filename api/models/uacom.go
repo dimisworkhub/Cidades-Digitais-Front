@@ -7,10 +7,11 @@ import "github.com/jinzhu/gorm"
 =========================  */
 
 type Uacom struct {
-	CodIbge uint32 `gorm:"primary_key;foreign_key:CodIbge;not null" json:"cod_ibge"`
-	Data    string `gorm:"primary_key;not null" json:"data"`
-	Titulo  string `gorm:"default:null" json:"titulo"`
-	Relato  string `gorm:"default:null" json:"relato"`
+	CodIbge   uint32 `gorm:"primary_key;foreign_key:CodIbge;not null" json:"cod_ibge"`
+	Data      string `gorm:"primary_key;not null" json:"data"`
+	Titulo    string `gorm:"default:null" json:"titulo"`
+	Relato    string `gorm:"default:null" json:"relato"`
+	Descricao string `gorm:"default:null" json:"descricao"`
 }
 
 /*  =========================
@@ -53,8 +54,11 @@ func (uacom *Uacom) FindAllUacom(db *gorm.DB, codIbge uint32) (*[]Uacom, error) 
 
 	// Busca todos elementos contidos no banco de dados
 	err := db.Debug().Table("uacom").
-		Select("uacom.*").
+		Select("uacom.*, GROUP_CONCAT(assunto.descricao ORDER BY assunto.cod_assunto SEPARATOR '\n') AS descricao").
+		Joins("LEFT JOIN uacom_assunto ON uacom.cod_ibge = uacom_assunto.cod_ibge").
+		Joins("LEFT JOIN assunto ON uacom_assunto.cod_assunto = assunto.cod_assunto").
 		Where("uacom.cod_ibge = ?", codIbge).
+		Group("uacom.cod_ibge, uacom.data").
 		Order("uacom.data").
 		Scan(&allUacom).Error
 
