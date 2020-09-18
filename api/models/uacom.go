@@ -55,7 +55,7 @@ func (uacom *Uacom) FindAllUacom(db *gorm.DB, codIbge uint32) (*[]Uacom, error) 
 	// Busca todos elementos contidos no banco de dados
 	err := db.Debug().Table("uacom").
 		Select("uacom.*, GROUP_CONCAT(assunto.descricao ORDER BY assunto.cod_assunto SEPARATOR '\n') AS descricao").
-		Joins("LEFT JOIN uacom_assunto ON uacom.cod_ibge = uacom_assunto.cod_ibge").
+		Joins("LEFT JOIN uacom_assunto ON uacom.cod_ibge = uacom_assunto.cod_ibge AND uacom.data = uacom_assunto.data").
 		Joins("LEFT JOIN assunto ON uacom_assunto.cod_assunto = assunto.cod_assunto").
 		Where("uacom.cod_ibge = ?", codIbge).
 		Group("uacom.cod_ibge, uacom.data").
