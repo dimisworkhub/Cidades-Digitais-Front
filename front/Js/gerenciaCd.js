@@ -377,14 +377,13 @@ function contatos() {
         <th style="width:20%" scope="col">Nome</th>
         <th style="width:20%" scope="col">Função</th>
         <th style="width:20%" scope="col">E-mail</th>
+        <th style="width:20%" scope="col">Telefones</th>
+        <th style="width:20%" scope="col">Tipo</th>
+        <th style="width:10%" scope="col">Opções</th>
         </tr>
         </thead>`);
         tabela += (`<tbody>`);
-<<<<<<< HEAD
-
-=======
         // console.log(json)
->>>>>>> 0a78e084cdd170740675f17acc9f8734cabda379
         //cria uma lista apenas com os itens do lote selecionado
         let j = 0;
         for (let i = 0; i < json.length; i++) {
@@ -394,20 +393,30 @@ function contatos() {
           }
         }
         for (i = 0; i < listaItem.length; i++) {
-
+          
           //salva os valores para edição
           meuItem[i] = listaItem[i]["cod_item"];
           meuTipo[i] = listaItem[i]["cod_tipo_item"];
-
+          
           tabela += (`<tr>`);
           tabela += (`<td>`);
-          tabela += (`<input value="` + listaItem[i]["nome"] + `"class="" id="nome` + i + `" type="text" size="30">`);
+          tabela += (`<span id="nome style="white-space: pre-line">` + listaItem[i]["nome"] + `</span>`);
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["funcao"] + `"class="" id="funcao` + i + `" type="text" size="30">`);
+          tabela += (`<span id="funcao style="white-space: pre-line">` + listaItem[i]["funcao"] + `</span>`);
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["email"] + `"class="" id="email` + i + `" type="text" size="30">`);
-          tabela += (`</td>`);
+          tabela += (`<span id="email style="white-space: pre-line">` + listaItem[i]["email"] + `</span>`);
+          tabela += (`</td> <td>`);
+          tabela += (`<span class="" id="telefone" style="white-space: pre-line">` + listaItem[i].telefone + `</span>`);
+          tabela += (`</td> <td>`);
+          tabela += (`<span class="" id="tipo" style="white-space: pre-line">` + listaItem[i].tipo + `</span>`);
+          tabela += (`</td><td> 
+          <span class="d-flex">
+          <button onclick="visualizarContato(`+  listaItem[i].cod_contato+`,'`+ listaItem[i].nome +`','`+ listaItem[i].funcao +`','`+ listaItem[i].email +`','`+i+`')" data-toggle="modal" href="#visualizar" class="btn btn-success">
+          <i class="material-icons"data-toggle="tooltip" title="Visualizar">content_paste</i>
+          </button>
+          </span> </td>`);
           tabela += (`</tr>`);
+          // console.log(tabela)
         }
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
@@ -422,41 +431,27 @@ function contatos() {
   });
 }
 
-function editarContatoCD() {
 
-  for (let i = 0; i < listaItem.length; i++) {
+function visualizarContato(cod_contato,nome,funcao,email,identificador) {
+  identificador= parseInt(identificador)
+  
+  fetch(servidor + 'read/telefone/' + cod_contato, {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
 
-    edicaoItem[i] = {
-      "nome": document.getElementById("nome" + i).value,
-      "email": document.getElementById("email" + i).value,
-      "funcao": document.getElementById("funcao" + i).value,
-    };
+    //checar os status de pedidos
+    //console.log(response)
 
-<<<<<<< HEAD
-    console.log(listaItem[i])
-    console.log(edicaoItem[i])
-    if (edicaoItem[i]["nome"] != listaItem[i]["nome"] || edicaoItem[i]["email"] != listaItem[i]["email"] || edicaoItem[i]["funcao"] != listaItem[i]["funcao"]) {
-      //transforma as informações do token em json
-      let corpo = JSON.stringify(edicaoItem[i]);
-      //função fetch para mandar
-      fetch(servidor + 'read/contato/' + listaItem[i]["cod_contato"] , {
-        method: 'PUT',
-        body: corpo,
-        headers: {
-          'Authorization': 'Bearer ' + meuToken
-        },
-      }).then(function (response) {
-        //checar o status do pedido
-        console.log(response.statusText);
+    //tratamento dos erros
+    if (response.status == 200) {
+      //console.log(response.statusText);
 
-        //tratamento dos erros
-        if (response.status == 200 || response.status == 201) {
-          location.reload();
-        } else {
-          erros(response.status);
-        }
-        window.location.replace("./gerenciaCd.html");
-=======
+      //pegar o json que possui a tabela
+      response.json().then(function (json) {
+
         console.log(json)
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
@@ -500,11 +495,10 @@ function editarContatoCD() {
         
         document.getElementById("visualiza").innerHTML = tabela;
         mascara();
->>>>>>> 0a78e084cdd170740675f17acc9f8734cabda379
       });
+    } else {
+      erros(response.status);
     }
-<<<<<<< HEAD
-=======
   });
   // document.getElementById("tabela").innerHTML = tabela;
 }
@@ -603,8 +597,8 @@ function editarContatoCD(id,cod_contato) {
       }
       // window.location.replace("./gerenciaCd.html");
     });
->>>>>>> 0a78e084cdd170740675f17acc9f8734cabda379
   }
+  
 }
 
 function novoContato() {
