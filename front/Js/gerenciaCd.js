@@ -491,7 +491,7 @@ function editarContatoCD() {
         tabela += (`</td><td> 
           <span class="d-flex">
           <button onclick="editarContatoCD(`+ identificador +`,`+cod_contato+`);editarTelefone(`+ identificador +`,`+cod_contato+`);" data-toggle="modal" href="#visualizar" class="btn ">
-          <i class="material-icons"data-toggle="tooltip" title="Editar">&#xE254;</i>
+          <i class="material-icons"data-toggle="tooltip" title="Salvar">&#xE254;</i>
           </button>
           </span> </td>`);
         tabela += (`</tr></tbody>`);
