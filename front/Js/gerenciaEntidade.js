@@ -512,7 +512,7 @@ function loteEntidade() {
   document.getElementById("editar2").innerHTML = (`<br>`);
 
   //função fetch para chamar os itens de previsão da tabela
-  fetch(servidor + 'read/lote/'+meuCNPJ, {
+  fetch(servidor + 'read/lotecnpj/'+meuCNPJ, {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -525,7 +525,7 @@ function loteEntidade() {
       //pegar o json que possui a tabela
       response.json().then(function (json) {
 
-        //console.log(json);
+        console.log(json);
 
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
@@ -548,12 +548,11 @@ function loteEntidade() {
 
         for (i = 0; i < listaFinal.length; i++) {
           //captura itens para tabela
-          tabela += (`<tr style="cursor:pointer" id="linha` + i + `" onmouseover="sublinhar(` + i + "," + json.length + `)" onclick="redirecionar(` + i + "," + "'previsao'" + `)">`);
+          tabela += (`<tr style="cursor:pointer" id="linha` + i + `" onmouseover="sublinhar(` + i + "," + json.length + `)" onclick="redirecionar(` + listaFinal[i]["cod_lote"] + "," + "'lote'" + `)">`);
           tabela += (`<td>`);
           tabela += listaFinal[i]["cod_lote"];
           tabela += (`</td><td>`);
-          tabela += listaFinal[i]["Contrato"];
-          tabela += (`</td><td>`);
+          tabela += listaFinal[i]["contrato"];
           tabela += (`</td><td class="data">`);
           mascara();
           tabela += arrumaData(listaFinal[i]["dt_inicio_vig"]);
