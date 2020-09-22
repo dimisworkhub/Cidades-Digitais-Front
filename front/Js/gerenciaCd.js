@@ -159,7 +159,7 @@ function uacom() {
 		//pegar o json que possui a tabela
 		response.json().then(function (json) {
   
-      //console.log(json);
+      console.log(json);
       
       listaUacom=json;
 	
@@ -188,7 +188,7 @@ function uacom() {
         tabela += (`</td>`);
         tabela += (`<td> 
                   <span class="d-flex">
-                  <button onclick="editarUacom(` + i + `)" class="btn btn-success">
+                  <button onclick="editarUacom(` + i + `)" class="btn btn-success" data-toggle="modal" data-target="#adicionarUacom">
                   <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
                   </button>
                   </span> </td>`);
@@ -309,35 +309,35 @@ function editarUacom(valor) {
 }
 
 
-//coisas para a segunda parte
 
-//   let edicaoUacom = {
-// 		"titulo": document.getElementById("titulo").value,
-// 		"relato": document.getElementById("relato").value,
-// 	  };
+function editarUacom2(){
+  
+  let edicaoUacom = {
+    "titulo": document.getElementById("titulo").value,
+    "relato": document.getElementById("relato").value,
+  };
 
-//       //transforma as informações do token em json
-//       let corpo = JSON.stringify(edicaoUacom);
+  //transforma as informações do token em json
+  let corpo = JSON.stringify(edicaoUacom);
 
-//       fetch(servidor + 'read/uacom/' + meuCodigo + '/' + meuData[i], {
-//         method: 'PUT',
-//         body: corpo,
-//         headers: {
-//         'Authorization': 'Bearer ' + meuToken
-//         },
-//       }).then(function (response) {
-//         //checar o status do pedido
-//         console.log(response.statusText);
-    
-//         //tratamento dos erros
-//         if (response.status == 200 || response.status == 201) {
-//           location.reload();
-//         } else {
-//           erros(response.status);
-//         }
-//       });
-// 	  }
-// 	}
+  fetch(servidor + 'read/uacom/' + meuCodigo + '/' + meuData[i], {
+    method: 'PUT',
+    body: corpo,
+    headers: {
+    'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+    //checar o status do pedido
+    console.log(response.statusText);
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      location.reload();
+    } else {
+      erros(response.status);
+    }
+  });
+}
 
 
 
@@ -383,7 +383,9 @@ function contatos() {
         </tr>
         </thead>`);
         tabela += (`<tbody>`);
+        
         // console.log(json)
+        
         //cria uma lista apenas com os itens do lote selecionado
         let j = 0;
         for (let i = 0; i < json.length; i++) {
