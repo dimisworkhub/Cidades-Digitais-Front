@@ -159,7 +159,7 @@ function uacom() {
 		//pegar o json que possui a tabela
 		response.json().then(function (json) {
   
-      //console.log(json);
+      console.log(json);
       
       listaUacom=json;
 	
@@ -188,7 +188,7 @@ function uacom() {
         tabela += (`</td>`);
         tabela += (`<td> 
                   <span class="d-flex">
-                  <button onclick="editarUacom(` + i + `)" class="btn btn-success">
+                  <button onclick="editarUacom(` + i + `)" class="btn btn-success" data-toggle="modal" data-target="#adicionarUacom">
                   <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
                   </button>
                   </span> </td>`);
@@ -309,35 +309,35 @@ function editarUacom(valor) {
 }
 
 
-//coisas para a segunda parte
 
-//   let edicaoUacom = {
-// 		"titulo": document.getElementById("titulo").value,
-// 		"relato": document.getElementById("relato").value,
-// 	  };
+function editarUacom2(){
+  
+  let edicaoUacom = {
+    "titulo": document.getElementById("titulo").value,
+    "relato": document.getElementById("relato").value,
+  };
 
-//       //transforma as informações do token em json
-//       let corpo = JSON.stringify(edicaoUacom);
+  //transforma as informações do token em json
+  let corpo = JSON.stringify(edicaoUacom);
 
-//       fetch(servidor + 'read/uacom/' + meuCodigo + '/' + meuData[i], {
-//         method: 'PUT',
-//         body: corpo,
-//         headers: {
-//         'Authorization': 'Bearer ' + meuToken
-//         },
-//       }).then(function (response) {
-//         //checar o status do pedido
-//         console.log(response.statusText);
-    
-//         //tratamento dos erros
-//         if (response.status == 200 || response.status == 201) {
-//           location.reload();
-//         } else {
-//           erros(response.status);
-//         }
-//       });
-// 	  }
-// 	}
+  fetch(servidor + 'read/uacom/' + meuCodigo + '/' + meuData[i], {
+    method: 'PUT',
+    body: corpo,
+    headers: {
+    'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+    //checar o status do pedido
+    console.log(response.statusText);
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      location.reload();
+    } else {
+      erros(response.status);
+    }
+  });
+}
 
 
 
@@ -380,11 +380,6 @@ function contatos() {
         </tr>
         </thead>`);
         tabela += (`<tbody>`);
-<<<<<<< HEAD
-
-=======
-        // console.log(json)
->>>>>>> 0a78e084cdd170740675f17acc9f8734cabda379
         //cria uma lista apenas com os itens do lote selecionado
         let j = 0;
         for (let i = 0; i < json.length; i++) {
@@ -432,7 +427,6 @@ function editarContatoCD() {
       "funcao": document.getElementById("funcao" + i).value,
     };
 
-<<<<<<< HEAD
     console.log(listaItem[i])
     console.log(edicaoItem[i])
     if (edicaoItem[i]["nome"] != listaItem[i]["nome"] || edicaoItem[i]["email"] != listaItem[i]["email"] || edicaoItem[i]["funcao"] != listaItem[i]["funcao"]) {
@@ -456,56 +450,9 @@ function editarContatoCD() {
           erros(response.status);
         }
         window.location.replace("./gerenciaCd.html");
-=======
-        console.log(json)
-        let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
-          <tr>
-            <th style="width:20%" scope="col">Nome</th>
-            <th style="width:20%" scope="col">Função</th>
-            <th style="width:20%" scope="col">E-mail</th>
-            <th style="width:20%" scope="col" rowspan="`+ json.length +`">Telefone</th>
-            <th style="width:9%" scope="col">Ação</th>
-          </tr>
-          </thead>
-        <tbody>
-          <tr>`);
-        tabela += (`<td><input value="` + nome + `" id="nome`+identificador+`" type="text" class="nome"></td>`);
-        tabela += (`<td><input value="` + funcao + `" id="funcao`+identificador+`" type="text" class="funcao"></td>`);
-        tabela += (`<td><input value="` + email + `" id="email`+identificador+`" type="text" class="email"></td>`);
-
-
-        tabela += (`<td>`);
-        for (i = 0; i < json.length; i++) {
-          tabela += (`<input value="` + json[i].telefone + `" id="telefone`+ parseInt(1+ i) +`" type="text" class="telefone" size="14">`);
-          tabela += (`&nbsp&nbsp&nbsp<select name="tipo" id="tipo`+ parseInt(1+ i) +`">
-          <option value="`+json[i].tipo+`">`+json[i].tipo+`</option>
-          <option value="WhatsApp">WhatsApp</option>
-          <option value="Casa">Casa</option>
-          <option value="Celular">Celular</option>
-          <option value="Trabalho">Trabalho</option>
-          </select>
-          `);
-          
-        }
-        tabela += (`</td>`);
-        tabela += (`</td><td> 
-          <span class="d-flex">
-          <button onclick="editarContatoCD(`+ identificador +`,`+cod_contato+`);editarTelefone(`+ identificador +`,`+cod_contato+`);" data-toggle="modal" href="#visualizar" class="btn ">
-          <i class="material-icons"data-toggle="tooltip" title="Editar">&#xE254;</i>
-          </button>
-          </span> </td>`);
-        tabela += (`</tr></tbody>`);
-        // console.log(tabela)
-
-        
-        document.getElementById("visualiza").innerHTML = tabela;
-        mascara();
->>>>>>> 0a78e084cdd170740675f17acc9f8734cabda379
       });
     }
-<<<<<<< HEAD
-=======
-  });
+  }
   // document.getElementById("tabela").innerHTML = tabela;
 }
 
@@ -603,7 +550,6 @@ function editarContatoCD(id,cod_contato) {
       }
       // window.location.replace("./gerenciaCd.html");
     });
->>>>>>> 0a78e084cdd170740675f17acc9f8734cabda379
   }
 }
 
