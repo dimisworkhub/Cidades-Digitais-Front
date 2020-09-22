@@ -58,9 +58,9 @@ func (lote *Lote) FindLoteByCnpj(db *gorm.DB, cnpj string) (*[]Lote, error) {
 
 	// Busca todos elementos contidos no banco de dados
 	err := db.Debug().Table("lote").
-		Select("entidade.nome, lote.*").
-		Joins("JOIN entidade ON lote.cnpj = entidade.cnpj ORDER BY lote.cod_lote ASC").
-		Where("entidade.cnpj = ", cnpj).
+		Select("lote.*").
+		Joins("JOIN entidade ON lote.cnpj = entidade.cnpj").
+		Where("entidade.cnpj = ?", cnpj).
 		Order("lote.cod_lote").
 		Scan(&allLote).Error
 	if err != nil {
