@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="bootstrap4\css\bootstrap.css"> <!-- CSS bootstrap -->
     <link rel="stylesheet" href="css/reset.css"> <!-- CSS reset -->
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="./css/multi.css">
     <!--Resource style -->
     <link rel="stylesheet" href="./css/style2.css">
     <script src="Js/modernizr.js"></script> <!-- Modernizr -->
@@ -101,12 +102,13 @@
                             </div>
                         </form>
 
-                        <!-- Esta parte por algum motivo inverte o alinhamento do começo. Precisa de separação por ser muito grande para uma linha. -->
-
+                        <!-- arrumar depois para evitar problemas de espaço -->
                         <div class="col-md-12">
                             <div class="form-row">
-                                <!-- ??? -->
-                                <button onclick="itens()" type="button" style="background-color:#959595" class="btn btn-primary">Itens</button>
+                                <button onclick="contatosEntidade()" type="button" style="background-color:#959595"
+                                    class="btn btn-primary">Contatos</button>
+                                <button onclick="loteEntidade()" type="button" style="background-color:#959595"
+                                    class="btn btn-primary">Lote</button>
                             </div>
                         </div>
                         
@@ -121,42 +123,129 @@
             </div>
         </section> <!-- cd-intro -->
     </main>
-    <!-- ADD Contato HTML -->
-    <div id="addContatoModal" class="modal fade">
+    <!-- Modal Contato -->
+    <div id="adicionarContato" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form>
-                    <div class="modal-header">
-                        <h4 class="modal-title">Adicionar Contato</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label>Nome</label>
-                            <input type="text" class="form-control" required>
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Adicionar Contato</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body" style="padding-bottom: 3rem;">
+                    <div class="multisteps-form">
+                        <!--Barra de Progresso-->
+                        <div class="row">
+                            <div class="col-12 col-lg-12 ml-auto mr-auto mb-4">
+                                <div class="multisteps-form__progress">
+                                    <button class="multisteps-form__progress-btn js-active" type="button"
+                                        title="Cd Info">Informações do Contato</button>
+                                    <button class="multisteps-form__progress-btn" type="button"
+                                        title="OrdemServico">Telefone</button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label>E-mail</label>
-                            <input type="text" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Função</label>
-                            <input type="text" class="form-control" required>
+                        <!--Formularios-->
+                        <div class="row">
+                            <div class="col-12 col-lg-12 m-auto">
+                                <form class="multisteps-form__form needs-validation" style="height: 350px;">
+                                    <!--Formulario 1 -->
+                                    <div class="multisteps-form__panel shadow p-4 rounded bg-white js-active"
+                                        data-animation="scaleIn">
+                                        <h3 class="multisteps-form__title">Informações do Contato</h3>
+
+                                        <div class="multisteps-form__content">
+                                            <div class="form-row mt-4">
+                                                <div class="col-12 col-sm-12 mt-4">
+                                                    <input class="multisteps-form__input form-control " type="text" placeholder="Nome"
+                                                        name="nome" id="nomeC"  maxlength="50">
+                                                    </div>
+                                                <div class="col-12 col-sm-12 mt-4">
+                                                    <input class="multisteps-form__input form-control " type="text" placeholder="Função"
+                                                        name="funcao" id="funcao">
+                                                </div>
+                                                <div class="col-12 col-sm-12 mt-4">
+                                                    <input class="multisteps-form__input form-control " type="email" placeholder="E-mail"
+                                                        name="email" id="email">
+                                                </div>
+                                            </div>
+
+                                            <div class="button-row d-flex mt-4">
+                                                <button class="btn btn-primary multi-button ml-auto js-btn-next"
+                                                    onclick="novoContato()" type="button">Cadastrar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--tabela telefone-->
+                                    <div class="multisteps-form__panel shadow p-4 rounded bg-white"
+                                        data-animation="scaleIn">
+                                        <h3 class="multisteps-form__title">Telefone</h3>
+                                        <div class="multisteps-form__content ">
+                                            <div class="form-row mt-4 ">
+                                                <div class="col-12 col-sm-6">
+                                                    <input class="multisteps-form__input form-control telefone" type="text"
+                                                        placeholder="Telefone" id="telefone0" name="telefone"/>
+                                                </div>
+                                                <div class="col-12 col-sm-6  ">
+
+                                                    <select class="multisteps-form__input form-control tipo" name="tipo" id="tipo0">
+                                                        <option value="">Tipo</option>
+                                                        <option value="WhatsApp">WhatsApp</option>
+                                                        <option value="Casa">Casa</option>
+                                                        <option value="Celular">Celular</option>
+                                                        <option value="Trabalho">Trabalho</option>
+                                                    </select>
+                                                </div>
+                                            
+                                            </div>
+
+                                            <side id="maisTelefone"></side>
+                                            
+                                            
+                                        </div>
+                                        <div class="button-row d-flex mt-4">
+                                            <a class="js-btn-next" type="reset" id="clicaTelefone" onclick="maisInput(true);" title="Adicionar"><img  src="img/add-icon.png" width="30px"></a>
+                                            <button  class="btn btn-primary multi-button ml-auto js-btn-next" onclick="novoTelefone();" type="button">Concluir</button>
+                                        </div>
+
+                                    
+                                    </div>
+
+                                </form>
+                            </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <input type="button" class="btn btn-danger" data-dismiss="modal" value="Cancelar">
-                        <input style="background-color:#3a3a3a" type="button" class="btn btn-success" value="Adicionar">
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- modal de visualização -->
+    <div id="visualizar" class="modal fade">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Visualizar</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body" style="overflow-y:auto;">
+                    <!--Tabela por JS-->
+                    <div style="overflow-x:auto;">
+                        <table class="table table-striped table-bordered table-hover" id="visualiza"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <div class="fixed-bottom">
         <script height="100%" width="100%" src="./Js/menu.js"></script>
     </div>
 
     <script src="./Js/gerenciaEntidade.js"></script>
+    <script src="./Js/subtabelas.js"></script>
+    <script src="./Js/multi.js"></script>
     <script src="./Js/main.js"></script> <!-- Resource jQuery -->
     <script src="./Js/mask.js"></script>
 

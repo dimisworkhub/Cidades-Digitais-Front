@@ -343,14 +343,14 @@ function editarUacom(valor) {
 
 
 
-//CD Contatos
+//Contatos
 
-function contatos() {
+function contatosCD() {
 
   //cria o botão para editar
-  document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarContatoCD()" class="btn btn-success">Salvar Alterações</button>
+  document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarContato()" class="btn btn-success">Salvar Alterações</button>
                                                   <button class="btn btn-success" data-toggle="modal" data-target="#adicionarContato">Novo Contato</button>`);
-  document.getElementById("editar2").innerHTML = (`<button id="editar" onclick="editarContatoCD()" class="btn btn-success">Salvar Alterações</button>`);
+  document.getElementById("editar2").innerHTML = (`<button id="editar" onclick="editarContato()" class="btn btn-success">Salvar Alterações</button>`);
 
   //função fetch para chamar contatos da tabela
   fetch(servidor + 'read/contato/'+meuCodigo+'/0', {
@@ -485,7 +485,7 @@ function visualizarContato(cod_contato,nome,funcao,email,identificador) {
         tabela += (`</td>`);
         tabela += (`</td><td> 
           <span class="d-flex">
-          <button onclick="editarContatoCD(`+ identificador +`,`+cod_contato+`);editarTelefone(`+ identificador +`,`+cod_contato+`);" data-toggle="modal" href="#visualizar" class="btn ">
+          <button onclick="editarContato(`+ identificador +`,`+cod_contato+`);editarTelefone(`+ identificador +`,`+cod_contato+`);" data-toggle="modal" href="#visualizar" class="btn ">
           <i class="material-icons"data-toggle="tooltip" title="Salvar">&#xE254;</i>
           </button>
           </span> </td>`);
@@ -565,7 +565,7 @@ function editarTelefone(id,cod_contato) {
     }
   });
 }
-function editarContatoCD(id,cod_contato) {
+function editarContato(id,cod_contato) {
 
 
   edicaoItem = {
@@ -694,7 +694,7 @@ function novoTelefone() {
 
 let indice = 0;
 function maisInput(passe){
-  if(passe == true){
+  if(passe == true && indice < 3){
     $(document).ready(function(){
       mascara();
       $("side").append('<div class="form-row mt-4">'+
