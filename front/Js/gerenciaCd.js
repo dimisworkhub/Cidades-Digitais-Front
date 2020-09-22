@@ -377,9 +377,15 @@ function contatos() {
         <th style="width:20%" scope="col">Nome</th>
         <th style="width:20%" scope="col">Função</th>
         <th style="width:20%" scope="col">E-mail</th>
+        <th style="width:20%" scope="col">Telefones</th>
+        <th style="width:20%" scope="col">Tipo</th>
+        <th style="width:10%" scope="col">Opções</th>
         </tr>
         </thead>`);
         tabela += (`<tbody>`);
+        
+        // console.log(json)
+        
         //cria uma lista apenas com os itens do lote selecionado
         let j = 0;
         for (let i = 0; i < json.length; i++) {
@@ -389,20 +395,30 @@ function contatos() {
           }
         }
         for (i = 0; i < listaItem.length; i++) {
-
+          
           //salva os valores para edição
           meuItem[i] = listaItem[i]["cod_item"];
           meuTipo[i] = listaItem[i]["cod_tipo_item"];
-
+          
           tabela += (`<tr>`);
           tabela += (`<td>`);
-          tabela += (`<input value="` + listaItem[i]["nome"] + `"class="" id="nome` + i + `" type="text" size="30">`);
+          tabela += (`<span id="nome style="white-space: pre-line">` + listaItem[i]["nome"] + `</span>`);
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["funcao"] + `"class="" id="funcao` + i + `" type="text" size="30">`);
+          tabela += (`<span id="funcao style="white-space: pre-line">` + listaItem[i]["funcao"] + `</span>`);
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["email"] + `"class="" id="email` + i + `" type="text" size="30">`);
-          tabela += (`</td>`);
+          tabela += (`<span id="email style="white-space: pre-line">` + listaItem[i]["email"] + `</span>`);
+          tabela += (`</td> <td>`);
+          tabela += (`<span class="" id="telefone" style="white-space: pre-line">` + listaItem[i].telefone + `</span>`);
+          tabela += (`</td> <td>`);
+          tabela += (`<span class="" id="tipo" style="white-space: pre-line">` + listaItem[i].tipo + `</span>`);
+          tabela += (`</td><td> 
+          <span class="d-flex">
+          <button onclick="visualizarContato(`+  listaItem[i].cod_contato+`,'`+ listaItem[i].nome +`','`+ listaItem[i].funcao +`','`+ listaItem[i].email +`','`+i+`')" data-toggle="modal" href="#visualizar" class="btn btn-success">
+          <i class="material-icons"data-toggle="tooltip" title="Visualizar">content_paste</i>
+          </button>
+          </span> </td>`);
           tabela += (`</tr>`);
+          // console.log(tabela)
         }
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
@@ -417,42 +433,75 @@ function contatos() {
   });
 }
 
-function editarContatoCD() {
 
-  for (let i = 0; i < listaItem.length; i++) {
+function visualizarContato(cod_contato,nome,funcao,email,identificador) {
+  identificador= parseInt(identificador)
+  
+  fetch(servidor + 'read/telefone/' + cod_contato, {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
 
-    edicaoItem[i] = {
-      "nome": document.getElementById("nome" + i).value,
-      "email": document.getElementById("email" + i).value,
-      "funcao": document.getElementById("funcao" + i).value,
-    };
+    //checar os status de pedidos
+    //console.log(response)
 
-    console.log(listaItem[i])
-    console.log(edicaoItem[i])
-    if (edicaoItem[i]["nome"] != listaItem[i]["nome"] || edicaoItem[i]["email"] != listaItem[i]["email"] || edicaoItem[i]["funcao"] != listaItem[i]["funcao"]) {
-      //transforma as informações do token em json
-      let corpo = JSON.stringify(edicaoItem[i]);
-      //função fetch para mandar
-      fetch(servidor + 'read/contato/' + listaItem[i]["cod_contato"] , {
-        method: 'PUT',
-        body: corpo,
-        headers: {
-          'Authorization': 'Bearer ' + meuToken
-        },
-      }).then(function (response) {
-        //checar o status do pedido
-        console.log(response.statusText);
+    //tratamento dos erros
+    if (response.status == 200) {
+      //console.log(response.statusText);
 
-        //tratamento dos erros
-        if (response.status == 200 || response.status == 201) {
-          location.reload();
-        } else {
-          erros(response.status);
+      //pegar o json que possui a tabela
+      response.json().then(function (json) {
+
+        console.log(json)
+        let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
+          <tr>
+            <th style="width:20%" scope="col">Nome</th>
+            <th style="width:20%" scope="col">Função</th>
+            <th style="width:20%" scope="col">E-mail</th>
+            <th style="width:20%" scope="col" rowspan="`+ json.length +`">Telefone</th>
+            <th style="width:9%" scope="col">Ação</th>
+          </tr>
+          </thead>
+        <tbody>
+          <tr>`);
+        tabela += (`<td><input value="` + nome + `" id="nome`+identificador+`" type="text" class="nome"></td>`);
+        tabela += (`<td><input value="` + funcao + `" id="funcao`+identificador+`" type="text" class="funcao"></td>`);
+        tabela += (`<td><input value="` + email + `" id="email`+identificador+`" type="text" class="email"></td>`);
+
+
+        tabela += (`<td>`);
+        for (i = 0; i < json.length; i++) {
+          tabela += (`<input value="` + json[i].telefone + `" id="telefone`+ parseInt(1+ i) +`" type="text" class="telefone" size="14">`);
+          tabela += (`&nbsp&nbsp&nbsp<select name="tipo" id="tipo`+ parseInt(1+ i) +`">
+          <option value="`+json[i].tipo+`">`+json[i].tipo+`</option>
+          <option value="WhatsApp">WhatsApp</option>
+          <option value="Casa">Casa</option>
+          <option value="Celular">Celular</option>
+          <option value="Trabalho">Trabalho</option>
+          </select>
+          `);
+          
         }
-        window.location.replace("./gerenciaCd.html");
+        tabela += (`</td>`);
+        tabela += (`</td><td> 
+          <span class="d-flex">
+          <button onclick="editarContatoCD(`+ identificador +`,`+cod_contato+`);editarTelefone(`+ identificador +`,`+cod_contato+`);" data-toggle="modal" href="#visualizar" class="btn ">
+          <i class="material-icons"data-toggle="tooltip" title="Salvar">&#xE254;</i>
+          </button>
+          </span> </td>`);
+        tabela += (`</tr></tbody>`);
+        // console.log(tabela)
+
+        
+        document.getElementById("visualiza").innerHTML = tabela;
+        mascara();
       });
+    } else {
+      erros(response.status);
     }
-  }
+  });
   // document.getElementById("tabela").innerHTML = tabela;
 }
 
@@ -551,6 +600,7 @@ function editarContatoCD(id,cod_contato) {
       // window.location.replace("./gerenciaCd.html");
     });
   }
+  
 }
 
 function novoContato() {
