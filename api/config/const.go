@@ -63,8 +63,9 @@ const (
 =========================  */
 
 const (
-	LOTE_PATH    = "/read/lote"
-	LOTE_ID_PATH = "/read/lote/{cod_lote}"
+	LOTE_PATH      = "/read/lote"
+	LOTE_ID_PATH   = "/read/lote/{cod_lote}"
+	LOTE_CNPJ_PATH = "/read/lotecnpj/{cnpj}"
 )
 
 /*  =========================
@@ -125,8 +126,9 @@ const (
 =========================  */
 
 const (
-	UACOM_ASSUNTO_PATH    = "/read/uacomassunto"
-	UACOM_ASSUNTO_ID_PATH = "/read/uacomassunto/{cod_ibge}/{data}/{cod_assunto}"
+	UACOM_ASSUNTO_PATH        = "/read/uacomassunto"
+	UACOM_ASSUNTO_LISTAR_PATH = "/read/uacomassunto/{cod_ibge}/{data}"
+	UACOM_ASSUNTO_ID_PATH     = "/read/uacomassunto/{cod_ibge}/{data}/{cod_assunto}"
 )
 
 /*  =========================

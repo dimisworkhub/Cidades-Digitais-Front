@@ -121,6 +121,43 @@ func (server *Server) GetLoteByID(w http.ResponseWriter, r *http.Request) {
 }
 
 /*  =========================
+	FUNCAO LISTAR LOTE POR CNPJ
+=========================  */
+
+func (server *Server) GetLoteByCnpj(w http.ResponseWriter, r *http.Request) {
+
+	//	Autorizacao de Modulo
+	err := config.AuthMod(w, r, 14002)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
+
+	//	Vars retorna as variaveis de rota
+	vars := mux.Vars(r)
+
+	//	cnpj armazena a chave primaria da tabela lote
+	cnpj := vars["cnpj"]
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	lote := models.Lote{}
+
+	//	allLote armazena os dados buscados no banco de dados
+	allLote, err := lote.FindLoteByCnpj(server.DB, cnpj)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))
+		return
+	}
+
+	//	Retorna o Status 200 e o JSON da struct buscada
+	responses.JSON(w, http.StatusOK, allLote)
+}
+
+/*  =========================
 	FUNCAO LISTAR TODOS LOTE
 =========================  */
 
@@ -135,7 +172,7 @@ func (server *Server) GetAllLote(w http.ResponseWriter, r *http.Request) {
 
 	lote := models.Lote{}
 
-	//	lotes armazena os dados buscados no banco de dados
+	//	allLote armazena os dados buscados no banco de dados
 	allLote, err := lote.FindAllLote(server.DB)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
@@ -145,7 +182,6 @@ func (server *Server) GetAllLote(w http.ResponseWriter, r *http.Request) {
 
 	//	Retorna o Status 200 e o JSON da struct buscada
 	responses.JSON(w, http.StatusOK, allLote)
-
 }
 
 /*  =========================
