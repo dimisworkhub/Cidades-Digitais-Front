@@ -703,7 +703,7 @@ function maisInput(passe){
   if(passe == true && indice < 3){
     $(document).ready(function(){
       mascara();
-      $("side").append('<div class="form-row mt-4">'+
+      $("side").append('<div id="telTipo'+indice+'" class="form-row mt-4">'+
                           '<div class="col-12 col-sm-6">'+
                             '<input class="multisteps-form__input form-control telefone" type="text" placeholder="Telefone" id="telefone'+indice+'" name="telefone"/>'+
                           '</div>'+
