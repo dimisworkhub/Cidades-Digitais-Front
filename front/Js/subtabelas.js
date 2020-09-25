@@ -708,21 +708,21 @@ function itensFiscalizacao(caminho) {
           <tr>
           <th style="width:30%" scope="col">Descrição</th>
           <th style="width:10%" scope="col">Empenho</th>
-          <th style="cursor:pointer;width:10%" onclick="descricaoItem('Tipo')" scope="col">Tipo</th>
-          <th style="cursor:pointer;width:5%" onclick="descricaoItem('Quantidade disponível')" scope="col">Quantidade Disponível</th>
-          <th style="cursor:pointer;width:5%" onclick="descricaoItem('Quantidade')" scope="col">Quantidade</th>
-          <th style="cursor:pointer;width:20%" onclick="descricaoItem('Valor')" scope="col">Valor</th>
-          <th style="cursor:pointer;width:20%" onclick="descricaoItem('Subtotal')" scope="col">Subtotal</th>
+          <th style="cursor:pointer;width:10%" data-toggle="modal" data-target="#descricaoItem" onclick="descricaoItem('Tipo','` + caminho + `')" scope="col">Tipo</th>
+          <th style="cursor:pointer;width:5%" data-toggle="modal" data-target="#descricaoItem" onclick="descricaoItem('Quantidade disponível','` + caminho + `')" scope="col">Quantidade Disponível</th>
+          <th style="cursor:pointer;width:5%" data-toggle="modal" data-target="#descricaoItem" onclick="descricaoItem('Quantidade','` + caminho + `')" scope="col">Quantidade</th>
+          <th style="cursor:pointer;width:20%" data-toggle="modal" data-target="#descricaoItem" onclick="descricaoItem('Valor','` + caminho + `')" scope="col">Valor</th>
+          <th style="cursor:pointer;width:20%" data-toggle="modal" data-target="#descricaoItem" onclick="descricaoItem('Subtotal','` + caminho + `')" scope="col">Subtotal</th>
           </tr>
           </thead>`);
         } else {
           tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
           <th style="width:50%" scope="col">Descrição</th>
-          <th style="cursor:pointer;width:5%" onclick="descricaoItem('Quantidade disponível')" scope="col">Quantidade Disponível</th>
-          <th style="cursor:pointer;width:5%" onclick="descricaoItem('Quantidade')"  scope="col">Quantidade</th>
-          <th style="cursor:pointer;width:20%" onclick="descricaoItem('Valor')" scope="col">Valor</th>
-          <th style="cursor:pointer;width:20%" onclick="descricaoItem('Subtotal')" scope="col">Subtotal</th>
+          <th style="cursor:pointer;width:5%" data-toggle="modal" data-target="#descricaoItem" onclick="descricaoItem('Quantidade disponível','` + caminho + `')" scope="col">Quantidade Disponível</th>
+          <th style="cursor:pointer;width:5%" data-toggle="modal" data-target="#descricaoItem" onclick="descricaoItem('Quantidade','` + caminho + `')"  scope="col">Quantidade</th>
+          <th style="cursor:pointer;width:20%" data-toggle="modal" data-target="#descricaoItem" onclick="descricaoItem('Valor','` + caminho + `')" scope="col">Valor</th>
+          <th style="cursor:pointer;width:20%" data-toggle="modal" data-target="#descricaoItem" onclick="descricaoItem('Subtotal','` + caminho + `')" scope="col">Subtotal</th>
           </tr>
           </thead>`);
         }
@@ -762,13 +762,12 @@ function itensFiscalizacao(caminho) {
           tabela += (`</td> <td>`);
           tabela += listaItem[i]["quantidade_disponivel"];
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["quantidade"] * 100 + `" class="quebrados" id="quantidade` + i + `" onchange="checarQuantidade(` + i + `);checarCasos(` + caminho + "," + i + `)" type="text" size="10" style="text-align: right;"></input>`);
+          tabela += (`<input value="` + listaItem[i]["quantidade"] * 100 + `" class="quebrados" id="quantidade` + i + `" onchange="checarCasos('` + caminho + "','" + i + `')" type="text" size="10" style="text-align: right;"></input>`);
           tabela += (`</td> <td>`);
           tabela += (`<input value="` + listaItem[i]["valor"] * 100 + `" class="preco" id="valor` + i + `" type="text" size="15" style="text-align: right;"></input>`);
           tabela += (`</td> <td class="preco">`);
 
           //calculo do subtotal
-          //multiplicado por 100 porque a máscara foi feita com base em preencher as centenas primeiro
           total = (listaItem[i]["quantidade"] * listaItem[i]["valor"]);
           totalFinal = totalFinal + total;
 
@@ -818,22 +817,64 @@ function itensFiscalizacao(caminho) {
   });
 }
 
-function descricaoItem(valor) {
-  $("#descricaoItem").modal({
-    show: true
-  });
-
-  descricaoItem2(valor);
-}
-
-function descricaoItem2(itemDescrito) {
+function descricaoItem(itemDescrito,tipoTabela) {
 
   //frase inicial
   document.getElementById("explicacao").innerHTML = itemDescrito;
 
+  console.log(tipoTabela);
   //calculos para cada caso
   if (itemDescrito == "Subtotal") {
     document.getElementById("calculo").innerHTML = "Quantidade x Valor = " + itemDescrito;
+  }
+  else if (itemDescrito == "Quantidade disponível") {
+    document.getElementById("calculo").innerHTML = `QD - QU = Quantidade disponível. QD = Quantidade total disponível. QU = Quantidade total utilizada.
+
+    Quantidade total disponível
+    Pega-se todos os projetos executivos de um lote, e para cada item é somado suas quantidades, assim se obtém a quantidade total.
+    
+    Quantidade total utilizada
+    Pega-se todas as previsões de empenho de um lote, e para cada item é somado suas quantidades, assim se obtém a quantidade utilizada.
+    
+    Ex: Lote X: 15 cidades, 5 projetos executivos, 10 previsões de empenho
+    Quantidade total disponível item 1.1 = 10+20+30+40+50 = 150
+    Quantidade total utilizada item 1.1 = 10+20+30+40 = 100 (4 previsão de empenho utilizam o item 1.1)
+    
+    Quantidade total disponível - Quantidade total utilizada = Quantidade disponível
+    150 - 100 = 50`;
+
+    if(tipoTabela=="itensprevisaoempenho" || tipoTabela=="itensfatura"){
+      document.getElementById("calculo").innerHTML = `Para os itens dos tipos 8, 9 e 10, o cálculo tem uma camada a mais de complexidade. Pois estes itens possuem um certo “compartilhamento” de suas disponibilidades. A exemplo:
+      8.2, 9.2 e 10.2, todos são “Perfuração de vala” de uma categoria diferente, na terra, no asfalto, etc.
+      Para controlar a quantidade disponível destes itens não é utilizada a quantidade e sim o valor do item, pois cada item possui um valor diferente.
+      
+      Quantidade total disponível (itens 8.x, 9.x, 10.x)
+      Pega-se o resultado dos itens e multiplica ele pelo valor (sem reajuste).
+      Ex: 
+      8.2:  10 * 5.65 = 56.50 
+      9.2:  10 * 6,43 = 64.30 
+      10.2: 10 * 7,02 = 70.20
+      Pega-se os 3 itens e soma o resultado de cada 
+      Ex: 56.50 + 64.30 + 70.20 = 191.00
+      
+      Quantidade total utilizada (itens 8.x, 9.x, 10.x)
+      Pega-se o resultado dos itens e multiplica ele pelo valor (sem reajuste).
+      Ex: 
+      8.2:   20 * 5.65 = 113.00 
+      9.2:   5 * 6,43 = 32.15
+      10.2: 5 * 7,02 = 35.10
+      Pega-se os 3 itens e soma o resultado de cada 
+      Ex: 113.00 + 32.15 + 35.10 = 180.25
+      
+      Quantidade total disponível - Quantidade total utilizada = Quantidade disponível
+      191.00 – 180.25 = 10.75
+      Com isso as quantidades disponíveis para cada item é utilizado o valor de 10.75 dividido pelo valor do item (sem reajuste)
+      Ex:
+      8.2:   10.75 / 5.65 = 1,90
+      9.2:   10.75 / 6.43 = 1.67
+      10.2: 10.75 / 7.02 = 1.53`;
+    }
+
   } else {
     document.getElementById("calculo").innerHTML = "misterio";
   }
@@ -919,6 +960,7 @@ function checarCasos(caminho,valor){
             'Item foi inserido!',
             'success'
           )
+          checarQuantidade(valor);
 
         } else {
 
@@ -929,10 +971,13 @@ function checarCasos(caminho,valor){
             'O item não foi inserido!',
             'error'
           )
+          checarQuantidade(valor);
 
         }
       });
     }
+  } else {
+    checarQuantidade(valor);
   }
 
 }

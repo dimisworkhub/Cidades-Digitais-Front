@@ -24,7 +24,7 @@ function zeros(valor){
   valorCortado = valor.split("");
 
   //retira os zeros da frente 1 por 1
-  for(let i=0;valorCortado==0;i++){
+  for(let i = 0; valorCortado == 0; i++){
     valorSemZero = valorCortado;
   }
   valor = valorSemZero;
