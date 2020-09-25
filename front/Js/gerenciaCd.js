@@ -71,13 +71,11 @@ function enviar() {
 
 //CD acompanhamento
 
-let listaUacom = [];
+let listaUacom = [], meuData = [];
 
 //usado para fazer o id dos botões de assunto
 let idAssunto = 0;
-
-//usado para contar o total de botões
-let contadorAssunto = 0;
+let guardaAsunto = [];
 
 //assuntoSelecionado guarda os assuntos que serão adicionados
 let dataAssunto, listarAssuntos, assuntoSelecionado = "";
@@ -95,11 +93,16 @@ function pegarAssuntos(){
     if (response.status == 200 || response.status == 201) {
       response.json().then(function (json) {
 
+        document.getElementById("titulo").value = "";
+        document.getElementById("relato").value = "";
+
         let x="";
         for(let i=0; i<json.length; i++){
           x += "<option value='" + json[i].cod_assunto + "   " + json[i].descricao + "'>" + json[i].descricao + "</option>";
         }
         document.getElementById("assunto").innerHTML = x;
+
+        document.getElementById("botaoFinal").innerHTML = " <button class='btn btn-primary multi-button ml-auto js-btn-next' onclick='novoUacom()' type='button'>Cadastrar</button>";
 
       });
     } else {
@@ -108,32 +111,32 @@ function pegarAssuntos(){
   });
 }
 
-// function assuntosTabela(dataSelecionada){
-//   fetch(servidor + 'read/uacomassunto/' + meuCodigo + "/" + dataSelecionada , {
-//     method: 'GET',
-//     headers: {
-//       'Authorization': 'Bearer ' + meuToken
-//     },
-//   }).then(function (response) {
+function assuntosEdicao(dataSelecionada){
+  fetch(servidor + 'read/uacomassunto/' + meuCodigo + "/" + dataSelecionada , {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
 
-//     //tratamento dos erros
-//     if (response.status == 200 || response.status == 201) {
-//       response.json().then(function (json) {
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      response.json().then(function (json) {
         
-//         let x="";
-//         x += json[0].cod_assunto;
-//         for(let i=1; i<json.length; i++){
-//           x += ", "
-//           x += json[i].cod_assunto;
-//         }
-//         listarAssuntos = x;
-//         console.log(listarAssuntos);
-//       });
-//     } else {
-//       erros(response.status);
-//     }
-//   });
-// }
+        let x="";
+        x += json[0].cod_assunto;
+        for(let i=1; i<json.length; i++){
+          x += ", "
+          x += json[i].cod_assunto;
+        }
+        listarAssuntos = x;
+        console.log(listarAssuntos);
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
 
 function uacom() {
 
@@ -159,7 +162,7 @@ function uacom() {
 		//pegar o json que possui a tabela
 		response.json().then(function (json) {
   
-      console.log(json);
+      //console.log(json);
       
       listaUacom=json;
 	
@@ -175,6 +178,8 @@ function uacom() {
       tabela += (`<tbody>`);
   
 		  for (i = 0; i < listaUacom.length; i++) {
+
+        meuData[i] = listaUacom[i]["data"];
 	
 				tabela += (`<tr>`);
 				tabela += (`<td class="data3">`);
@@ -208,26 +213,7 @@ function uacom() {
 	});
 }
 
-function anotaAssunto() {
 
-  let valoresAssunto = document.getElementById("assunto").value;
-  let valoresAssunto2 = valoresAssunto.split("   ");
-
-  assuntoSelecionado += `<button class="btn btn-success" id="adicao` + idAssunto + `" onclick="removerAssunto(` + idAssunto + `)" value="` + valoresAssunto2[0] + `">`+ valoresAssunto2[1] +`</button>`;
-
-  document.getElementById("adicoes").innerHTML = assuntoSelecionado;
-
-  idAssunto++;
-  contadorAssunto++;
-}
-
-function removerAssunto(valor){
-
-  document.getElementById("adicao"+valor).innerHTML = "";
-
-  contadorAssunto--;
-  console.log(contadorAssunto);
-}
 
 function novoUacom() {
 
@@ -266,35 +252,61 @@ function novoUacom() {
   });
 }
 
+
+
+function anotaAssunto() {
+
+  let valoresAssunto = document.getElementById("assunto").value;
+  let valoresAssunto2 = valoresAssunto.split("   ");
+
+  assuntoSelecionado = `<button class="btn" id="adicao` + idAssunto + `" onclick="removerAssunto(` + idAssunto + `)" value="` + valoresAssunto2[0] + `">`+ valoresAssunto2[1] +`</button>`;
+
+  document.getElementById("adicoes").innerHTML += assuntoSelecionado;
+
+  console.log(document.getElementById("adicoes").innerHTML);
+
+  guardaAsunto[idAssunto]=idAssunto;
+
+  idAssunto++;
+}
+
+function removerAssunto(valor){
+  document.getElementById("adicao"+valor).innerHTML = "";
+}
+
 function novoAssunto(){
-  for(let i = 0; i < contadorAssunto; i++){
-
-    let infoAssunto = {
-      "cod_ibge": parseInt(meuCodigo),
-      "data": dataAssunto,
-      "cod_assunto": parseInt(document.getElementById("adicao"+i).value),
-    };
-
-    //transforma as informações em string para mandar
-    let corpo = JSON.stringify(infoAssunto);
-    //console.log(corpo);
-
-    //função fetch para mandar
-    fetch(servidor + 'read/uacomassunto', {
-      method: 'POST',
-      body: corpo,
-      headers: {
-        'Authorization': 'Bearer ' + meuToken
-      },
-    }).then(function (response) {
-
-      //tratamento dos erros
-      if (response.status == 200 || response.status == 201) {
-        location.reload();
-      } else {
-        erros(response.status);
-      }
-    });
+  for(let i = 0; i < guardaAsunto.length; i++){
+    if(document.getElementById("adicao"+guardaAsunto[i]).innerHTML == ""){
+      console.log("Apagado.");
+    }else{
+      
+      let infoAssunto = {
+        "cod_ibge": parseInt(meuCodigo),
+        "data": dataAssunto,
+        "cod_assunto": parseInt(document.getElementById("adicao"+i).value),
+      };
+  
+      //transforma as informações em string para mandar
+      let corpo = JSON.stringify(infoAssunto);
+      console.log(corpo);
+  
+      //função fetch para mandar
+      fetch(servidor + 'read/uacomassunto', {
+        method: 'POST',
+        body: corpo,
+        headers: {
+          'Authorization': 'Bearer ' + meuToken
+        },
+      }).then(function (response) {
+  
+        //tratamento dos erros
+        if (response.status == 200 || response.status == 201) {
+          location.reload();
+        } else {
+          erros(response.status);
+        }
+      });
+    }
   }
 }
 
@@ -302,15 +314,42 @@ function novoAssunto(){
 
 function editarUacom(valor) {
 
-  document.getElementById("titulo").value = listaUacom[valor]["titulo"];
-  document.getElementById("relato").value = listaUacom[valor]["relato"];
+  //fetch de assunto
+  fetch(servidor + 'read/assunto', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
 
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      response.json().then(function (json) {
+
+        document.getElementById("titulo").value = listaUacom[valor]["titulo"];
+        document.getElementById("relato").value = listaUacom[valor]["relato"];
+
+        let x="";
+        for(let i=0; i<json.length; i++){
+          x += "<option value='" + json[i].cod_assunto + "   " + json[i].descricao + "'>" + json[i].descricao + "</option>";
+        }
+        document.getElementById("assunto").innerHTML = x;
+      
+        document.getElementById("botaoFinal").innerHTML = " <button class='btn btn-primary multi-button ml-auto js-btn-next' onclick='editarUacom2(" + valor + ")' type='button'>Cadastrar</button>";
+
+        assuntosEdicao(meuData[valor]);
+
+      });
+    } else {
+      erros(response.status);
+    }
+  });
 
 }
 
 
 
-function editarUacom2(){
+function editarUacom2(valor){
   
   let edicaoUacom = {
     "titulo": document.getElementById("titulo").value,
@@ -320,7 +359,7 @@ function editarUacom2(){
   //transforma as informações do token em json
   let corpo = JSON.stringify(edicaoUacom);
 
-  fetch(servidor + 'read/uacom/' + meuCodigo + '/' + meuData[i], {
+  fetch(servidor + 'read/uacom/' + meuCodigo + '/' + meuData[valor], {
     method: 'PUT',
     body: corpo,
     headers: {

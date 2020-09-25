@@ -115,13 +115,41 @@
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h4 class="modal-title">Calculo do campo selecionado:</h4>
+                    <h4 class="modal-title">Fórmula do campo selecionado:</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div class="modal-body" style="padding-bottom: 3rem;">
-                    <p id="explicacao"></p>
-                    <br><br>
-                    <h4 id="calculo"><h4>
+                    <div class="multisteps-form">
+                        <!--progress bar-->
+                        <div class="row">
+                            <div class="col-12 col-lg-12 ml-auto mr-auto mb-4">
+                                <div class="multisteps-form__progress">
+                                    <h2 class="multisteps-form__input"  id="explicacao"
+                                        title="Informação do Campo"></h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-lg-12 m-auto">
+                                <form class="multisteps-form__form" style="height: 200px;">
+                                    
+                                    <div class="multisteps-form__panel shadow p-4 rounded bg-white js-active" data-animation="scaleIn">
+                        
+                                        <hr></hr>
+                                        <div class="multisteps-form__content">
+                                            <div class="form-row mt-4">
+                                                <div class="col-12 col-sm-12 mt-12 mt-sm-12" style="text-align: center; width: 100%;">
+                                                    <p style="font-size:150%;" class="multisteps-form__input" id="calculo"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr></hr>
+                                    </div>
+                                    
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
