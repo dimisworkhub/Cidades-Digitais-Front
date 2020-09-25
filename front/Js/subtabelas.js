@@ -847,7 +847,7 @@ function descricaoItem(itemDescrito,tipoTabela) {
     150 - 100 = 50`;
 
     if(tipoTabela=="itensprevisaoempenho" || tipoTabela=="itensfatura"){
-      document.getElementById("calculo").innerHTML = `Para os itens dos tipos 8, 9 e 10, o cálculo tem uma camada a mais de complexidade. Pois estes itens possuem um certo “compartilhamento” de suas disponibilidades. A exemplo:
+      document.getElementById("calculo2").innerHTML += `Para os itens dos tipos 8, 9 e 10, o cálculo tem uma camada a mais de complexidade. Pois estes itens possuem um certo “compartilhamento” de suas disponibilidades. A exemplo:
       8.2, 9.2 e 10.2, todos são “Perfuração de vala” de uma categoria diferente, na terra, no asfalto, etc.
       Para controlar a quantidade disponível destes itens não é utilizada a quantidade e sim o valor do item, pois cada item possui um valor diferente.
       
