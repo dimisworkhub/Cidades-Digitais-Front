@@ -386,6 +386,9 @@ function redirecionar(valor, caminhoRedirect) {
     localStorage.setItem("cod_otb", listaFinal[valor]["cod_otb"]);
     localStorage.setItem("dt_pgto", listaFinal[valor]["dt_pgto"]);
     window.location.href = "./gerenciaPagamento.html";
+  }else if (caminhoRedirect == "lote") {
+    // localStorage.setItem("cod_lote", listaFinal[valor].cod_lote);
+    window.location.href = "./gerenciaLote.html";
   }
   //caso especial da função empenho
   else if (caminhoRedirect == "empItensFatura") {

@@ -49,6 +49,28 @@ func (lote *Lote) FindLoteByID(db *gorm.DB, codLote uint32) (*Lote, error) {
 }
 
 /*  =========================
+	FUNCAO LISTAR LOTE POR CNPJ
+=========================  */
+
+func (lote *Lote) FindLoteByCnpj(db *gorm.DB, cnpj string) (*[]Lote, error) {
+
+	allLote := []Lote{}
+
+	// Busca todos elementos contidos no banco de dados
+	err := db.Debug().Table("lote").
+		Select("lote.*").
+		Joins("JOIN entidade ON lote.cnpj = entidade.cnpj").
+		Where("entidade.cnpj = ?", cnpj).
+		Order("lote.cod_lote").
+		Scan(&allLote).Error
+	if err != nil {
+		return &[]Lote{}, err
+	}
+
+	return &allLote, err
+}
+
+/*  =========================
 	FUNCAO LISTAR TODOS LOTE
 =========================  */
 
@@ -57,8 +79,11 @@ func (lote *Lote) FindAllLote(db *gorm.DB) (*[]Lote, error) {
 	allLote := []Lote{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Table("lote").Select("entidade.nome, lote.*").
-		Joins("JOIN entidade ON lote.cnpj = entidade.cnpj ORDER BY lote.cod_lote ASC").Scan(&allLote).Error
+	err := db.Debug().Table("lote").
+		Select("entidade.nome, lote.*").
+		Joins("JOIN entidade ON lote.cnpj = entidade.cnpj").
+		Order("lote.cod_lote").
+		Scan(&allLote).Error
 	if err != nil {
 		return &[]Lote{}, err
 	}

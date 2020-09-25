@@ -184,7 +184,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	=========================	*/
 
 	//	LISTA UACOM ASSUNTO (cod_ibge, data)
-	r.HandleFunc("/read/uacomassunto/{cod_ibge}/{data}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllUacomAssunto))).Methods(http.MethodGet)
+	r.HandleFunc(config.UACOM_ASSUNTO_LISTAR_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllUacomAssunto))).Methods(http.MethodGet)
 
 	//	SALVA UACOM ASSUNTO
 	r.HandleFunc(config.UACOM_ASSUNTO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateUacomAssunto))).Methods(http.MethodPost)
@@ -246,6 +246,9 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 
 	//	EDITA LOTE
 	r.HandleFunc(config.LOTE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateLote))).Methods(http.MethodPut)
+
+	//	LISTA LOTE PELO CNPJ(cnpj)
+	r.HandleFunc(config.LOTE_CNPJ_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetLoteByCnpj))).Methods(http.MethodGet)
 
 	//	LISTA LOTE (cod_lote)
 	r.HandleFunc(config.LOTE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetLoteByID))).Methods(http.MethodGet)
