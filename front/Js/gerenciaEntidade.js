@@ -166,9 +166,9 @@ function contatosEntidade() {
         <th style="width:20%" scope="col">Nome</th>
         <th style="width:20%" scope="col">Função</th>
         <th style="width:20%" scope="col">E-mail</th>
-        <th style="width:20%" scope="col">Telefones</th>
-        <th style="width:20%" scope="col">Tipo</th>
-        <th style="width:10%" scope="col">Opções</th>
+        <th style="width:10%" scope="col">Telefones</th>
+        <th style="width:10%" scope="col">Tipo</th>
+        <th style="width:30%" scope="col">Opções</th>
         </tr>
         </thead>`);
         tabela += (`<tbody>`);
@@ -200,10 +200,14 @@ function contatosEntidade() {
           tabela += (`<span class="" id="tipo" style="white-space: pre-line">` + listaItem[i].tipo + `</span>`);
           tabela += (`</td><td> 
           <span class="d-flex">
-          <button onclick="visualizarContato(`+  listaItem[i].cod_contato+`,'`+ listaItem[i].nome +`','`+ listaItem[i].funcao +`','`+ listaItem[i].email +`','`+i+`')" data-toggle="modal" href="#visualizar" class="btn btn-success">
-          <i class="material-icons"data-toggle="tooltip" title="Visualizar">content_paste</i>
-          </button>
-          </span> </td>`);
+            <button onclick="visualizarContato(`+  listaItem[i].cod_contato+`,'`+ listaItem[i].nome +`','`+ listaItem[i].funcao +`','`+ listaItem[i].email +`','`+i+`')" data-toggle="modal" href="#visualizar" class="btn btn-success">
+              <i class="material-icons"data-toggle="tooltip" title="Visualizar">content_paste</i>
+            </button>
+            <button onclick="apagarContatoTelefone(`+  listaItem[i].cod_contato+`)" class="btn btn-danger">
+              <i class="material-icons"data-toggle="tooltip" title="Apagar">delete</i>
+            </button>
+          </span>
+          </td>`);
           tabela += (`</tr>`);
           // console.log(tabela)
         }
@@ -484,7 +488,7 @@ function maisInput(passe){
   if(passe == true && indice < 3){
     $(document).ready(function(){
       mascara();
-      $("side").append('<div class="form-row mt-4">'+
+      $("side").append('<div id="telTipo'+indice+'" class="form-row mt-4">'+
                           '<div class="col-12 col-sm-6">'+
                             '<input class="multisteps-form__input form-control telefone" type="text" placeholder="Telefone" id="telefone'+indice+'" name="telefone"/>'+
                           '</div>'+
@@ -500,9 +504,155 @@ function maisInput(passe){
                         '</div>')
     });
     indice = indice + 1;
+    console.log(indice)
   }
   return indice;
 }
+
+function menosInput(){
+  document.getElementById('telTipo'+indice).innerHTML = '';
+  if(indice > 1){
+    indice = indice -1;
+  }else{
+    indice = 1;
+  }
+  console.log(indice)
+}
+
+function apagarContatoTelefone(cod_contato) {
+
+  fetch(servidor + 'read/telefone/' + cod_contato, {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //checar os status de pedidos
+    //console.log(response)
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      //console.log(response.statusText);
+
+      //pegar o json que possui a tabela
+      response.json().then(function (json) {
+        console.log(json)
+
+        if(json.length != 0){
+
+          Swal.fire({
+            title: 'Tem certeza?',
+            text: "Que deseja excluir todos os telefones?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim, tenho certeza!'
+          }).then((result) => {
+            
+            if (result.value) {
+    
+              Swal.fire(
+                'Sucesso!',
+                'Os telefones foram excluidos com sucesso!',
+                'success'
+              )
+              
+              for (i = 0; i < json.length; i++) {
+                fetch(servidor + 'read/telefone/'+json[i].cod_telefone, {
+                  method: 'DELETE',
+                  headers: {
+                    'Authorization': 'Bearer ' + meuToken
+                  },
+                }).then(function (response) {
+                  console.log('telefone deletado com sucesso!')
+                });
+              }
+    
+              Swal.fire({
+                title: 'Tem certeza?',
+                text: "Que deseja excluir este Contato?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sim, tenho certeza!'
+              }).then((result) => {
+                
+                if (result.value) {
+        
+                  Swal.fire(
+                    'Sucesso!',
+                    'O Contato foi excluido com sucesso!',
+                    'success'
+                  )
+                  
+                  
+                  fetch(servidor + 'read/contato/'+cod_contato, {
+                    method: 'DELETE',
+                    headers: {
+                      'Authorization': 'Bearer ' + meuToken
+                    },
+                  }).then(function (response) {
+                
+                    console.log('Contato deletado com sucesso!')
+                  });
+
+                  setTimeout(function(){
+                    location.reload()
+                  }, 3000);
+
+                } else {
+        
+                  location.reload();
+      
+                }
+              });
+            }
+          });
+        }else{
+          Swal.fire({
+            title: 'Tem certeza?',
+            text: "Que deseja excluir este Contato?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim, tenho certeza!'
+          }).then((result) => {
+            
+            if (result.value) {
+    
+              Swal.fire(
+                'Sucesso!',
+                'O Contato foi excluido com sucesso!',
+                'success'
+              )
+              
+              
+              fetch(servidor + 'read/contato/'+cod_contato, {
+                method: 'DELETE',
+                headers: {
+                  'Authorization': 'Bearer ' + meuToken
+                },
+              }).then(function (response) {
+            
+                console.log('Contato deletado com sucesso!')
+              });
+              
+              setTimeout(function(){
+                location.reload()
+              }, 3000);
+
+            }
+          });
+        }
+      })
+    }
+  });
+}
+
 
 //tabela de lote de entidade
 
