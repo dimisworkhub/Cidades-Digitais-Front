@@ -497,13 +497,13 @@ function visualizarContato(cod_contato,nome,funcao,email,identificador) {
       //pegar o json que possui a tabela
       response.json().then(function (json) {
 
-        console.log(json)
+        // console.log(json)
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
             <th style="width:20%" scope="col">Nome</th>
             <th style="width:20%" scope="col">Função</th>
             <th style="width:20%" scope="col">E-mail</th>
-            <th style="width:20%" scope="col" rowspan="`+ json.length +`">Telefone</th>
+            <th style="width:30%" scope="col" rowspan="`+ json.length +`">Telefone</th>
             <th style="width:9%" scope="col">Ação</th>
           </tr>
           </thead>
@@ -524,6 +524,9 @@ function visualizarContato(cod_contato,nome,funcao,email,identificador) {
           <option value="Celular">Celular</option>
           <option value="Trabalho">Trabalho</option>
           </select>
+          <button onclick="apagarTelefone(`+ json[i].cod_telefone+`)" class="btn danger">
+          <i class="material-icons"data-toggle="tooltip" title="Apagar Telefone">delete</i>
+          </button>
           `);
           
         }
@@ -566,7 +569,11 @@ function editarTelefone(id,cod_contato) {
 
       //pegar o json que possui a tabela
       response.json().then(function (json) {
-        // console.log(json)
+        
+        if(json.length==0){
+          location.reload();
+        }
+
         for (let i = 0; i < json.length; i++) {
           
           
@@ -841,7 +848,6 @@ function apagarContatoTelefone(cod_contato) {
                     'success'
                   )
                   
-                  
                   fetch(servidor + 'read/contato/'+cod_contato, {
                     method: 'DELETE',
                     headers: {
@@ -854,7 +860,7 @@ function apagarContatoTelefone(cod_contato) {
 
                   setTimeout(function(){
                     location.reload()
-                  }, 3000);
+                  }, 2000);
 
                 } else {
         
@@ -884,7 +890,6 @@ function apagarContatoTelefone(cod_contato) {
                 'success'
               )
               
-              
               fetch(servidor + 'read/contato/'+cod_contato, {
                 method: 'DELETE',
                 headers: {
@@ -897,12 +902,31 @@ function apagarContatoTelefone(cod_contato) {
               
               setTimeout(function(){
                 location.reload()
-              }, 3000);
+              }, 2000);
 
             }
           });
         }
       })
+    }
+  });
+}
+
+function apagarTelefone(cod_telefone) {
+
+  fetch(servidor + 'read/telefone/'+cod_telefone, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+    //checar os status de pedidos
+    console.log(response)
+
+    //tratamento dos erros
+    if (response.status == 204) {
+      //console.log(response.statusText);
+      alert('Telefone deletado com sucesso!')
     }
   });
 }

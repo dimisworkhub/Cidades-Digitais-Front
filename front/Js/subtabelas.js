@@ -387,7 +387,11 @@ function redirecionar(valor, caminhoRedirect) {
     localStorage.setItem("dt_pgto", listaFinal[valor]["dt_pgto"]);
     window.location.href = "./gerenciaPagamento.html";
   }else if (caminhoRedirect == "lote") {
-    // localStorage.setItem("cod_lote", listaFinal[valor].cod_lote);
+    localStorage.setItem("cod_lote", listaFinal[valor].cod_lote);
+    localStorage.setItem("contrato", listaFinal[valor].contrato);
+    localStorage.setItem("dt_inicio_vig", listaFinal[valor].dt_inicio_vig);
+    localStorage.setItem("dt_final_vig", listaFinal[valor].dt_final_vig);
+    localStorage.setItem("dt_reajuste", listaFinal[valor].dt_reajuste);
     window.location.href = "./gerenciaLote.html";
   }
   //caso especial da função empenho
