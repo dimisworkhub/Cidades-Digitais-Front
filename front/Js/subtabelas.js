@@ -830,53 +830,54 @@ function descricaoItem(itemDescrito,tipoTabela) {
   if (itemDescrito == "Subtotal") {
     document.getElementById("calculo").innerHTML = "Quantidade x Valor = " + itemDescrito;
   }
-  else if (itemDescrito == "Quantidade disponível") {
-    document.getElementById("calculo").innerHTML = `QD - QU = Quantidade disponível. QD = Quantidade total disponível. QU = Quantidade total utilizada.
+  else if (itemDescrito == "Quantidade disponível" && tipoTabela == "") {
+    document.getElementById("calculo").innerHTML = `<p>QD - QU = Quantidade disponível.</p>
+    <p>QD = Quantidade total disponível.</p>
+    <p>QU = Quantidade total utilizada.</p>
 
-    Quantidade total disponível
-    Pega-se todos os projetos executivos de um lote, e para cada item é somado suas quantidades, assim se obtém a quantidade total.
+    <p>Quantidade total disponível:</p>
+    <p>Pega-se todos os projetos executivos de um lote, e para cada item é somado suas quantidades, assim se obtém a quantidade total.</p>
     
-    Quantidade total utilizada
-    Pega-se todas as previsões de empenho de um lote, e para cada item é somado suas quantidades, assim se obtém a quantidade utilizada.
+    <p>Quantidade total utilizada</p>
+    <p>Pega-se todas as previsões de empenho de um lote, e para cada item é somado suas quantidades, assim se obtém a quantidade utilizada.</p>
     
-    Ex: Lote X: 15 cidades, 5 projetos executivos, 10 previsões de empenho
-    Quantidade total disponível item 1.1 = 10+20+30+40+50 = 150
-    Quantidade total utilizada item 1.1 = 10+20+30+40 = 100 (4 previsão de empenho utilizam o item 1.1)
+    <p>Ex:</p>
+    <p>Lote X: 15 cidades, 5 projetos executivos, 10 previsões de empenho</p>
+    <p>Quantidade total disponível item 1.1 = 10+20+30+40+50 = 150</p>
+    <p>Quantidade total utilizada item 1.1 = 10+20+30+40 = 100 (4 previsão de empenho utilizam o item 1.1)</p>
     
     Quantidade total disponível - Quantidade total utilizada = Quantidade disponível
     150 - 100 = 50`;
 
-    if(tipoTabela=="itensprevisaoempenho" || tipoTabela=="itensfatura"){
-      document.getElementById("calculo2").innerHTML += `Para os itens dos tipos 8, 9 e 10, o cálculo tem uma camada a mais de complexidade. Pois estes itens possuem um certo “compartilhamento” de suas disponibilidades. A exemplo:
-      8.2, 9.2 e 10.2, todos são “Perfuração de vala” de uma categoria diferente, na terra, no asfalto, etc.
-      Para controlar a quantidade disponível destes itens não é utilizada a quantidade e sim o valor do item, pois cada item possui um valor diferente.
-      
-      Quantidade total disponível (itens 8.x, 9.x, 10.x)
-      Pega-se o resultado dos itens e multiplica ele pelo valor (sem reajuste).
-      Ex: 
-      8.2:  10 * 5.65 = 56.50 
-      9.2:  10 * 6,43 = 64.30 
-      10.2: 10 * 7,02 = 70.20
-      Pega-se os 3 itens e soma o resultado de cada 
-      Ex: 56.50 + 64.30 + 70.20 = 191.00
-      
-      Quantidade total utilizada (itens 8.x, 9.x, 10.x)
-      Pega-se o resultado dos itens e multiplica ele pelo valor (sem reajuste).
-      Ex: 
-      8.2:   20 * 5.65 = 113.00 
-      9.2:   5 * 6,43 = 32.15
-      10.2: 5 * 7,02 = 35.10
-      Pega-se os 3 itens e soma o resultado de cada 
-      Ex: 113.00 + 32.15 + 35.10 = 180.25
-      
-      Quantidade total disponível - Quantidade total utilizada = Quantidade disponível
-      191.00 – 180.25 = 10.75
-      Com isso as quantidades disponíveis para cada item é utilizado o valor de 10.75 dividido pelo valor do item (sem reajuste)
-      Ex:
-      8.2:   10.75 / 5.65 = 1,90
-      9.2:   10.75 / 6.43 = 1.67
-      10.2: 10.75 / 7.02 = 1.53`;
-    }
+    document.getElementById("calculo2").innerHTML = `Para os itens dos tipos 8, 9 e 10, o cálculo tem uma camada a mais de complexidade. Pois estes itens possuem um certo “compartilhamento” de suas disponibilidades. A exemplo:
+    8.2, 9.2 e 10.2, todos são “Perfuração de vala” de uma categoria diferente, na terra, no asfalto, etc.
+    Para controlar a quantidade disponível destes itens não é utilizada a quantidade e sim o valor do item, pois cada item possui um valor diferente.
+    
+    Quantidade total disponível (itens 8.x, 9.x, 10.x)
+    Pega-se o resultado dos itens e multiplica ele pelo valor (sem reajuste).
+    Ex: 
+    8.2:  10 * 5.65 = 56.50 
+    9.2:  10 * 6,43 = 64.30 
+    10.2: 10 * 7,02 = 70.20
+    Pega-se os 3 itens e soma o resultado de cada 
+    Ex: 56.50 + 64.30 + 70.20 = 191.00
+    
+    Quantidade total utilizada (itens 8.x, 9.x, 10.x)
+    Pega-se o resultado dos itens e multiplica ele pelo valor (sem reajuste).
+    Ex: 
+    8.2:   20 * 5.65 = 113.00 
+    9.2:   5 * 6,43 = 32.15
+    10.2: 5 * 7,02 = 35.10
+    Pega-se os 3 itens e soma o resultado de cada 
+    Ex: 113.00 + 32.15 + 35.10 = 180.25
+    
+    Quantidade total disponível - Quantidade total utilizada = Quantidade disponível
+    191.00 – 180.25 = 10.75
+    Com isso as quantidades disponíveis para cada item é utilizado o valor de 10.75 dividido pelo valor do item (sem reajuste)
+    Ex:
+    8.2:   10.75 / 5.65 = 1,90
+    9.2:   10.75 / 6.43 = 1.67
+    10.2: 10.75 / 7.02 = 1.53`;
 
   } else {
     document.getElementById("calculo").innerHTML = "misterio";
