@@ -23,6 +23,7 @@ type ItensFatura struct {
 	Quantidade           float32 `gorm:"default:null" json:"quantidade"`
 	Descricao            string  `gorm:"default:null" json:"descricao"`
 	QuantidadeDisponivel float32 `gorm:"default:null" json:"quantidade_disponivel"`
+	Preco                float32 `gorm:"default:null" json:"preco"`
 }
 
 /*  =========================
@@ -190,6 +191,8 @@ func (itensFatura *ItensFatura) FindAllItensFatura(db *gorm.DB, numNF, codIbge u
 				Order("lote_itens.cod_tipo_item, lote_itens.cod_item").
 				Scan(&loteItens)
 
+			allItensFatura[i].Preco = loteItens[0].Preco
+
 			quantidadeDisponivel = (allItensEmpenho[i].Quantidade * loteItens[0].Preco) - (itensFaturaAux[i].QuantidadeDisponivel * loteItens[0].Preco)
 
 			itensEmpenho.Quantidade = 0
@@ -255,6 +258,8 @@ func (itensFatura *ItensFatura) FindAllItensFatura(db *gorm.DB, numNF, codIbge u
 				Order("lote_itens.cod_tipo_item, lote_itens.cod_item").
 				Scan(&loteItens)
 
+			allItensFatura[i].Preco = loteItens[1].Preco
+
 			quantidadeDisponivel = (allItensEmpenho[i].Quantidade * loteItens[1].Preco) - (itensFaturaAux[i].QuantidadeDisponivel * loteItens[1].Preco)
 
 			itensEmpenho.Quantidade = 0
@@ -319,6 +324,8 @@ func (itensFatura *ItensFatura) FindAllItensFatura(db *gorm.DB, numNF, codIbge u
 				Where("lote_itens.cod_lote = (SELECT cd.cod_lote FROM cd WHERE cd.cod_ibge = ?) AND lote_itens.cod_item = ? AND lote_itens.cod_tipo_item IN (8, 9, 10)", data.CodIbge, data.CodItem).
 				Order("lote_itens.cod_tipo_item, lote_itens.cod_item").
 				Scan(&loteItens)
+
+			allItensFatura[i].Preco = loteItens[2].Preco
 
 			quantidadeDisponivel = (allItensEmpenho[i].Quantidade * loteItens[2].Preco) - (itensFaturaAux[i].QuantidadeDisponivel * loteItens[2].Preco)
 
