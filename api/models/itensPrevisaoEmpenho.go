@@ -20,6 +20,7 @@ type ItensPrevisaoEmpenho struct {
 	Quantidade           float32 `gorm:"default:null" json:"quantidade"`
 	Descricao            string  `gorm:"default:null" json:"descricao"`
 	QuantidadeDisponivel float32 `gorm:"default:null" json:"quantidade_disponivel"`
+	Preco                float32 `gorm:"default:null" json:"preco"`
 }
 
 /*  =========================
@@ -134,10 +135,12 @@ func (itensPrevisaoEmpenho *ItensPrevisaoEmpenho) FindAllItensPrevisaoEmpenho(db
 				/* --------- Quantidade Disponivel para Reajuste ----------------*/
 				//	Busca o Lote_Itens.Preco do item em questao e retorna a quantidade disponivel que sera consumida
 				db.Debug().Table("itens_previsao_empenho").
-					Select("(? / lote_itens.preco ) AS quantidade_disponivel", quantidadeDisponivel).
+					Select("(? / lote_itens.preco ) AS quantidade_disponivel, lote_itens.preco AS preco", quantidadeDisponivel).
 					Joins("INNER JOIN lote_itens ON itens_previsao_empenho.cod_lote = lote_itens.cod_lote AND itens_previsao_empenho.cod_tipo_item = lote_itens.cod_tipo_item AND itens_previsao_empenho.cod_item = lote_itens.cod_item").
 					Where("itens_previsao_empenho.cod_previsao_empenho = ? AND itens_previsao_empenho.cod_lote = ? AND itens_previsao_empenho.cod_tipo_item = ? AND itens_previsao_empenho.cod_item = ?", data.CodPrevisaoEmpenho, data.CodLote, data.CodTipoItem, data.CodItem).
 					Scan(&itensPrevisaoEmpenho)
+
+				allItensPrevisaoEmpenho[i].Preco = itensPrevisaoEmpenho.Preco
 
 				//	Arredondamento para duas casas decimais
 				s := fmt.Sprintf("%.2f", itensPrevisaoEmpenho.QuantidadeDisponivel)
