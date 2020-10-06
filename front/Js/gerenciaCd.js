@@ -429,7 +429,7 @@ function contatosCD() {
           //salva os valores para edição
           meuItem[i] = listaItem[i]["cod_item"];
           meuTipo[i] = listaItem[i]["cod_tipo_item"];
-
+          
           tabela += (`<tr>`);
           tabela += (`<td>`);
           tabela += (`<span id="nome style="white-space: pre-line">` + listaItem[i]["nome"] + `</span>`);
