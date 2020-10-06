@@ -438,7 +438,7 @@ function contatosCD() {
           //salva os valores para edição
           meuItem[i] = listaItem[i]["cod_item"];
           meuTipo[i] = listaItem[i]["cod_tipo_item"];
-          
+          console.log(listaItem[i].telefone)
           tabela += (`<tr>`);
           tabela += (`<td>`);
           tabela += (`<span id="nome style="white-space: pre-line">` + listaItem[i]["nome"] + `</span>`);
