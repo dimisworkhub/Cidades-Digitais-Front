@@ -104,6 +104,7 @@
                     <h4 class="modal-title">Adicionar Item</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
+
                 <div class="modal-body" style="padding-bottom: 3rem;">
                     <div class="multisteps-form">
 
@@ -117,47 +118,57 @@
                                         <h3 class="multisteps-form__title">Informações do Item</h3>
 
                                         <div class="multisteps-form__content">
+
                                             <div class="form-row mt-4">
 
                                                 <div class="col-12 col-sm-6">
                                                     <select class="multisteps-form__input form-control" name="tipo" id="tipo" onclick="enabler1()"></select>
                                                 </div>
+
                                                 <div class="col-12 col-sm-6">
                                                     <select class="multisteps-form__input form-control" name="id_empenho" id="id_empenho" onclick="enabler2()"></select>
                                                 </div>
+
                                                 <div class="col-12 col-sm-12 mt-4">
                                                     <select class="multisteps-form__input form-control" name="itens_disponiveis" id="itens_disponiveis" onclick="enabler3()"></select>
                                                 </div>
+
                                                 <div class="col-12 col-sm-4 mt-4">
                                                     <label for="quantidade_disponivel">Q. Disponivel:</label>
                                                     <input class="multisteps-form__input form-control" type="text" name="quantidade_disponivel" id="quantidade_disponivel">
                                                 </div>
+
                                                 <div class="col-12 col-sm-4 mt-4">
                                                     <label for="quantidade">Quantidade:</label>
                                                     <input class="multisteps-form__input form-control quebrados" type="text" name="quantidade" id="quantidade">
                                                 </div>
+
                                                 <div class="col-12 col-sm-4 mt-4">
                                                     <label for="valor">Valor:</label>
                                                     <input class="multisteps-form__input form-control preco" type="text" name="valor" id="valor">
                                                 </div>
+
                                             </div>
 
                                             <div class="button-row d-flex mt-4">
-                                                <button class="btn btn-primary multi-button ml-auto"
-                                                    onclick="enviarItensFatura()" type="button">Cadastrar</button>
+                                                <button class="btn btn-primary multi-button ml-auto" onclick="enviarItensFatura()" type="button">Cadastrar</button>
                                             </div>
+
                                         </div>
+
                                     </div>
                                 </form>
                             </div>
                         </div>
+
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
 
-    <!-- Modal de Informações -->
+    <!-- ADD Modal HTML -->
     <div id="descricaoItem" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -166,39 +177,68 @@
                     <h4 class="modal-title">Fórmula do campo selecionado:</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
+                
                 <div class="modal-body" style="padding-bottom: 3rem;">
                     <div class="multisteps-form">
+
                         <!--progress bar-->
                         <div class="row">
                             <div class="col-12 col-lg-12 ml-auto mr-auto mb-4">
                                 <div class="multisteps-form__progress">
-                                    <h2 class="multisteps-form__input"  id="explicacao"
-                                        title="Informação do Campo"></h2>
+                                    <button class="multisteps-form__progress-btn js-active" type="button"
+                                        title="Entity Info">Informações da Entidade</button>
+                                    <button class="multisteps-form__progress-btn" type="button"
+                                        title="Address">Informações de Casos Especiais</button>
                                 </div>
                             </div>
                         </div>
+
+                        <!--form panels-->
                         <div class="row">
                             <div class="col-12 col-lg-12 m-auto">
-                                <form class="multisteps-form__form" style="height: auto;">
-                                    
+                                <form class="multisteps-form__form needs-validation" novalidate style="height: auto;">
+
+                                    <!--single form panel-->
                                     <div class="multisteps-form__panel shadow p-4 rounded bg-white js-active" data-animation="scaleIn">
-                        
+
+                                        <h3 class="multisteps-form__title"  id="explicacao"></h3>
+
                                         <hr></hr>
                                         <div class="multisteps-form__content">
                                             <div class="form-row mt-4">
-                                                <div class="col-12 col-sm-12 mt-12 mt-sm-12" style="text-align: center; width: 100%;">
+                                                <div class="col-12 col-sm-12 mt-12 mt-sm-12" style="width: 100%;">
                                                     <p style="font-size:150%;" class="multisteps-form__input" id="calculo"></p>
                                                 </div>
                                             </div>
                                         </div>
                                         <hr></hr>
+
                                     </div>
-                                    
+
+                                    <!--single form panel-->
+                                    <div class="multisteps-form__panel shadow p-4 rounded bg-white js-active" data-animation="scaleIn">
+
+                                        <h3 class="multisteps-form__title"  id="explicacao2"></h3>
+
+                                        <hr></hr>
+                                        <div class="multisteps-form__content">
+                                            <div class="form-row mt-4">
+                                                <div class="col-12 col-sm-12 mt-12 mt-sm-12" style="width: 100%;">
+                                                    <p style="font-size:150%;" class="multisteps-form__input" id="calculo2"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr></hr>
+
+                                    </div>
+
                                 </form>
                             </div>
                         </div>
+
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
