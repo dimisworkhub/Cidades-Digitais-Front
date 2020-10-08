@@ -71,7 +71,7 @@ function enviar() {
 
 //CD acompanhamento
 
-let listaUacom = [],
+let listaUacom = [], listaEdicaoAssunto = [],
   meuData = [];
 
 //usado para fazer o id dos botões de assunto
@@ -81,52 +81,6 @@ let idAssunto = 0, testenumero = [];
 let dataAssunto;
 
 
-
-//precisa ficar de fora para poder ser alterado
-let optionAssunto = "";
-
-//valorPego serve apenas para quando já foi usado um dos assuntos na criação.
-function pegarAssuntos(valorPego) {
-  //fetch de assunto
-  fetch(servidor + 'read/assunto', {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-
-    //tratamento dos erros
-    if (response.status == 200 || response.status == 201) {
-      response.json().then(function (json) {
-
-        document.getElementById("titulo").value = "";
-        document.getElementById("relato").value = "";
-
-        for (let i = 0; i < json.length; i++) {
-
-          //caso original:
-          if (valorPego == 0) {
-            optionAssunto += "<option value='" + json[i].cod_assunto + "   " + json[i].descricao + "'>" + json[i].descricao + "</option>";
-          }
-
-          // //caso precise retirar
-          // else {
-          //   if (json[i].cod_assunto == testenumero) {
-          //     optionAssunto -= "<option value='" + json[i].cod_assunto + "   " + json[i].descricao + "'>" + json[i].descricao + "</option>";
-          //   }
-          // }
-
-        }
-        document.getElementById("assunto").innerHTML = optionAssunto;
-
-        document.getElementById("botaoFinal").innerHTML = " <button class='btn btn-primary multi-button ml-auto js-btn-next' onclick='novoUacom()' type='button'>Cadastrar</button>";
-
-      });
-    } else {
-      erros(response.status);
-    }
-  });
-}
 
 function uacom() {
 
@@ -205,6 +159,57 @@ function uacom() {
 
 
 
+//valorPego serve apenas para quando já foi usado um dos assuntos na criação.
+function pegarAssuntos(valorPego) {
+  //fetch de assunto
+  fetch(servidor + 'read/assunto', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      response.json().then(function (json) {
+
+        //reseta para usar denovo
+        idAssunto = 0;
+        document.getElementById("adicoes").innerHTML = "";
+
+        document.getElementById("titulo").value = "";
+        document.getElementById("relato").value = "";
+
+        for (let i = 0; i < json.length; i++) {
+
+
+          //precisa ficar de fora para poder ser alterado
+          let optionAssunto = "";
+
+          //caso original:
+          if (valorPego == 0) {
+            optionAssunto += "<option value='" + json[i].cod_assunto + "   " + json[i].descricao + "'>" + json[i].descricao + "</option>";
+          }
+
+          // //caso precise retirar (ainda em testes)
+          // else {
+          //   if (json[i].cod_assunto == testenumero) {
+          //     optionAssunto -= "<option value='" + json[i].cod_assunto + "   " + json[i].descricao + "'>" + json[i].descricao + "</option>";
+          //   }
+          // }
+
+        }
+        document.getElementById("assunto").innerHTML = optionAssunto;
+
+        document.getElementById("botaoFinal").innerHTML = " <button class='btn btn-primary multi-button ml-auto js-btn-next' onclick='novoUacom()' type='button'>Cadastrar</button>";
+
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
 function novoUacom() {
 
   let infoUacom = {
@@ -257,9 +262,11 @@ function anotaAssunto() {
 }
 
 function removerAssunto(valor) {
-  document.getElementById("adicao" + valor).innerHTML = null;
-  document.getElementById("removedor" + valor).innerHTML = null;
+  document.getElementById("adicoes").removeChild(document.getElementById("adicao" + valor));
+  document.getElementById("adicoes").removeChild(document.getElementById("removedor" + valor));
 }
+
+
 
 function novoAssunto() {
   for (let i = 0; i < idAssunto; i++) {
@@ -286,6 +293,10 @@ function novoAssunto() {
 
         //tratamento dos erros
         if (response.status == 200 || response.status == 201) {
+          //reseta para usar denovo
+          idAssunto = 0;
+          document.getElementById("adicoes").innerHTML = "";
+
           location.reload();
         } else {
           erros(response.status);
@@ -311,6 +322,10 @@ function edicaoModal(valor) {
     if (response.status == 200 || response.status == 201) {
       response.json().then(function (json) {
 
+        //reseta para usar denovo
+        idAssunto = 0;
+        document.getElementById("adicoes").innerHTML = "";
+
         document.getElementById("titulo").value = listaUacom[valor]["titulo"];
         document.getElementById("relato").value = listaUacom[valor]["relato"];
 
@@ -321,14 +336,44 @@ function edicaoModal(valor) {
 
         document.getElementById("assunto").innerHTML = x;
 
-        document.getElementById("botaoFinal").innerHTML = " <button class='btn btn-primary multi-button ml-auto js-btn-next' onclick='editarUacom(" + valor + ")' type='button'>Cadastrar</button>";
+        document.getElementById("botaoFinal").innerHTML = "<a><button class='btn btn-primary multi-button ml-auto js-btn-next' onclick='editarUacom(" + valor + ")' type='button'>Cadastrar</button></a>";
 
+        getAssuntos(valor);
       });
     } else {
       erros(response.status);
     }
   });
 
+}
+
+function getAssuntos(valor){
+  //fetch de assuntouacom
+
+  //preenche os assuntos na parte de edição
+  fetch(servidor + 'read/uacomassunto/' + meuCodigo + "/" + meuData[valor], {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      response.json().then(function (json) {
+        
+        for(let i = 0; i < json.length; i++){
+          document.querySelector("#assunto").selectedIndex = (json[i].cod_assunto-1);
+          anotaAssunto();
+        }
+
+        listaEdicaoAssunto = json;
+
+      });
+    } else {
+      erros(response.status);
+    }
+  });
 }
 
 
@@ -355,7 +400,13 @@ function editarUacom(valor) {
 
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
-      location.reload();
+
+      //pegar a data para enviar no editarUacom2
+      response.json().then(function (json) {
+        dataAssunto = json.data;
+        novoAssunto();
+      });
+
     } else {
       erros(response.status);
     }
@@ -365,8 +416,90 @@ function editarUacom(valor) {
 
 
 
-function editarUacom2(valor) {
-  console.log("Ainda pensando como fazer...");
+function editarUacom2() {
+  for (let i = 0; i < idAssunto; i++) {
+
+    //para checar se precisa adicionar
+    if (document.getElementById("adicao" + i).innerHTML != "") {
+
+      //caso ja tenha
+      if(listaEdicaoAssunto[i].cod_assunto == document.getElementById("adicao" + i).value){
+        console.log("Já tem");
+      }
+
+      //caso não tenha
+      else{
+        let infoAssunto = {
+          "cod_ibge": parseInt(meuCodigo),
+          "data": dataAssunto,
+          "cod_assunto": parseInt(document.getElementById("adicao" + i).value),
+        };
+
+        //transforma as informações em string para mandar
+        let corpo = JSON.stringify(infoAssunto);
+        //console.log(corpo);
+
+        //função fetch para mandar
+        fetch(servidor + 'read/uacomassunto', {
+          method: 'POST',
+          body: corpo,
+          headers: {
+            'Authorization': 'Bearer ' + meuToken
+          },
+        }).then(function (response) {
+
+          //tratamento dos erros
+          if (response.status == 200 || response.status == 201) {
+
+            //reseta para usar denovo
+            idAssunto = 0;
+            document.getElementById("adicoes").innerHTML = "";
+
+          } else {
+            //erros(response.status);
+          }
+        });
+      }
+
+    }
+
+    //para checar se precisa deletar
+    else {
+
+      console.log("Ao menos isso.");
+      // //caso tivesse antes
+      // if(listaEdicaoAssunto[i].cod_assunto == document.getElementById("adicao" + i).value){
+
+      //   //função fetch para deletar
+      //   fetch(servidor + 'read/uacomassunto/' + meuCodigo + "/" + dataAssunto + "/" + document.getElementById("adicao" + i).value, {
+      //     method: 'DELETE',
+      //     headers: {
+      //       'Authorization': 'Bearer ' + meuToken
+      //     },
+      //   }).then(function (response) {
+
+      //     //tratamento dos erros
+      //     if (response.status == 200 || response.status == 201) {
+
+      //       //reseta para usar denovo
+      //       idAssunto = 0;
+      //       document.getElementById("adicoes").innerHTML = "";
+
+      //     } else {
+      //       erros(response.status);
+      //     }
+      //   });
+      // }
+
+      // //caso não tivesse antes
+      // else{
+      //   console.log("Já não tava aqui")
+      // }
+
+    }
+
+  }
+
 }
 
 
@@ -618,7 +751,7 @@ function editarContato(id, cod_contato) {
     "funcao": document.getElementById("funcao" + id).value,
   };
 
-  console.log(edicaoItem)
+  //console.log(edicaoItem)
   if (edicaoItem["nome"] != listaItem["nome"] || edicaoItem["email"] != listaItem["email"] || edicaoItem["funcao"] != listaItem["funcao"]) {
     //transforma as informações do token em json
     let corpo = JSON.stringify(edicaoItem);
