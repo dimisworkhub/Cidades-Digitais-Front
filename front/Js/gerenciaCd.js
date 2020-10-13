@@ -71,11 +71,15 @@ function enviar() {
 
 //CD acompanhamento
 
-let listaUacom = [], listaEdicaoAssunto = [],
+let listaUacom = [],
+  listaEdicaoAssunto = [],
   meuData = [];
 
 //usado para fazer o id dos botões de assunto
-let idAssunto = 0, testenumero = [];
+let idAssunto = 0;
+
+//para remover valores na parte de edição
+let valorRemovido = [];
 
 //dataAssunto usado para enviar assuntos após enviar as informações de acompanhamento
 let dataAssunto;
@@ -85,7 +89,7 @@ let dataAssunto;
 function uacom() {
 
   //cria o botão para editar
-  document.getElementById("editar").innerHTML = (`<button class="btn btn-success" data-toggle="modal" data-target="#adicionarUacom" onclick="pegarAssuntos(0)">Novo Acompanhamento</button>`);
+  document.getElementById("editar").innerHTML = (`<button class="btn btn-success" data-toggle="modal" data-target="#adicionarUacom" onclick="pegarAssuntos()">Novo Acompanhamento</button>`);
   document.getElementById("editar2").innerHTML = "";
 
   //função fetch para chamar itens da tabela
@@ -160,7 +164,7 @@ function uacom() {
 
 
 //valorPego serve apenas para quando já foi usado um dos assuntos na criação.
-function pegarAssuntos(valorPego) {
+function pegarAssuntos() {
   //fetch de assunto
   fetch(servidor + 'read/assunto', {
     method: 'GET',
@@ -180,26 +184,12 @@ function pegarAssuntos(valorPego) {
         document.getElementById("titulo").value = "";
         document.getElementById("relato").value = "";
 
+        let x = "";
         for (let i = 0; i < json.length; i++) {
-
-
-          //precisa ficar de fora para poder ser alterado
-          let optionAssunto = "";
-
-          //caso original:
-          if (valorPego == 0) {
-            optionAssunto += "<option value='" + json[i].cod_assunto + "   " + json[i].descricao + "'>" + json[i].descricao + "</option>";
-          }
-
-          // //caso precise retirar (ainda em testes)
-          // else {
-          //   if (json[i].cod_assunto == testenumero) {
-          //     optionAssunto -= "<option value='" + json[i].cod_assunto + "   " + json[i].descricao + "'>" + json[i].descricao + "</option>";
-          //   }
-          // }
-
+          x += "<option value='" + json[i].cod_assunto + "'>" + json[i].descricao + "</option>";
         }
-        document.getElementById("assunto").innerHTML = optionAssunto;
+
+        document.getElementById("assunto").innerHTML = x;
 
         document.getElementById("botaoFinal").innerHTML = " <button class='btn btn-primary multi-button ml-auto js-btn-next' onclick='novoUacom()' type='button'>Cadastrar</button>";
 
@@ -251,10 +241,12 @@ function novoUacom() {
 
 function anotaAssunto() {
 
-  let valoresAssunto = document.getElementById("assunto").value;
-  let valoresAssunto2 = valoresAssunto.split("   ");
+  let valorAssunto = document.getElementById("assunto").value;
 
-  let assuntoSelecionado = `<button class="btn" id="adicao` + idAssunto + `" value="` + valoresAssunto2[0] + `">` + valoresAssunto2[1] + `</button> <a class="js-btn-next" id="removedor` + idAssunto + `" type="reset" onclick="removerAssunto(` + idAssunto + `)" title="Deletar"> <img src="img/delete-icon.png" width="30px"> </a>`;
+  //o 0 define que é a primeira a ser selecionada, sendo que não há mais de uma seleção nesse select.
+  let nomeAssunto = document.querySelector("#assunto").selectedOptions[0].text;
+
+  let assuntoSelecionado = `<button class="btn" id="adicao` + idAssunto + `" value="` + valorAssunto + `">` + nomeAssunto + ` <a class="js-btn-next" id="removedor` + idAssunto + `" type="reset" onclick="removerAssunto(` + idAssunto + `)" title="Deletar"><img src="img/delete-icon.png" width="30px"></a> </button>`;
 
   document.getElementById("adicoes").innerHTML += assuntoSelecionado;
 
@@ -262,15 +254,19 @@ function anotaAssunto() {
 }
 
 function removerAssunto(valor) {
+
+  //para saber qual deletar
+  valorRemovido[valor] = document.getElementById("adicao" + valor).value;
   document.getElementById("adicoes").removeChild(document.getElementById("adicao" + valor));
-  document.getElementById("adicoes").removeChild(document.getElementById("removedor" + valor));
+
 }
 
 
 
 function novoAssunto() {
+
   for (let i = 0; i < idAssunto; i++) {
-    if (document.getElementById("adicao" + i).innerHTML != "") {
+    if (document.getElementById("adicao" + i) != undefined) {
 
       let infoAssunto = {
         "cod_ibge": parseInt(meuCodigo),
@@ -331,7 +327,10 @@ function edicaoModal(valor) {
 
         let x = "";
         for (let i = 0; i < json.length; i++) {
-          x += "<option value='" + json[i].cod_assunto + "   " + json[i].descricao + "'>" + json[i].descricao + "</option>";
+          x += "<option value='" + json[i].cod_assunto + "'>" + json[i].descricao + "</option>";
+
+          //para remoção de itens
+          valorRemovido[i] = 0;
         }
 
         document.getElementById("assunto").innerHTML = x;
@@ -347,7 +346,7 @@ function edicaoModal(valor) {
 
 }
 
-function getAssuntos(valor){
+function getAssuntos(valor) {
   //fetch de assuntouacom
 
   //preenche os assuntos na parte de edição
@@ -361,9 +360,9 @@ function getAssuntos(valor){
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
       response.json().then(function (json) {
-        
-        for(let i = 0; i < json.length; i++){
-          document.querySelector("#assunto").selectedIndex = (json[i].cod_assunto-1);
+
+        for (let i = 0; i < json.length; i++) {
+          document.querySelector("#assunto").selectedIndex = (json[i].cod_assunto - 1);
           anotaAssunto();
         }
 
@@ -404,7 +403,7 @@ function editarUacom(valor) {
       //pegar a data para enviar no editarUacom2
       response.json().then(function (json) {
         dataAssunto = json.data;
-        novoAssunto();
+        editarUacom2();
       });
 
     } else {
@@ -420,15 +419,10 @@ function editarUacom2() {
   for (let i = 0; i < idAssunto; i++) {
 
     //para checar se precisa adicionar
-    if (document.getElementById("adicao" + i).innerHTML != "") {
+    if (document.getElementById("adicao" + i) != undefined) {
 
-      //caso ja tenha
-      if(listaEdicaoAssunto[i].cod_assunto == document.getElementById("adicao" + i).value){
-        console.log("Já tem");
-      }
-
-      //caso não tenha
-      else{
+      //caso ainda não esteja lá
+      if (listaEdicaoAssunto[i] == undefined) {
         let infoAssunto = {
           "cod_ibge": parseInt(meuCodigo),
           "data": dataAssunto,
@@ -456,9 +450,11 @@ function editarUacom2() {
             document.getElementById("adicoes").innerHTML = "";
 
           } else {
-            //erros(response.status);
+            erros(response.status);
           }
         });
+      } else {
+        console.log("Já tem");
       }
 
     }
@@ -466,35 +462,34 @@ function editarUacom2() {
     //para checar se precisa deletar
     else {
 
-      console.log("Ao menos isso.");
-      // //caso tivesse antes
-      // if(listaEdicaoAssunto[i].cod_assunto == document.getElementById("adicao" + i).value){
+      //caso tivesse antes
+      if (valorRemovido[i] != 0) {
 
-      //   //função fetch para deletar
-      //   fetch(servidor + 'read/uacomassunto/' + meuCodigo + "/" + dataAssunto + "/" + document.getElementById("adicao" + i).value, {
-      //     method: 'DELETE',
-      //     headers: {
-      //       'Authorization': 'Bearer ' + meuToken
-      //     },
-      //   }).then(function (response) {
+        //função fetch para deletar
+        fetch(servidor + 'read/uacomassunto/' + meuCodigo + "/" + dataAssunto + "/" + valorRemovido[i], {
+          method: 'DELETE',
+          headers: {
+            'Authorization': 'Bearer ' + meuToken
+          },
+        }).then(function (response) {
 
-      //     //tratamento dos erros
-      //     if (response.status == 200 || response.status == 201) {
+          //tratamento dos erros
+          if (response.status == 200 || response.status == 201) {
 
-      //       //reseta para usar denovo
-      //       idAssunto = 0;
-      //       document.getElementById("adicoes").innerHTML = "";
+            //reseta para usar denovo
+            idAssunto = 0;
+            document.getElementById("adicoes").innerHTML = "";
 
-      //     } else {
-      //       erros(response.status);
-      //     }
-      //   });
-      // }
+          } else {
+            erros(response.status);
+          }
+        });
+      }
 
-      // //caso não tivesse antes
-      // else{
-      //   console.log("Já não tava aqui")
-      // }
+      //caso não tivesse antes
+      else {
+        console.log("Já não tava aqui.");
+      }
 
     }
 
@@ -562,7 +557,7 @@ function contatosCD() {
           //salva os valores para edição
           meuItem[i] = listaItem[i]["cod_item"];
           meuTipo[i] = listaItem[i]["cod_tipo_item"];
-          
+
           tabela += (`<tr>`);
           tabela += (`<td>`);
           tabela += (`<span id="nome style="white-space: pre-line">` + listaItem[i]["nome"] + `</span>`);
@@ -627,7 +622,7 @@ function visualizarContato(cod_contato, nome, funcao, email, identificador) {
             <th style="width:20%" scope="col">Nome</th>
             <th style="width:20%" scope="col">Função</th>
             <th style="width:20%" scope="col">E-mail</th>
-            <th style="width:30%" scope="col" rowspan="`+ json.length +`">Telefone</th>
+            <th style="width:30%" scope="col" rowspan="` + json.length + `">Telefone</th>
             <th style="width:9%" scope="col">Ação</th>
           </tr>
           </thead>
@@ -648,7 +643,7 @@ function visualizarContato(cod_contato, nome, funcao, email, identificador) {
           <option value="Celular">Celular</option>
           <option value="Trabalho">Trabalho</option>
           </select>
-          <button onclick="apagarTelefone(`+ json[i].cod_telefone+`)" class="btn danger">
+          <button onclick="apagarTelefone(` + json[i].cod_telefone + `)" class="btn danger">
           <i class="material-icons"data-toggle="tooltip" title="Apagar Telefone">delete</i>
           </button>
           `);
@@ -693,8 +688,8 @@ function editarTelefone(id, cod_contato) {
 
       //pegar o json que possui a tabela
       response.json().then(function (json) {
-        
-        if(json.length==0){
+
+        if (json.length == 0) {
           location.reload();
         }
 
@@ -973,8 +968,8 @@ function apagarContatoTelefone(cod_contato) {
                     'O Contato foi excluido com sucesso!',
                     'success'
                   )
-                  
-                  fetch(servidor + 'read/contato/'+cod_contato, {
+
+                  fetch(servidor + 'read/contato/' + cod_contato, {
                     method: 'DELETE',
                     headers: {
                       'Authorization': 'Bearer ' + meuToken
@@ -1015,7 +1010,7 @@ function apagarContatoTelefone(cod_contato) {
                 'O Contato foi excluido com sucesso!',
                 'success'
               )
-              fetch(servidor + 'read/contato/'+cod_contato, {
+              fetch(servidor + 'read/contato/' + cod_contato, {
                 method: 'DELETE',
                 headers: {
                   'Authorization': 'Bearer ' + meuToken
@@ -1039,7 +1034,7 @@ function apagarContatoTelefone(cod_contato) {
 
 function apagarTelefone(cod_telefone) {
 
-  fetch(servidor + 'read/telefone/'+cod_telefone, {
+  fetch(servidor + 'read/telefone/' + cod_telefone, {
     method: 'DELETE',
     headers: {
       'Authorization': 'Bearer ' + meuToken
