@@ -18,9 +18,9 @@ function erros(value) {
 	} else if (value == 409) {
 		alert("Erro: Adição já existente.");
 	} else if (value == 412) {
-		alert("Erro: Informação colocada é incorreta.");
+		alert("Erro: Informação colocada é incorreta ou improcessável.");
 	} else if (value == 422) {
-		alert("Erro: Formato de informação não aceito.");
+		alert("Erro: Usuário ou senha incorretos.");
 	} else if (value == 500) {
 		window.location.href = "./errors/500.html";
 	} else if (value == 504) {
