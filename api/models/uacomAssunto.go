@@ -56,7 +56,7 @@ func (uacomAssunto *UacomAssunto) FindAllUacomAssunto(db *gorm.DB, codIbge uint3
 func (uacomAssunto *UacomAssunto) DeleteUacomAssunto(db *gorm.DB, codIbge uint32, data string, codAssunto uint32) error {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
-	db = db.Debug().Model(&UacomAssunto{}).Where("cod_ibge = ? AND data = ? AND cod_assunto = ?", codIbge, data, codAssunto).Take(&Uacom{}).Delete(&UacomAssunto{})
+	db = db.Debug().Model(&UacomAssunto{}).Where("cod_ibge = ? AND data = ? AND cod_assunto = ?", codIbge, data, codAssunto).Take(&UacomAssunto{}).Delete(&UacomAssunto{})
 
 	return db.Error
 }
