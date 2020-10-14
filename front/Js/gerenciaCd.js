@@ -596,9 +596,11 @@ function contatosCD() {
 }
 
 
-function visualizarContato(cod_contato, nome, funcao, email, identificador) {
-  identificador = parseInt(identificador)
-
+let id= 0
+let codigoTelefone = '';
+function visualizarContato(cod_contato,nome,funcao,email,identificador) {
+  identificador= parseInt(identificador)
+  
   fetch(servidor + 'read/telefone/' + cod_contato, {
     method: 'GET',
     headers: {
@@ -622,44 +624,72 @@ function visualizarContato(cod_contato, nome, funcao, email, identificador) {
             <th style="width:20%" scope="col">Nome</th>
             <th style="width:20%" scope="col">Função</th>
             <th style="width:20%" scope="col">E-mail</th>
-            <th style="width:30%" scope="col" rowspan="` + json.length + `">Telefone</th>
+            <th style="width:30%" scope="col" rowspan="`+ json.length +`">Telefone</th>
             <th style="width:9%" scope="col">Ação</th>
           </tr>
           </thead>
         <tbody>
           <tr>`);
-        tabela += (`<td><input value="` + nome + `" id="nome` + identificador + `" type="text" class="nome"></td>`);
-        tabela += (`<td><input value="` + funcao + `" id="funcao` + identificador + `" type="text" class="funcao"></td>`);
-        tabela += (`<td><input value="` + email + `" id="email` + identificador + `" type="text" class="email"></td>`);
+        tabela += (`<td><input value="` + nome + `" id="nome`+identificador+`" type="text" class="nome"></td>`);
+        tabela += (`<td><input value="` + funcao + `" id="funcao`+identificador+`" type="text" class="funcao"></td>`);
+        tabela += (`<td><input value="` + email + `" id="email`+identificador+`" type="text" class="email"></td>`);
+        tabela += (`<td><div id="maisLittleInput">`);
 
-
-        tabela += (`<td>`);
-        for (i = 0; i < json.length; i++) {
-          tabela += (`<input value="` + json[i].telefone + `" id="telefone` + parseInt(1 + i) + `" type="text" class="telefone" size="14">`);
-          tabela += (`&nbsp&nbsp&nbsp<select name="tipo" id="tipo` + parseInt(1 + i) + `">
-          <option value="` + json[i].tipo + `">` + json[i].tipo + `</option>
-          <option value="WhatsApp">WhatsApp</option>
-          <option value="Casa">Casa</option>
-          <option value="Celular">Celular</option>
-          <option value="Trabalho">Trabalho</option>
-          </select>
-          <button onclick="apagarTelefone(` + json[i].cod_telefone + `)" class="btn danger">
-          <i class="material-icons"data-toggle="tooltip" title="Apagar Telefone">delete</i>
-          </button>
-          `);
-
+        if(json.length == 0){
+          tabela += (`<input value="" id="telefoneNew0" type="text" class="telefone" size="14">`);
+            tabela += (`&nbsp&nbsp&nbsp&nbsp
+            <select name="tipo" id="tipoNew0">
+              <option value=""> Tipo</option>
+              <option value="WhatsApp">WhatsApp</option>
+              <option value="Casa">Casa</option>
+              <option value="Celular">Celular</option>
+              <option value="Trabalho">Trabalho</option>
+            </select>
+            <br/>
+            <br/>
+            `);
+        }else{
+          for (i = 0; i < json.length; i++) {
+            // console.log(json)
+            if(json.length !=0){
+              id = i +1;
+            }
+            tabela += (`<input value="` + json[i].telefone + `" id="telefone`+ parseInt(1+i) +`" type="text" class="telefone" size="14">`);
+            tabela += (`&nbsp&nbsp&nbsp
+            <select name="tipo" id="tipo`+ parseInt(1+i) +`">
+              <option value="`+json[i].tipo+`">`+json[i].tipo+`</option>
+              <option value="WhatsApp">WhatsApp</option>
+              <option value="Casa">Casa</option>
+              <option value="Celular">Celular</option>
+              <option value="Trabalho">Trabalho</option>
+            </select>
+            <button id="butaoDelet`+ parseInt(1+i) +`" onclick="apagarTelefone(`+ json[i].cod_telefone+`);lessInput(${id});" class="btn danger">
+              <i class="material-icons"data-toggle="tooltip" title="Apagar Telefone">delete</i>
+            </button>
+            `);
+          }
         }
-        tabela += (`</td>`);
-        tabela += (`</td><td> 
+        
+        
+        // console.log(id)
+        tabela += (`</div>
+        <siders/>
+        </td>`);
+        tabela += (`</td>
+        <td> 
           <span class="d-flex">
-          <button onclick="editarContato(` + identificador + `,` + cod_contato + `);editarTelefone(` + identificador + `,` + cod_contato + `);" data-toggle="modal" href="#visualizar" class="btn ">
-          <i class="material-icons"data-toggle="tooltip" title="Salvar">&#xE254;</i>
-          </button>
-          </span> </td>`);
+            <button onclick="editarContato(`+ identificador +`,`+cod_contato+`);editarTelefone(`+ identificador +`,`+cod_contato+`);novoTelefone(`+cod_contato+`,${pass=true});" data-toggle="modal" href="#visualizar" class="btn ">
+              <i class="material-icons"data-toggle="tooltip" title="Salvar">&#xE254;</i>
+            </button>
+          </span> 
+          <span class="d-flex">
+            &nbsp&nbsp&nbsp<a class="js-btn-next" type="reset" id="clicaInput" onclick="litteInput(${true});" title="Adicionar"><img  src="img/add-icon.png" width="25px"></a>
+          </span> 
+        </td>`);
         tabela += (`</tr></tbody>`);
         // console.log(tabela)
 
-
+        
         document.getElementById("visualiza").innerHTML = tabela;
         mascara();
       });
@@ -668,6 +698,40 @@ function visualizarContato(cod_contato, nome, funcao, email, identificador) {
     }
   });
   // document.getElementById("tabela").innerHTML = tabela;
+}
+
+contador=0
+function litteInput(passe){
+  // console.log(passe)
+  if(passe == true){
+    $(document).ready(function(){
+      mascara();
+      $("siders").append(`
+      <div id="pequenoInput${contador}">
+        <input value="" id="telefoneNew`+ contador +`" type="text" class="telefone" size="14">
+        &nbsp&nbsp&nbsp
+        <select name="tipo" id="tipoNew`+ contador +`">
+          <option value="">Tipo</option>
+          <option value="WhatsApp">WhatsApp</option>
+          <option value="Casa">Casa</option>
+          <option value="Celular">Celular</option>
+          <option value="Trabalho">Trabalho</option>
+        </select>
+      </div>
+      <br>
+      `)
+      
+    });
+    console.log(contador)
+    contador = contador + 1;
+  }
+  return contador;
+}
+
+function lessInput(identifier){
+  document.getElementById('maisLittleInput').removeChild(document.getElementById('telefone'+identifier));
+  document.getElementById('maisLittleInput').removeChild(document.getElementById('tipo'+identifier));
+  document.getElementById('maisLittleInput').removeChild(document.getElementById('butaoDelet'+identifier));
 }
 
 function editarTelefone(id, cod_contato) {
@@ -689,9 +753,7 @@ function editarTelefone(id, cod_contato) {
       //pegar o json que possui a tabela
       response.json().then(function (json) {
 
-        if (json.length == 0) {
-          location.reload();
-        }
+        litteInput(false)
 
         for (let i = 0; i < json.length; i++) {
 
@@ -720,7 +782,9 @@ function editarTelefone(id, cod_contato) {
 
               //tratamento dos erros
               if (response.status == 200 || response.status == 201) {
-                location.reload();
+                setTimeout(function(){
+                  location.reload()
+                }, 2000);
               } else {
                 erros(response.status);
               }
@@ -804,10 +868,15 @@ function novoContato() {
   });
 }
 
-function novoTelefone() {
+function novoTelefone(cod_contato, pass) {
 
   let meuContato;
   let infoTelefone = [];
+
+  //Pega o numero de inputs do modal de adicionar
+  maisInput(false);
+  //pega o numero de inputs do modal de editar
+  litteInput(false);
 
   fetch(servidor + 'read/contato/' + meuCodigo + '/0', {
     method: 'GET',
@@ -815,48 +884,119 @@ function novoTelefone() {
       'Authorization': 'Bearer ' + meuToken
     },
   }).then(function (response) {
-
+    
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
       response.json().then(function (json) {
-
+        
         //Pega o ultimo contato salvo
         for (let i = 0; i < json.length; i++) {
-          meuContato = json[i].cod_contato;
+          meuContato= json[i].cod_contato;
         }
-
-        maisInput(false);
-
-        for (let i = 0; i < indice + 1; i++) {
-          infoTelefone[i] = {
-            "cod_contato": parseInt(meuContato),
-            "telefone": document.getElementById("telefone" + i).value,
-            "tipo": document.getElementById("tipo" + i).value,
-          };
-
-
-          //transforma as informações em string para mandar
-          let corpo = JSON.stringify(infoTelefone[i]);
-          console.log(infoTelefone[i]);
-          //função fetch para mandar
-          fetch(servidor + 'read/telefone', {
-            method: 'POST',
-            body: corpo,
-            headers: {
-              'Authorization': 'Bearer ' + meuToken
-            },
-          }).then(function (response) {
-
-            //tratamento dos erros
-            if (response.status == 200 || response.status == 201) {
-              // alert('O telefone: '+ infoTelefone[i].telefone +' do tipo: '+ infoTelefone[i].tipo +' cadastrado com sucesso!');
-            } else {
-              erros(response.status);
+        let tel0 = document.getElementById("telefoneNew0")
+        
+        if(pass== true && (tel0 != null) ){
+          for (let i = 0; i <= contador; i++) {
+            infoTelefone[i] = {
+              "cod_contato": parseInt(cod_contato),
+              "telefone": document.getElementById("telefoneNew"+parseInt(i)).value,
+              "tipo": document.getElementById("tipoNew"+parseInt(i)).value,
+            };
+          
+            if(infoTelefone[i].cod_contato != null && infoTelefone[i].telefone != null && infoTelefone[i].tipo != null){
+              //transforma as informações em string para mandar
+              let corpo = JSON.stringify(infoTelefone[i]);
+              console.log(infoTelefone[i]);
+              //função fetch para mandar
+              fetch(servidor + 'read/telefone', {
+                method: 'POST',
+                body: corpo,
+                headers: {
+                  'Authorization': 'Bearer ' + meuToken
+                },
+              }).then(function (response) {
+    
+                //tratamento dos erros
+                if (response.status == 200 || response.status == 201) {
+                  // alert('O telefone: '+ infoTelefone[i].telefone +' do tipo: '+ infoTelefone[i].tipo +' cadastrado com sucesso!');
+                } else {
+                  erros(response.status);
+                }
+              });
             }
-          });
+          }
         }
-        alert('O(s) telefone(s) foi(ram) cadastrado(s) com sucesso!');
-        location.reload();
+        else if(pass== true && contador>0 && tel0 == null){
+          for (let i = 1; i <= contador; i++) {
+            infoTelefone[i] = {
+              "cod_contato": parseInt(cod_contato),
+              "telefone": document.getElementById("telefoneNew"+parseInt(i)).value,
+              "tipo": document.getElementById("tipoNew"+parseInt(i)).value,
+            };
+          
+            if(infoTelefone[i].cod_contato != null && infoTelefone[i].telefone != null && infoTelefone[i].tipo != null){
+              //transforma as informações em string para mandar
+              let corpo = JSON.stringify(infoTelefone[i]);
+              console.log(infoTelefone[i]);
+              //função fetch para mandar
+              fetch(servidor + 'read/telefone', {
+                method: 'POST',
+                body: corpo,
+                headers: {
+                  'Authorization': 'Bearer ' + meuToken
+                },
+              }).then(function (response) {
+    
+                //tratamento dos erros
+                if (response.status == 200 || response.status == 201) {
+                  // alert('O telefone: '+ infoTelefone[i].telefone +' do tipo: '+ infoTelefone[i].tipo +' cadastrado com sucesso!');
+                } else {
+                  erros(response.status);
+                }
+              });
+            }
+          }
+        }
+        else{
+
+          for (let i = 0; i < indice+1; i++) {
+            infoTelefone[i] = {
+              "cod_contato": parseInt(meuContato),
+              "telefone": document.getElementById("telefone"+i).value,
+              "tipo": document.getElementById("tipo"+i).value,
+            };
+          
+            if(infoTelefone[i].cod_contato != null && infoTelefone[i].telefone != null && infoTelefone[i].tipo != null){
+              //transforma as informações em string para mandar
+              let corpo = JSON.stringify(infoTelefone[i]);
+              console.log(infoTelefone[i]);
+              //função fetch para mandar
+              fetch(servidor + 'read/telefone', {
+                method: 'POST',
+                body: corpo,
+                headers: {
+                  'Authorization': 'Bearer ' + meuToken
+                },
+              }).then(function (response) {
+    
+                //tratamento dos erros
+                if (response.status == 200 || response.status == 201) {
+                  // alert('O telefone: '+ infoTelefone[i].telefone +' do tipo: '+ infoTelefone[i].tipo +' cadastrado com sucesso!');
+                } else {
+                  erros(response.status);
+                }
+              });
+            }
+          }
+        }
+        if(pass != true){
+          alert('O(s) telefone(s) foi(ram) cadastrado(s) com sucesso!');
+          location.reload();
+        }else{
+          setTimeout(function(){
+            location.reload()
+          }, 3000);
+        }
       });
     } else {
       erros(response.status);
@@ -865,39 +1005,38 @@ function novoTelefone() {
 }
 
 let indice = 0;
-
-function maisInput(passe) {
-  if (passe == true && indice < 3) {
-    $(document).ready(function () {
-      mascara();
-      $("side").append('<div id="telTipo' + indice + '" class="form-row mt-4">' +
-        '<div class="col-12 col-sm-6">' +
-        '<input class="multisteps-form__input form-control telefone" type="text" placeholder="Telefone" id="telefone' + indice + '" name="telefone"/>' +
-        '</div>' +
-        '<div class="col-12 col-sm-6">' +
-        '<select class="multisteps-form__input form-control" name="tipo" id="tipo' + indice + '">' +
-        '<option value="">Tipo</option>' +
-        '<option value="WhatsApp">WhatsApp</option>' +
-        '<option value="Casa">Casa</option>' +
-        '<option value="Celular">Celular</option>' +
-        '<option value="Trabalho">Trabalho</option>' +
-        '</select>' +
-        '</div>' +
-        '</div>')
-    });
+function maisInput(passe){
+  if(passe == true && indice < 3){
     indice = indice + 1;
+    $(document).ready(function(){
+      mascara();
+      $("side").append('<div id="telTipo'+indice+'" class="form-row mt-4">'+
+                          '<div class="col-12 col-sm-6">'+
+                            '<input class="multisteps-form__input form-control telefone" type="text" placeholder="Telefone" id="telefone'+indice+'" name="telefone"/>'+
+                          '</div>'+
+                          '<div class="col-12 col-sm-6">'+
+                            '<select class="multisteps-form__input form-control" name="tipo" id="tipo'+ indice +'">'+
+                              '<option value="">Tipo</option>'+
+                              '<option value="WhatsApp">WhatsApp</option>'+
+                              '<option value="Casa">Casa</option>'+
+                              '<option value="Celular">Celular</option>'+
+                              '<option value="Trabalho">Trabalho</option>'+
+                            '</select>'+
+                          '</div>'+
+                        '</div>')
+    });
+    // console.log(indice)
   }
   return indice;
 }
 
-function menosInput() {
-  document.getElementById('telTipo' + indice).innerHTML = '';
-  if (indice > 1) {
-    indice = indice - 1;
-  } else {
-    indice = 1;
+function menosInput(){
+  if(indice>0){
+    document.getElementById('maisTelefone').removeChild(document.getElementById('telTipo'+indice));
   }
-  console.log(indice)
+  indice = indice -1;
+  // console.log(indice)
+  return indice
 }
 
 function apagarContatoTelefone(cod_contato) {
