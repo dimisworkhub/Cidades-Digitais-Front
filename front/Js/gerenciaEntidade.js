@@ -182,7 +182,7 @@ function contatosEntidade() {
           }
         }
         for (i = 0; i < listaItem.length; i++) {
-          console.log(meuCNPJ)
+          // console.log(meuCNPJ)
           //salva os valores para edição
           meuItem[i] = listaItem[i]["cod_item"];
           meuTipo[i] = listaItem[i]["cod_tipo_item"];
@@ -263,36 +263,50 @@ function visualizarContato(cod_contato,nome,funcao,email,identificador) {
         tabela += (`<td><input value="` + email + `" id="email`+identificador+`" type="text" class="email"></td>`);
         tabela += (`<td><div id="maisLittleInput">`);
 
-        
-        for (i = 0; i < json.length; i++) {
-          console.log(json)
-          if(json.length !=0){
-            id = i +1;
+        if(json.length == 0){
+          tabela += (`<input value="" id="telefoneNew0" type="text" class="telefone" size="14">`);
+            tabela += (`&nbsp&nbsp&nbsp&nbsp
+            <select name="tipo" id="tipoNew0">
+              <option value=""> Tipo</option>
+              <option value="WhatsApp">WhatsApp</option>
+              <option value="Casa">Casa</option>
+              <option value="Celular">Celular</option>
+              <option value="Trabalho">Trabalho</option>
+            </select>
+            <br/>
+            <br/>
+            `);
+        }else{
+          for (i = 0; i < json.length; i++) {
+            // console.log(json)
+            if(json.length !=0){
+              id = i +1;
+            }
+            tabela += (`<input value="` + json[i].telefone + `" id="telefone`+ parseInt(1+i) +`" type="text" class="telefone" size="14">`);
+            tabela += (`&nbsp&nbsp&nbsp
+            <select name="tipo" id="tipo`+ parseInt(1+i) +`">
+              <option value="`+json[i].tipo+`">`+json[i].tipo+`</option>
+              <option value="WhatsApp">WhatsApp</option>
+              <option value="Casa">Casa</option>
+              <option value="Celular">Celular</option>
+              <option value="Trabalho">Trabalho</option>
+            </select>
+            <button id="butaoDelet`+ parseInt(1+i) +`" onclick="apagarTelefone(`+ json[i].cod_telefone+`);lessInput(${id});" class="btn danger">
+              <i class="material-icons"data-toggle="tooltip" title="Apagar Telefone">delete</i>
+            </button>
+            `);
           }
-          tabela += (`<input value="` + json[i].telefone + `" id="telefone`+ parseInt(1+i) +`" type="text" class="telefone" size="14">`);
-          tabela += (`&nbsp&nbsp&nbsp
-          <select name="tipo" id="tipo`+ parseInt(1+i) +`">
-            <option value="`+json[i].tipo+`">`+json[i].tipo+`</option>
-            <option value="WhatsApp">WhatsApp</option>
-            <option value="Casa">Casa</option>
-            <option value="Celular">Celular</option>
-            <option value="Trabalho">Trabalho</option>
-          </select>
-          <button id="butaoDelet" onclick="apagarTelefone(`+ json[i].cod_telefone+`);lessInput(${id});" class="btn danger">
-            <i class="material-icons"data-toggle="tooltip" title="Apagar Telefone">delete</i>
-          </button>
-          `);
         }
         
         
-        console.log(id)
+        // console.log(id)
         tabela += (`</div>
         <siders/>
         </td>`);
         tabela += (`</td>
         <td> 
           <span class="d-flex">
-            <button onclick="editarContato(`+ identificador +`,`+cod_contato+`);editarTelefone(`+ identificador +`,`+cod_contato+`);novoTelefone(`+cod_contato+`);" data-toggle="modal" href="#visualizar" class="btn ">
+            <button onclick="editarContato(`+ identificador +`,`+cod_contato+`);editarTelefone(`+ identificador +`,`+cod_contato+`);novoTelefone(`+cod_contato+`,${pass=true});" data-toggle="modal" href="#visualizar" class="btn ">
               <i class="material-icons"data-toggle="tooltip" title="Salvar">&#xE254;</i>
             </button>
           </span> 
@@ -345,7 +359,7 @@ function litteInput(passe){
 function lessInput(identifier){
   document.getElementById('maisLittleInput').removeChild(document.getElementById('telefone'+identifier));
   document.getElementById('maisLittleInput').removeChild(document.getElementById('tipo'+identifier));
-  document.getElementById('maisLittleInput').removeChild(document.getElementById('butaoDelet'));
+  document.getElementById('maisLittleInput').removeChild(document.getElementById('butaoDelet'+identifier));
 }
 
 function editarTelefone(id,cod_contato) {
@@ -368,9 +382,6 @@ function editarTelefone(id,cod_contato) {
       response.json().then(function (json) {
         // console.log(json)
 
-        if(json.length==0){
-          location.reload();
-        }
         litteInput(false)
 
         for (let i = 0; i < json.length; i++) {
@@ -481,17 +492,15 @@ function novoContato() {
   });
 }
 
-function novoTelefone(cod_contato) {
+function novoTelefone(cod_contato, pass) {
 
   let meuContato;
   let infoTelefone= [];
-
+  
   //Pega o numero de inputs do modal de adicionar
   maisInput(false);
-
   //pega o numero de inputs do modal de editar
   litteInput(false);
-
 
   fetch(servidor + 'read/contato/0/'+meuCNPJ, {
     method: 'GET',
@@ -499,7 +508,7 @@ function novoTelefone(cod_contato) {
       'Authorization': 'Bearer ' + meuToken
     },
   }).then(function (response) {
-
+    
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
       response.json().then(function (json) {
@@ -508,8 +517,40 @@ function novoTelefone(cod_contato) {
         for (let i = 0; i < json.length; i++) {
           meuContato= json[i].cod_contato;
         }
-
-        if(contador>0){
+        let tel0 = document.getElementById("telefoneNew0")
+        
+        if(pass== true && (tel0 != null) ){
+          for (let i = 0; i <= contador; i++) {
+            infoTelefone[i] = {
+              "cod_contato": parseInt(cod_contato),
+              "telefone": document.getElementById("telefoneNew"+parseInt(i)).value,
+              "tipo": document.getElementById("tipoNew"+parseInt(i)).value,
+            };
+          
+            if(infoTelefone[i].cod_contato != null && infoTelefone[i].telefone != null && infoTelefone[i].tipo != null){
+              //transforma as informações em string para mandar
+              let corpo = JSON.stringify(infoTelefone[i]);
+              console.log(infoTelefone[i]);
+              //função fetch para mandar
+              fetch(servidor + 'read/telefone', {
+                method: 'POST',
+                body: corpo,
+                headers: {
+                  'Authorization': 'Bearer ' + meuToken
+                },
+              }).then(function (response) {
+    
+                //tratamento dos erros
+                if (response.status == 200 || response.status == 201) {
+                  // alert('O telefone: '+ infoTelefone[i].telefone +' do tipo: '+ infoTelefone[i].tipo +' cadastrado com sucesso!');
+                } else {
+                  erros(response.status);
+                }
+              });
+            }
+          }
+        }
+        else if(pass== true && contador>0 && tel0 == null){
           for (let i = 1; i <= contador; i++) {
             infoTelefone[i] = {
               "cod_contato": parseInt(cod_contato),
@@ -539,7 +580,8 @@ function novoTelefone(cod_contato) {
               });
             }
           }
-        }else{
+        }
+        else{
 
           for (let i = 0; i < indice+1; i++) {
             infoTelefone[i] = {
@@ -571,9 +613,13 @@ function novoTelefone(cod_contato) {
             }
           }
         }
-        if(cod_contato == null){
+        if(pass != true){
           alert('O(s) telefone(s) foi(ram) cadastrado(s) com sucesso!');
           location.reload();
+        }else{
+          setTimeout(function(){
+            location.reload()
+          }, 3000);
         }
       });
     } else {
@@ -603,7 +649,7 @@ function maisInput(passe){
                           '</div>'+
                         '</div>')
     });
-    console.log(indice)
+    // console.log(indice)
   }
   return indice;
 }
@@ -613,7 +659,7 @@ function menosInput(){
     document.getElementById('maisTelefone').removeChild(document.getElementById('telTipo'+indice));
   }
   indice = indice -1;
-  console.log(indice)
+  // console.log(indice)
   return indice
 }
 
@@ -635,7 +681,7 @@ function apagarContatoTelefone(cod_contato) {
 
       //pegar o json que possui a tabela
       response.json().then(function (json) {
-        console.log(json)
+        // console.log(json)
 
         if(json.length != 0){
 
@@ -664,7 +710,7 @@ function apagarContatoTelefone(cod_contato) {
                     'Authorization': 'Bearer ' + meuToken
                   },
                 }).then(function (response) {
-                  console.log('telefone deletado com sucesso!')
+                  console.log('Telefone deletado com sucesso!')
                 });
               }
     
@@ -789,7 +835,7 @@ function loteEntidade() {
       //pegar o json que possui a tabela
       response.json().then(function (json) {
 
-        console.log(json);
+        // console.log(json);
 
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
