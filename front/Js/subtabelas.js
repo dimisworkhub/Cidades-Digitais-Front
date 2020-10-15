@@ -715,21 +715,21 @@ function itensFiscalizacao(caminho) {
           <tr>
           <th style="width:30%" scope="col">Descrição</th>
           <th style="width:10%" scope="col">Empenho</th>
-          <th style="cursor:pointer;width:10%" data-toggle="modal" data-target="#descricaoItem" scope="col">Tipo</th>
-          <th style="cursor:pointer;width:5%" data-toggle="modal" data-target="#descricaoItem" onclick="descricaoItem('Quantidade disponível','` + caminho + `')" scope="col">Quantidade Disponível</th>
-          <th style="cursor:pointer;width:5%" data-toggle="modal" data-target="#descricaoItem" scope="col">Quantidade</th>
-          <th style="cursor:pointer;width:20%" data-toggle="modal" data-target="#descricaoItem" scope="col">Valor</th>
-          <th style="cursor:pointer;width:20%" data-toggle="modal" data-target="#descricaoItem" onclick="descricaoItem('Subtotal','` + caminho + `')" scope="col">Subtotal</th>
+          <th style="cursor:pointer;width:10%" data-toggle="modal" scope="col">Tipo</th>
+          <th style="cursor:pointer;width:5%" data-toggle="modal" data-target="#descricaoItem" onclick="descricaoItem('` + caminho + `')" scope="col">Quantidade Disponível</th>
+          <th style="cursor:pointer;width:5%" data-toggle="modal" scope="col">Quantidade</th>
+          <th style="cursor:pointer;width:20%" data-toggle="modal" scope="col">Valor</th>
+          <th style="cursor:pointer;width:20%" data-toggle="modal" data-target="#descricaoSubtotal" scope="col">Subtotal</th>
           </tr>
           </thead>`);
         } else {
           tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
           <th style="width:50%" scope="col">Descrição</th>
-          <th style="cursor:pointer;width:5%" data-toggle="modal" data-target="#descricaoItem" onclick="descricaoItem('Quantidade disponível','` + caminho + `')" scope="col">Quantidade Disponível</th>
-          <th style="cursor:pointer;width:5%" data-toggle="modal" data-target="#descricaoItem" scope="col">Quantidade</th>
-          <th style="cursor:pointer;width:20%" data-toggle="modal" data-target="#descricaoItem" scope="col">Valor</th>
-          <th style="cursor:pointer;width:20%" data-toggle="modal" data-target="#descricaoItem" onclick="descricaoItem('Subtotal','` + caminho + `')" scope="col">Subtotal</th>
+          <th style="cursor:pointer;width:5%" data-toggle="modal" data-target="#descricaoItem" onclick="descricaoItem('` + caminho + `')" scope="col">Quantidade Disponível</th>
+          <th style="cursor:pointer;width:5%" data-toggle="modal" scope="col">Quantidade</th>
+          <th style="cursor:pointer;width:20%" data-toggle="modal" scope="col">Valor</th>
+          <th style="cursor:pointer;width:20%" data-toggle="modal" data-target="#descricaoSubtotal" scope="col">Subtotal</th>
           </tr>
           </thead>`);
         }
@@ -824,23 +824,19 @@ function itensFiscalizacao(caminho) {
   });
 }
 
-function descricaoItem(itemDescrito,tipoTabela) {
+function descricaoItem(tipoTabela) {
 
   //console.log(tipoTabela);
 
-  //calculos para cada caso
-  if (itemDescrito == "Subtotal") {
-    //Titulo
-    document.getElementById("explicacao").innerHTML = itemDescrito;
+  //fazer subtotal separado
 
-    document.getElementById("calculo").innerHTML = "Quantidade x Valor = " + itemDescrito;
-  }
+  //calculos para cada caso
 
   //previsão de empenho
-  else if (itemDescrito == "Quantidade disponível" && tipoTabela == "itensprevisaoempenho") {
+  if (tipoTabela == "itensprevisaoempenho") {
 
     //Titulo
-    document.getElementById("explicacao").innerHTML = itemDescrito + ":";
+    document.getElementById("explicacao").innerHTML = "Quantidade Disponível:";
 
     document.getElementById("calculo").innerHTML = `
     <p>QTD - QTU = Quantidade disponível.</p>
@@ -983,14 +979,15 @@ function descricaoItem(itemDescrito,tipoTabela) {
     // 161,55			   
     // 466,8			   
     // 700	              828,35	        -128,35		   
-    // (item quantidade disponível * valor lote_itens) – ((item atual quant * valor lote_itens atual quant) + (item irmão 1 * valor lote_itens irmão 1) + (item irmão 2 * valor lote_itens irmão 2) = positivo ou negativo`)
+    // (item quantidade disponível * valor lote_itens) – ((item atual quant * valor lote_itens atual quant) + (item irmão 1 * valor lote_itens irmão 1) + (item irmão 2 * valor lote_itens irmão 2) = positivo ou negativo`);
 
   }
   
   //empenho
-  else if (itemDescrito == "Quantidade disponível" && tipoTabela == "itensempenho") {
+  else if (tipoTabela == "itensempenho") {
+
     //Titulo
-    document.getElementById("explicacao").innerHTML = itemDescrito + ":";
+    document.getElementById("explicacao").innerHTML = "Quantidade Disponível:";
 
     document.getElementById("calculo").innerHTML = `
     <p>QTD - QTU = Quantidade disponível.</p>
@@ -1024,9 +1021,10 @@ function descricaoItem(itemDescrito,tipoTabela) {
   }
   
   //fatura
-  else if (itemDescrito == "Quantidade disponível" && tipoTabela == "itensfatura") {
+  else if (tipoTabela == "itensfatura") {
+
     //Titulo
-    document.getElementById("explicacao").innerHTML = itemDescrito + ":";
+    document.getElementById("explicacao").innerHTML = "Quantidade Disponível:";
 
     document.getElementById("calculo").innerHTML = `<p>QTD - QTU = Quantidade disponível.</p>
     <p>(QTD = Quantidade total disponível.)</p>
@@ -1108,7 +1106,7 @@ function descricaoItem(itemDescrito,tipoTabela) {
     <p>10.2: 10.75 / 7.02 = 1.53</p>`;
 
   } else {
-    document.getElementById("calculo").innerHTML = "misterio";
+    document.getElementById("calculo").innerHTML = "ERRO";
   }
 
 }

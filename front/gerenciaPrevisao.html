@@ -109,7 +109,7 @@
         </section>
     </main>
 
-    <!-- Modal de Informações -->
+    <!-- ADD Modal HTML -->
     <div id="descricaoItem" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -118,39 +118,125 @@
                     <h4 class="modal-title">Fórmula do campo selecionado:</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
+                
                 <div class="modal-body" style="padding-bottom: 3rem;">
                     <div class="multisteps-form">
-                        <!--progress bar-->
-                        <div class="row">
+
+                        <div class="row ">
                             <div class="col-12 col-lg-12 ml-auto mr-auto mb-4">
-                                <div class="multisteps-form__progress">
-                                    <h2 class="multisteps-form__input"  id="explicacao"
-                                        title="Informação do Campo"></h2>
+                                <div class="multisteps-form__progress" id="passos">
+                                    <button class="multisteps-form__progress-btn js-active" type="button" title="Info">Informações da Quantidade</button>
+                                    <button class="multisteps-form__progress-btn" type="button" title="Special Cases">Informações de Casos Especiais</button>
+                                    <button class="multisteps-form__progress-btn" type="button" title="Special Cases">Informações de Reajuste</button>
                                 </div>
                             </div>
                         </div>
+
+                        <!--form panels-->
                         <div class="row">
                             <div class="col-12 col-lg-12 m-auto">
-                                <form class="multisteps-form__form" style="height: auto;">
-                                    
+                                <form class="multisteps-form__form needs-validation" novalidate style="height: auto;">
+
+                                    <!--single form panel-->
                                     <div class="multisteps-form__panel shadow p-4 rounded bg-white js-active" data-animation="scaleIn">
-                        
+                                        <h3 class="multisteps-form__title"  id="explicacao"></h3>
+
                                         <hr></hr>
                                         <div class="multisteps-form__content">
                                             <div class="form-row mt-4">
-                                                <div class="col-12 col-sm-12 mt-12 mt-sm-12" style="text-align: center; width: 100%;">
+                                                <div class="col-12 col-sm-12 mt-12 mt-sm-12" style="width: 100%;">
                                                     <p style="font-size:150%;" class="multisteps-form__input" id="calculo"></p>
                                                 </div>
                                             </div>
                                         </div>
                                         <hr></hr>
+
                                     </div>
-                                    
+
+                                    <!--single form panel-->
+                                    <div class="multisteps-form__panel shadow p-4 rounded bg-white" data-animation="scaleIn">
+                                        <h3 class="multisteps-form__title"  id="explicacao2"></h3>
+
+                                        <hr></hr>
+                                        <div class="multisteps-form__content">
+                                            <div class="form-row mt-4">
+                                                <div class="col-12 col-sm-12 mt-12 mt-sm-12" style="width: 100%;">
+                                                    <p style="font-size:150%;" class="multisteps-form__input" id="calculo2"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr></hr>
+
+                                    </div>
+
+                                    <!--single form panel-->
+                                    <div class="multisteps-form__panel shadow p-4 rounded bg-white" data-animation="scaleIn">
+                                        <h3 class="multisteps-form__title"  id="explicacao3"></h3>
+
+                                        <hr></hr>
+                                        <div class="multisteps-form__content">
+                                            <div class="form-row mt-4">
+                                                <div class="col-12 col-sm-12 mt-12 mt-sm-12" style="width: 100%;">
+                                                    <p style="font-size:150%;" class="multisteps-form__input" id="calculo3"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr></hr>
+
+                                    </div>
+
                                 </form>
                             </div>
                         </div>
+
                     </div>
                 </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD Modal HTML -->
+    <div id="descricaoSubtotal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Fórmula do campo selecionado:</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                
+                <div class="modal-body" style="padding-bottom: 3rem;">
+                    <div class="multisteps-form">
+
+                        <!--form panels-->
+                        <div class="row">
+                            <div class="col-12 col-lg-12 m-auto">
+                                <form class="multisteps-form__form needs-validation" novalidate style="height: auto;">
+
+                                    <!--single form panel-->
+                                    <div class="panel shadow p-4 rounded bg-white" data-animation="scaleIn">
+                                        <h3 class="multisteps-form__title">Cálculo de Subtabelas:</h3>
+
+                                        <hr></hr>
+                                        <div class="multisteps-form__content">
+                                            <div class="form-row mt-4">
+                                                <div class="col-12 col-sm-12 mt-12 mt-sm-12" style="width: 100%;">
+                                                    <p style="font-size:150%;" class="multisteps-form__input">Quantidade usada x Valor = Subtotal</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr></hr>
+
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
