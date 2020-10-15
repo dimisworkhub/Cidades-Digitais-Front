@@ -191,7 +191,7 @@ function pegarAssuntos() {
 
         document.getElementById("assunto").innerHTML = x;
 
-        document.getElementById("botaoFinal").innerHTML = " <button class='btn btn-primary multi-button ml-auto js-btn-next' onclick='novoUacom()' type='button'>Cadastrar</button>";
+        document.getElementById("botaoFinal").innerHTML = " <button class='btn btn-primary' onclick='novoUacom()' type='button'>Cadastrar</button>";
 
       });
     } else {
@@ -246,7 +246,7 @@ function anotaAssunto() {
   //o 0 define que é a primeira a ser selecionada, sendo que não há mais de uma seleção nesse select.
   let nomeAssunto = document.querySelector("#assunto").selectedOptions[0].text;
 
-  let assuntoSelecionado = `<button class="btn" id="adicao` + idAssunto + `" value="` + valorAssunto + `">` + nomeAssunto + ` <a class="js-btn-next" id="removedor` + idAssunto + `" type="reset" onclick="removerAssunto(` + idAssunto + `)" title="Deletar"><img src="img/delete-icon.png" width="30px"></a> </button>`;
+  let assuntoSelecionado = `<button class="btn" id="adicao` + idAssunto + `" value="` + valorAssunto + `"> <a class="btn" id="removedor` + idAssunto + `" type="reset" onclick="removerAssunto(` + idAssunto + `)" title="Deletar"> ` + nomeAssunto + ` <img src="img/delete-icon.png" width="30px"></a> </button>`;
 
   document.getElementById("adicoes").innerHTML += assuntoSelecionado;
 
@@ -474,7 +474,7 @@ function editarUacom2() {
         }).then(function (response) {
 
           //tratamento dos erros
-          if (response.status == 200 || response.status == 201) {
+          if (response.status == 200 || response.status == 201 || response.status == 204) {
 
             //reseta para usar denovo
             idAssunto = 0;
@@ -494,6 +494,9 @@ function editarUacom2() {
     }
 
   }
+
+  //recarrega a pagina
+  location.reload();
 
 }
 
