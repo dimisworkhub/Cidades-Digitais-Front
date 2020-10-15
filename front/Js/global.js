@@ -26,6 +26,6 @@ function erros(value) {
 	} else if (value == 504) {
 		window.location.href = "./errors/504.html";
 	} else {
-		alert("ERRO DESCONHECIDO");
+		alert("ERRO DESCONHECIDO: " + value);
 	}
 }

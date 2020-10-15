@@ -715,10 +715,10 @@ function itensFiscalizacao(caminho) {
           <tr>
           <th style="width:30%" scope="col">Descrição</th>
           <th style="width:10%" scope="col">Empenho</th>
-          <th style="cursor:pointer;width:10%" data-toggle="modal" data-target="#descricaoItem" onclick="descricaoItem('Tipo','` + caminho + `')" scope="col">Tipo</th>
+          <th style="cursor:pointer;width:10%" data-toggle="modal" data-target="#descricaoItem" scope="col">Tipo</th>
           <th style="cursor:pointer;width:5%" data-toggle="modal" data-target="#descricaoItem" onclick="descricaoItem('Quantidade disponível','` + caminho + `')" scope="col">Quantidade Disponível</th>
-          <th style="cursor:pointer;width:5%" data-toggle="modal" data-target="#descricaoItem" onclick="descricaoItem('Quantidade','` + caminho + `')" scope="col">Quantidade</th>
-          <th style="cursor:pointer;width:20%" data-toggle="modal" data-target="#descricaoItem" onclick="descricaoItem('Valor','` + caminho + `')" scope="col">Valor</th>
+          <th style="cursor:pointer;width:5%" data-toggle="modal" data-target="#descricaoItem" scope="col">Quantidade</th>
+          <th style="cursor:pointer;width:20%" data-toggle="modal" data-target="#descricaoItem" scope="col">Valor</th>
           <th style="cursor:pointer;width:20%" data-toggle="modal" data-target="#descricaoItem" onclick="descricaoItem('Subtotal','` + caminho + `')" scope="col">Subtotal</th>
           </tr>
           </thead>`);
@@ -727,8 +727,8 @@ function itensFiscalizacao(caminho) {
           <tr>
           <th style="width:50%" scope="col">Descrição</th>
           <th style="cursor:pointer;width:5%" data-toggle="modal" data-target="#descricaoItem" onclick="descricaoItem('Quantidade disponível','` + caminho + `')" scope="col">Quantidade Disponível</th>
-          <th style="cursor:pointer;width:5%" data-toggle="modal" data-target="#descricaoItem" onclick="descricaoItem('Quantidade','` + caminho + `')"  scope="col">Quantidade</th>
-          <th style="cursor:pointer;width:20%" data-toggle="modal" data-target="#descricaoItem" onclick="descricaoItem('Valor','` + caminho + `')" scope="col">Valor</th>
+          <th style="cursor:pointer;width:5%" data-toggle="modal" data-target="#descricaoItem" scope="col">Quantidade</th>
+          <th style="cursor:pointer;width:20%" data-toggle="modal" data-target="#descricaoItem" scope="col">Valor</th>
           <th style="cursor:pointer;width:20%" data-toggle="modal" data-target="#descricaoItem" onclick="descricaoItem('Subtotal','` + caminho + `')" scope="col">Subtotal</th>
           </tr>
           </thead>`);
@@ -826,7 +826,8 @@ function itensFiscalizacao(caminho) {
 
 function descricaoItem(itemDescrito,tipoTabela) {
 
-  console.log(tipoTabela);
+  //console.log(tipoTabela);
+
   //calculos para cada caso
   if (itemDescrito == "Subtotal") {
     //Titulo
