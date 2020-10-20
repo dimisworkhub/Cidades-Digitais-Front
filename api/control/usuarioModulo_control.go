@@ -95,10 +95,20 @@ func (server *Server) GetAllUsuarioModulo(w http.ResponseWriter, r *http.Request
 		return
 	}
 
+	//	Vars retorna as variaveis de rota
+	vars := mux.Vars(r)
+
+	//	codUsuario armazena a chave primaria da tabela usuario
+	codUsuario, err := strconv.ParseUint(vars["cod_usuario"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
 	usuarioModulo := models.UsuarioModulo{}
 
-	//	allUsuarioModulo armazena os dados buscados no banco de dados
-	allUsuarioModulo, err := usuarioModulo.FindAllUsuarioModulo(server.DB)
+	//	usuarioModuloGotten armazena os dados buscados no banco de dados
+	usuarioModuloGotten, err := usuarioModulo.FindAllUsuarioModulo(server.DB, uint32(codUsuario))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))
@@ -106,7 +116,7 @@ func (server *Server) GetAllUsuarioModulo(w http.ResponseWriter, r *http.Request
 	}
 
 	//	Retorna o Status 200 e o JSON da struct buscada
-	responses.JSON(w, http.StatusOK, allUsuarioModulo)
+	responses.JSON(w, http.StatusOK, usuarioModuloGotten)
 }
 
 /*  =========================
