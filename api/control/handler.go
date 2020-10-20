@@ -52,8 +52,11 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	ADICIONAR USUARIO MODULO
 	r.HandleFunc(config.MODULO_USERLIST_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateUsuarioModulo))).Methods(http.MethodPost)
 
+	//	LISTA MODULO
+	r.HandleFunc(config.MODULO_USERLIST_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllUsuarioModulo))).Methods(http.MethodGet)
+
 	//	DELETAR USUARIO MODULO
-	r.HandleFunc(config.MODULO_USERLIST_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteUsuarioModulo))).Methods(http.MethodPost)
+	r.HandleFunc(config.MODULO_USERLIST_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteUsuarioModulo))).Methods(http.MethodDelete)
 
 	/*	=========================
 		ROTAS EM ENTIDADE
