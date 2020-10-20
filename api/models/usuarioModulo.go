@@ -7,8 +7,12 @@ import "github.com/jinzhu/gorm"
 =========================  */
 
 type UsuarioModulo struct {
-	CodUsuario uint32 `gorm:"foreingkey:CodUsuario" json:"cod_usuario" validate:"required"`
-	CodModulo  uint32 `gorm:"foreingkey:CodModulo" json:"cod_modulo" validate:"required"`
+	CodUsuario  uint32 `gorm:"foreingkey:CodUsuario" json:"cod_usuario" validate:"required"`
+	CodModulo   uint32 `gorm:"foreingkey:CodModulo" json:"cod_modulo" validate:"required"`
+	Categoria_1 string `gorm:"default:null" json:"categoria_1"`
+	Categoria_2 string `gorm:"default:null" json:"categoria_2"`
+	Categoria_3 string `gorm:"default:null" json:"categoria_3"`
+	Descricao   string `gorm:"default:null" json:"descricao"`
 }
 
 /*  =========================
@@ -30,12 +34,15 @@ func (usuarioModulo *UsuarioModulo) SaveUsuarioModulo(db *gorm.DB) (*UsuarioModu
 	FUNCAO LISTAR TODOS USUARIO MODULO
 =========================  */
 
-func (usuarioModulo *UsuarioModulo) FindAllUsuarioModulo(db *gorm.DB) (*[]UsuarioModulo, error) {
+func (usuarioModulo *UsuarioModulo) FindAllUsuarioModulo(db *gorm.DB, codUsuario uint32) (*[]UsuarioModulo, error) {
 
 	allUsuarioModulo := []UsuarioModulo{}
-
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&UsuarioModulo{}).Find(&allUsuarioModulo).Error
+	err := db.Debug().Table("usuario_modulo").
+		Select("usuario_modulo.*, modulo.categoria_1, modulo.categoria_2, modulo.categoria_3, modulo.descricao").
+		Joins("INNER JOIN modulo ON usuario_modulo.cod_modulo = modulo.cod_modulo").
+		Where("usuario_modulo.cod_usuario = ?", codUsuario).
+		Scan(&allUsuarioModulo).Error
 	if err != nil {
 		return &[]UsuarioModulo{}, err
 	}

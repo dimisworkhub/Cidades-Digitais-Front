@@ -10,6 +10,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
+
+	"github.com/gorilla/mux"
 )
 
 /*  =========================
@@ -92,10 +95,20 @@ func (server *Server) GetAllUsuarioModulo(w http.ResponseWriter, r *http.Request
 		return
 	}
 
+	//	Vars retorna as variaveis de rota
+	vars := mux.Vars(r)
+
+	//	codUsuario armazena a chave primaria da tabela usuario
+	codUsuario, err := strconv.ParseUint(vars["cod_usuario"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
 	usuarioModulo := models.UsuarioModulo{}
 
-	//	allUsuarioModulo armazena os dados buscados no banco de dados
-	allUsuarioModulo, err := usuarioModulo.FindAllUsuarioModulo(server.DB)
+	//	usuarioModuloGotten armazena os dados buscados no banco de dados
+	usuarioModuloGotten, err := usuarioModulo.FindAllUsuarioModulo(server.DB, uint32(codUsuario))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))
@@ -103,7 +116,7 @@ func (server *Server) GetAllUsuarioModulo(w http.ResponseWriter, r *http.Request
 	}
 
 	//	Retorna o Status 200 e o JSON da struct buscada
-	responses.JSON(w, http.StatusOK, allUsuarioModulo)
+	responses.JSON(w, http.StatusOK, usuarioModuloGotten)
 }
 
 /*  =========================
@@ -118,17 +131,27 @@ func (server *Server) DeleteUsuarioModulo(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	//	O metodo ReadAll le toda a request ate encontrar algum erro, se nao encontrar erro o leitura para em EOF
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] it couldn't read the body, %v\n", err))
-		return
-	}
+	// Vars retorna as variaveis de rota
+	vars := mux.Vars(r)
 
 	//	Extrai o cod_usuario do body
 	tokenID, err := auth.ExtractTokenID(r)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+
+	//	codUsuario armazena a chave primaria da tabela usuario_modulo
+	codUsuario, err := strconv.ParseUint(vars["cod_usuario"], 10, 32)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	//	O metodo ReadAll le toda a request ate encontrar algum erro, se nao encontrar erro o leitura para em EOF
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] it couldn't read the body, %v\n", err))
 		return
 	}
 
@@ -167,7 +190,7 @@ func (server *Server) DeleteUsuarioModulo(w http.ResponseWriter, r *http.Request
 		<-ch
 	}()
 
-	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, usuarioModulo))
+	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", codUsuario))
 
 	//	Retorna o Status 201 e o JSON do Array adicionado
 	responses.JSON(w, http.StatusCreated, usuarioModulo)
