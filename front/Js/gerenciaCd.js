@@ -246,7 +246,7 @@ function anotaAssunto() {
   //o 0 define que é a primeira a ser selecionada, sendo que não há mais de uma seleção nesse select.
   let nomeAssunto = document.querySelector("#assunto").selectedOptions[0].text;
 
-  let assuntoSelecionado = `<button class="btn" id="adicao` + idAssunto + `" value="` + valorAssunto + `"> <a class="btn" id="removedor` + idAssunto + `" type="reset" onclick="removerAssunto(` + idAssunto + `)" title="Deletar"> ` + nomeAssunto + ` <img src="img/delete-icon.png" width="30px"></a> </button>`;
+  let assuntoSelecionado = `<button class="btn" id="adicao` + idAssunto + `" value="` + valorAssunto + `"> <a class="btn" id="removedor` + idAssunto + `" type="reset" onclick="removerAssunto(` + idAssunto + `)" title="Deletar">` + nomeAssunto + ` <img src="img/delete-icon.png" width="30px"></a> </button>`;
 
   document.getElementById("adicoes").innerHTML += assuntoSelecionado;
 

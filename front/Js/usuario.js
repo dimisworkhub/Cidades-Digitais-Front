@@ -24,7 +24,7 @@ function paginacao() {
   }).then(function (response) {
     //tratamento dos erros
     if (response.status == 200) {
-      let j = 0;
+
       //console.log(response.statusText);
 
       //pegar o json que possui a tabela
@@ -45,7 +45,6 @@ function paginacao() {
         // função para checar quem está ativo ou inativo
         let selecao = document.getElementById("status").value;
         
-
         //para quando o status for inativo
         let j = 0;
         let jsonDeStatus = [];
@@ -232,20 +231,11 @@ function enviar() {
 
   //estrutura usada para mandar o JSON no fetch
   let info = {
-    "nome": "",
-    "email": "",
-    "login": "",
-    "senha": "",
+    "nome": document.getElementById("nome").value,
+    "email": document.getElementById("email").value,
+    "login": document.getElementById("login").value,
+    "senha": document.getElementById("senha").value,
   };
-
-  let a = document.getElementById("nome");
-  info.nome = a.value;
-  let b = document.getElementById("email");
-  info.email = b.value;
-  let c = document.getElementById("login");
-  info.login = c.value;
-  let d = document.getElementById("senha");
-  info.senha = d.value;
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
@@ -292,7 +282,7 @@ function enviarModulo() {
   let infoModulo = JSON.stringify(modulo);
 
   //função fetch para mandar
-  fetch(servidor + 'read/usuario/' + 1 + '/modulo', {
+  fetch(servidor + 'read/usuario/' + userCriado + '/modulo', {
     method: 'POST',
     body: infoModulo,
     headers: {
