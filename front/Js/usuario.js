@@ -2,12 +2,11 @@
 let listaModulo = [];
 
 //pega o usuario logado
-let userLogado = localStorage.getItem("logado");
+let userLogado = localStorage.getItem("codigoLogado");
 
 //organizar os modulos
 let userCriado,
   userTotal = [],
-  modulo = [],
   valorModulo = [];
 
 function paginacao() {
@@ -106,7 +105,6 @@ function paginacao() {
   });
 }
 
-
 window.onload = function () {
   this.paginacao();
 
@@ -130,14 +128,14 @@ window.onload = function () {
         listaModulo = json;
         let tabelaMod = (`<thead style="background: #4b5366; color:white; font-size:15px">
                 <tr>
-                <th> <span class="custom-checkbox">
+                <th style="width:5%"> <span class="custom-checkbox">
                 <input type="checkbox" id="selectAll" >
                 <label for="selectAll"></label>
                 </span></th>
-                <th scope="col">Cód. Módulo</th>
-                <th scope="col">Módulo</th>
-                <th scope="col">Sub. Módulo</th>
-                <th scope="col">Ação</th>
+                <th style="width:5%" scope="col">Cód. Módulo</th>
+                <th style="width:5%" scope="col">Módulo</th>
+                <th style="width:5%" scope="col">Sub. Módulo</th>
+                <th style="width:5%" scope="col">Ação</th>
                 </tr>
                 </thead>`);
         tabelaMod += (`<tbody>`);
@@ -268,6 +266,7 @@ function enviar() {
 function enviarModulo() {
 
   let i, j = 0;
+  let modulo = [];
   for (i = 0; i < listaModulo.length; i++) {
     if (valorModulo[i] != null) {
       modulo[j] = {
@@ -282,7 +281,7 @@ function enviarModulo() {
   let infoModulo = JSON.stringify(modulo);
 
   //função fetch para mandar
-  fetch(servidor + 'read/usuario/' + userCriado + '/modulo', {
+  fetch(servidor + 'read/usuario/' + userLogado + '/modulo', {
     method: 'POST',
     body: infoModulo,
     headers: {
@@ -291,7 +290,7 @@ function enviarModulo() {
   }).then(function (response) {
 
     //checar o status do pedido
-    console.log(response);
+    //console.log(response);
 
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {

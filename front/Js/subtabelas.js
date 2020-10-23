@@ -769,7 +769,7 @@ function itensFiscalizacao(caminho) {
           tabela += (`</td> <td>`);
           tabela += listaItem[i]["quantidade_disponivel"];
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["quantidade"] * 100 + `" class="quebrados" id="quantidade` + i + `" onchange="checarCasos('` + caminho + "','" + i + `')" type="text" size="10" style="text-align: right;"></input>`);
+          tabela += (`<input value="` + listaItem[i]["quantidade"] * 100 + `" class="quebrados" id="quantidade` + i + `" onchange="checarQuantidade('` + caminho + "','" + i + `')" type="text" size="10" style="text-align: right;"></input>`);
           tabela += (`</td> <td>`);
           tabela += (`<input value="` + listaItem[i]["valor"] * 100 + `" class="preco" id="valor` + i + `" type="text" size="15" style="text-align: right;"></input>`);
           tabela += (`</td> <td class="preco">`);
@@ -944,43 +944,6 @@ function descricaoItem(tipoTabela) {
     <p>Para cada item é somado suas quantidades,</p>
     <p>assim se obtém a quantidade reajustada.</p>`;
 
-    //parte misteriosa: (não sei se entra ou não)
-    // (`Quantidade disponivel
-    // 1,90
-    // Valor lote itens
-    // 5.65
-    // item – quantidade disponivel * valor lote itens = valor total disponivel
-    // 8.2 – 1,9 * 5.65 = 19
-    // 1.67*6.43 = 16.7
-    // 1.53*7.02 = 15.3
-    // quantidade usada
-    // 51/5.65 = 5.1
-    // 51/6.43 =  4,63
-    // 51/7.02 =  4,25
-    // _____________________
-    // a - item quantidade disponível
-    // b - valor lote_itens
-    // c - item atual quant
-    // d - valor lote_itens atual quant
-    // f - item irmão 1
-    // g - valor lote_itens irmão 1
-    // h - tem irmão 2
-    // i - valor lote_itens irmão 2
-    // X - positivo ou negativo
-    // (item quantidade disponível * valor lote_itens) – ((item atual quant * valor lote_itens atual quant) + (item irmão 1 * valor lote_itens irmão 1) + (item irmão 2 * valor lote_itens irmão 2) = positivo ou negativo
-    // Formula calcular a quantidade disponível
-    // (a*b)-((c*d)+(f*g)+(h*i))=X
-    // Quantidade disponível	quantidade	Valor da tela	valor lote_itens	   
-    // 8.4	                  70	        20	          15	  10	   
-    // 9.4	                  65	        15	          18	  10,77	   
-    // 10.4	                60	        40	          21	  11,67	   
-    // Valor disponível	valor utilizado			   
-    // 700	              200			   
-    // 161,55			   
-    // 466,8			   
-    // 700	              828,35	        -128,35		   
-    // (item quantidade disponível * valor lote_itens) – ((item atual quant * valor lote_itens atual quant) + (item irmão 1 * valor lote_itens irmão 1) + (item irmão 2 * valor lote_itens irmão 2) = positivo ou negativo`);
-
   }
   
   //empenho
@@ -1111,14 +1074,14 @@ function descricaoItem(tipoTabela) {
 
 }
 
-function checarQuantidade(valor){
+function checarQuantidade(caminho,valor){
 
   if (mascaraQuebrados(document.getElementById("quantidade" + valor).value) > (listaItem[valor].quantidade_disponivel + listaItem[valor].quantidade)) {
 
     //Alerta inteligente que necessita de uma confirmação para continuar
     Swal.fire({
       title: 'Tem certeza?',
-      text: "A Quantidade inserida no item " + listaItem[valor].cod_tipo_item + "." + listaItem[valor].cod_item + " é maior que a Quantidade Disponível!",
+      text: "A Quantidade inserida no item " + listaItem[valor].cod_tipo_item + "." + listaItem[valor].cod_item + " é maior que sua Quantidade Disponível.",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -1148,6 +1111,8 @@ function checarQuantidade(valor){
     });
   }
 
+  checarCasos(caminho,valor);
+
 }
 
 function checarCasos(caminho,valor){
@@ -1175,7 +1140,7 @@ function checarCasos(caminho,valor){
       //Alerta inteligente que necessita de uma confirmação para continuar
       Swal.fire({
         title: 'Tem certeza?',
-        text: "A Quantidade inserida no item " + listaItem[valor].cod_tipo_item + "." + listaItem[valor].cod_item + " está ultrapassando o limite do seu grupo!",
+        text: "A Quantidade inserida no item " + listaItem[valor].cod_tipo_item + "." + listaItem[valor].cod_item + " ultrapassa a quantidade disponível do grupo de itens especiais (8." + listaItem[valor].cod_item + "; 9." + listaItem[valor].cod_item + " e 10." + listaItem[valor].cod_item + ").",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -1206,8 +1171,6 @@ function checarCasos(caminho,valor){
         }
       });
     }
-  } else {
-    checarQuantidade(valor);
   }
 
 }
