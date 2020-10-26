@@ -73,7 +73,7 @@ func (server *Server) CreatePonto(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
-	err = logPid.LogPid(server.DB, pid.CodPid, "pid", "i", tokenID)
+	err = logPid.LogPid(server.DB, pidCreated.CodPid, "pid", "i", tokenID)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
