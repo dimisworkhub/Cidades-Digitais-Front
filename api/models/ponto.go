@@ -7,19 +7,19 @@ import "github.com/jinzhu/gorm"
 =========================  */
 
 type Ponto struct {
-	CodPonto     uint32 `gorm:"primary_key;not null" json:"cod_ponto"`
-	CodCategoria uint32 `gorm:"primary_key;foreign_key:CodCategoria;not null" json:"cod_categoria"`
-	CodIbge      uint32 `gorm:"primary_key;foreign_key:CodIbge;not null" json:"cod_ibge"`
-	CodPid       uint32 `gorm:"foreign_key:CodPid;not null" json:"cod_pid"`
-	Nome         string `gorm:"default:null" json:"nome"`
-	Inep         string `gorm:"default:null" json:"inep"`
-	Endereco     string `gorm:"default:null" json:"endereco"`
-	Numero       string `gorm:"default:null" json:"numero"`
-	Complemento  string `gorm:"default:null" json:"complemento"`
-	Bairro       string `gorm:"default:null" json:"bairro"`
-	Cep          string `gorm:"default:null" json:"cep"`
-	Latitude     uint32 `gorm:"default:null" json:"latitude"`
-	Longitude    uint32 `gorm:"default:null" json:"longitude"`
+	CodPonto     uint32  `gorm:"primary_key;not null" json:"cod_ponto"`
+	CodCategoria uint32  `gorm:"primary_key;foreign_key:CodCategoria;not null" json:"cod_categoria"`
+	CodIbge      uint32  `gorm:"primary_key;foreign_key:CodIbge;not null" json:"cod_ibge"`
+	CodPid       uint32  `gorm:"foreign_key:CodPid;not null" json:"cod_pid"`
+	Nome         string  `gorm:"default:null" json:"nome"`
+	Inep         string  `gorm:"default:null" json:"inep"`
+	Endereco     string  `gorm:"default:null" json:"endereco"`
+	Numero       string  `gorm:"default:null" json:"numero"`
+	Complemento  string  `gorm:"default:null" json:"complemento"`
+	Bairro       string  `gorm:"default:null" json:"bairro"`
+	Cep          string  `gorm:"default:null" json:"cep"`
+	Latitude     float32 `gorm:"default:null" json:"latitude"`
+	Longitude    float32 `gorm:"default:null" json:"longitude"`
 }
 
 /*  =========================
