@@ -115,14 +115,14 @@ function uacom() {
         listaUacom = json;
 
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
-			<tr>
-			<th style="width:20%" scope="col">Data</th>
-			<th style="width:20%" scope="col">Assunto</th>
-			<th style="width:20%" scope="col">Titulo</th>
-			<th style="width:35%" scope="col">Relato</th>
-			<th style="width:5%" scope="col">editar</th>
-			</tr>
-			</thead>`);
+        <tr>
+        <th style="width:20%" scope="col">Data</th>
+        <th style="width:20%" scope="col">Assunto</th>
+        <th style="width:20%" scope="col">Titulo</th>
+        <th style="width:35%" scope="col">Relato</th>
+        <th style="width:5%" scope="col">editar</th>
+        </tr>
+        </thead>`);
         tabela += (`<tbody>`);
 
         for (i = 0; i < listaUacom.length; i++) {
