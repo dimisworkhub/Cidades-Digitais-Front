@@ -49,19 +49,6 @@ func (server *Server) CreatePonto(w http.ResponseWriter, r *http.Request) {
 	logPid := models.Log{}
 	logPonto := models.Log{}
 
-	//	Unmarshal pid
-	if err = json.Unmarshal(body, &pid); err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
-		return
-	}
-
-	//	Validacao de estrutura
-	if err = validation.Validator.Struct(pid); err != nil {
-		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
-		w.WriteHeader(http.StatusPreconditionFailed)
-		return
-	}
-
 	//	Unmarshal ponto
 	if err = json.Unmarshal(body, &ponto); err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
@@ -73,6 +60,10 @@ func (server *Server) CreatePonto(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
+
+	pid.CodIbge = ponto.CodIbge
+	pid.Nome = ponto.Nome
+	pid.Inep = ponto.Inep
 
 	pidCreated, err := pid.SavePid(server.DB)
 	if err != nil {
