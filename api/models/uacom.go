@@ -76,7 +76,7 @@ func (uacom *Uacom) FindAllUacom(db *gorm.DB, codIbge uint32) (*[]Uacom, error) 
 func (uacom *Uacom) UpdateUacom(db *gorm.DB, codIbge uint32, data string) (*Uacom, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	db = db.Debug().Exec("UPDATE uacom SET titulo = ?, relato = ?, descricao = ? WHERE cod_ibge = ? AND data = ?", uacom.Titulo, uacom.Relato, uacom.Descricao, codIbge, data)
+	db = db.Debug().Exec("UPDATE uacom SET titulo = ?, relato = ? WHERE cod_ibge = ? AND data = ?", uacom.Titulo, uacom.Relato, codIbge, data)
 	if db.Error != nil {
 		return &Uacom{}, db.Error
 	}
