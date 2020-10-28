@@ -271,7 +271,7 @@ function enviarModulo(){
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
       alert("Módulos inseridos com sucesso");
-      //location.reload();
+      location.reload();
     } else {
       erros(response.status);
     }

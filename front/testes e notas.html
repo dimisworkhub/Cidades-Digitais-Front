@@ -1,264 +1,35 @@
 <!--
 
-fazer a função para ajuste final da máscara
+  fazer a função para ajuste final da máscara
+  
+  mudar keycode (deprecated)
 
-mudar keycode (deprecated)
+  garantir q não é selecionado o mesmo assunto
 
-garantir q não é selecionado o mesmo assunto
+  modais especiais: colocar de acordo com o discord VV
 
-modais especiais: colocar de acordo com o discord VV
+  colocar seleção e remoçao de modulos dentro da parte de adição de agora (marcar o q ja tem)
 
-colocar selecçao e remoçao de modulos dentro da parte de adição de agora (marcar o q ja tem)
+  concertar reload depois
+
+  remover auto envio de data em edição de CD ???
 
 -->
 
-
-
-<!-- click()	Simulates a mouse-click on an element 
-    style="white-space: pre-line"  Usa pra pular uma linha no html
+<!--
+  click()	Simulates a mouse-click on an element 
+  style="white-space: pre-line"  Usa pra pular uma linha no html
 -->
-
-
 
 <!--
   essa imagem foi util antes
   <img src="http://cidadesdigitais.c3sl.ufpr.br/wp-content/uploads/sites/6/2018/04/marca-01.png" class="img-responsive" style="width:50%;"/>
 -->
 
-
-
 <!-- 
-ITENS PREVISÃO DE EMPENHO
-
-Quantidade total disponível – soma de todas as cd_itens.quantidade_projeto_executivo
-
-Lote 16 * cidades
-
-
-
-Lote 42, 
-tem 5 cidades, 
-cada cidade tem uma quantidade_projeto_executivo
-15+10+50+35+10 = 120
-
-Quantidade total utilizada - 
-
-Lote 42,
-Tem 8 previsão, 4 utilizam o item 1.2
-40 + 5 + 10 +10 = 65
-
-Quantidade disponível - 
-Quantidade total disponível - Quantidade total utilizada = 120 – 65 = 55
-
-
-Quantidade total disponível é a quantidade de um item somado em todos os projetos executivos, de um determinado lote.
-
-
-
-
-
-
-
-
-TELA ITENS_PREVISÃO_EMPENHO
-Quantidade total disponível - Quantidade total utilizada = Quantidade disponível
-
-Quantidade total disponível
-Pega-se todos os projetos executivos de um lote, e para cada item é somado suas quantidades, assim se obtém a quantidade total.
-
-Quantidade total utilizada
-Pega-se todas as previsões de empenho de um lote, e para cada item é somado suas quantidades, assim se obtém a quantidade utilizada.
-
-Ex: Lote X: 15 cidades, 5 projetos executivos, 10 previsões de empenho
-Quantidade total disponível item 1.1 = 10+20+30+40+50 = 150
-Quantidade total utilizada item 1.1 = 10+20+30+40 = 100 (4 previsão de empenho utilizam o item 1.1)
-
-Quantidade total disponível - Quantidade total utilizada = Quantidade disponível
-150 - 100 = 50
-
-___________
-
-Para os itens dos tipos 8, 9 e 10, o cálculo tem uma camada a mais de complexidade. Pois estes itens possuem um certo “compartilhamento” de suas disponibilidades. A exemplo:
-8.2, 9.2 e 10.2, todos são “Perfuração de vala” de uma categoria diferente, na terra, no asfalto, etc. 
-Para controlar a quantidade disponível destes itens não é utilizada a quantidade e sim o valor do item, pois cada item possui um valor diferente.
-
-Quantidade total disponível (itens 8.x, 9.x, 10.x)
-Pega-se o resultado dos itens e multiplica ele pelo valor (sem reajuste).
-Ex: 
-8.2:   10 * 5.65 = 56.50 
-9.2:   10 * 6,43 = 64.30 
-10.2: 10 * 7,02 = 70.20
-Pega-se os 3 itens e soma o resultado de cada 
-Ex: 56.50 + 64.30 + 70.20 = 191.00
-
-Quantidade total utilizada (itens 8.x, 9.x, 10.x)
-Pega-se o resultado dos itens e multiplica ele pelo valor (sem reajuste).
-Ex: 
-8.2:   20 * 5.65 = 113.00 
-9.2:   5 * 6,43 = 32.15
-10.2: 5 * 7,02 = 35.10
-Pega-se os 3 itens e soma o resultado de cada 
-Ex: 113.00 + 32.15 + 35.10 = 180.25
-
-Quantidade total disponível - Quantidade total utilizada = Quantidade disponível
-191.00 – 180.25 = 10.75
-Com isso as quantidades disponíveis para cada item é utilizado o valor de 10.75 dividido pelo valor do item (sem reajuste)
-Ex:
-8.2:   10.75 / 5.65 = 1,90
-9.2:   10.75 / 6.43 = 1.67
-10.2: 10.75 / 7.02 = 1.53
-
-______________
-
-Reajuste
-(Quantidade total disponível – quantidade faturada) – quantidade reajustada =  quantidade disponível
-
-Quantidade total disponível
-Pega-se todos as previsões de empenho (tipo original) de um lote anterior ao ano de referência. 
-Para cada item é somado suas quantidades, assim se obtém a quantidade total.
-
-Quantidade faturada
-Pega-se todas faturas (anteriores a data de reajuste do ano de referência) que utilizam a mesma previsão de empenho. 
-Para cada item é somado suas quantidades, assim se obtém a quantidade faturada.
-
-Quantidade reajustada
-Pega-se todas as previsões de empenho do tipo reajuste (que compartilham o mesmo ano de referência) de um lote. 
-Para cada item é somado suas quantidades, assim se obtém a quantidade reajustada.
-
-
-
-
-
-Quantidade disponivel
-1,90
-
-Valor lote itens
-5.65
-
-item – quantidade disponivel * valor lote itens = valor total disponivel
-8.2 – 1,9 * 5.65 = 19
-1.67*6.43 = 16.7
-1.53*7.02 = 15.3
-	
-
-quantidade usada
-
-
-51/5.65 = 5.1
-51/6.43 =  4,63
-51/7.02 =  4,25
-
-
-
-
-_____________________
-
-a - item quantidade disponível
-b - valor lote_itens
-c - item atual quant
-d - valor lote_itens atual quant
-f - item irmão 1
-g - valor lote_itens irmão 1
-h - tem irmão 2
-i - valor lote_itens irmão 2
-X - positivo ou negativo
-
-(item quantidade disponível * valor lote_itens) – ((item atual quant * valor lote_itens atual quant) + (item irmão 1 * valor lote_itens irmão 1) + (item irmão 2 * valor lote_itens irmão 2) = positivo ou negativo
-
-Formula calcular a quantidade disponível
-(a*b)-((c*d)+(f*g)+(h*i))=X
-
-
-
-
- 
-	Quantidade disponível	quantidade	Valor da tela	valor lote_itens	   
-8.4	70	20	15	10	   
-9.4	65	15	18	10,77	   
-10.4	60	40	21	11,67	   
-					   
-	Valor disponível	valor utilizado			   
-	700	200			   
-		161,55			   
-		466,8			   
-	700	828,35	-128,35		   
-					   
-	(item quantidade disponível * valor lote_itens) – ((item atual quant * valor lote_itens atual quant) + (item irmão 1 * valor lote_itens irmão 1) + (item irmão 2 * valor lote_itens irmão 2) = positivo ou negativo				 
-
-
-
-  
-TELA ITENS_EMPENHO
-Quantidade total disponível - Quantidade total utilizada = Quantidade disponível
-
-Quantidade total disponível
-Pega-se todos as previsões de empenho de um lote, e para cada item é somado suas quantidades, assim se obtém a quantidade total.
-
-Quantidade total utilizada
-Pega-se todas os empenhos relacionados a uma previsão de empenho, e para cada item é somado suas quantidades, assim se obtém a quantidade utilizada.
-
-Ex: Lote X: 15 cidades, 5 previsões de empenho, 10 empenhos
-Quantidade total disponível item 1.1 = 10+20 = 30 (2 previsão de empenho utilizam o item 1.1)
-Quantidade total utilizada item 1.1 = 1+2+3+4+5+6 = 21 (6 empenho utilizam o item 1.1)
-
-Quantidade total disponível - Quantidade total utilizada = Quantidade disponível
-30 - 21 = 9
-
-
-
-
-
-
-TELA FATURA
-Quantidade total disponível - Quantidade total utilizada = Quantidade disponível
-
-Quantidade total disponível
-Pega-se o empenho utilizado, e a quantidade do item, assim se obtém a quantidade total.
-
-Quantidade total utilizada
-Pega-se todos as faturas que possuem o mesmo empenho, e para o item é somado suas quantidades, assim se obtém a quantidade utilizada.
-
-Ex: 1 empenho, 5 faturas
-Quantidade total disponível item 1.1 = 50 = 50
-Quantidade total utilizada item 1.1 = 10+20 = 30 (2 faturas utilizam o item 1.1)
-
-Quantidade total disponível - Quantidade total utilizada = Quantidade disponível
-50 - 30 = 20
-
-___________
-
-Para os itens dos tipos 8, 9 e 10, o cálculo tem uma camada a mais de complexidade. Pois estes itens possuem um certo “compartilhamento” de suas disponibilidades. A exemplo:
-8.2, 9.2 e 10.2, todos são “Perfuração de vala” de uma categoria diferente, na terra, no asfalto, etc. 
-Para controlar a quantidade disponível destes itens não é utilizada a quantidade e sim o valor do item, pois cada item possui um valor diferente.
-
-Quantidade total disponível (itens 8.x, 9.x, 10.x)
-Pega-se o resultado dos itens e multiplica ele pelo valor (sem reajuste).
-Ex: 
-8.2:   10 * 5.65 = 56.50 
-9.2:   10 * 6,43 = 64.30 
-10.2: 10 * 7,02 = 70.20
-Pega-se os 3 itens e soma o resultado de cada 
-Ex: 56.50 + 64.30 + 70.20 = 191.00
-
-Quantidade total utilizada (itens 8.x, 9.x, 10.x)
-Pega-se o resultado dos itens e multiplica ele pelo valor (sem reajuste).
-Ex: 
-8.2:   20 * 5.65 = 113.00 
-9.2:   5 * 6,43 = 32.15
-10.2: 5 * 7,02 = 35.10
-Pega-se os 3 itens e soma o resultado de cada 
-Ex: 113.00 + 32.15 + 35.10 = 180.25
-
-Quantidade total disponível - Quantidade total utilizada = Quantidade disponível
-191.00 – 180.25 = 10.75
-Com isso as quantidades disponíveis para cada item é utilizado o valor de 10.75 dividido pelo valor do item (sem reajuste)
-Ex:
-8.2:   10.75 / 5.65 = 1,90
-9.2:   10.75 / 6.43 = 1.67
-10.2: 10.75 / 7.02 = 1.53 
+    //pagina com documentação
+    // https://samarineproducts.com/plugins/jquery-inputmask/README.md
 -->
-
-
 
 <!--
 
@@ -299,21 +70,7 @@ Ex:
       });
     $('.selectonfocus').mask("00/00/0000", {selectOnFocus: true});
   });
-
-  usado até agora:
-
-  $(document).ready(function(){
-    $('.data').mask('00/00/0000');
-    $('.cep').mask('00000-000');
-    $('.numero').mask('00000-0000');
-    $('.numero_ddd').mask('(00) 00000-0000');
-    $('.cpf').mask('000.000.000-00', {reverse: true});
-    $('.cnpj').mask('00.000.000/0000-00', {reverse: true});
-    $('.preco').mask('R$ 000.000.000.000.000,00', {reverse: true});
-  });
 -->
-
-
 
 <!--
 
@@ -349,9 +106,4 @@ window.location.replace("./errors/504.html");
 alert("ERRO DESCONHECIDO");
 }
 
--->
-
-<!-- 
-    //pagina com documentação
-    // https://samarineproducts.com/plugins/jquery-inputmask/README.md
 -->
