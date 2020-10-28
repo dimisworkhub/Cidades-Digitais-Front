@@ -509,9 +509,7 @@ function editarUacom2() {
 function contatosCD() {
 
   //cria o botão para editar
-  document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarContato()" class="btn btn-success">Salvar Alterações</button>
-                                                  <button class="btn btn-success" data-toggle="modal" data-target="#adicionarContato">Novo Contato</button>`);
-  document.getElementById("editar2").innerHTML = (`<button id="editar" onclick="editarContato()" class="btn btn-success">Salvar Alterações</button>`);
+  document.getElementById("editar").innerHTML = (`<button class="btn btn-success" data-toggle="modal" data-target="#adicionarContato">Novo Contato</button>`);
 
   //função fetch para chamar contatos da tabela
   fetch(servidor + 'read/contato/' + meuCodigo + '/0', {
@@ -1189,6 +1187,212 @@ function apagarTelefone(cod_telefone) {
     if (response.status == 204) {
       //console.log(response.statusText);
       alert('Telefone deletado com sucesso!')
+    }
+  });
+}
+
+//Ponto
+
+function ponto() {
+
+  //cria o botão para editar
+  document.getElementById("editar").innerHTML = (`<button class="btn btn-success" data-toggle="modal" data-target="#adicionarPonto">Novo Ponto</button>`);
+
+  //função fetch para chamar contatos da tabela
+  fetch(servidor + 'read/ponto', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //checar os status de pedidos
+    //console.log(response)
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      //console.log(response.statusText);
+
+      //pegar o json que possui a tabela
+      response.json().then(function (json) {
+
+        //console.log(json);
+
+        let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
+        <tr>
+        <th style="width:20%" scope="col">Nome</th>
+        <th style="width:20%" scope="col">INEP</th>
+        <th style="width:20%" scope="col">Categoria</th>
+        <th style="width:10%" scope="col">CEP</th>
+        <th style="width:10%" scope="col">Bairro</th>
+        <th style="width:30%" scope="col">Endereço</th>
+        <th style="width:30%" scope="col">Número</th>
+        <th style="width:30%" scope="col">Complemento</th>
+        <th style="width:30%" scope="col">Latitude</th>
+        <th style="width:30%" scope="col">Longitude</th>
+        <th style="width:30%" scope="col">Opções</th>
+        </tr>
+        </thead>`);
+        tabela += (`<tbody>`);
+
+        // console.log(json)
+
+        //cria uma lista apenas com os itens do lote selecionado
+        let j = 0;
+        for (let i = 0; i < json.length; i++) {
+          console.log(json)
+          if (json[i]["cod_ibge"] == meuCodigo) {
+            listaItem[j] = json[i];
+            j++;
+          }
+        }
+        for (i = 0; i < listaItem.length; i++) {
+          
+          //salva os valores para edição
+          meuItem[i] = listaItem[i]["cod_item"];
+          meuTipo[i] = listaItem[i]["cod_tipo_item"];
+
+          tabela += (`<tr>`);
+          tabela += (`<td>`);
+
+          // fetch(servidor + 'read/ponto', {
+          //   method: 'GET',
+          //   headers: {
+          //     'Authorization': 'Bearer ' + meuToken
+          //   },
+          // }).then(function (response) {
+        
+          //   //checar os status de pedidos
+          //   //console.log(response)
+        
+          //   //tratamento dos erros
+          //   if (response.status == 200) {
+          //     //console.log(response.statusText);
+        
+          //     //pegar o json que possui a tabela
+          //     response.json().then(function (json) {
+
+          //       tabela += (`<span id="nome style="white-space: pre-line">` + json.nome + `</span>`);
+          //       tabela += (`</td> <td>`);
+          //       tabela += (`<span id="funcao style="white-space: pre-line">` + json + `</span>`);
+          //       tabela += (`</td> <td>`);
+          
+          //     });
+          //   } else {
+            //     erros(response.status);
+            //   }
+            // });
+          tabela += (`<span id="nome style="white-space: pre-line">` + listaItem[i]["nome"] + `</span>`);
+          tabela += (`</td> <td>`);
+          tabela += (`<span id="funcao style="white-space: pre-line">` + listaItem[i]["inep"] + `</span>`);
+          tabela += (`</td> <td>`);
+          tabela += (`<span id="email style="white-space: pre-line">` + listaItem[i]["categoria"] + `</span>`);
+          tabela += (`</td> <td>`);
+          tabela += (`<span class="" id="telefone" style="white-space: pre-line">` + listaItem[i]["cep"] + `</span>`);
+          tabela += (`</td> <td>`);
+          tabela += (`<span class="" id="telefone" style="white-space: pre-line">` + listaItem[i]["bairro"] + `</span>`);
+          tabela += (`</td> <td>`);
+          tabela += (`<span class="" id="telefone" style="white-space: pre-line">` + listaItem[i]["endereco"] + `</span>`);
+          tabela += (`</td> <td>`);
+          tabela += (`<span class="" id="telefone" style="white-space: pre-line">` + listaItem[i]["numero"] + `</span>`);
+          tabela += (`</td> <td>`);
+          tabela += (`<span class="" id="telefone" style="white-space: pre-line">` + listaItem[i]["complemento"] + `</span>`);
+          tabela += (`</td> <td>`);
+          tabela += (`<span class="" id="telefone" style="white-space: pre-line">` + listaItem[i]["latitude"] + `</span>`);
+          tabela += (`</td> <td>`);
+          tabela += (`<span class="" id="telefone" style="white-space: pre-line">` + listaItem[i]["longitude"] + `</span>`);
+          tabela += (`</td> 
+          <td>
+            <span class="d-flex">
+              <button onclick="visualizarContato(` + listaItem[i].cod_contato + `,'` + listaItem[i].nome + `','` + listaItem[i].funcao + `','` + listaItem[i].email + `','` + i + `')" data-toggle="modal" href="#visualizar" class="btn btn-success">
+                <i class="material-icons"data-toggle="tooltip" title="Visualizar">content_paste</i>
+              </button>
+              <button onclick="apagarContatoTelefone(` + listaItem[i].cod_contato + `)" class="btn btn-danger">
+                <i class="material-icons"data-toggle="tooltip" title="Apagar">delete</i>
+              </button>
+            </span>
+          </td>`);
+          tabela += (`</tr>`);
+          // console.log(tabela)
+        }
+        tabela += (`</tbody>`);
+        document.getElementById("tabela").innerHTML = tabela;
+
+        //Máscara colocada separadamente para tabela
+        mascara();
+
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+// function novoPid() {
+
+//   let infoPid = {
+//     "cod_ibge": parseInt(meuCodigo),
+//     "nome": document.getElementById("nomePonto").value,
+//     "inep": document.getElementById("inep").value,
+//   };
+
+//   console.log(infoPid)
+//   //transforma as informações em string para mandar
+//   let corpo = JSON.stringify(infoPid);
+//   //função fetch para mandar
+//   fetch(servidor + 'read/pid', {
+//     method: 'POST',
+//     body: corpo,
+//     headers: {
+//       'Authorization': 'Bearer ' + meuToken
+//     },
+//   }).then(function (response) {
+
+//     //tratamento dos erros
+//     if (response.status == 200 || response.status == 201) {
+//       alert('Pid inserido com sucesso!')
+//       // location.reload();
+//     } else {
+//       erros(response.status);
+//     }
+//   });
+// }
+
+function novoPonto() {
+
+  let infoPonto = {
+    "cod_categoria": document.getElementById("categoria").value,
+    "cod_ibge": parseInt(meuCodigo),
+    "cod_pid": parseInt(1),
+    "nome": document.getElementById("nomePonto").value,
+    "inep": document.getElementById("inep").value,
+    "endereco": document.getElementById("enderecoPonto").value,
+    "numero": document.getElementById("numeroPonto").value,
+    "complemento": document.getElementById("complementoPonto").value,
+    "bairro": document.getElementById("bairroPonto").value,
+    "cep": document.getElementById("cepPonto").value,
+    "latitude": document.getElementById("latitude").value,
+    "longitude": document.getElementById("longitude").value,
+  };
+
+  console.log(infoPonto)
+  //transforma as informações em string para mandar
+  let corpo = JSON.stringify(infoPonto);
+  //função fetch para mandar
+  fetch(servidor + 'read/ponto', {
+    method: 'POST',
+    body: corpo,
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      alert('Pid inserido com sucesso!')
+      // location.reload();
+    } else {
+      erros(response.status);
     }
   });
 }
