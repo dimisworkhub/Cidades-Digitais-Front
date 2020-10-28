@@ -56,12 +56,17 @@ func (ponto *Ponto) FindPontoByID(db *gorm.DB, codPonto, codCategoria, codIbge u
 	FUNCAO LISTAR TODAS PONTO
 =========================  */
 
-func (ponto *Ponto) FindAllPonto(db *gorm.DB) (*[]Ponto, error) {
+func (ponto *Ponto) FindAllPonto(db *gorm.DB, codIbge uint32) (*[]Ponto, error) {
 
 	allPonto := []Ponto{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&Ponto{}).Find(&allPonto).Error
+	err := db.Debug().Table("ponto").
+		Select("ponto.*, pid.cod_ibge, pid.nome. pid.inep").
+		Joins("INNER JOIN pid ON ponto.cod_ibge = pid,cod_ibge AND ponto.cod_pid = pid,cod_pid").
+		Where("ponto.cod_ibge = ?", codIbge).
+		Order("ponto.cod_pid").
+		Scan(&allPonto).Error
 	if err != nil {
 		return &[]Ponto{}, err
 	}
