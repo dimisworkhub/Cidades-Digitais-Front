@@ -120,7 +120,7 @@ function uacom() {
         <th style="width:20%" scope="col">Assunto</th>
         <th style="width:20%" scope="col">Titulo</th>
         <th style="width:35%" scope="col">Relato</th>
-        <th style="width:5%" scope="col">editar</th>
+        <th style="width:5%" scope="col">Editar</th>
         </tr>
         </thead>`);
         tabela += (`<tbody>`);
@@ -243,14 +243,29 @@ function anotaAssunto() {
 
   let valorAssunto = document.getElementById("assunto").value;
 
-  //o 0 define que é a primeira a ser selecionada, sendo que não há mais de uma seleção nesse select.
-  let nomeAssunto = document.querySelector("#assunto").selectedOptions[0].text;
+  //para garantir que não haja assunto igual
+  // let possuiassunto = false;
 
-  let assuntoSelecionado = `<button class="btn" id="adicao` + idAssunto + `" value="` + valorAssunto + `"> <a class="btn" id="removedor` + idAssunto + `" type="reset" onclick="removerAssunto(` + idAssunto + `)" title="Deletar">` + nomeAssunto + ` <img src="img/delete-icon.png" width="30px"></a> </button>`;
+  // for(let i = 0; i < idAssunto; i++){
+  //   if(valorAssunto == document.getElementById("adicoes"+i).value){
+  //     possuiassunto = true;
+  //   }
+  // }
 
-  document.getElementById("adicoes").innerHTML += assuntoSelecionado;
+  //se não houver assunto
+  // if(possuiassunto == false){
+    //o 0 define que é a primeira a ser selecionada, sendo que não há mais de uma seleção nesse select.
+    let nomeAssunto = document.querySelector("#assunto").selectedOptions[0].text;
 
-  idAssunto++;
+    let assuntoSelecionado = `<button class="btn" id="adicao` + idAssunto + `" value="` + valorAssunto + `"> <a class="btn" id="removedor` + idAssunto + `" type="reset" onclick="removerAssunto(` + idAssunto + `)" title="Deletar">` + nomeAssunto + ` <img src="img/delete-icon.png" width="30px"></a> </button>`;
+
+    document.getElementById("adicoes").innerHTML += assuntoSelecionado;
+
+    idAssunto++;
+  // }
+  // else{
+    // alert("Assunto já inserido.")
+  // }
 }
 
 function removerAssunto(valor) {
@@ -386,6 +401,8 @@ function editarUacom(valor) {
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(edicaoUacom);
+  
+  console.log(corpo);
 
   fetch(servidor + 'read/uacom/' + meuCodigo + '/' + meuData[valor], {
     method: 'PUT',
@@ -407,7 +424,7 @@ function editarUacom(valor) {
       });
 
     } else {
-      erros(response.status);
+      //erros(response.status);
     }
   });
 
@@ -496,8 +513,88 @@ function editarUacom2() {
   }
 
   //recarrega a pagina
-  location.reload();
+  //location.reload();
 
+}
+
+
+
+
+//Processos
+
+let listaProcessos = [];
+
+function processos() {
+
+  //cria o botão para editar
+  document.getElementById("editar").innerHTML = (`<button class="btn btn-success" data-toggle="modal" data-target="#adicionarProcessos" onclick="pegarAssuntos()">Novo Processo</button>`);
+  document.getElementById("editar2").innerHTML = "";
+
+  //função fetch para chamar itens da tabela
+  fetch(servidor + 'read/processos/' + meuCodigo, {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //checar os status de pedidos
+    //console.log(response)
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      //console.log(response.statusText);
+
+      //pegar o json que possui a tabela
+      response.json().then(function (json) {
+
+        //console.log(json);
+
+        listaProcessos = json;
+
+        let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
+        <tr>
+        <th style="width:20%" scope="col">Processo</th>
+        <th style="width:40%" scope="col">Descrição</th>
+        <th style="width:20%" scope="col">Editar</th>
+        <th style="width:20%" scope="col">Excluir</th>
+        </tr>
+        </thead>`);
+        tabela += (`<tbody>`);
+
+        for (i = 0; i < listaProcessos.length; i++) {
+
+          tabela += (`<tr>`);
+          tabela += (`<td>`);
+          tabela += listaProcessos[i]["cod_processo"];
+          tabela += (`</td> <td>`);
+          tabela += listaProcessos[i]["descricao"];
+          tabela += (`<td> 
+                  <span class="d-flex">
+                  <button onclick="edicaoProcesso(` + i + `)" class="btn btn-success" data-toggle="modal" data-target="#adicionarProcessos">
+                  <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
+                  </button>
+                  </span> </td>`);
+          tabela += (`<td> 
+                  <span class="d-flex">
+                  <button onclick="excluirProcesso(` + i + `)" class="btn btn-success" data-toggle="modal" data-target="#adicionarProcessos">
+                  <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
+                  </button>
+                  </span> </td>`);
+          tabela += (`</tr>`);
+        }
+
+        tabela += (`</tbody>`);
+        document.getElementById("tabela").innerHTML = tabela;
+
+        //Máscara colocada separadamente para tabela
+        mascara();
+
+      });
+    } else {
+      erros(response.status);
+    }
+  });
 }
 
 
