@@ -386,7 +386,7 @@ function redirecionar(valor, caminhoRedirect) {
     localStorage.setItem("cod_otb", listaFinal[valor]["cod_otb"]);
     localStorage.setItem("dt_pgto", listaFinal[valor]["dt_pgto"]);
     window.location.href = "./gerenciaPagamento.html";
-  }else if (caminhoRedirect == "lote") {
+  } else if (caminhoRedirect == "lote") {
     localStorage.setItem("cod_lote", listaFinal[valor].cod_lote);
     localStorage.setItem("contrato", listaFinal[valor].contrato);
     localStorage.setItem("dt_inicio_vig", listaFinal[valor].dt_inicio_vig);
@@ -618,7 +618,7 @@ function itensCD() {
 
         //Máscara colocada separadamente para tabela
         mascara();
-        
+
       });
     } else {
       erros(response.status);
@@ -828,10 +828,6 @@ function descricaoItem(tipoTabela) {
 
   //console.log(tipoTabela);
 
-  //fazer subtotal separado
-
-  //calculos para cada caso
-
   //previsão de empenho
   if (tipoTabela == "itensprevisaoempenho") {
 
@@ -839,14 +835,14 @@ function descricaoItem(tipoTabela) {
     document.getElementById("explicacao").innerHTML = "Quantidade Disponível:";
 
     document.getElementById("calculo").innerHTML = `
-    <p>QTD - QTU = Quantidade disponível.</p>
+    <p>Quantidade total disponível - Quantidade total utilizada = Quantidade disponível.</p>
     <br>
-    <p>QTD = Quantidade total disponível:</p>
+    <p>Quantidade total disponível:</p>
     <p>Pega-se todos os projetos executivos</p>
     <p>de um lote, e para cada item é somado</p>
     <p>suas quantidades, assim se obtém a quantidade total.</p>
     <br>
-    <p>QTU = Quantidade total utilizada:</p>
+    <p>Quantidade total utilizada:</p>
     <p>Pega-se todas as previsões de empenho</p>
     <p>de um lote, e para cada item é somado</p>
     <p>suas quantidades, assim se obtém a quantidade utilizada.</p>
@@ -860,7 +856,7 @@ function descricaoItem(tipoTabela) {
     <p>item 1.1 = 10+20+30+40 = 100</p>
     <p>(4 previsão de empenho utilizam o item 1.1)</p>
     <br>
-    <p>QTD - QTU = 150 - 100 = 50</p>`;
+    <p>Quantidade total disponível - Quantidade total utilizada: 150 - 100 = 50</p>`;
 
     //Titulo
     document.getElementById("explicacao2").innerHTML = "Casos Especiais:";
@@ -903,9 +899,7 @@ function descricaoItem(tipoTabela) {
     <p>Pega-se os 3 itens e soma o resultado de cada</p>
     <p>Ex: 113.00 + 32.15 + 35.10 = 180.25</p>
     <br>
-    <p>QTD - QTU = Quantidade disponível.</p>
-    <p>(QTD = Quantidade total disponível.)</p>
-    <p>(QTU = Quantidade total utilizada.)</p>
+    <p> Quantidade total disponível -  Quantidade total utilizada = Quantidade disponível.</p>
     <br>
     <p>191.00 – 180.25 = 10.75</p>
     <br>
@@ -921,23 +915,23 @@ function descricaoItem(tipoTabela) {
     document.getElementById("explicacao3").innerHTML = "Reajuste:";
 
     document.getElementById("calculo3").innerHTML = `
-    <p>(QTD – QF) – QR =  quantidade disponível</p>
+    <p>(Quantidade total disponível – Quantidade faturada) – Quantidade reajustada =  Quantidade Disponível</p>
     <br>
-    <p>QTD = Quantidade total disponível:</p>
+    <p>Quantidade total disponível:</p>
     <p>Pega-se todos as previsões de empenho</p>
     <p>(tipo original) de um lote anterior</p>
     <p>ao ano de referência.</p>
     <p>Para cada item é somado suas quantidades,</p>
     <p>assim se obtém a quantidade total.</p>
     <br>
-    <p>QF = Quantidade faturada</p>
+    <p>Quantidade faturada</p>
     <p>Pega-se todas faturas (anteriores a data</p>
     <p>de reajuste do ano de referência) que utilizam</p>
     <p>a mesma previsão de empenho. </p>
     <p>Para cada item é somado suas quantidades,</p>
     <p>assim se obtém a quantidade faturada.</p>
     <br>
-    <p>QR = Quantidade reajustada</p>
+    <pQuantidade reajustada</p>
     <p>Pega-se todas as previsões de empenho do tipo</p>
     <p>reajuste (que compartilham o mesmo ano de</p>
     <p>referência) de um lote.</p>
@@ -945,7 +939,7 @@ function descricaoItem(tipoTabela) {
     <p>assim se obtém a quantidade reajustada.</p>`;
 
   }
-  
+
   //empenho
   else if (tipoTabela == "itensempenho") {
 
@@ -982,7 +976,7 @@ function descricaoItem(tipoTabela) {
     <p>QTD - QTU = 30 - 21 = 9</p>`;
 
   }
-  
+
   //fatura
   else if (tipoTabela == "itensfatura") {
 
@@ -1074,7 +1068,7 @@ function descricaoItem(tipoTabela) {
 
 }
 
-function checarQuantidade(caminho,valor){
+function checarQuantidade(caminho, valor) {
 
   if (mascaraQuebrados(document.getElementById("quantidade" + valor).value) > (listaItem[valor].quantidade_disponivel + listaItem[valor].quantidade)) {
 
@@ -1088,7 +1082,7 @@ function checarQuantidade(caminho,valor){
       cancelButtonColor: '#d33',
       confirmButtonText: 'Sim, tenho certeza!'
     }).then((result) => {
-      
+
       if (result.value) {
 
         Swal.fire(
@@ -1111,11 +1105,11 @@ function checarQuantidade(caminho,valor){
     });
   }
 
-  checarCasos(caminho,valor);
+  checarCasos(caminho, valor);
 
 }
 
-function checarCasos(caminho,valor){
+function checarCasos(caminho, valor) {
 
   //Para os casos especificos em tipos de item 8,9 e 10. Validos apenas em itens de 1 a 5 e de fatura ou previsão.
   if (listaItem[valor].cod_tipo_item >= "8" && listaItem[valor].cod_tipo_item <= "10" && (caminho == "itensfatura" || caminho == "itensprevisao") && listaItem[valor].tipo == "o") {
@@ -1147,7 +1141,7 @@ function checarCasos(caminho,valor){
         cancelButtonColor: '#d33',
         confirmButtonText: 'Sim, tenho certeza!'
       }).then((result) => {
-        
+
         if (result.value) {
 
           Swal.fire(
@@ -1188,7 +1182,7 @@ function editarItem(caminho) {
       } else {
         caminhoFinal = servidor + 'read/' + caminho + '/' + meuCodigo + '/' + meuItem[i] + '/' + meuTipo[i];
       }
-      
+
       edicaoItem[i] = {
         "quantidade": parseFloat(mascaraQuebrados(document.getElementById("quantidade" + i).value)),
         "valor": parseFloat(mascaraQuebrados(document.getElementById("valor" + i).value)),
