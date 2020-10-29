@@ -20,6 +20,7 @@ type Ponto struct {
 	Cep          string  `gorm:"default:null" json:"cep"`
 	Latitude     float32 `gorm:"default:null" json:"latitude"`
 	Longitude    float32 `gorm:"default:null" json:"longitude"`
+	Descricao    string  `gorm:"default:null" json:"descricao"`
 }
 
 /*  =========================
@@ -62,8 +63,9 @@ func (ponto *Ponto) FindAllPonto(db *gorm.DB, codIbge uint32) (*[]Ponto, error) 
 
 	// Busca todos elementos contidos no banco de dados
 	err := db.Debug().Table("ponto").
-		Select("ponto.*, pid.nome, pid.inep").
+		Select("ponto.*, pid.nome, pid.inep, categoria.descricao").
 		Joins("INNER JOIN pid ON ponto.cod_ibge = pid.cod_ibge AND ponto.cod_pid = pid.cod_pid").
+		Joins("INNER JOIN categoria ON ponto.cod_categoria = categoria.cod_categoria").
 		Where("ponto.cod_ibge = ?", codIbge).
 		Order("ponto.cod_pid").
 		Scan(&allPonto).Error
