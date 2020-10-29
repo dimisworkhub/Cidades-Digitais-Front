@@ -1,10 +1,10 @@
 package control
 
 import (
-	"CidadesDigitaisV2/api/auth"
-	"CidadesDigitaisV2/api/config"
-	"CidadesDigitaisV2/api/models"
-	"CidadesDigitaisV2/api/responses"
+	"Cidades-Digitais-Front/api/auth"
+	"Cidades-Digitais-Front/api/config"
+	"Cidades-Digitais-Front/api/models"
+	"Cidades-Digitais-Front/api/responses"
 	"encoding/json"
 	"errors"
 	"fmt"
