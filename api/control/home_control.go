@@ -3,7 +3,7 @@ package control
 import (
 	"net/http"
 
-	"CidadesDigitaisV2/api/responses"
+	"Cidades-Digitais-Front/api/responses"
 )
 
 func (server *Server) Home(w http.ResponseWriter, r *http.Request) {

@@ -1,8 +1,8 @@
 package control
 
 import (
-	"CidadesDigitaisV2/api/config"
-	"CidadesDigitaisV2/api/validation"
+	"Cidades-Digitais-Front/api/config"
+	"Cidades-Digitais-Front/api/validation"
 	"fmt"
 	"log"
 	"net/http"

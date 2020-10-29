@@ -1,7 +1,7 @@
 package models
 
 import (
-	"CidadesDigitaisV2/api/auth"
+	"Cidades-Digitais-Front/api/auth"
 	"fmt"
 	"html"
 	"log"
