@@ -1371,7 +1371,7 @@ function ponto() {
               <button onclick="visualizarContato(` + listaItem[i].cod_contato + `,'` + listaItem[i].nome + `','` + listaItem[i].funcao + `','` + listaItem[i].email + `','` + i + `')" data-toggle="modal" href="#visualizar" class="btn btn-success">
                 <i class="material-icons"data-toggle="tooltip" title="Visualizar">content_paste</i>
               </button>
-              <button onclick="apagarContatoTelefone(` + listaItem[i].cod_contato + `)" class="btn btn-danger">
+              <button onclick="apagarPidPonto( ${listaItem[i].cod_ponto}, ${listaItem[i].cod_categoria},  ${listaItem[i].cod_pid} )" class="btn btn-danger">
                 <i class="material-icons"data-toggle="tooltip" title="Apagar">delete</i>
               </button>
             </span>
@@ -1396,91 +1396,166 @@ function novoPidPonto() {
 
   let ultimoPid
 
-  //função fetch para buscar o ultimo pid instalado
+  let infoPid = {
+    "cod_ibge": parseInt(meuCodigo),
+    "nome": document.getElementById("nomePonto").value,
+    "inep": document.getElementById("inep").value,
+  };
+
+  console.log(infoPid)
+  //transforma as informações em string para mandar
+  let corpo1 = JSON.stringify(infoPid);
+  //função fetch para mandar
   fetch(servidor + 'read/pid', {
-    method: 'GET',
+    method: 'POST',
+    body: corpo1,
     headers: {
       'Authorization': 'Bearer ' + meuToken
     },
   }).then(function (response) {
 
-    if (response.status == 200) {
-
-      //pegar o json que possui a tabela
-      response.json().then(function (json) {
-
-        //ultimo cod_pid
-        for (i = 0; i < json.length; i++) {
-          ultimoPid = json[i].cod_pid;
-        }
-
-        let infoPonto = {
-          "cod_categoria": parseInt(document.getElementById("categoria").value),
-          "cod_ibge": parseInt(meuCodigo),
-          //Acrescento + 1 no cod_pid para que eu consiga linkar ele com o novo PID criado.
-          "cod_pid": parseInt(ultimoPid+1),
-          "endereco": document.getElementById("enderecoPonto").value,
-          "numero": document.getElementById("numeroPonto").value,
-          "complemento": document.getElementById("complementoPonto").value,
-          "bairro": document.getElementById("bairroPonto").value,
-          "cep": document.getElementById("cepPonto").value,
-          "latitude": parseFloat(document.getElementById("latitude").value),
-          "longitude": parseFloat(document.getElementById("longitude").value),
-        };
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      console.log('Pid inserido com sucesso!')
       
-        let infoPid = {
-          "cod_ibge": parseInt(meuCodigo),
-          "nome": document.getElementById("nomePonto").value,
-          "inep": document.getElementById("inep").value,
-        };
+      setTimeout(function () {
       
-        console.log(infoPid)
-        //transforma as informações em string para mandar
-        let corpo1 = JSON.stringify(infoPid);
-        //função fetch para mandar
+        //função fetch para buscar o ultimo pid instalado
         fetch(servidor + 'read/pid', {
-          method: 'POST',
-          body: corpo1,
+          method: 'GET',
           headers: {
             'Authorization': 'Bearer ' + meuToken
           },
         }).then(function (response) {
-      
-          //tratamento dos erros
-          if (response.status == 200 || response.status == 201) {
-            console.log('Pid inserido com sucesso!')
-            // location.reload();
+  
+          if (response.status == 200) {
+  
+            //pegar o json que possui a tabela
+            response.json().then(function (json) {
+  
+              //ultimo cod_pid
+              for (i = 0; i < json.length; i++) {
+                ultimoPid = json[i].cod_pid;
+              }
+              console.log(ultimoPid)
+              
+              let infoPonto = {
+                "cod_categoria": parseInt(document.getElementById("categoria").value),
+                "cod_ibge": parseInt(meuCodigo),
+                "cod_pid": parseInt(ultimoPid),
+                "endereco": document.getElementById("enderecoPonto").value,
+                "numero": document.getElementById("numeroPonto").value,
+                "complemento": document.getElementById("complementoPonto").value,
+                "bairro": document.getElementById("bairroPonto").value,
+                "cep": document.getElementById("cepPonto").value,
+                "latitude": parseFloat(document.getElementById("latitude").value),
+                "longitude": parseFloat(document.getElementById("longitude").value),
+              };
+            
+              console.log(infoPonto)
+              //transforma as informações em string para mandar
+              let corpo2 = JSON.stringify(infoPonto);
+              //função fetch para mandar
+              fetch(servidor + 'read/ponto', {
+                method: 'POST',
+                body: corpo2,
+                headers: {
+                  'Authorization': 'Bearer ' + meuToken
+                },
+              }).then(function (response) {
+            
+                //tratamento dos erros
+                if (response.status == 200 || response.status == 201) {
+                  alert('Ponto inserido com sucesso!')
+                  setTimeout(function () {
+                    location.reload()
+                  }, 2000);
+                } else {
+                  erros(response.status);
+                }
+              });
+  
+            });
           } else {
             erros(response.status);
           }
         });
-      
-        console.log(infoPonto)
-        //transforma as informações em string para mandar
-        let corpo2 = JSON.stringify(infoPonto);
-        //função fetch para mandar
-        fetch(servidor + 'read/ponto', {
-          method: 'POST',
-          body: corpo2,
-          headers: {
-            'Authorization': 'Bearer ' + meuToken
-          },
-        }).then(function (response) {
-      
-          //tratamento dos erros
-          if (response.status == 200 || response.status == 201) {
-            alert('Ponto inserido com sucesso!')
-            setTimeout(function () {
-              location.reload()
-            }, 2000);
-          } else {
-            erros(response.status);
-          }
-        });
+      }, 1000);
+    } else {
+      erros(response.status);
+    }
+  });
+}
 
+function apagarPidPonto(cod_ponto, cod_categoria, cod_pid) {
+
+  Swal.fire({
+    title: 'Tem certeza?',
+    text: "Que deseja excluir o Ponto?",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Sim, tenho certeza!'
+  }).then((result) => {
+
+    if (result.value) {
+
+      Swal.fire(
+        'Sucesso!',
+        'O Ponto foi excluido com sucesso!',
+        'success'
+      )
+        
+        
+      fetch(servidor + `read/ponto/${cod_ponto}/${cod_categoria}/${meuCodigo}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': 'Bearer ' + meuToken
+        },
+      }).then(function (response) {
+        console.log('ponto deletado com sucesso!')
+
+        setTimeout(function () {
+
+          fetch(servidor + 'read/pid/' + cod_pid, {
+            method: 'DELETE',
+            headers: {
+              'Authorization': 'Bearer ' + meuToken
+            },
+          }).then(function (response) {
+    
+            console.log('Pid deletado com sucesso!')
+          });
+    
+          setTimeout(function () {
+            location.reload()
+          }, 1000);
+
+        }, 2000);
+      });
+      
+    }
+  });
+}
+
+function viaCep(){
+
+  fetch(`http://viacep.com.br/ws/${document.getElementById("cepPonto").value}/json/`, {
+    method: 'GET',
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      response.json().then(function (json) {
+        console.log(json)
+        document.getElementById("enderecoPonto").value = json.logradouro;
+        document.getElementById("bairroPonto").value = json.bairro;
+        document.getElementById("complementoPonto").value = json.complemento;
       });
     } else {
       erros(response.status);
     }
   });
+
 }
