@@ -678,9 +678,7 @@ function edicaoProcesso(){
 function contatosCD() {
 
   //cria o botão para editar
-  document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarContato()" class="btn btn-success">Salvar Alterações</button>
-                                                  <button class="btn btn-success" data-toggle="modal" data-target="#adicionarContato">Novo Contato</button>`);
-  document.getElementById("editar2").innerHTML = (`<button id="editar" onclick="editarContato()" class="btn btn-success">Salvar Alterações</button>`);
+  document.getElementById("editar").innerHTML = (`<button class="btn btn-success" data-toggle="modal" data-target="#adicionarContato">Novo Contato</button>`);
 
   //função fetch para chamar contatos da tabela
   fetch(servidor + 'read/contato/' + meuCodigo + '/0', {
@@ -1360,4 +1358,276 @@ function apagarTelefone(cod_telefone) {
       alert('Telefone deletado com sucesso!')
     }
   });
+}
+
+//Ponto
+function ponto() {
+
+  //cria o botão para editar
+  document.getElementById("editar").innerHTML = (`<button class="btn btn-success" data-toggle="modal" data-target="#adicionarPonto">Novo Ponto</button>`);
+
+  //função fetch para chamar contatos da tabela
+  fetch(servidor + 'read/ponto/'+meuCodigo, {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //checar os status de pedidos
+    //console.log(response)
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      //console.log(response.statusText);
+
+      //pegar o json que possui a tabela
+      response.json().then(function (json) {
+
+        //console.log(json);
+
+        let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
+        <tr>
+        <th style="width:20%" scope="col">Nome</th>
+        <th style="width:20%" scope="col">INEP</th>
+        <th style="width:20%" scope="col">Categoria</th>
+        <th style="width:10%" scope="col">CEP</th>
+        <th style="width:10%" scope="col">Bairro</th>
+        <th style="width:30%" scope="col">Endereço</th>
+        <th style="width:30%" scope="col">Número</th>
+        <th style="width:30%" scope="col">Complemento</th>
+        <th style="width:30%" scope="col">Latitude</th>
+        <th style="width:30%" scope="col">Longitude</th>
+        <th style="width:30%" scope="col">Opções</th>
+        </tr>
+        </thead>`);
+        tabela += (`<tbody>`);
+
+        console.log(json)
+        
+        //cria uma lista apenas com os itens do lote selecionado
+        let j = 0;
+        for (let i = 0; i < json.length; i++) {
+          if (json[i]["cod_ibge"] == meuCodigo) {
+            listaItem[j] = json[i];
+            j++;
+          }
+        }
+        for (i = 0; i < listaItem.length; i++) {
+
+          tabela += (`<tr>`);
+          tabela += (`<td>`);
+
+          tabela += (`<span id="nome style="white-space: pre-line">` + listaItem[i]["nome"] + `</span>`);
+          tabela += (`</td> <td>`);
+          tabela += (`<span id="funcao style="white-space: pre-line">` + listaItem[i]["inep"] + `</span>`);
+          tabela += (`</td> <td>`);
+          tabela += (`<span id="email style="white-space: pre-line">` + listaItem[i]["descricao"] + `</span>`);
+          tabela += (`</td> <td>`);
+          tabela += (`<span class="" id="cep" style="white-space: pre-line">` + listaItem[i]["cep"] + `</span>`);
+          tabela += (`</td> <td>`);
+          tabela += (`<span class="" id="bairro" style="white-space: pre-line">` + listaItem[i]["bairro"] + `</span>`);
+          tabela += (`</td> <td>`);
+          tabela += (`<span class="" id="endereco" style="white-space: pre-line">` + listaItem[i]["endereco"] + `</span>`);
+          tabela += (`</td> <td>`);
+          tabela += (`<span class="" id="numero" style="white-space: pre-line">` + listaItem[i]["numero"] + `</span>`);
+          tabela += (`</td> <td>`);
+          tabela += (`<span class="" id="complemento" style="white-space: pre-line">` + listaItem[i]["complemento"] + `</span>`);
+          tabela += (`</td> <td>`);
+          tabela += (`<span class="" id="latitude" style="white-space: pre-line">` + listaItem[i]["latitude"] + `</span>`);
+          tabela += (`</td> <td>`);
+          tabela += (`<span class="" id="longitude" style="white-space: pre-line">` + listaItem[i]["longitude"] + `</span>`);
+          tabela += (`</td> 
+          <td>
+            <span class="d-flex">
+              <button onclick="visualizarContato(` + listaItem[i].cod_contato + `,'` + listaItem[i].nome + `','` + listaItem[i].funcao + `','` + listaItem[i].email + `','` + i + `')" data-toggle="modal" href="#visualizar" class="btn btn-success">
+                <i class="material-icons"data-toggle="tooltip" title="Visualizar">content_paste</i>
+              </button>
+              <button onclick="apagarPidPonto( ${listaItem[i].cod_ponto}, ${listaItem[i].cod_categoria},  ${listaItem[i].cod_pid} )" class="btn btn-danger">
+                <i class="material-icons"data-toggle="tooltip" title="Apagar">delete</i>
+              </button>
+            </span>
+          </td>`);
+          tabela += (`</tr>`);
+          // console.log(tabela)
+        }
+        tabela += (`</tbody>`);
+        document.getElementById("tabela").innerHTML = tabela;
+
+        //Máscara colocada separadamente para tabela
+        mascara();
+
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+function novoPidPonto() {
+
+  let ultimoPid
+
+  let infoPid = {
+    "cod_ibge": parseInt(meuCodigo),
+    "nome": document.getElementById("nomePonto").value,
+    "inep": document.getElementById("inep").value,
+  };
+
+  console.log(infoPid)
+  //transforma as informações em string para mandar
+  let corpo1 = JSON.stringify(infoPid);
+  //função fetch para mandar
+  fetch(servidor + 'read/pid', {
+    method: 'POST',
+    body: corpo1,
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      console.log('Pid inserido com sucesso!')
+      
+      setTimeout(function () {
+      
+        //função fetch para buscar o ultimo pid instalado
+        fetch(servidor + 'read/pid', {
+          method: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + meuToken
+          },
+        }).then(function (response) {
+  
+          if (response.status == 200) {
+  
+            //pegar o json que possui a tabela
+            response.json().then(function (json) {
+  
+              //ultimo cod_pid
+              for (i = 0; i < json.length; i++) {
+                ultimoPid = json[i].cod_pid;
+              }
+              console.log(ultimoPid)
+              
+              let infoPonto = {
+                "cod_categoria": parseInt(document.getElementById("categoria").value),
+                "cod_ibge": parseInt(meuCodigo),
+                "cod_pid": parseInt(ultimoPid),
+                "endereco": document.getElementById("enderecoPonto").value,
+                "numero": document.getElementById("numeroPonto").value,
+                "complemento": document.getElementById("complementoPonto").value,
+                "bairro": document.getElementById("bairroPonto").value,
+                "cep": document.getElementById("cepPonto").value,
+                "latitude": parseFloat(document.getElementById("latitude").value),
+                "longitude": parseFloat(document.getElementById("longitude").value),
+              };
+            
+              console.log(infoPonto)
+              //transforma as informações em string para mandar
+              let corpo2 = JSON.stringify(infoPonto);
+              //função fetch para mandar
+              fetch(servidor + 'read/ponto', {
+                method: 'POST',
+                body: corpo2,
+                headers: {
+                  'Authorization': 'Bearer ' + meuToken
+                },
+              }).then(function (response) {
+            
+                //tratamento dos erros
+                if (response.status == 200 || response.status == 201) {
+                  alert('Ponto inserido com sucesso!')
+                  setTimeout(function () {
+                    location.reload()
+                  }, 2000);
+                } else {
+                  erros(response.status);
+                }
+              });
+  
+            });
+          } else {
+            erros(response.status);
+          }
+        });
+      }, 1000);
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+function apagarPidPonto(cod_ponto, cod_categoria, cod_pid) {
+
+  Swal.fire({
+    title: 'Tem certeza?',
+    text: "Que deseja excluir o Ponto?",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Sim, tenho certeza!'
+  }).then((result) => {
+
+    if (result.value) {
+
+      Swal.fire(
+        'Sucesso!',
+        'O Ponto foi excluido com sucesso!',
+        'success'
+      )
+        
+        
+      fetch(servidor + `read/ponto/${cod_ponto}/${cod_categoria}/${meuCodigo}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': 'Bearer ' + meuToken
+        },
+      }).then(function (response) {
+        console.log('ponto deletado com sucesso!')
+
+        setTimeout(function () {
+
+          fetch(servidor + 'read/pid/' + cod_pid, {
+            method: 'DELETE',
+            headers: {
+              'Authorization': 'Bearer ' + meuToken
+            },
+          }).then(function (response) {
+    
+            console.log('Pid deletado com sucesso!')
+          });
+    
+          setTimeout(function () {
+            location.reload()
+          }, 1000);
+
+        }, 2000);
+      });
+      
+    }
+  });
+}
+
+function viaCep(){
+
+  fetch(`http://viacep.com.br/ws/${document.getElementById("cepPonto").value}/json/`, {
+    method: 'GET',
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      response.json().then(function (json) {
+        console.log(json)
+        document.getElementById("enderecoPonto").value = json.logradouro;
+        document.getElementById("bairroPonto").value = json.bairro;
+        document.getElementById("complementoPonto").value = json.complemento;
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+
 }

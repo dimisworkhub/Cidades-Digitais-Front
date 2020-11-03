@@ -1,8 +1,8 @@
 package control
 
 import (
-	"CidadesDigitaisV2/api/config"
-	"CidadesDigitaisV2/api/middlewares"
+	"Cidades-Digitais-Front/api/config"
+	"Cidades-Digitais-Front/api/middlewares"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -200,19 +200,19 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	=========================	*/
 
 	//	LISTA PONTO
-	r.HandleFunc(config.PONTO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllPonto))).Methods(http.MethodGet)
+	r.HandleFunc(config.PONTO_GET_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllPonto))).Methods(http.MethodGet)
 
 	//	SALVA PONTO
 	r.HandleFunc(config.PONTO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreatePonto))).Methods(http.MethodPost)
 
-	//	EDITA PONTO (cod_ponto, cod_categoria, cod_ibge, cod_pid)
-	r.HandleFunc(config.PONTO_PID_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdatePonto))).Methods(http.MethodPut)
+	//	EDITA PONTO (cod_ponto, cod_categoria, cod_ibge)
+	r.HandleFunc(config.PONTO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdatePonto))).Methods(http.MethodPut)
 
 	//	LISTA PONTO (cod_ponto, cod_categoria, cod_ibge)
 	r.HandleFunc(config.PONTO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetPontoByID))).Methods(http.MethodGet)
 
-	//	APAGA PONTO (cod_ponto, cod_categoria, cod_ibge, cod_pid)
-	r.HandleFunc(config.PONTO_PID_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeletePonto))).Methods(http.MethodDelete)
+	//	APAGA PONTO (cod_ponto, cod_categoria, cod_ibge)
+	r.HandleFunc(config.PONTO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeletePonto))).Methods(http.MethodDelete)
 
 	/*	=========================
 		ROTAS EM PID
@@ -221,8 +221,17 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	LISTA PID
 	r.HandleFunc(config.PID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllPid))).Methods(http.MethodGet)
 
+	//	SALVA PID
+	r.HandleFunc(config.PID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreatePid))).Methods(http.MethodPost)
+
+	//	EDITA PID (cod_pid)
+	r.HandleFunc(config.PID_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdatePid))).Methods(http.MethodPut)
+
 	//	LISTA PID (cod_pid)
 	r.HandleFunc(config.PID_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetPidByID))).Methods(http.MethodGet)
+
+	//	APAGA PID (cod_pid)
+	r.HandleFunc(config.PID_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeletePid))).Methods(http.MethodDelete)
 
 	/*	=========================
 		ROTAS EM PID TIPOLOGIA

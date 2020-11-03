@@ -1,7 +1,7 @@
 package api
 
 import (
-	"CidadesDigitaisV2/api/control"
+	"Cidades-Digitais-Front/api/control"
 	"fmt"
 	"log"
 	"os"

@@ -8,10 +8,10 @@ import (
 	"net/http"
 	"strings"
 
-	"CidadesDigitaisV2/api/config"
-	"CidadesDigitaisV2/api/models"
-	"CidadesDigitaisV2/api/responses"
-	"CidadesDigitaisV2/api/validation"
+	"Cidades-Digitais-Front/api/config"
+	"Cidades-Digitais-Front/api/models"
+	"Cidades-Digitais-Front/api/responses"
+	"Cidades-Digitais-Front/api/validation"
 )
 
 /*  =========================

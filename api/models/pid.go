@@ -66,7 +66,7 @@ func (pid *Pid) FindAllPid(db *gorm.DB) (*[]Pid, error) {
 func (pid *Pid) UpdatePid(db *gorm.DB, codPid uint32) (*Pid, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	db = db.Debug().Exec("UPDATE pid SET cod_ibge = ?, nome = ?, inep = ? WHERE cod_pid = ?", pid.CodIbge, pid.Nome, pid.Inep, codPid)
+	db = db.Debug().Exec("UPDATE pid SET nome = ?, inep = ? WHERE cod_pid = ?", pid.Nome, pid.Inep, codPid)
 	if db.Error != nil {
 		return &Pid{}, db.Error
 	}

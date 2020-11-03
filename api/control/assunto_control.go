@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"strconv"
 
-	"CidadesDigitaisV2/api/auth"
-	"CidadesDigitaisV2/api/config"
-	"CidadesDigitaisV2/api/models"
-	"CidadesDigitaisV2/api/responses"
-	"CidadesDigitaisV2/api/validation"
+	"Cidades-Digitais-Front/api/auth"
+	"Cidades-Digitais-Front/api/config"
+	"Cidades-Digitais-Front/api/models"
+	"Cidades-Digitais-Front/api/responses"
+	"Cidades-Digitais-Front/api/validation"
 
 	"github.com/gorilla/mux"
 )

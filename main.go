@@ -1,6 +1,6 @@
 package main
 
-import "CidadesDigitaisV2/api"
+import "Cidades-Digitais-Front/api"
 
 func main() {
 

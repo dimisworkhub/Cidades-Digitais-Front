@@ -1,8 +1,8 @@
 package config
 
 import (
-	"CidadesDigitaisV2/api/auth"
-	"CidadesDigitaisV2/api/responses"
+	"Cidades-Digitais-Front/api/auth"
+	"Cidades-Digitais-Front/api/responses"
 	"errors"
 	"fmt"
 	"log"
