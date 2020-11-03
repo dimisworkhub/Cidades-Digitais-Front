@@ -106,7 +106,7 @@
                                     class="btn btn-primary">Glosa</button>
                                 <button onclick="contatosCD()" type="button" style="background-color:#959595"
                                     class="btn btn-primary">Contatos</button>
-                                <button onclick="processos()" type="button" style="background-color:#959595"
+                                <button onclick="processo()" type="button" style="background-color:#959595"
                                     class="btn btn-primary">Processos</button>
                                 <button onclick="uacom()" type="button" style="background-color:#959595"
                                     class="btn btn-primary">Acomp.</button>
@@ -229,6 +229,51 @@
         </div>
     </div>
 
+    <!-- Modal Processo -->
+    <div id="adicionarProcesso" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Processo</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body" style="padding-bottom: 9rem;">
+                    <div class="multisteps-form">
+                        <!--Formulário-->
+                        <div class="row">
+                            <div class="col-12 col-lg-12 m-auto">
+                                <form class="multisteps-form__form needs-validation" style="height: 250px;">
+                                    <div class="multisteps-form__panel shadow p-4 rounded bg-white js-active"
+                                        data-animation="scaleIn">
+                                        <h3 class="multisteps-form__title">Informações do Processo</h3>
+
+                                        <div class="multisteps-form__content">
+                                            <div class="form-row mt-4">
+                                                <div class="col-12 col-sm-12 mt-4">
+                                                    <input class="multisteps-form__input form-control " type="text" placeholder="Processo"
+                                                        name="Processo" id="cod_processo">
+                                                </div>
+
+                                                <div class="col-12 col-sm-12 mt-4">
+                                                    <textarea class="multisteps-form__input form-control " type="text" placeholder="Descrição"
+                                                        name="descricao" id="descricao"></textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="button-row d-flex mt-4" id="botaoProcesso"></div>
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Uacom -->
     <div id="adicionarUacom" class="modal fade">
         <div class="modal-dialog">
@@ -250,6 +295,7 @@
 
                                         <div class="multisteps-form__content">
                                             <div class="form-row mt-4">
+
                                                 <div class="col-12 col-sm-12 mt-4">
                                                     <input class="multisteps-form__input form-control " type="text" placeholder="Titulo"
                                                         name="titulo" id="titulo">
@@ -270,9 +316,10 @@
                                                     <textarea class="multisteps-form__input form-control " type="text" placeholder="Relato"
                                                         name="relato" id="relato"></textarea>
                                                 </div>
+                                                
                                             </div>
 
-                                            <div class="button-row d-flex mt-4" id="botaoFinal"></div>
+                                            <div class="button-row d-flex mt-4" id="botaoUacom"></div>
                                         </div>
                                     </div>
 

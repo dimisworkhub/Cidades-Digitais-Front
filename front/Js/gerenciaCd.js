@@ -191,7 +191,7 @@ function pegarAssuntos() {
 
         document.getElementById("assunto").innerHTML = x;
 
-        document.getElementById("botaoFinal").innerHTML = " <button class='btn btn-primary' onclick='novoUacom()' type='button'>Cadastrar</button>";
+        document.getElementById("botaoUacom").innerHTML = " <button class='btn btn-primary' onclick='novoUacom()' type='button'>Cadastrar</button>";
 
       });
     } else {
@@ -244,16 +244,19 @@ function anotaAssunto() {
   let valorAssunto = document.getElementById("assunto").value;
 
   //para garantir que não haja assunto igual
-  // let possuiassunto = false;
+  let possuiassunto = false;
 
-  // for(let i = 0; i < idAssunto; i++){
-  //   if(valorAssunto == document.getElementById("adicoes"+i).value){
-  //     possuiassunto = true;
-  //   }
-  // }
+  for(let i = 0; i < idAssunto; i++){
+    if(document.getElementById("adicoes"+i) != null){
+      if(valorAssunto == document.getElementById("adicoes"+i).value){
+        possuiassunto = true;
+        console.log("aqui passa");
+      }
+    }
+  }
 
   //se não houver assunto
-  // if(possuiassunto == false){
+   if(possuiassunto == false){
     //o 0 define que é a primeira a ser selecionada, sendo que não há mais de uma seleção nesse select.
     let nomeAssunto = document.querySelector("#assunto").selectedOptions[0].text;
 
@@ -262,10 +265,10 @@ function anotaAssunto() {
     document.getElementById("adicoes").innerHTML += assuntoSelecionado;
 
     idAssunto++;
-  // }
-  // else{
-    // alert("Assunto já inserido.")
-  // }
+  }
+  else{
+    alert("Assunto já inserido.")
+  }
 }
 
 function removerAssunto(valor) {
@@ -350,7 +353,7 @@ function edicaoModal(valor) {
 
         document.getElementById("assunto").innerHTML = x;
 
-        document.getElementById("botaoFinal").innerHTML = "<a><button class='btn btn-primary multi-button ml-auto js-btn-next' onclick='editarUacom(" + valor + ")' type='button'>Cadastrar</button></a>";
+        document.getElementById("botaoUacom").innerHTML = "<a><button class='btn btn-primary multi-button ml-auto js-btn-next' onclick='editarUacom(" + valor + ")' type='button'>Cadastrar</button></a>";
 
         getAssuntos(valor);
       });
@@ -424,7 +427,7 @@ function editarUacom(valor) {
       });
 
     } else {
-      //erros(response.status);
+      erros(response.status);
     }
   });
 
@@ -520,18 +523,18 @@ function editarUacom2() {
 
 
 
-//Processos
+//Processo
 
-let listaProcessos = [];
+let listaProcesso = [];
 
-function processos() {
+function processo() {
 
   //cria o botão para editar
-  document.getElementById("editar").innerHTML = (`<button class="btn btn-success" data-toggle="modal" data-target="#adicionarProcessos" onclick="pegarAssuntos()">Novo Processo</button>`);
+  document.getElementById("editar").innerHTML = (`<button class="btn btn-success" data-toggle="modal" data-target="#adicionarProcesso" onclick="criarProcesso()">Novo Processo</button>`);
   document.getElementById("editar2").innerHTML = "";
 
   //função fetch para chamar itens da tabela
-  fetch(servidor + 'read/processos/' + meuCodigo, {
+  fetch(servidor + 'read/processo', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -550,35 +553,35 @@ function processos() {
 
         //console.log(json);
 
-        listaProcessos = json;
+        listaProcesso = json;
 
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
         <tr>
-        <th style="width:20%" scope="col">Processo</th>
-        <th style="width:40%" scope="col">Descrição</th>
-        <th style="width:20%" scope="col">Editar</th>
-        <th style="width:20%" scope="col">Excluir</th>
+        <th style="width:30%" scope="col">Processo</th>
+        <th style="width:60%" scope="col">Descrição</th>
+        <th style="width:5%" scope="col">Editar</th>
+        <th style="width:5%" scope="col">Excluir</th>
         </tr>
         </thead>`);
         tabela += (`<tbody>`);
 
-        for (i = 0; i < listaProcessos.length; i++) {
+        for (i = 0; i < listaProcesso.length; i++) {
 
           tabela += (`<tr>`);
           tabela += (`<td>`);
-          tabela += listaProcessos[i]["cod_processo"];
+          tabela += listaProcesso[i]["cod_processo"];
           tabela += (`</td> <td>`);
-          tabela += listaProcessos[i]["descricao"];
+          tabela += listaProcesso[i]["descricao"];
           tabela += (`<td> 
                   <span class="d-flex">
-                  <button onclick="edicaoProcesso(` + i + `)" class="btn btn-success" data-toggle="modal" data-target="#adicionarProcessos">
+                  <button onclick="editarProcesso(` + i + `)" class="btn btn-success" data-toggle="modal" data-target="#adicionarProcesso">
                   <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
                   </button>
                   </span> </td>`);
           tabela += (`<td> 
                   <span class="d-flex">
-                  <button onclick="excluirProcesso(` + i + `)" class="btn btn-success" data-toggle="modal" data-target="#adicionarProcessos">
-                  <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
+                  <button onclick="excluirProcesso(` + i + `)" class="btn btn-success" data-toggle="modal" data-target="#adicionarProcesso">
+                  <img src="img/delete-icon.png" width="30px">
                   </button>
                   </span> </td>`);
           tabela += (`</tr>`);
@@ -597,7 +600,76 @@ function processos() {
   });
 }
 
+function criarProcesso(){
+  document.getElementById("botaoProcesso").innerHTML = " <button class='btn btn-primary' onclick='novoProcesso()' type='button'>Cadastrar</button>";
+}
 
+function novoProcesso(){
+  let infoProcesso = {
+    "cod_ibge": parseInt(meuCodigo),
+    "cod_processo": document.getElementById("cod_processo").value,
+    "descricao": document.getElementById("descricao").value,
+  };
+
+  //transforma as informações em string para mandar
+  let corpo = JSON.stringify(infoProcesso);
+  //console.log(corpo);
+
+  //função fetch para mandar
+  fetch(servidor + 'read/processo', {
+    method: 'POST',
+    body: corpo,
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      //alert('Processo inserido com sucesso!');
+      location.reload();
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+function editarProcesso(valor){
+  document.getElementById("cod_processo").value = listaProcesso[valor].cod_processo;
+  document.getElementById("descricao").value = listaProcesso[valor].descricao;
+  document.getElementById("botaoProcesso").innerHTML = "<button class='btn btn-primary' onclick='edicaoProcesso()' type='button'>Cadastrar</button>";
+}
+
+function edicaoProcesso(){
+  let edicaoProcesso = {
+    "cod_processo": document.getElementById("cod_processo").value,
+    "descricao": document.getElementById("descricao").value,
+  };
+
+  //transforma as informações do token em json
+  let corpo = JSON.stringify(edicaoProcesso);
+  
+  //console.log(corpo);
+  fetch(servidor + 'read/processo/' + document.getElementById("cod_processo").value + '/' + meuCodigo, {
+    method: 'PUT',
+    body: corpo,
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+    //checar o status do pedido
+    console.log(response.statusText);
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      location.reload();
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+//function excluirProcesso(){}
 
 
 
