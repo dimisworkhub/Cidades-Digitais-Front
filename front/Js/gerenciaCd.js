@@ -21,7 +21,6 @@ window.onload = function () {
   mascara();
 }
 
-
 function enviar() {
 
   //JSON usado para mandar as informações no fetch
@@ -70,22 +69,15 @@ function enviar() {
 
 
 //CD acompanhamento
-
 let listaUacom = [],
   listaEdicaoAssunto = [],
   meuData = [];
-
 //usado para fazer o id dos botões de assunto
 let idAssunto = 0;
-
 //para remover valores na parte de edição
 let valorRemovido = [];
-
 //dataAssunto usado para enviar assuntos após enviar as informações de acompanhamento
 let dataAssunto;
-
-
-
 function uacom() {
 
   //cria o botão para editar
@@ -161,8 +153,6 @@ function uacom() {
   });
 }
 
-
-
 //valorPego serve apenas para quando já foi usado um dos assuntos na criação.
 function pegarAssuntos() {
   //fetch de assunto
@@ -237,8 +227,6 @@ function novoUacom() {
   });
 }
 
-
-
 function anotaAssunto() {
 
   let valorAssunto = document.getElementById("assunto").value;
@@ -279,8 +267,6 @@ function removerAssunto(valor) {
 
 }
 
-
-
 function novoAssunto() {
 
   for (let i = 0; i < idAssunto; i++) {
@@ -320,8 +306,6 @@ function novoAssunto() {
   }
 }
 
-
-
 function edicaoModal(valor) {
 
   //fetch de assunto
@@ -353,7 +337,7 @@ function edicaoModal(valor) {
 
         document.getElementById("assunto").innerHTML = x;
 
-        document.getElementById("botaoUacom").innerHTML = "<a><button class='btn btn-primary multi-button ml-auto js-btn-next' onclick='editarUacom(" + valor + ")' type='button'>Cadastrar</button></a>";
+        document.getElementById("botaoUacom").innerHTML = "<a><button class='btn btn-primary multi-button ml-auto js-btn-next' onclick='editarUacom(" + valor + ")' type='button'>Editar</button></a>";
 
         getAssuntos(valor);
       });
@@ -393,20 +377,17 @@ function getAssuntos(valor) {
   });
 }
 
-
-
 function editarUacom(valor) {
 
   let edicaoUacom = {
     "titulo": document.getElementById("titulo").value,
-    "relato": document.getElementById("relato").value,
+    "relato": document.getElementById("relato").value
   };
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(edicaoUacom);
   
-  console.log(corpo);
-
+  //console.log(corpo);
   fetch(servidor + 'read/uacom/' + meuCodigo + '/' + meuData[valor], {
     method: 'PUT',
     body: corpo,
@@ -432,8 +413,6 @@ function editarUacom(valor) {
   });
 
 }
-
-
 
 function editarUacom2() {
   for (let i = 0; i < idAssunto; i++) {
@@ -474,7 +453,7 @@ function editarUacom2() {
           }
         });
       } else {
-        console.log("Já tem");
+        //console.log("Já tem");
       }
 
     }
@@ -482,9 +461,13 @@ function editarUacom2() {
     //para checar se precisa deletar
     else {
 
-      //caso tivesse antes
-      if (valorRemovido[i] != 0) {
+      //caso não tivesse antes
+      if (valorRemovido[i] == null) {
+        console.log("Já não tava aqui.");
+      }
 
+      //caso precise deletar
+      else {
         //função fetch para deletar
         fetch(servidor + 'read/uacomassunto/' + meuCodigo + "/" + dataAssunto + "/" + valorRemovido[i], {
           method: 'DELETE',
@@ -506,27 +489,23 @@ function editarUacom2() {
         });
       }
 
-      //caso não tivesse antes
-      else {
-        console.log("Já não tava aqui.");
-      }
-
     }
 
   }
 
   //recarrega a pagina
-  //location.reload();
+  location.reload();
 
 }
 
 
 
 
+
+
+
 //Processo
-
 let listaProcesso = [];
-
 function processo() {
 
   //cria o botão para editar
@@ -570,20 +549,20 @@ function processo() {
           tabela += (`<tr>`);
           tabela += (`<td>`);
           tabela += listaProcesso[i]["cod_processo"];
-          tabela += (`</td> <td>`);
+          tabela += (`</td><td>`);
           tabela += listaProcesso[i]["descricao"];
-          tabela += (`<td> 
+          tabela += (`<td>
                   <span class="d-flex">
                   <button onclick="editarProcesso(` + i + `)" class="btn btn-success" data-toggle="modal" data-target="#adicionarProcesso">
                   <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
                   </button>
-                  </span> </td>`);
-          tabela += (`<td> 
+                  </span></td>`);
+          tabela += (`<td>
                   <span class="d-flex">
-                  <button onclick="excluirProcesso(` + i + `)" class="btn btn-success" data-toggle="modal" data-target="#adicionarProcesso">
+                  <button onclick="excluirProcesso(` + i + `)" class="btn btn-success">
                   <img src="img/delete-icon.png" width="30px">
                   </button>
-                  </span> </td>`);
+                  </span></td>`);
           tabela += (`</tr>`);
         }
 
@@ -636,12 +615,14 @@ function novoProcesso(){
 
 function editarProcesso(valor){
   document.getElementById("cod_processo").value = listaProcesso[valor].cod_processo;
+  document.getElementById("cod_processo").disabled = true;
   document.getElementById("descricao").value = listaProcesso[valor].descricao;
-  document.getElementById("botaoProcesso").innerHTML = "<button class='btn btn-primary' onclick='edicaoProcesso()' type='button'>Cadastrar</button>";
+  document.getElementById("botaoProcesso").innerHTML = "<button class='btn btn-primary' onclick='edicaoProcesso()' type='button'>Editar</button>";
 }
 
 function edicaoProcesso(){
   let edicaoProcesso = {
+    "cod_ibge": parseInt(meuCodigo),
     "cod_processo": document.getElementById("cod_processo").value,
     "descricao": document.getElementById("descricao").value,
   };
@@ -669,7 +650,44 @@ function edicaoProcesso(){
   });
 }
 
-//function excluirProcesso(){}
+function excluirProcesso(valorModulo){
+  console.log("chega aqui");
+  //será ajustado para funcionar com varios valores
+  let info = [];
+  info[0] = {
+    "cod_ibge": parseInt(meuCodigo),
+    "cod_processo": listaProcesso[valorModulo].cod_processo,
+    "descricao": listaProcesso[valorModulo].descricao,
+  }
+
+  //transforma as informações do token em json
+  let corpo = JSON.stringify(info);
+  //console.log(corpo);
+  
+  //função fetch para deletar
+  fetch(servidor + 'read/processo/' + listaProcesso[valorModulo].cod_processo + '/' + meuCodigo, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken,
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 204) {
+      //alert("Apagado com sucesso.");
+      location.reload();
+    } else {
+      erros(response.status);
+    }
+    // return response.json().then(function (json) {
+    //   console.log(json);
+    // });
+  });
+}
+
+
+
+
 
 
 
@@ -764,7 +782,6 @@ function contatosCD() {
     }
   });
 }
-
 
 let id= 0
 let codigoTelefone = '';
