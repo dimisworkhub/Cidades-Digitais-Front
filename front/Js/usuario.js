@@ -172,9 +172,7 @@ window.onload = function () {
               });
 
               for (i = 0; i < json.length; i++) {
-                let mods = [];
-                mods[i] = document.getElementById("checkbox" + i);
-                valorModulo[i] = mods[i].value;
+                valorModulo[i] = document.getElementById("checkbox" + i).value;
               }
             } else {
 
@@ -183,8 +181,6 @@ window.onload = function () {
               });
 
               for (i = 0; i < json.length; i++) {
-                let mods = [];
-                mods[i] = document.getElementById("checkbox" + i);
                 valorModulo[i] = null;
               }
             }
@@ -216,10 +212,9 @@ function editarUsuario(valor) {
 
 //pega os valores de modulo dos checkboxes e coloca na estrutura valorModulo
 function modulos(numCod) {
-  let mods = [];
-  mods[numCod] = document.getElementById("checkbox" + numCod);
-  if (mods[numCod].checked) {
-    valorModulo[numCod] = mods[numCod].value;
+  let mods = document.getElementById("checkbox" + numCod);
+  if (mods.checked) {
+    valorModulo[numCod] = mods.value;
   } else {
     valorModulo[numCod] = null;
   }

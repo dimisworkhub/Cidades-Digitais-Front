@@ -2,7 +2,6 @@
 let listaFinal = [];
 
 //tabela pra previsão de empenho:
-
 function previsaoSub(valorCodigo) {
 
   document.getElementById("editar").innerHTML = (`<br>`);
@@ -85,7 +84,6 @@ function previsaoSub(valorCodigo) {
 }
 
 //tabela pra empenho:
-
 function empenhoSub(valorCodigo) {
 
   document.getElementById("editar").innerHTML = (`<br>`);
@@ -212,7 +210,6 @@ function empenhoSub(valorCodigo) {
 }
 
 //tabela pra fatura:
-
 function faturaSub(valorCodigo) {
 
   document.getElementById("editar").innerHTML = (`<br>`);
@@ -288,7 +285,6 @@ function faturaSub(valorCodigo) {
 }
 
 //tabela pra pagamento:
-
 function pagamentoSub(valorCodigo) {
 
   document.getElementById("editar").innerHTML = (`<br>`);

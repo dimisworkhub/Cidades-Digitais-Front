@@ -171,11 +171,11 @@ function adicionarModulo(){
           tabelaMod += (`<td>`);
           tabelaMod += json[i]["cod_modulo"];
           tabelaMod += (`</td> <td>`);
-          tabelaMod += json[i]["categoria_1"]
+          tabelaMod += json[i]["categoria_1"];
           tabelaMod += (`</td> <td>`);
-          tabelaMod += json[i]["categoria_2"]
+          tabelaMod += json[i]["categoria_2"];
           tabelaMod += (`</td> <td>`);
-          tabelaMod += json[i]["categoria_3"]
+          tabelaMod += json[i]["categoria_3"];
           tabelaMod += (`</td> </tr>`);
         }
 
@@ -186,28 +186,25 @@ function adicionarModulo(){
           // Select/Deselect checkboxes
           let checkbox = $('table tbody input[type="checkbox"]');
           $("#selectAll").click(function () {
-
             if (this.checked) {
+
               checkbox.each(function () {
                 this.checked = true;
               });
-              for (i = 0; i < json.length; i++) {
-                let modificado = [];
-                modificado[i] = document.getElementById("checkbox" + i);
-                valorModulo[i] = modificado[i].value;
-              }
 
+              for (i = 0; i < json.length; i++) {
+                valorModulo[i] = listaModulo[i]["cod_modulo"];
+              }
             } else {
+
               checkbox.each(function () {
                 this.checked = false;
               });
+
               for (i = 0; i < json.length; i++) {
-                let modificado = [];
-                modificado[i] = document.getElementById("checkbox" + i);
                 valorModulo[i] = null;
               }
             }
-
           });
           checkbox.click(function () {
             if (!this.checked) {
@@ -215,6 +212,15 @@ function adicionarModulo(){
             }
           });
         });
+
+        //fazendo os modulos selecionados aparecerem
+        for(let i = 0; i <json.length; i++){
+          for(let j = 0; j<jsonFinal.lenght; j++){
+            if(jsonFinal[j].cod_modulo == json[i].cod_modulo){
+            document.getElementById("checkbox" + i).checked;
+            }
+          }
+        }
 
       });
 
@@ -226,10 +232,9 @@ function adicionarModulo(){
 
 //pega os valores de modulo dos checkboxes e coloca na estrutura valorModulo
 function modulos(numCod) {
-  let mods = [];
-  mods[numCod] = document.getElementById("checkbox" + numCod);
-  if (mods[numCod].checked) {
-    valorModulo[numCod] = mods[numCod].value;
+  let mods = document.getElementById("checkbox" + numCod);
+  if (mods.checked) {
+    valorModulo[numCod] = mods.value;
   } else {
     valorModulo[numCod] = null;
   }
@@ -237,24 +242,35 @@ function modulos(numCod) {
 
 function enviarModulo(){
 
-  let i, j = 0;
+  let k = 0;
+  let l = 0;
   let modulo = [];
-  for (i = 0; i < listaModulo.length; i++) {
+  for (let i = 0; i < listaModulo.length; i++) {
     //adicionar  && valorModulo[i] != jsonFinal[i].cod_modulo
     if (valorModulo[i] != null) {
 
-      modulo[j] = {
+      modulo[k] = {
         "cod_usuario": parseFloat(meuCodigo),
         "cod_modulo": parseFloat(valorModulo[i])
       }
-      j++;
+      k++;
 
     }
+
+    else{
+      //caso seja um valor que deva ser removido
+      for(let j = 0; j < jsonFinal.length; j++){
+        if(valorModulo[i].value == jsonFinal[j].cod_modulo){
+          removerModulo(i);
+        }
+      }
+    }
+
   }
 
   //transforma as informações do token em json
   let infoModulo = JSON.stringify(modulo);
-  console.log(infoModulo);
+  //console.log(infoModulo);
   
   //função fetch para mandar
   fetch(servidor + 'read/usuario/' + codigoLogado + '/modulo', {
@@ -276,14 +292,7 @@ function enviarModulo(){
       erros(response.status);
     }
   });
-
 }
-
-
-
-
-
-
 
 //para remover modulos
 
