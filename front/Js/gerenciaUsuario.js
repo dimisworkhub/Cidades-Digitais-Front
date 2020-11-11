@@ -4,8 +4,8 @@ let codigoLogado = localStorage.getItem("codigoLogado");
 //pega o valor do usuário selecionado
 let meuCodigo = localStorage.getItem("cod_usuario");
 
-//para modulos
-let jsonFinal = [];
+//para pegar os modulos usados
+let modulosUsuario = [];
 
 window.onload = function () {
   // inserindo os valores no html
@@ -79,7 +79,7 @@ function usuarioModulo(){
       response.json().then(function (json) {
 
         //para manipular os valores
-        jsonFinal = json;
+        modulosUsuario = json;
 
         //console.log(json);
 
@@ -96,17 +96,17 @@ function usuarioModulo(){
         tabela += (`<tbody>`);
 
 
-        for (let i = 0; i < jsonFinal.length; i++) {
+        for (let i = 0; i < modulosUsuario.length; i++) {
           tabela += (`</td> <td>`);
-          tabela += jsonFinal[i]["cod_modulo"];
+          tabela += modulosUsuario[i]["cod_modulo"];
           tabela += (`</td> <td>`);
-          tabela += jsonFinal[i]["categoria_1"];
+          tabela += modulosUsuario[i]["categoria_1"];
           tabela += (`</td> <td>`);
-          tabela += jsonFinal[i]["categoria_2"];
+          tabela += modulosUsuario[i]["categoria_2"];
           tabela += (`</td> <td>`);
-          tabela += jsonFinal[i]["categoria_3"];
+          tabela += modulosUsuario[i]["categoria_3"];
           tabela += (`</td> <td>`);
-          tabela += jsonFinal[i]["descricao"];
+          tabela += modulosUsuario[i]["descricao"];
           tabela += (`</td> <td>
           <span class="d-flex">
           <button onclick="removerModulo(` + i + `)" class="btn btn-success"><img src="img/delete-icon.png" width="30px"></button>
@@ -145,8 +145,10 @@ function adicionarModulo(){
 
       //pegar o json que possui a tabela
       response.json().then(function (json) {
+
         //usado para listar os modulos usados na criação do usuario
         listaModulo = json;
+
         let tabelaMod = (`<thead style="background: #4b5366; color:white; font-size:15px">
                 <tr>
                 <th style="width:5%"> <span class="custom-checkbox">
@@ -182,6 +184,17 @@ function adicionarModulo(){
         tabelaMod += (`</tbody>`);
         document.getElementById("tabelaMod").innerHTML = tabelaMod;
 
+        //fazendo os modulos selecionados aparecerem
+        for(let i = 0; i < json.length; i++){
+          //garantindo valor inicial
+          valorModulo[i] = null;
+          for(let j = 0; j < modulosUsuario.length; j++){
+            if(json[i].cod_modulo == modulosUsuario[j].cod_modulo){
+              document.getElementById("checkbox" + i).click();
+            }
+          }
+        }
+
         $(document).ready(function () {
           // Select/Deselect checkboxes
           let checkbox = $('table tbody input[type="checkbox"]');
@@ -213,15 +226,6 @@ function adicionarModulo(){
           });
         });
 
-        //fazendo os modulos selecionados aparecerem
-        for(let i = 0; i <json.length; i++){
-          for(let j = 0; j<jsonFinal.lenght; j++){
-            if(jsonFinal[j].cod_modulo == json[i].cod_modulo){
-            document.getElementById("checkbox" + i).checked;
-            }
-          }
-        }
-
       });
 
     } else {
@@ -234,7 +238,7 @@ function adicionarModulo(){
 function modulos(numCod) {
   let mods = document.getElementById("checkbox" + numCod);
   if (mods.checked) {
-    valorModulo[numCod] = mods.value;
+    valorModulo[numCod] = listaModulo[numCod].cod_modulo;
   } else {
     valorModulo[numCod] = null;
   }
@@ -242,33 +246,27 @@ function modulos(numCod) {
 
 function enviarModulo(){
 
-  let k = 0;
-  let l = 0;
+  let j = 0;
   let modulo = [];
+
   for (let i = 0; i < listaModulo.length; i++) {
-    //adicionar  && valorModulo[i] != jsonFinal[i].cod_modulo
+
+    //adicionar  && valorModulo[i] != modulosUsuario[i].cod_modulo
     if (valorModulo[i] != null) {
-
-      modulo[k] = {
+      modulo[j] = {
         "cod_usuario": parseFloat(meuCodigo),
-        "cod_modulo": parseFloat(valorModulo[i])
+        "cod_modulo": parseFloat(listaModulo[i].cod_modulo),
       }
-      k++;
-
+      j++;
     }
 
     else{
-      //caso seja um valor que deva ser removido
-      for(let j = 0; j < jsonFinal.length; j++){
-        if(valorModulo[i].value == jsonFinal[j].cod_modulo){
-          removerModulo(i);
-        }
-      }
+      removerModulo(i);
     }
 
   }
 
-  //transforma as informações do token em json
+  //transforma todas as informações do token em json
   let infoModulo = JSON.stringify(modulo);
   //console.log(infoModulo);
   
@@ -286,28 +284,30 @@ function enviarModulo(){
 
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
-      alert("Módulos inseridos com sucesso");
-      location.reload();
+      //alert("Módulos inseridos com sucesso");
+      //location.reload();
     } else {
       erros(response.status);
     }
   });
 }
 
-//para remover modulos
 
+
+//para remover modulos
 function removerModulo(valorModulo) {
 
   //será ajustado para funcionar com varios valores
   let info = [];
   info[0] = {
-    "cod_usuario": parseInt(jsonFinal[valorModulo].cod_usuario),
-    "cod_modulo": parseInt(jsonFinal[valorModulo].cod_modulo),
+    "cod_usuario": parseInt(listaModulo[valorModulo].cod_usuario),
+    "cod_modulo": parseInt(listaModulo[valorModulo].cod_modulo),
   }
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
-  console.log(corpo);
+  //console.log(corpo);
+
   //função fetch para deletar
   fetch(servidor + 'read/usuario/' + codigoLogado + "/modulo", {
     method: 'DELETE',
@@ -320,7 +320,7 @@ function removerModulo(valorModulo) {
     //tratamento dos erros
     if (response.status == 204) {
       //alert("Apagado com sucesso.");
-      location.reload();
+      //location.reload();
     } else {
       erros(response.status);
     }
