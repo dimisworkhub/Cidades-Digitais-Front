@@ -2,7 +2,7 @@
 let listaModulo = [];
 
 //pega o usuario logado
-let userLogado = localStorage.getItem("codigoLogado");
+let codigoLogado = localStorage.getItem("codigoLogado");
 
 //organizar os modulos
 let userCriado,
@@ -90,7 +90,7 @@ function paginacao() {
                 <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
                 </button>
                 </span> </td> </tr>`);
-          if (filtrado[i]["login"] == userLogado) {
+          if (filtrado[i]["login"] == codigoLogado) {
             localStorage.setItem("codigoLogado", filtrado[i]["cod_usuario"]);
           }
         }
@@ -253,7 +253,7 @@ function enviar() {
       });
     } else {
       erros(response.status);
-      window.location.reload();
+      location.reload();
     }
   });
 }
@@ -276,7 +276,7 @@ function enviarModulo() {
   let infoModulo = JSON.stringify(modulo);
 
   //função fetch para mandar
-  fetch(servidor + 'read/usuario/' + userLogado + '/modulo', {
+  fetch(servidor + 'read/usuario/' + codigoLogado + '/modulo', {
     method: 'POST',
     body: infoModulo,
     headers: {

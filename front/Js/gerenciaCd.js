@@ -255,7 +255,7 @@ function anotaAssunto() {
     idAssunto++;
   }
   else{
-    alert("Assunto já inserido.")
+    alert("Assunto já inserido.");
   }
 }
 
