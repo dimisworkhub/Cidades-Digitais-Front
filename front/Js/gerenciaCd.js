@@ -1457,9 +1457,6 @@ function ponto() {
           tabela += (`</td> 
           <td>
             <span class="d-flex">
-              <button onclick="visualizarContato(` + listaItem[i].cod_contato + `,'` + listaItem[i].nome + `','` + listaItem[i].funcao + `','` + listaItem[i].email + `','` + i + `')" data-toggle="modal" href="#visualizar" class="btn btn-success">
-                <i class="material-icons"data-toggle="tooltip" title="Visualizar">content_paste</i>
-              </button>
               <button onclick="apagarPidPonto( ${listaItem[i].cod_ponto}, ${listaItem[i].cod_categoria},  ${listaItem[i].cod_pid} )" class="btn btn-danger">
                 <i class="material-icons"data-toggle="tooltip" title="Apagar">delete</i>
               </button>
@@ -1474,12 +1471,50 @@ function ponto() {
         //Máscara colocada separadamente para tabela
         mascara();
 
+        //Carrega o select de Categoria
+        puxaCategoria();
       });
     } else {
       erros(response.status);
     }
   });
 }
+
+function puxaCategoria() {
+  
+  fetch(servidor + 'read/categoria', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      response.json().then(function (json) {
+
+        //variaveis
+        let valor= [];
+
+        //Primeiro option do select de "Categoria"
+
+        valor[0] += "<option value=''>Categoria</option>";
+
+        for (i = 0; i < json.length; i++) {
+          valor[i+1] += `<option value=${json[i].cod_categoria} > ${json[i].descricao} </option>`;
+        }
+        
+        document.getElementById("categoria").innerHTML = valor;
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+{/* <button onclick="visualizarContato(` + listaItem[i].cod_contato + `,'` + listaItem[i].nome + `','` + listaItem[i].funcao + `','` + listaItem[i].email + `','` + i + `')" data-toggle="modal" href="#visualizar" class="btn btn-success">
+  <i class="material-icons"data-toggle="tooltip" title="Visualizar">content_paste</i>
+</button> */}
 
 function novoPidPonto() {
 
@@ -1529,6 +1564,7 @@ function novoPidPonto() {
               console.log(ultimoPid)
               
               let infoPonto = {
+                "cod_ponto": parseInt(document.getElementById("cod_ponto").value),
                 "cod_categoria": parseInt(document.getElementById("categoria").value),
                 "cod_ibge": parseInt(meuCodigo),
                 "cod_pid": parseInt(ultimoPid),

@@ -154,7 +154,7 @@ function pegarMunicipio() {
     //tratamento dos erros
     if (response.status == 200) {
       response.json().then(function (json) {
-
+        console.log(json)
         //pegando valores para usar em enabler()
         cidades = json;
 
