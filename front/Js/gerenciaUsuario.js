@@ -107,8 +107,7 @@ function usuarioModulo(){
           tabela += modulosUsuario[i]["categoria_3"];
           tabela += (`</td> <td>`);
           tabela += modulosUsuario[i]["descricao"];
-          tabela += (`</td> <td>
-          <span class="d-flex">
+          tabela += (`</td> <td> <span class="d-flex">
           <button onclick="removerModulo(` + i + `)" class="btn btn-success"><img src="img/delete-icon.png" width="30px"></button>
           </span> </td> </tr>`);
         }
@@ -238,7 +237,7 @@ function adicionarModulo(){
 function modulos(numCod) {
   let mods = document.getElementById("checkbox" + numCod);
   if (mods.checked) {
-    valorModulo[numCod] = listaModulo[numCod].cod_modulo;
+    valorModulo[numCod] = mods.value;
   } else {
     valorModulo[numCod] = null;
   }
@@ -255,20 +254,20 @@ function enviarModulo(){
     if (valorModulo[i] != null) {
       modulo[j] = {
         "cod_usuario": parseFloat(meuCodigo),
-        "cod_modulo": parseFloat(listaModulo[i].cod_modulo),
+        "cod_modulo": parseFloat(valorModulo[i]),
       }
       j++;
     }
 
-    else{
-      removerModulo(i);
-    }
+    //else{
+    //  removerModulo(i);
+    //}
 
   }
 
   //transforma todas as informações do token em json
   let infoModulo = JSON.stringify(modulo);
-  //console.log(infoModulo);
+  console.log(infoModulo);
   
   //função fetch para mandar
   fetch(servidor + 'read/usuario/' + codigoLogado + '/modulo', {
@@ -298,14 +297,14 @@ function enviarModulo(){
 function removerModulo(valorModulo) {
 
   //será ajustado para funcionar com varios valores
-  let info = [];
-  info[0] = {
-    "cod_usuario": parseInt(listaModulo[valorModulo].cod_usuario),
-    "cod_modulo": parseInt(listaModulo[valorModulo].cod_modulo),
-  }
+  //let info = [];
+  //info[0] = {
+  //  "cod_usuario": parseInt(modulosUsuario[valorModulo].cod_usuario),
+  //  "cod_modulo": parseInt(modulosUsuario[valorModulo].cod_modulo),
+  //}
 
   //transforma as informações do token em json
-  let corpo = JSON.stringify(info);
+  //let corpo = JSON.stringify(info);
   //console.log(corpo);
 
   //função fetch para deletar
