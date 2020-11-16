@@ -580,6 +580,9 @@ function processo() {
 }
 
 function criarProcesso(){
+  document.getElementById("cod_processo").value = "";
+  document.getElementById("cod_processo").disabled = false;
+  document.getElementById("descricao").value = "";
   document.getElementById("botaoProcesso").innerHTML = " <button class='btn btn-primary' onclick='novoProcesso()' type='button'>Cadastrar</button>";
 }
 
