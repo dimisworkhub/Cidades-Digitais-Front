@@ -44,6 +44,8 @@ func (server *Server) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	strings.ToLower(usuario.Login)
+
 	//	Verifica os dados de login e senha e cria o token de autenticacao para usuarios cadastrados
 	token, err := usuario.SignIn(server.DB, usuario.Login, usuario.Senha)
 
