@@ -90,6 +90,7 @@ function empenhoSub(valorCodigo) {
   document.getElementById("editar2").innerHTML = (`<br>`);
 
   //filtro de subtabelas pelo codigo escolhido (1 para previsao, 2 para lote, 3 para cidades digitais)
+  //empenho possui o codigo especial 0, que indica que está vindo da tabela itens de fatura
   let caminhoEmpenho;
 
   if (valorCodigo == '1') {

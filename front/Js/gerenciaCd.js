@@ -72,12 +72,16 @@ function enviar() {
 let listaUacom = [],
   listaEdicaoAssunto = [],
   meuData = [];
+
 //usado para fazer o id dos botões de assunto
 let idAssunto = 0;
+
 //para remover valores na parte de edição
 let valorRemovido = [];
+
 //dataAssunto usado para enviar assuntos após enviar as informações de acompanhamento
 let dataAssunto;
+
 function uacom() {
 
   //cria o botão para editar
@@ -131,9 +135,9 @@ function uacom() {
           tabela += (`</td> <td>`);
           tabela += listaUacom[i]["relato"];
           tabela += (`</td>`);
-          tabela += (`<td> 
+          tabela += (`<td>
                   <span class="d-flex">
-                  <button onclick="edicaoModal(` + i + `)" class="btn btn-success" data-toggle="modal" data-target="#adicionarUacom">
+                  <button onclick="abrirEdicao(` + i + `)" class="btn btn-success" data-toggle="modal" data-target="#adicionarUacom">
                   <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
                   </button>
                   </span> </td>`);
@@ -153,7 +157,6 @@ function uacom() {
   });
 }
 
-//valorPego serve apenas para quando já foi usado um dos assuntos na criação.
 function pegarAssuntos() {
   //fetch de assunto
   fetch(servidor + 'read/assunto', {
@@ -188,6 +191,45 @@ function pegarAssuntos() {
       erros(response.status);
     }
   });
+}
+
+function anotaAssunto() {
+
+  let valorAssunto = document.getElementById("assunto").value;
+
+  //para garantir que não haja assunto igual
+  let possuiassunto = false;
+
+  for(let i = 0; i < idAssunto; i++){
+    if(document.getElementById("adicao"+i) != null && valorAssunto == document.getElementById("adicao"+i).value){
+      possuiassunto = true;
+      //console.log("aqui passa");
+    }
+  }
+
+  //se não houver assunto
+   if(possuiassunto == false){
+
+    //o 0 define que é a primeira a ser selecionada, sendo que não há mais de uma seleção nesse select.
+    let nomeAssunto = document.querySelector("#assunto").selectedOptions[0].text;
+
+    let assuntoSelecionado = `<button class="btn" id="adicao` + idAssunto + `" value="` + valorAssunto + `"> <a class="btn" id="removedor` + idAssunto + `" type="reset" onclick="removerAssunto(` + idAssunto + `)" title="Deletar">` + nomeAssunto + ` <img src="img/delete-icon.png" width="30px"></a> </button>`;
+
+    document.getElementById("adicoes").innerHTML += assuntoSelecionado;
+
+    idAssunto++;
+  }
+  else{
+    alert("Assunto já inserido.");
+  }
+}
+
+function removerAssunto(valor) {
+
+  //para saber qual deletar
+  valorRemovido[valor] = document.getElementById("adicao" + valor).value;
+  document.getElementById("adicoes").removeChild(document.getElementById("adicao" + valor));
+
 }
 
 function novoUacom() {
@@ -225,46 +267,6 @@ function novoUacom() {
       erros(response.status);
     }
   });
-}
-
-function anotaAssunto() {
-
-  let valorAssunto = document.getElementById("assunto").value;
-
-  //para garantir que não haja assunto igual
-  let possuiassunto = false;
-
-  for(let i = 0; i < idAssunto; i++){
-    if(document.getElementById("adicoes"+i) != null){
-      if(valorAssunto == document.getElementById("adicoes"+i).value){
-        possuiassunto = true;
-        console.log("aqui passa");
-      }
-    }
-  }
-
-  //se não houver assunto
-   if(possuiassunto == false){
-    //o 0 define que é a primeira a ser selecionada, sendo que não há mais de uma seleção nesse select.
-    let nomeAssunto = document.querySelector("#assunto").selectedOptions[0].text;
-
-    let assuntoSelecionado = `<button class="btn" id="adicao` + idAssunto + `" value="` + valorAssunto + `"> <a class="btn" id="removedor` + idAssunto + `" type="reset" onclick="removerAssunto(` + idAssunto + `)" title="Deletar">` + nomeAssunto + ` <img src="img/delete-icon.png" width="30px"></a> </button>`;
-
-    document.getElementById("adicoes").innerHTML += assuntoSelecionado;
-
-    idAssunto++;
-  }
-  else{
-    alert("Assunto já inserido.");
-  }
-}
-
-function removerAssunto(valor) {
-
-  //para saber qual deletar
-  valorRemovido[valor] = document.getElementById("adicao" + valor).value;
-  document.getElementById("adicoes").removeChild(document.getElementById("adicao" + valor));
-
 }
 
 function novoAssunto() {
@@ -306,7 +308,7 @@ function novoAssunto() {
   }
 }
 
-function edicaoModal(valor) {
+function abrirEdicao(valor) {
 
   //fetch de assunto
   fetch(servidor + 'read/assunto', {
@@ -339,7 +341,7 @@ function edicaoModal(valor) {
 
         document.getElementById("botaoUacom").innerHTML = "<a><button class='btn btn-primary multi-button ml-auto js-btn-next' onclick='editarUacom(" + valor + ")' type='button'>Editar</button></a>";
 
-        getAssuntos(valor);
+        PegarAssuntos2(valor);
       });
     } else {
       erros(response.status);
@@ -348,8 +350,8 @@ function edicaoModal(valor) {
 
 }
 
-function getAssuntos(valor) {
-  //fetch de assuntouacom
+function PegarAssuntos2(valor) {
+  //fetch de assunto
 
   //preenche os assuntos na parte de edição
   fetch(servidor + 'read/uacomassunto/' + meuCodigo + "/" + meuData[valor], {
@@ -378,17 +380,22 @@ function getAssuntos(valor) {
 }
 
 function editarUacom(valor) {
+  //retira fuso horário; preciso fazer ser um sistema automático ou usar "if != +" com procura 
+  let retiraFuso =  meuData[valor].split("-");
+  let dataUsada = retiraFuso[0] + "-" + retiraFuso[1] + "-" + retiraFuso[2];
 
   let edicaoUacom = {
+    "cod_ibge": parseInt(meuCodigo),
+    "data": dataUsada,
     "titulo": document.getElementById("titulo").value,
-    "relato": document.getElementById("relato").value
+    "relato": document.getElementById("relato").value,
   };
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(edicaoUacom);
   
-  //console.log(corpo);
-  fetch(servidor + 'read/uacom/' + meuCodigo + '/' + meuData[valor], {
+  console.log(corpo);
+  fetch(servidor + 'read/uacom/' + meuCodigo + '/' + dataUsada, {
     method: 'PUT',
     body: corpo,
     headers: {
@@ -403,8 +410,7 @@ function editarUacom(valor) {
 
       //pegar a data para enviar no editarUacom2
       response.json().then(function (json) {
-        dataAssunto = json.data;
-        editarUacom2();
+        editarUacom2(valor);
       });
 
     } else {
@@ -414,7 +420,11 @@ function editarUacom(valor) {
 
 }
 
-function editarUacom2() {
+function editarUacom2(valor) {
+  //retira fuso horário; preciso fazer ser um sistema automático
+  let retiraFuso =  meuData[valor].split("-");
+  let dataUsada = retiraFuso[0] + "-" + retiraFuso[1] + "-" + retiraFuso[2];
+
   for (let i = 0; i < idAssunto; i++) {
 
     //para checar se precisa adicionar
@@ -424,7 +434,7 @@ function editarUacom2() {
       if (listaEdicaoAssunto[i] == undefined) {
         let infoAssunto = {
           "cod_ibge": parseInt(meuCodigo),
-          "data": dataAssunto,
+          "data": dataUsada,
           "cod_assunto": parseInt(document.getElementById("adicao" + i).value),
         };
 
@@ -443,17 +453,11 @@ function editarUacom2() {
 
           //tratamento dos erros
           if (response.status == 200 || response.status == 201) {
-
-            //reseta para usar denovo
-            idAssunto = 0;
-            document.getElementById("adicoes").innerHTML = "";
-
+            //console.log(response.statusText);
           } else {
             erros(response.status);
           }
         });
-      } else {
-        //console.log("Já tem");
       }
 
     }
@@ -462,14 +466,10 @@ function editarUacom2() {
     else {
 
       //caso não tivesse antes
-      if (valorRemovido[i] == null) {
-        console.log("Já não tava aqui.");
-      }
-
-      //caso precise deletar
-      else {
+      if (valorRemovido[i] != null) {
+        //console.log(valorRemovido[i]);
         //função fetch para deletar
-        fetch(servidor + 'read/uacomassunto/' + meuCodigo + "/" + dataAssunto + "/" + valorRemovido[i], {
+        fetch(servidor + 'read/uacomassunto/' + meuCodigo + "/" + dataUsada + "/" + valorRemovido[i], {
           method: 'DELETE',
           headers: {
             'Authorization': 'Bearer ' + meuToken
@@ -478,11 +478,7 @@ function editarUacom2() {
 
           //tratamento dos erros
           if (response.status == 200 || response.status == 201 || response.status == 204) {
-
-            //reseta para usar denovo
-            idAssunto = 0;
-            document.getElementById("adicoes").innerHTML = "";
-
+            //console.log(response.statusText);
           } else {
             erros(response.status);
           }
@@ -493,9 +489,17 @@ function editarUacom2() {
 
   }
 
-  //recarrega a pagina
+  //recarrega a pagina após 5 segundos (em milisegundos)
+  esperar(5000);
   location.reload();
+}
 
+function esperar(tempo) {
+  const comeco = Date.now();
+  let fim = null;
+  do {
+    fim = Date.now();
+  } while (fim - comeco < tempo);
 }
 
 

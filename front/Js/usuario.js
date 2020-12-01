@@ -2,7 +2,7 @@
 let listaModulo = [];
 
 //pega o usuario logado
-let codigoLogado = localStorage.getItem("codigoLogado");
+let userLogado = localStorage.getItem("logado");
 
 //organizar os modulos
 let userCriado,
@@ -10,6 +10,9 @@ let userCriado,
   valorModulo = [];
 
 function paginacao() {
+
+  console.log(userLogado);
+
   porPagina = document.getElementById("quantos").value;
   let comeco = contador * porPagina;
   let fim = (contador + 1) * porPagina;
@@ -74,25 +77,30 @@ function paginacao() {
 
         for (let i = comeco; i < fim && i < filtrado.length; i++) {
           userTotal[i] = filtrado[i];
+
+          if (userLogado == filtrado[i]["login"]) {
+            localStorage.setItem("codigoLogado", filtrado[i]["cod_usuario"]);
+          }
+
           tabela += (`<tr> <td>`);
           tabela += filtrado[i]["cod_usuario"];
           tabela += (`</td> <td>`);
-          tabela += filtrado[i]["nome"]
+          tabela += filtrado[i]["nome"];
           tabela += (`</td> <td>`);
-          tabela += filtrado[i]["email"]
+          tabela += filtrado[i]["email"];
           tabela += (`</td> <td>`);
-          tabela += filtrado[i]["login"]
+          tabela += filtrado[i]["login"];
           tabela += (`</td> <td>`);
-          tabela += filtrado[i]["status"]
-          tabela += (`</td> <td> 
-                <span class="d-flex">
-                <button onclick="editarUsuario(` + i + `)" class="btn btn-success">
-                <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
-                </button>
-                </span> </td> </tr>`);
-          if (filtrado[i]["login"] == codigoLogado) {
-            localStorage.setItem("codigoLogado", filtrado[i]["cod_usuario"]);
+
+          if(filtrado[i]["status"] == 1){
+            tabela += "Ativo";
+          }else{
+            tabela += "Inativo";
           }
+
+          tabela += (`</td> <td> <span class="d-flex">
+                <button onclick="editarUsuario(` + i + `)" class="btn btn-success"> <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i> </button>
+                </span> </td> </tr>`);
         }
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
