@@ -296,7 +296,7 @@
                         <!--Formularios-->
                         <div class="row">
                             <div class="col-12 col-lg-12 m-auto">
-                                <form class="multisteps-form__form needs-validation" style="height: 640px;">
+                                <form class="multisteps-form__form needs-validation" style="height: 800px;">
                                     <!--Formulario 1 -->
                                     <div class="multisteps-form__panel shadow p-4 rounded bg-white js-active"
                                         data-animation="scaleIn">
@@ -306,15 +306,7 @@
                                             <div class="form-row mt-4">
                                                 <div class="col-6 col-sm-6 mt-4">
                                                     <input class="multisteps-form__input form-control " type="number" placeholder="Código do Ponto"
-                                                        name="cod_ponto" id="cod_ponto"  maxlength="50">
-                                                </div>
-                                                <div class="col-6 col-sm-6 mt-4">
-                                                    <input class="multisteps-form__input form-control " type="text" placeholder="Nome"
-                                                        name="nomePonto" id="nomePonto"  maxlength="50">
-                                                </div>
-                                                <div class="col-12 col-sm-12 mt-4">
-                                                    <input class="multisteps-form__input form-control " type="text" placeholder="INEP"
-                                                        name="inep" id="inep">
+                                                        name="cod_pontoPonto" id="cod_pontoPonto"  maxlength="11">
                                                 </div>
                                                 <div class="col-6 col-sm-6 mt-4">
                                                     <select class="multisteps-form__input form-control categoria" name="categoria" id="categoria">
@@ -322,10 +314,18 @@
                                                     </select>
                                                 </div>
                                                 <div class="col-6 col-sm-6 mt-4">
+                                                    <input class="multisteps-form__input form-control " type="text" placeholder="Nome"
+                                                        name="nomePonto" id="nomePonto"  maxlength="50">
+                                                </div>
+                                                <div class="col-6 col-sm-6 mt-4">
+                                                    <input class="multisteps-form__input form-control " type="text" placeholder="INEP"
+                                                        name="inepPonto" id="inepPonto">
+                                                </div>
+                                                <div class="col-4 col-sm-4 mt-4">
                                                     <input class="multisteps-form__input form-control " type="text" placeholder="CEP"
                                                         name="cepPonto" id="cepPonto" onchange="viaCep();" maxlength="8">
                                                 </div>
-                                                <div class="col-12 col-sm-12 mt-4">
+                                                <div class="col-8 col-sm-8 mt-4">
                                                     <input class="multisteps-form__input form-control " type="text" placeholder="Endereco"
                                                         name="enderecoPonto" id="enderecoPonto">
                                                 </div>
@@ -341,19 +341,27 @@
                                                     <input class="multisteps-form__input form-control " type="text" placeholder="Complemento"
                                                         name="complementoPonto" id="complementoPonto">
                                                 </div>
-                                                <div class="col-12 col-sm-12 mt-4">
+                                                <div class="col-1 col-sm-1 mt-4">
+                                                    <label for="radio_1">Decimal</label>
+                                                    <input class="multisteps-form__input form-control" type="radio" name="radio" id="radio_1" onchange="latLong(1);">
+                                                </div>
+                                                <div class="col-1 col-sm-1 mt-4 ml-4">
+                                                    <label for="radio_2">Grau</label>
+                                                    <input class="multisteps-form__input form-control" type="radio" name="radio" id="radio_2" onchange="latLong(2);">
+                                                </div>
+                                                <field id="LatLong"></field>
+                                                <!-- <div class="col-12 col-sm-12 mt-4">
                                                     <input class="multisteps-form__input form-control " type="text" placeholder="Latitude"
-                                                        name="latitude" id="latitude">
+                                                        name="latitudePonto" id="latitudePonto">
                                                 </div>
                                                 <div class="col-12 col-sm-12 mt-4">
                                                     <input class="multisteps-form__input form-control " type="text" placeholder="Longitude"
-                                                        name="longitude" id="longitude">
-                                                </div>
+                                                        name="longitudePonto" id="longitudePonto">
+                                                </div> -->
                                             </div>
 
                                             <div class="button-row d-flex mt-4">
-                                                <button class="btn btn-primary multi-button ml-auto js-btn-next"
-                                                    onclick=" novoPidPonto()" type="button">Cadastrar</button>
+                                                <div class="button-row d-flex mt-4" id="botaoPonto"></div>
                                             </div>
                                         </div>
                                     </div>
