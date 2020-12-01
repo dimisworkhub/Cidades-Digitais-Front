@@ -1572,19 +1572,41 @@ function novoPidPonto() {
               }
               console.log(ultimoPid)
               
-              let infoPonto = {
-                "cod_ponto": parseInt(document.getElementById("cod_pontoPonto").value),
-                "cod_categoria": parseInt(document.getElementById("categoria").value),
-                "cod_ibge": parseInt(meuCodigo),
-                "cod_pid": parseInt(ultimoPid),
-                "endereco": document.getElementById("enderecoPonto").value,
-                "numero": document.getElementById("numeroPonto").value,
-                "complemento": document.getElementById("complementoPonto").value,
-                "bairro": document.getElementById("bairroPonto").value,
-                "cep": document.getElementById("cepPonto").value,
-                "latitude": parseFloat(document.getElementById("latitudePonto").value),
-                "longitude": parseFloat(document.getElementById("longitudePonto").value),
-              };
+              let infoPonto
+              if(document.getElementById('grau').id == "grau"){
+
+                //Pega os valores dos campos de graus e transforma em decimal
+                grauToDecimal();
+                
+                infoPonto = {
+                  "cod_ponto": parseInt(document.getElementById("cod_pontoPonto").value),
+                  "cod_categoria": parseInt(document.getElementById("categoria").value),
+                  "cod_ibge": parseInt(meuCodigo),
+                  "cod_pid": parseInt(ultimoPid),
+                  "endereco": document.getElementById("enderecoPonto").value,
+                  "numero": document.getElementById("numeroPonto").value,
+                  "complemento": document.getElementById("complementoPonto").value,
+                  "bairro": document.getElementById("bairroPonto").value,
+                  "cep": document.getElementById("cepPonto").value,
+                  "latitude": laatitude,
+                  "longitude": loongitude
+                }
+
+              }else if(document.getElementById('decimal').id == "decimal"){
+                infoPonto = {
+                  "cod_ponto": parseInt(document.getElementById("cod_pontoPonto").value),
+                  "cod_categoria": parseInt(document.getElementById("categoria").value),
+                  "cod_ibge": parseInt(meuCodigo),
+                  "cod_pid": parseInt(ultimoPid),
+                  "endereco": document.getElementById("enderecoPonto").value,
+                  "numero": document.getElementById("numeroPonto").value,
+                  "complemento": document.getElementById("complementoPonto").value,
+                  "bairro": document.getElementById("bairroPonto").value,
+                  "cep": document.getElementById("cepPonto").value,
+                  "latitude": parseFloat(document.getElementById("latitudePonto").value),
+                  "longitude": parseFloat(document.getElementById("longitudePonto").value),
+                }
+              }
             
               console.log(infoPonto)
               //transforma as informações em string para mandar
@@ -1946,5 +1968,93 @@ function latLong(input) {
                         </div>
                       </div>`)
     });
+  }
+}
+
+function grauToDecimal() {
+  let lat = null;
+  let long = null;
+  let latitude = null;
+  let longitude = null;
+
+  const latGrau = parseInt(document.getElementById("latGrau").value);
+  const latMin = parseInt(document.getElementById("latMin").value);
+  const latSeg = parseInt(document.getElementById("latSeg").value);
+  const longGrau = parseInt(document.getElementById("longGrau").value);
+  const longMin = parseInt(document.getElementById("longMin").value);
+  const longSeg = parseInt(document.getElementById("longSeg").value);
+
+  // Latitude
+  if (!((latGrau === 0) && (latMin === 0) && (latSeg === 0))) {
+    lat = ( latGrau + ( (latMin / 60) + (latSeg / 3600) )).toFixed(6);
+    if ( document.getElementById("latTipo").value === 'S' ) {
+      latitude = `-${lat.toString()}`;
+    } else {
+      latitude = `+${lat.toString()}`;
+    }
+  } else {
+    latitude = '';
+  }
+
+  // Longitude
+  if (!((longGrau === 0) && (longMin === 0) && (longSeg === 0))) {
+    long = (longGrau + ( ( longMin / 60) + ( longSeg / 3600) )).toFixed(6);
+    longitude = `-${long.toString()}`;
+  } else {
+    longitude = '';
+  }
+
+  return laatitude = parseFloat(latitude) , loongitude = parseFloat(longitude)
+}
+
+function decimalToGrau(latitude, longitude) {
+  let latGrau = null;
+  let latMin = null;
+  let latSeg = null;
+  let latTipo = '';
+  let longGrau = null;
+  let longMin = null;
+  let longSeg = null;
+  const longTipo = 'O';
+  let latitudeDecimal = Number(latitude);
+  const longitudeDecimal = Number(longitude) * -1;
+
+  (latitudeDecimal < 0) ? (latTipo = 'S', latitudeDecimal = latitudeDecimal * -1) : latTipo = 'N';
+
+  if (latitude && !isNaN(latitude)) {
+    // Grau Latitude
+    latGrau = Math.trunc(latitudeDecimal);
+    // Minutos Latitude
+    latMin = Math.trunc((latitudeDecimal * 60) % 60);
+    // Segundos Latitude
+    latSeg = ((latitudeDecimal * 3600) % 60).toFixed(2);
+
+    this.latLong.grau.latitude.latTipo = latTipo;
+    this.latLong.grau.latitude.latGrau = latGrau;
+    this.latLong.grau.latitude.latMin = latMin;
+    this.latLong.grau.latitude.latSeg = latSeg;
+  } else {
+    this.latLong.grau.latitude.latTipo = '';
+    this.latLong.grau.latitude.latGrau = null;
+    this.latLong.grau.latitude.latMin = null;
+    this.latLong.grau.latitude.latSeg = null;
+  }
+  if (longitude && !isNaN(longitude)) {
+    // Grau Longitude
+    longGrau = Math.trunc(longitudeDecimal);
+    // Minutos Longitude
+    longMin = Math.trunc((longitudeDecimal * 60) % 60);
+    // Segundos Longitude
+    longSeg = ((longitudeDecimal * 3600) % 60).toFixed(2);
+
+    this.latLong.grau.longitude.longTipo = longTipo;
+    this.latLong.grau.longitude.longGrau = longGrau;
+    this.latLong.grau.longitude.longMin = longMin;
+    this.latLong.grau.longitude.longSeg = longSeg;
+  } else {
+    this.latLong.grau.longitude.longTipo = '';
+    this.latLong.grau.longitude.longGrau = null;
+    this.latLong.grau.longitude.longMin = null;
+    this.latLong.grau.longitude.longSeg = null;
   }
 }
