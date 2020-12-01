@@ -15,6 +15,7 @@ window.onload = function () {
   document.getElementById("login").value = localStorage.getItem("login");
   document.getElementById("status").value = localStorage.getItem("status");
   document.getElementById("senha").value = localStorage.getItem("senha");
+  console.log(codigoLogado);
 }
 
 function enviar() {
@@ -32,7 +33,7 @@ function enviar() {
   let corpo = JSON.stringify(info);
   //console.log(corpo);
   //função fetch para mandar
-  fetch(servidor + 'read/usuario/' + parseInt(codigoLogado), {
+  fetch(servidor + 'read/usuario/' + codigoLogado, {
     method: 'PUT',
     body: corpo,
     headers: {
@@ -47,7 +48,7 @@ function enviar() {
     if (response.status == 200 || response.status == 202) {
       window.location.replace("./usuario.html");
     } else {
-      erros(response.status);
+      //erros(response.status);
     }
   });
 }
@@ -59,11 +60,8 @@ function enviar() {
 
 
 //para visualizar os modulos
-
 function usuarioModulo(){
-
   document.getElementById("editar").innerHTML = (`<button class="btn btn-success" data-toggle="modal" onclick="adicionarModulo()" data-target="#adicionarModulo">Adicionar Modulos</button>`);
-
   //função fetch para mandar
   fetch(servidor + 'read/usuario/' + meuCodigo + "/modulo", {
     method: 'GET',
@@ -95,7 +93,6 @@ function usuarioModulo(){
             </thead>`);
         tabela += (`<tbody>`);
 
-
         for (let i = 0; i < modulosUsuario.length; i++) {
           tabela += (`</td> <td>`);
           tabela += modulosUsuario[i]["cod_modulo"];
@@ -120,14 +117,11 @@ function usuarioModulo(){
   });
 }
 
-
-
-
-
-
-
 //para inserir com os modulos
 let valorModulo = [];
+
+//para saber qual foi clickado e remover
+let controleDeClick = [];
 
 function adicionarModulo(){
   //função fetch para mandar itens do modulo
@@ -163,6 +157,10 @@ function adicionarModulo(){
         tabelaMod += (`<tbody>`);
 
         for (let i = 0; i < json.length; i++) {
+
+          //para saber qual foi clickado e remover
+          controleDeClick[i] = false;
+
           tabelaMod += (`<tr> <td>
                 <span class="custom-checkbox">
                 <input class="checking" onclick="modulos(` + i + `)" type="checkbox" id="checkbox` + i + `" name="options[]" value="` + json[i]["cod_modulo"] + `">
@@ -238,57 +236,94 @@ function modulos(numCod) {
   let mods = document.getElementById("checkbox" + numCod);
   if (mods.checked) {
     valorModulo[numCod] = mods.value;
+    if(controleDeClick[numCod] == false){
+      controleDeClick[numCod] = true;
+    }else{
+      controleDeClick[numCod] = false;
+    }
   } else {
     valorModulo[numCod] = null;
+    if(controleDeClick[numCod] == false){
+      controleDeClick[numCod] = true;
+    }else{
+      controleDeClick[numCod] = false;
+    }
   }
 }
 
 function enviarModulo(){
 
   let j = 0;
-  let modulo = [];
+  let infoAdicionar = [];
+  let infoDeletar = [];
 
   for (let i = 0; i < listaModulo.length; i++) {
 
-    //adicionar  && valorModulo[i] != modulosUsuario[i].cod_modulo
-    if (valorModulo[i] != null) {
-      modulo[j] = {
+    if (valorModulo[i] != null && controleDeClick == true){
+      infoAdicionar[j] = {
         "cod_usuario": parseFloat(meuCodigo),
         "cod_modulo": parseFloat(valorModulo[i]),
       }
       j++;
+
+      //transforma todas as informações do token em json
+      let corpoModulo = JSON.stringify(infoAdicionar);
+      console.log(corpoModulo);
+      
+      //função fetch para mandar
+      fetch(servidor + 'read/usuario/' + codigoLogado + '/modulo', {
+        method: 'POST',
+        body: corpoModulo,
+        headers: {
+          'Authorization': 'Bearer ' + meuToken
+        },
+      }).then(function (response) {
+
+        //checar o status do pedido
+        console.log(response.statusText);
+
+        //tratamento dos erros
+        if (response.status == 200 || response.status == 201) {
+          //alert("Módulos inseridos com sucesso");
+        } else {
+          erros(response.status);
+        }
+      });
     }
 
-    //else{
-    //  removerModulo(i);
-    //}
+    else{
+      if(controleDeClick == true){
+
+        //transforma as informações do token em json
+        let corpoDeletar = JSON.stringify(infoDeletar);
+        console.log(corpoDeletar);
+
+        //função fetch para deletar
+        fetch(servidor + 'read/usuario/' + codigoLogado + "/modulo", {
+          method: 'DELETE',
+          body:corpoDeletar,
+          headers: {
+            'Authorization': 'Bearer ' + meuToken,
+          },
+        }).then(function (response) {
+
+          //checar o status do pedido
+          console.log(response.statusText);
+
+          //tratamento dos erros
+          if (response.status == 204) {
+            //alert("Apagado com sucesso.");
+          } else {
+            erros(response.status);
+          }
+        });
+      }
+    }
 
   }
 
-  //transforma todas as informações do token em json
-  let infoModulo = JSON.stringify(modulo);
-  console.log(infoModulo);
-  
-  //função fetch para mandar
-  fetch(servidor + 'read/usuario/' + codigoLogado + '/modulo', {
-    method: 'POST',
-    body: infoModulo,
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
+  //location.reload();
 
-    //checar o status do pedido
-    //console.log(response);
-
-    //tratamento dos erros
-    if (response.status == 200 || response.status == 201) {
-      //alert("Módulos inseridos com sucesso");
-      //location.reload();
-    } else {
-      erros(response.status);
-    }
-  });
 }
 
 
@@ -297,14 +332,14 @@ function enviarModulo(){
 function removerModulo(valorModulo) {
 
   //será ajustado para funcionar com varios valores
-  //let info = [];
-  //info[0] = {
-  //  "cod_usuario": parseInt(modulosUsuario[valorModulo].cod_usuario),
-  //  "cod_modulo": parseInt(modulosUsuario[valorModulo].cod_modulo),
-  //}
+  let info = [];
+  info[0] = {
+    "cod_usuario": parseInt(modulosUsuario[valorModulo].cod_usuario),
+    "cod_modulo": parseInt(modulosUsuario[valorModulo].cod_modulo),
+  }
 
   //transforma as informações do token em json
-  //let corpo = JSON.stringify(info);
+  let corpo = JSON.stringify(info);
   //console.log(corpo);
 
   //função fetch para deletar
@@ -315,6 +350,9 @@ function removerModulo(valorModulo) {
       'Authorization': 'Bearer ' + meuToken,
     },
   }).then(function (response) {
+
+    //checar o status do pedido
+    console.log(response.statusText);
 
     //tratamento dos erros
     if (response.status == 204) {

@@ -32,9 +32,6 @@ function entrar() {
     "senha": document.getElementById("senha").value,
   };
 
-  //guarda o login para futuras referencias
-  localStorage.setItem("logado", info.login);
-
   //transforma as informações do login em algo utilizavel
   let corpo = JSON.stringify(info);
 
@@ -50,7 +47,11 @@ function entrar() {
 
     if (response.status == 200 || response.status == 202) {
       response.json().then(function (json) {
+        
+        //guarda o login para futuras referencias
+        localStorage.setItem("logado", info.login);
         localStorage.setItem("token", json);
+
         window.location.replace("./home.html");
       })
     } else {

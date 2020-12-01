@@ -1,6 +1,3 @@
-//guarda info pra ser usado assim depois
-let info = {};
-
 //captura valores para os "selects" futuros
 let resultadoClasse;
 let resultadoNatureza;
@@ -14,10 +11,6 @@ window.onload = function () {
 
 
 
-
-
-
-
 //informaçãoes para assunto
 function addAssunto() {
   let formulario = (`<label for="descricao">Descrição</label>`);
@@ -28,19 +21,25 @@ function addAssunto() {
   document.getElementById("botaoEnvio").innerHTML = botao;
 }
 function envioAssunto() {
-  info = {
+  let info = {
     "descricao": document.getElementById("descricao").value,
   };
-  mandar("assunto");
+  enviar("assunto",info,'POST');
 }
 function visAssunto() {
-  visualizar("assunto", [`<th style="width:20%" scope="col">Código do Assunto</th>
-  <th style="width:80%" scope="col">Descrição</th>`, "cod_assunto", "descricao"]);
+  visualizar("assunto", `<th style="width:20%" scope="col">Código do Assunto</th>
+  <th style="width:75%" scope="col">Descrição</th>`, ["cod_assunto", "descricao"]);
 }
-
-
-
-
+function editassunto(valor){
+  document.getElementById("descricao" + valor).innerHTML = "<input></input>";
+  document.getElementById("botaoEdicao").innerHTML = `<button id="botaoEdicao" onclick="edit` + caminho + `(` + i + `)" class="btn btn-success"><i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i></button>`;
+}
+function editassunto2(){
+  let info = {
+    "descricao": document.getElementById("descricao").value,
+  };
+  enviar("assunto",info,'PUT');
+}
 
 
 
@@ -54,19 +53,25 @@ function addCategoria() {
   document.getElementById("botaoEnvio").innerHTML = botao;
 }
 function envioCategoria() {
-  info = {
+  let info = {
     "descricao": document.getElementById("descricao").value,
   };
-  mandar("categoria");
+  enviar("categoria",info,'POST');
 }
 function visCategoria() {
-  visualizar("categoria", [`<th style="width:20%" scope="col">Código da Categoria</th>
-  <th style="width:80%" scope="col">Descrição</th>`, "cod_categoria", "descricao"]);
+  visualizar("categoria", `<th style="width:20%" scope="col">Código da Categoria</th>
+  <th style="width:75%" scope="col">Descrição</th>`, ["cod_categoria", "descricao"]);
 }
-
-
-
-
+function editcategoria(){
+  document.getElementById("descricao" + valor).innerHTML = "<input></input>";
+  document.getElementById("botaoEdicao").innerHTML = `<button id="botaoEdicao" onclick="edit` + caminho + `(` + i + `)" class="btn btn-success"><i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i></button>`;
+}
+function editcategoria2(){
+  let info = {
+    "descricao": document.getElementById("descricao").value,
+  };
+  enviar("categoria",info,'PUT');
+}
 
 
 
@@ -82,20 +87,26 @@ function addClasseEmpenho() {
   document.getElementById("botaoEnvio").innerHTML = botao;
 }
 function envioClasseEmpenho() {
-  info = {
+  let info = {
     "cod_classe_empenho": parseInt(document.getElementById("cod_classe_empenho").value),
     "descricao": document.getElementById("descricao").value,
   };
-  mandar("classeempenho");
+  enviar("classeempenho",info,'POST');
 }
 function visClasseEmpenho() {
-  visualizar("classeempenho", [`<th style="width:20%" scope="col">Código de Classe de Empenho</th>
-  <th style="width:80%" scope="col">Descrição</th>`, "cod_classe_empenho", "descricao"]);
+  visualizar("classeempenho", `<th style="width:20%" scope="col">Código de Classe de Empenho</th>
+  <th style="width:75%" scope="col">Descrição</th>`, ["cod_classe_empenho", "descricao"]);
 }
-
-
-
-
+function editclasseempenho(){
+  document.getElementById("descricao" + valor).innerHTML = "<input></input>";
+  document.getElementById("botaoEdicao").innerHTML = `<button id="botaoEdicao" onclick="edit` + caminho + `(` + i + `)" class="btn btn-success"><i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i></button>`;
+}
+function editclasseempenho2(){
+  let info = {
+    "descricao": document.getElementById("descricao").value,
+  };
+  enviar("classeempenho",info,'PUT');
+}
 
 
 
@@ -117,27 +128,25 @@ function addEtapa() {
   document.getElementById("botaoEnvio").innerHTML = botao;
 }
 function envioEtapa() {
-  info = {
+  let info = {
     "descricao": document.getElementById("descricao").value,
     "duracao": parseInt(document.getElementById("duracao").value),
     "depende": parseInt(document.getElementById("depende").value),
     "delay": parseInt(document.getElementById("delay").value),
     "setor_resp": document.getElementById("setor_resp").value,
   };
-  mandar("etapa");
+  enviar("etapa",info,'POST');
 }
 function visEtapa() {
-  visualizar("etapa", [`<th style="width:10%" scope="col">Código de Etapas</th>
+  visualizar("etapa", `<th style="width:10%" scope="col">Código de Etapas</th>
   <th style="width:40%" scope="col">Descrição</th>
   <th style="width:10%" scope="col">Duração</th>
   <th style="width:10%" scope="col">Depende</th>
   <th style="width:10%" scope="col">Delay</th>
-  <th style="width:20%" scope="col">Setor Responsável</th>`, "cod_etapa", "descricao", "duracao", "depende", "delay", "setor_resp"]);
+  <th style="width:15%" scope="col">Setor Responsável</th>`, ["cod_etapa", "descricao", "duracao", "depende", "delay", "setor_resp"]);
 }
-
-
-
-
+function editetapa(){}
+function editetapa2(){}
 
 
 
@@ -209,7 +218,7 @@ function addItem() {
   document.getElementById("botaoEnvio").innerHTML = botao;
 }
 function envioItem() {
-  info = {
+  let info = {
     "cod_item": parseInt(document.getElementById("cod_item").value),
     "cod_tipo_item": parseInt(document.getElementById("cod_tipo_item").value),
     "cod_natureza_despeza": parseInt(document.getElementById("cod_natureza_despeza").value),
@@ -217,20 +226,18 @@ function envioItem() {
     "descricao": document.getElementById("descricao").value,
     "unidade": document.getElementById("unidade").value,
   };
-  mandar("itens");
+  enviar("itens",info,'POST');
 }
 function visItem() {
-  visualizar("itens", [`<th style="width:10%" scope="col">Código do Item</th>
+  visualizar("itens", `<th style="width:10%" scope="col">Código do Item</th>
   <th style="width:10%" scope="col">Código do Tipo de Item</th>
   <th style="width:10%" scope="col">Código da Natureza</th>
   <th style="width:10%" scope="col">Código da Classe</th>
-  <th style="width:50%" scope="col">Descrição</th>
-  <th style="width:10%" scope="col">Unidade</th>`, "cod_item", "cod_tipo_item", "cod_natureza_despesa", "cod_classe_empenho", "descricao", "unidade"]);
+  <th style="width:45%" scope="col">Descrição</th>
+  <th style="width:10%" scope="col">Unidade</th>`, ["cod_item", "cod_tipo_item", "cod_natureza_despesa", "cod_classe_empenho", "descricao", "unidade"]);
 }
-
-
-
-
+function edititem(){}
+function edititem2(){}
 
 
 
@@ -252,26 +259,24 @@ function addModulo() {
   document.getElementById("botaoEnvio").innerHTML = botao;
 }
 function envioModulo() {
-  info = {
+  let info = {
     "cod_modulo": parseInt(document.getElementById("cod_modulo").value),
     "categoria_1": document.getElementById("categoria_1").value,
     "categoria_2": document.getElementById("categoria_2").value,
     "categoria_3": document.getElementById("categoria_3").value,
     "descricao": document.getElementById("descricao").value,
   };
-  mandar("modulo");
+  enviar("modulo",info,'POST');
 }
 function visModulo() {
-  visualizar("modulo", [`<th style="width:20%" scope="col">Código de Modulo</th>
+  visualizar("modulo", `<th style="width:20%" scope="col">Código de Modulo</th>
   <th style="width:10%" scope="col">Categoria 1</th>
   <th style="width:10%" scope="col">Categoria 2</th>
   <th style="width:10%" scope="col">Categoria 3</th>
-  <th style="width:50%" scope="col">Descrição</th>`, "cod_modulo", "categoria_1", "categoria_2", "categoria_3", "descricao"]);
+  <th style="width:45%" scope="col">Descrição</th>`, ["cod_modulo", "categoria_1", "categoria_2", "categoria_3", "descricao"]);
 }
-
-
-
-
+function editmodulo(){}
+function editmodulo2(){}
 
 
 
@@ -311,7 +316,7 @@ function addMunicipio() {
   document.getElementById("botaoEnvio").innerHTML = botao;
 }
 function envioMunicipio() {
-  info = {
+  let info = {
     "cod_ibge": document.getElementById("cod_ibge").value,
     "nome_municipio": parseInt(document.getElementById("nome_municipio").value),
     "populacao": parseInt(document.getElementById("populacao").value),
@@ -327,12 +332,12 @@ function envioMunicipio() {
     "latitude": document.getElementById("latitude").value,
     "longitude": document.getElementById("longitude").value,
   };
-  mandar("municipio");
+  enviar("municipio",info,'POST');
 }
 function visMunicipio() {
-  visualizar("municipio", [`<th style="width:5%" scope="col">Código do IBGE</th>
-  <th style="width:10%" scope="col">Nome domunicípio</th>
-  <th style="width:10%" scope="col">População</th>
+  visualizar("municipio", `<th style="width:5%" scope="col">Código do IBGE</th>
+  <th style="width:10%" scope="col">Nome do Município</th>
+  <th style="width:5%" scope="col">População</th>
   <th style="width:5%" scope="col">UF</th>
   <th style="width:5%" scope="col">Região</th>
   <th style="width:5%" scope="col">CNPJ</th>
@@ -343,13 +348,10 @@ function visMunicipio() {
   <th style="width:10%" scope="col">Bairro</th>
   <th style="width:5%" scope="col">IDHM</th>
   <th style="width:5%" scope="col">Latitude</th>
-  <th style="width:5%" scope="col">Longitude</th>`, "cod_ibge", "nome_municipio", "populacao", "uf", "regiao", "cnpj", "dist_capital", "endereco", "numero", "complemento", "bairro", "idhm", "latitude", "longitude"]);
+  <th style="width:5%" scope="col">Longitude</th>`, ["cod_ibge", "nome_municipio", "populacao", "uf", "regiao", "cnpj", "dist_capital", "endereco", "numero", "complemento", "bairro", "idhm", "latitude", "longitude"]);
 }
-
-
-
-
-
+function editmunicipio(){}
+function editmunicipio2(){}
 
 
 //informaçãoes para natureza de despesas
@@ -364,20 +366,26 @@ function addNaturezaDespesa() {
   document.getElementById("botaoEnvio").innerHTML = botao;
 }
 function envioNaturezaDespesa() {
-  info = {
+  let info = {
     "cod_natureza_despesa": parseInt(document.getElementById("cod_natureza_despesa").value),
     "descricao": document.getElementById("descricao").value,
   };
-  mandar("naturezadespesa");
+  enviar("naturezadespesa",info,'POST');
 }
 function visNaturezaDespesa() {
-  visualizar("naturezadespesa", [`<th style="width:20%" scope="col">Código da Natureza da Despesa</th>
-  <th style="width:80%" scope="col">Descrição</th>`, "cod_natureza_despesa", "descricao"]);
+  visualizar("naturezadespesa", `<th style="width:20%" scope="col">Código da Natureza da Despesa</th>
+  <th style="width:75%" scope="col">Descrição</th>`, ["cod_natureza_despesa", "descricao"]);
 }
-
-
-
-
+function editnaturezadespesa(){
+  document.getElementById("descricao" + valor).innerHTML = "<input></input>";
+  document.getElementById("botaoEdicao").innerHTML = `<button id="botaoEdicao" onclick="edit` + caminho + `(` + i + `)" class="btn btn-success"><i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i></button>`;
+}
+function editnaturezadespesa2(){
+  let info = {
+    "descricao": document.getElementById("descricao").value,
+  };
+  enviar("naturezadespesa",info,'PUT');
+}
 
 
 
@@ -427,7 +435,7 @@ function addPrefeitos() {
   document.getElementById("botaoEnvio").innerHTML = botao;
 }
 function envioPrefeitos() {
-  info = {
+  let info = {
     "cod_ibge": parseInt(document.getElementById("cod_ibge").value),
     "nome": document.getElementById("nome").value,
     "cpf": document.getElementById("cpf").value,
@@ -435,21 +443,18 @@ function envioPrefeitos() {
     "partido": document.getElementById("partido").value,
     "exercicio": document.getElementById("exercicio").value,
   };
-  mandar("prefeitos");
+  enviar("prefeitos",info,'POST');
 }
 function visPrefeitos() {
-  visualizar("prefeitos", [`<th style="width:10%" scope="col">Código do IBGE</th>
+  visualizar("prefeitos", `<th style="width:10%" scope="col">Código do IBGE</th>
   <th style="width:10%" scope="col">Nome</th>
   <th style="width:20%" scope="col">CPF</th>
   <th style="width:20%" scope="col">RG</th>
   <th style="width:20%" scope="col">Partido</th>
-  <th style="width:20%" scope="col">Exercício</th>`, "cod_ibge", "nome", "cpf", "rg", "partido", "exercicio"]);
+  <th style="width:15%" scope="col">Exercício</th>`, ["cod_ibge", "nome", "cpf", "rg", "partido", "exercicio"]);
 }
-
-
-
-
-
+function editprefeitos(){}
+function editprefeitos2(){}
 
 
 //informaçãoes para Tipo de item
@@ -464,20 +469,26 @@ function addTipoItem() {
   document.getElementById("botaoEnvio").innerHTML = botao;
 }
 function envioTipoItem() {
-  info = {
+  let info = {
     "cod_tipo_item": parseInt(document.getElementById("cod_tipo_item").value),
     "descricao": document.getElementById("descricao").value,
   };
-  mandar("tipoitem");
+  enviar("tipoitem",info,'POST');
 }
 function visTipoItem() {
-  visualizar("tipoitem", [`<th style="width:20%" scope="col">Código de Tipo de Item</th>
-  <th style="width:80%" scope="col">Descrição</th>`, "cod_tipo_item", "descricao"]);
+  visualizar("tipoitem", `<th style="width:20%" scope="col">Código de Tipo de Item</th>
+  <th style="width:75%" scope="col">Descrição</th>`, ["cod_tipo_item", "descricao"]);
 }
-
-
-
-
+function edittipoitem(){
+  document.getElementById("descricao" + valor).innerHTML = "<input></input>";
+  document.getElementById("botaoEdicao").innerHTML = `<button id="botaoEdicao" onclick="edit` + caminho + `(` + i + `)" class="btn btn-success"><i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i></button>`;
+}
+function edittipoitem2(){
+  let info = {
+    "descricao": document.getElementById("descricao").value,
+  };
+  enviar("tipoitem",info,'PUT');
+}
 
 
 
@@ -491,23 +502,29 @@ function addTipologia() {
   document.getElementById("botaoEnvio").innerHTML = botao;
 }
 function envioTipologia() {
-  info = {
+  let info = {
     "descricao": document.getElementById("descricao").value,
   };
-  mandar("tipologia");
+  enviar("tipologia",info,'POST');
 }
 function visTipologia() {
-  visualizar("tipologia", [`<th style="width:20%" scope="col">Código de Tipologia</th>
-  <th style="width:80%" scope="col">Descrição</th>`, "cod_tipologia", "descricao"]);
+  visualizar("tipologia", `<th style="width:20%" scope="col">Código de Tipologia</th>
+  <th style="width:75%" scope="col">Descrição</th>`, ["cod_tipologia", "descricao"]);
+}
+function edittipologia(){
+  document.getElementById("descricao" + valor).innerHTML = "<input></input>";
+  document.getElementById("botaoEdicao").innerHTML = `<button id="botaoEdicao" onclick="edit` + caminho + `(` + i + `)" class="btn btn-success"><i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i></button>`;
+}
+function edittipologia2(){
+  let info = {
+    "descricao": document.getElementById("descricao").value,
+  };
+  enviar("tipologia",info,'PUT');
 }
 
 
 
-
-
-
-
-function visualizar(caminho, estrutura) {
+function visualizar(caminho,titulo,estrutura) {
   //função fetch para chamar os itens de previsão da tabela
   fetch(servidor + 'read/' + caminho, {
     method: 'GET',
@@ -527,21 +544,27 @@ function visualizar(caminho, estrutura) {
       response.json().then(function (json) {
 
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
-        <tr>` + estrutura[0] + `</tr>
+        <tr>` + titulo + `
+        <th style="width:5%" scope="col">Editar</th>
+        </tr>
         </thead>`);
         tabela += (`<tbody>`);
 
         //console.log(json);
 
         for (i = 0; i < json.length; i++) {
-          //captura itens para tabela
+          //produz a lista da tabela
           tabela += (`<tr>`);
-          for (j = 1; j < estrutura.length; j++) {
-            tabela += (`<td>`);
+
+          for (j = 0; j < estrutura.length; j++) {
+            tabela += (`<td id="` + estrutura[j] + `">`);
             tabela += json[i][estrutura[j]];
             tabela += (`</td>`);
           }
-          tabela += (`</tr>`);
+
+          tabela += (`<td> <span class="d-flex">
+          <button id="botaoEdicao" onclick="edit` + caminho + `(` + i + `)" class="btn btn-success"><i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i></button>
+          </span> </td> </tr>`);
         }
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
@@ -554,16 +577,12 @@ function visualizar(caminho, estrutura) {
 
 
 
-
-
-
-
-function mandar(caminho) {
+function enviar(caminho,info,metodo) {
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
-  //função fetch para mandar
+  //função fetch para enviar
   fetch(servidor + 'read/' + caminho, {
-    method: 'POST',
+    method: metodo,
     body: corpo,
     headers: {
       'Authorization': 'Bearer ' + meuToken

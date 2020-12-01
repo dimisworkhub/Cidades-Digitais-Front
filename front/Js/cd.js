@@ -90,8 +90,6 @@ function paginacao() {
   });
 }
 
-
-
 function editarCd(valor) {
   localStorage.setItem("cod_ibge", jsonFinal[valor].cod_ibge);
   localStorage.setItem("cod_lote", jsonFinal[valor].cod_lote);
@@ -104,12 +102,7 @@ function editarCd(valor) {
   window.location.href = "./gerenciaCd.html";
 }
 
-
-
-
-
 //funções para preencher os selects corretamente
-
 function pegarLote() {
   //preenche os cod_lotes
   fetch(servidor + 'read/lote', {
@@ -137,8 +130,6 @@ function pegarLote() {
   });
 }
 
-
-
 function pegarMunicipio() {
   document.getElementById("cod_ibge").innerHTML = "<option value=''>Cidade</option>";
   document.getElementById("cod_ibge").disabled = true;
@@ -154,7 +145,7 @@ function pegarMunicipio() {
     //tratamento dos erros
     if (response.status == 200) {
       response.json().then(function (json) {
-        console.log(json)
+        //console.log(json);
         //pegando valores para usar em enabler()
         cidades = json;
 
@@ -207,8 +198,6 @@ function enabler() {
   
   document.getElementById("cod_ibge").innerHTML = x;
 }
-
-
 
 function enviar() {
 
