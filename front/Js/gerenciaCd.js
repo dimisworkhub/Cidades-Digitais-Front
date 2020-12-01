@@ -1385,7 +1385,7 @@ function ponto() {
 
   //cria o botão para editar
   document.getElementById("editar").innerHTML = (`<button class="btn btn-success" data-toggle="modal" data-target="#adicionarPonto">Novo Ponto</button>`);
-
+  document.getElementById("botaoPonto").innerHTML = " <button class='btn btn-primary' onclick='novoPidPonto()' type='button'>Cadastrar</button>";
   //função fetch para chamar contatos da tabela
   fetch(servidor + 'read/ponto/'+meuCodigo, {
     method: 'GET',
@@ -1408,14 +1408,14 @@ function ponto() {
 
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
         <tr>
+        <th style="width:20%" scope="col">Código de Ponto</th>
         <th style="width:20%" scope="col">Nome</th>
-        <th style="width:20%" scope="col">INEP</th>
         <th style="width:20%" scope="col">Categoria</th>
+        <th style="width:20%" scope="col">INEP</th>
         <th style="width:10%" scope="col">CEP</th>
         <th style="width:10%" scope="col">Bairro</th>
         <th style="width:30%" scope="col">Endereço</th>
         <th style="width:30%" scope="col">Número</th>
-        <th style="width:30%" scope="col">Complemento</th>
         <th style="width:30%" scope="col">Latitude</th>
         <th style="width:30%" scope="col">Longitude</th>
         <th style="width:30%" scope="col">Opções</th>
@@ -1438,11 +1438,13 @@ function ponto() {
           tabela += (`<tr>`);
           tabela += (`<td>`);
 
-          tabela += (`<span id="nome style="white-space: pre-line">` + listaItem[i]["nome"] + `</span>`);
+          tabela += (`<span id="cod_ponto" style="white-space: pre-line">` + listaItem[i]["cod_ponto"] + `</span>`);
           tabela += (`</td> <td>`);
-          tabela += (`<span id="funcao style="white-space: pre-line">` + listaItem[i]["inep"] + `</span>`);
+          tabela += (`<span id="nome" style="white-space: pre-line">` + listaItem[i]["nome"] + `</span>`);
           tabela += (`</td> <td>`);
-          tabela += (`<span id="email style="white-space: pre-line">` + listaItem[i]["descricao"] + `</span>`);
+          tabela += (`<span id="email" style="white-space: pre-line">` + listaItem[i]["descricao"] + `</span>`);
+          tabela += (`</td> <td>`);
+          tabela += (`<span id="inep" style="white-space: pre-line">` + listaItem[i]["inep"] + `</span>`);
           tabela += (`</td> <td>`);
           tabela += (`<span class="" id="cep" style="white-space: pre-line">` + listaItem[i]["cep"] + `</span>`);
           tabela += (`</td> <td>`);
@@ -1452,14 +1454,15 @@ function ponto() {
           tabela += (`</td> <td>`);
           tabela += (`<span class="" id="numero" style="white-space: pre-line">` + listaItem[i]["numero"] + `</span>`);
           tabela += (`</td> <td>`);
-          tabela += (`<span class="" id="complemento" style="white-space: pre-line">` + listaItem[i]["complemento"] + `</span>`);
-          tabela += (`</td> <td>`);
           tabela += (`<span class="" id="latitude" style="white-space: pre-line">` + listaItem[i]["latitude"] + `</span>`);
           tabela += (`</td> <td>`);
           tabela += (`<span class="" id="longitude" style="white-space: pre-line">` + listaItem[i]["longitude"] + `</span>`);
           tabela += (`</td> 
           <td>
             <span class="d-flex">
+              <button onclick="edicaoPonto( ${listaItem[i].cod_ponto}, ${listaItem[i].cod_categoria} )" class="btn btn-success" data-toggle="modal" data-target="#adicionarPonto">
+                <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
+              </button>
               <button onclick="apagarPidPonto( ${listaItem[i].cod_ponto}, ${listaItem[i].cod_categoria},  ${listaItem[i].cod_pid} )" class="btn btn-danger">
                 <i class="material-icons"data-toggle="tooltip" title="Apagar">delete</i>
               </button>
@@ -1483,7 +1486,7 @@ function ponto() {
   });
 }
 
-function puxaCategoria() {
+function puxaCategoria(codigo, descricao) {
   
   fetch(servidor + 'read/categoria', {
     method: 'GET',
@@ -1501,7 +1504,14 @@ function puxaCategoria() {
 
         //Primeiro option do select de "Categoria"
 
-        valor[0] += "<option value=''>Categoria</option>";
+        if(codigo == null && descricao == null){
+          valor[0] += "<option value=''>Categoria</option>";
+        }else{
+          valor[0] += `<option value='${codigo}'>${descricao}</option>`;
+          $('#categoria').css('pointer-events','none');
+          $('#categoria').css('background-color','#e9ecef');
+
+        }
 
         for (i = 0; i < json.length; i++) {
           valor[i+1] += `<option value=${json[i].cod_categoria} > ${json[i].descricao} </option>`;
@@ -1515,10 +1525,6 @@ function puxaCategoria() {
   });
 }
 
-{/* <button onclick="visualizarContato(` + listaItem[i].cod_contato + `,'` + listaItem[i].nome + `','` + listaItem[i].funcao + `','` + listaItem[i].email + `','` + i + `')" data-toggle="modal" href="#visualizar" class="btn btn-success">
-  <i class="material-icons"data-toggle="tooltip" title="Visualizar">content_paste</i>
-</button> */}
-
 function novoPidPonto() {
 
   let ultimoPid
@@ -1526,7 +1532,7 @@ function novoPidPonto() {
   let infoPid = {
     "cod_ibge": parseInt(meuCodigo),
     "nome": document.getElementById("nomePonto").value,
-    "inep": document.getElementById("inep").value,
+    "inep": document.getElementById("inepPonto").value,
   };
 
   console.log(infoPid)
@@ -1567,7 +1573,7 @@ function novoPidPonto() {
               console.log(ultimoPid)
               
               let infoPonto = {
-                "cod_ponto": parseInt(document.getElementById("cod_ponto").value),
+                "cod_ponto": parseInt(document.getElementById("cod_pontoPonto").value),
                 "cod_categoria": parseInt(document.getElementById("categoria").value),
                 "cod_ibge": parseInt(meuCodigo),
                 "cod_pid": parseInt(ultimoPid),
@@ -1576,8 +1582,8 @@ function novoPidPonto() {
                 "complemento": document.getElementById("complementoPonto").value,
                 "bairro": document.getElementById("bairroPonto").value,
                 "cep": document.getElementById("cepPonto").value,
-                "latitude": parseFloat(document.getElementById("latitude").value),
-                "longitude": parseFloat(document.getElementById("longitude").value),
+                "latitude": parseFloat(document.getElementById("latitudePonto").value),
+                "longitude": parseFloat(document.getElementById("longitudePonto").value),
               };
             
               console.log(infoPonto)
@@ -1686,4 +1692,259 @@ function viaCep(){
     }
   });
 
+}
+
+function edicaoPonto(ponto, categoria) {
+  
+  //fetch de ponto
+  fetch(servidor + `read/ponto/${ponto}/${categoria}/${meuCodigo}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      response.json().then(function (json) {
+
+        // console.log(json)
+        //reseta para usar denovo
+        idPonto = 0;
+
+        document.getElementById("cod_pontoPonto").value = json.cod_ponto;
+        document.getElementById("cod_pontoPonto").readOnly = true;
+
+        document.getElementById("cepPonto").value = json.cep;
+        document.getElementById("enderecoPonto").value = json.endereco;
+        document.getElementById("bairroPonto").value = json.bairro;
+        document.getElementById("numeroPonto").value = json.numero;
+        document.getElementById("complementoPonto").value = json.complemento;
+        document.getElementById("latitudePonto").value = json.latitude;
+        document.getElementById("longitudePonto").value = json.longitude;
+
+        let Ponto= json.cod_ponto
+        let pid= json.cod_pid
+        let categoria= json.cod_categoria
+
+        //fetch de pid
+        fetch(servidor + `read/pid/${pid}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + meuToken
+          },
+        }).then(function (response) {
+
+          //tratamento dos erros
+          if (response.status == 200 || response.status == 201) {
+            response.json().then(function (json) {
+
+              document.getElementById("nomePonto").value = json.nome;
+              document.getElementById("inepPonto").value = json.inep;
+
+
+              //fetch de categoria
+              fetch(servidor + `read/categoria/${categoria}`, {
+                method: 'GET',
+                headers: {
+                  'Authorization': 'Bearer ' + meuToken
+                },
+              }).then(function (response) {
+
+                //tratamento dos erros
+                if (response.status == 200 || response.status == 201) {
+                  response.json().then(function (json) {
+
+                    puxaCategoria(json.cod_categoria, json.descricao);
+                    
+                    document.getElementById("botaoPonto").innerHTML = ` <button class='btn btn-primary' onclick='editarPidPonto(${Ponto}, ${pid}, ${categoria})' type='button'>Editar</button>`;
+                  });
+                } else {
+                  erros(response.status);
+                }
+              });
+            });
+          } else {
+            erros(response.status);
+          }
+        });
+        // let x = "";
+        // for (let i = 0; i < json.length; i++) {
+        //   x += "<option value='" + json[i].cod_assunto + "'>" + json[i].descricao + "</option>";
+
+        //   //para remoção de itens
+        //   valorRemovido[i] = 0;
+        // }
+
+        // document.getElementById("assunto").innerHTML = x;
+
+        
+
+        // getAssuntos(valor);
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+
+}
+
+function editarPidPonto(ponto, pid, categoria) {
+
+  let edicaoPonto = {
+    "cod_ponto": parseInt(document.getElementById("cod_pontoPonto").value),
+    "cod_categoria": parseInt(document.getElementById("categoria").value),
+    "cod_ibge": parseInt(meuCodigo),
+    "cod_pid": parseInt(pid),
+    "endereco": document.getElementById("enderecoPonto").value,
+    "numero": document.getElementById("numeroPonto").value,
+    "complemento": document.getElementById("complementoPonto").value,
+    "bairro": document.getElementById("bairroPonto").value,
+    "cep": document.getElementById("cepPonto").value,
+    "latitude": parseFloat(document.getElementById("latitude").value),
+    "longitude": parseFloat(document.getElementById("longitude").value),
+  };
+
+  let edicaoPid = {
+    "cod_ibge": parseInt(meuCodigo),
+    "nome": document.getElementById("nomePonto").value,
+    "inep": document.getElementById("inepPonto").value,
+  };
+
+  //transforma as informações do token em json
+  let corpo1 = JSON.stringify(edicaoPonto);
+  let corpo2 = JSON.stringify(edicaoPid);
+  
+  console.log(corpo2);
+  fetch(servidor + 'read/pid/' + pid, {
+    method: 'PUT',
+    body: corpo2,
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+    //checar o status do pedido
+    console.log(response.statusText);
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+
+      //pegar a data para enviar no editarUacom2
+      response.json().then(function (json) {
+        setTimeout(function () {
+          console.log(corpo1);
+          fetch(servidor + `read/ponto/${ponto}/${categoria}/${meuCodigo}`, {
+            method: 'PUT',
+            body: corpo1,
+            headers: {
+              'Authorization': 'Bearer ' + meuToken
+            },
+          }).then(function (response) {
+            //checar o status do pedido
+            console.log(response.statusText);
+  
+            //tratamento dos erros
+            if (response.status == 200 || response.status == 201) {
+  
+              //pegar a data para enviar no editarUacom2
+              response.json().then(function (json) {
+                setTimeout(function () {
+                  location.reload()
+                }, 1000);
+              });
+  
+            } else {
+              // erros(response.status);
+            }
+          });
+        }, 2000);
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+
+}
+
+function latLong(input) {
+  if(parseInt(input) == 1){
+    if(document.getElementById('grau')){
+      document.getElementById('LatLong').removeChild(document.getElementById('grau'));
+    }
+
+    $(document).ready(function(){
+      $("field").append(`<div id="decimal" class="multisteps-form__content">
+                          <div class="form-row mt-4">
+                            <div class="col-12 col-sm-12 mt-4">
+                              <label for="latitudePonto">Latitude</label>
+                              <input class="multisteps-form__input form-control " type="text" name="latitudePonto" id="latitudePonto">
+                            </div>
+                            <div class="col-12 col-sm-12 mt-4">
+                              <label for="longitudePonto">Longitude</label>
+                              <input class="multisteps-form__input form-control " type="text" name="longitudePonto" id="longitudePonto">
+                            </div>
+                          </div>
+                        </div>`)
+    });
+  }else{
+    if(document.getElementById('decimal')){
+      document.getElementById('LatLong').removeChild(document.getElementById('decimal'));
+    }
+
+    $(document).ready(function(){
+      $("field").append(`
+                      <div id="grau" class="multisteps-form__content">
+                        <h1 class="mt-4">Latitude</h1>
+                        <div class="form-row mt-4">
+                          <div class="col-2 col-sm-2 ">
+                            <label for="latTipo">Hemisfério</label>
+                            <select class="multisteps-form__input form-control latTipo" name="latTipo" id="latTipo">
+                              <option value="N">N</option>
+                              <option value="S">S</option>
+                            </select>
+                          </div>
+                          <div class="col-3 col-sm-3 mb-4">
+                            <label for="latGrau">Graus</label>
+                            <input class="multisteps-form__input form-control" type="text" name="latGrau" id="latGrau" mask="99">
+                          </div>
+                          <b>º</b>
+                          <div class="col-3 col-sm-3">
+                            <label for="latMin">Minutos</label>
+                            <input class="multisteps-form__input form-control" type="text" #latMin="ngModel" name="latMin" id="latMin" mask="99" >
+                          </div>
+                          <b>'</b>
+                          <div class="col-3 col-sm-3">
+                            <label for="latSeg">Segundos</label>
+                            <input class="multisteps-form__input form-control" type="text" #latSeg="ngModel" name="latSeg" id="latSeg" mask="99.99" [dropSpecialCharacters]="false" [(ngModel)]="latLong.grau.latitude.latSeg">
+                          </div>
+                          <b>"</b>
+                        </div>
+
+                        <h1 class="mt-4">Longitude</h1>
+                        <div class="form-row mt-4">
+                          <div class="col-2 col-sm-2 ">
+                            <label for="longTipo">Hemisfério</label>
+                            <select class="multisteps-form__input form-control longTipo" name="longTipo" id="longTipo">
+                              <option value="O" selected>O</option>
+                            </select>
+                          </div>
+                          <div class="col-3 col-sm-3 mb-4">
+                            <label for="longGrau">Graus</label>
+                            <input class="multisteps-form__input form-control" type="text" name="longGrau" id="longGrau" mask="99">
+                          </div>
+                          <b>º</b>
+                          <div class="col-3 col-sm-3">
+                            <label for="longMin">Minutos</label>
+                            <input class="multisteps-form__input form-control" type="text" #longMin="ngModel" name="longMin" id="longMin" mask="99" >
+                          </div>
+                          <b>'</b>
+                          <div class="col-3 col-sm-3">
+                            <label for="longSeg">Segundos</label>
+                            <input class="multisteps-form__input form-control" type="text" #longSeg="ngModel" name="longSeg" id="longSeg" mask="99.99" [dropSpecialCharacters]="false" [(ngModel)]="latLong.grau.latitude.latSeg">
+                          </div>
+                          <b>"</b>
+                        </div>
+                      </div>`)
+    });
+  }
 }
