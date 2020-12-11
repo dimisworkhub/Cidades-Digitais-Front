@@ -343,13 +343,26 @@
                                                 </div>
                                                 <div class="col-1 col-sm-1 mt-4">
                                                     <label for="radio_1">Decimal</label>
-                                                    <input class="multisteps-form__input form-control" type="radio" name="radio" id="radio_1" onchange="latLong(1);">
+                                                    <input class="multisteps-form__input form-control" type="radio" name="radio" id="radio_1" checked onchange="latLong(1);">
                                                 </div>
                                                 <div class="col-1 col-sm-1 mt-4 ml-4">
                                                     <label for="radio_2">Grau</label>
                                                     <input class="multisteps-form__input form-control" type="radio" name="radio" id="radio_2" onchange="latLong(2);">
                                                 </div>
-                                                <field id="LatLong"></field>
+                                                <field id="LatLong">
+                                                    <div id="decimal" class="multisteps-form__content">
+                                                        <div class="form-row mt-4">
+                                                            <div class="col-12 col-sm-12 mt-4">
+                                                            <label for="latitudePonto">Latitude</label>
+                                                            <input class="multisteps-form__input form-control " type="text" name="latitudePonto" id="latitudePonto">
+                                                            </div>
+                                                            <div class="col-12 col-sm-12 mt-4">
+                                                            <label for="longitudePonto">Longitude</label>
+                                                            <input class="multisteps-form__input form-control " type="text" name="longitudePonto" id="longitudePonto">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </field>
                                                 <!-- <div class="col-12 col-sm-12 mt-4">
                                                     <input class="multisteps-form__input form-control " type="text" placeholder="Latitude"
                                                         name="latitudePonto" id="latitudePonto">

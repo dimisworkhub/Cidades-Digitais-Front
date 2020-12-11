@@ -1577,7 +1577,22 @@ function novoPidPonto() {
               console.log(ultimoPid)
               
               let infoPonto
-              if(document.getElementById('grau').id == "grau"){
+
+              if(document.getElementById('decimal')?.id == "decimal"){
+                infoPonto = {
+                  "cod_ponto": parseInt(document.getElementById("cod_pontoPonto").value),
+                  "cod_categoria": parseInt(document.getElementById("categoria").value),
+                  "cod_ibge": parseInt(meuCodigo),
+                  "cod_pid": parseInt(ultimoPid),
+                  "endereco": document.getElementById("enderecoPonto").value,
+                  "numero": document.getElementById("numeroPonto").value,
+                  "complemento": document.getElementById("complementoPonto").value,
+                  "bairro": document.getElementById("bairroPonto").value,
+                  "cep": document.getElementById("cepPonto").value,
+                  "latitude": parseFloat(document.getElementById("latitudePonto").value),
+                  "longitude": parseFloat(document.getElementById("longitudePonto").value),
+                }
+              } else if(document.getElementById('grau').id == "grau"){
 
                 //Pega os valores dos campos de graus e transforma em decimal
                 grauToDecimal();
@@ -1596,20 +1611,6 @@ function novoPidPonto() {
                   "longitude": loongitude
                 }
 
-              }else if(document.getElementById('decimal').id == "decimal"){
-                infoPonto = {
-                  "cod_ponto": parseInt(document.getElementById("cod_pontoPonto").value),
-                  "cod_categoria": parseInt(document.getElementById("categoria").value),
-                  "cod_ibge": parseInt(meuCodigo),
-                  "cod_pid": parseInt(ultimoPid),
-                  "endereco": document.getElementById("enderecoPonto").value,
-                  "numero": document.getElementById("numeroPonto").value,
-                  "complemento": document.getElementById("complementoPonto").value,
-                  "bairro": document.getElementById("bairroPonto").value,
-                  "cep": document.getElementById("cepPonto").value,
-                  "latitude": parseFloat(document.getElementById("latitudePonto").value),
-                  "longitude": parseFloat(document.getElementById("longitudePonto").value),
-                }
               }
             
               console.log(infoPonto)
@@ -1817,19 +1818,42 @@ function edicaoPonto(ponto, categoria) {
 
 function editarPidPonto(ponto, pid, categoria) {
 
-  let edicaoPonto = {
-    "cod_ponto": parseInt(document.getElementById("cod_pontoPonto").value),
-    "cod_categoria": parseInt(document.getElementById("categoria").value),
-    "cod_ibge": parseInt(meuCodigo),
-    "cod_pid": parseInt(pid),
-    "endereco": document.getElementById("enderecoPonto").value,
-    "numero": document.getElementById("numeroPonto").value,
-    "complemento": document.getElementById("complementoPonto").value,
-    "bairro": document.getElementById("bairroPonto").value,
-    "cep": document.getElementById("cepPonto").value,
-    "latitude": parseFloat(document.getElementById("latitude").value),
-    "longitude": parseFloat(document.getElementById("longitude").value),
-  };
+  let edicaoPonto 
+
+  if(document.getElementById("latitudePonto") && document.getElementById("longitudePonto")){
+    edicaoPonto = {
+      "cod_ponto": parseInt(document.getElementById("cod_pontoPonto").value),
+      "cod_categoria": parseInt(document.getElementById("categoria").value),
+      "cod_ibge": parseInt(meuCodigo),
+      "cod_pid": parseInt(pid),
+      "endereco": document.getElementById("enderecoPonto").value,
+      "numero": document.getElementById("numeroPonto").value,
+      "complemento": document.getElementById("complementoPonto").value,
+      "bairro": document.getElementById("bairroPonto").value,
+      "cep": document.getElementById("cepPonto").value,
+      "latitude": parseFloat(document.getElementById("latitudePonto").value),
+      "longitude": parseFloat(document.getElementById("longitudePonto").value),
+    };
+  }else{
+
+    //Pega os valores dos campos de graus e transforma em decimal
+    grauToDecimal();
+
+    edicaoPonto = {
+      "cod_ponto": parseInt(document.getElementById("cod_pontoPonto").value),
+      "cod_categoria": parseInt(document.getElementById("categoria").value),
+      "cod_ibge": parseInt(meuCodigo),
+      "cod_pid": parseInt(pid),
+      "endereco": document.getElementById("enderecoPonto").value,
+      "numero": document.getElementById("numeroPonto").value,
+      "complemento": document.getElementById("complementoPonto").value,
+      "bairro": document.getElementById("bairroPonto").value,
+      "cep": document.getElementById("cepPonto").value,
+      "latitude": laatitude,
+      "longitude": loongitude,
+    };
+
+  }
 
   let edicaoPid = {
     "cod_ibge": parseInt(meuCodigo),
@@ -1874,6 +1898,8 @@ function editarPidPonto(ponto, pid, categoria) {
   
               //pegar a data para enviar no editarUacom2
               response.json().then(function (json) {
+
+                alert("Ponto editado com sucesso!")
                 setTimeout(function () {
                   location.reload()
                 }, 1000);
@@ -1892,30 +1918,64 @@ function editarPidPonto(ponto, pid, categoria) {
 
 }
 
+
+function puxaLatTipo(laatTipo) {
+  if(laatTipo){
+    return `<option value="${laatTipo}">${laatTipo}</option>`
+  }
+}
 function latLong(input) {
+
   if(parseInt(input) == 1){
+    //Pega os valores dos campos de graus e transforma em decimal
+    grauToDecimal();
+
+    console.log(laatitude,loongitude)
+    
+    if( isNaN(laatitude) && isNaN(loongitude)){
+      laatitude = ''
+      loongitude = ''
+    }
+    
     if(document.getElementById('grau')){
       document.getElementById('LatLong').removeChild(document.getElementById('grau'));
     }
+    
 
     $(document).ready(function(){
       $("field").append(`<div id="decimal" class="multisteps-form__content">
                           <div class="form-row mt-4">
                             <div class="col-12 col-sm-12 mt-4">
                               <label for="latitudePonto">Latitude</label>
-                              <input class="multisteps-form__input form-control " type="text" name="latitudePonto" id="latitudePonto">
+                              <input class="multisteps-form__input form-control " value="${laatitude}" type="text" name="latitudePonto" id="latitudePonto">
                             </div>
                             <div class="col-12 col-sm-12 mt-4">
                               <label for="longitudePonto">Longitude</label>
-                              <input class="multisteps-form__input form-control " type="text" name="longitudePonto" id="longitudePonto">
+                              <input class="multisteps-form__input form-control " value="${loongitude}" type="text" name="longitudePonto" id="longitudePonto">
                             </div>
                           </div>
                         </div>`)
     });
   }else{
+
+    //Pega os valores dos campos de decimais e transforma em graus
+    decimalToGrau(parseFloat(document.getElementById("latitudePonto").value), parseFloat(document.getElementById("longitudePonto").value))
+
+    console.log( laatTipo, laatGrau, laatMin, laatSeg, loongTipo, loongGrau, loongMin, loongSeg)
+
+    if( laatGrau == null && laatMin == null && laatSeg == null && loongGrau == null && loongMin == null && loongSeg == null){
+      laatGrau = ''
+      laatMin = ''
+      laatSeg = ''
+      loongGrau = ''
+      loongMin = ''
+      loongSeg = ''
+    }
+
     if(document.getElementById('decimal')){
       document.getElementById('LatLong').removeChild(document.getElementById('decimal'));
     }
+
 
     $(document).ready(function(){
       $("field").append(`
@@ -1925,23 +1985,24 @@ function latLong(input) {
                           <div class="col-2 col-sm-2 ">
                             <label for="latTipo">Hemisfério</label>
                             <select class="multisteps-form__input form-control latTipo" name="latTipo" id="latTipo">
+                              ${puxaLatTipo(laatTipo)}
                               <option value="N">N</option>
                               <option value="S">S</option>
                             </select>
                           </div>
                           <div class="col-3 col-sm-3 mb-4">
                             <label for="latGrau">Graus</label>
-                            <input class="multisteps-form__input form-control" type="text" name="latGrau" id="latGrau" mask="99">
+                            <input class="multisteps-form__input form-control" value="${laatGrau}" type="text" name="latGrau" id="latGrau" mask="99">
                           </div>
                           <b>º</b>
                           <div class="col-3 col-sm-3">
                             <label for="latMin">Minutos</label>
-                            <input class="multisteps-form__input form-control" type="text" #latMin="ngModel" name="latMin" id="latMin" mask="99" >
+                            <input class="multisteps-form__input form-control" value="${laatMin}" type="text" #latMin="ngModel" name="latMin" id="latMin" mask="99" >
                           </div>
                           <b>'</b>
                           <div class="col-3 col-sm-3">
                             <label for="latSeg">Segundos</label>
-                            <input class="multisteps-form__input form-control" type="text" #latSeg="ngModel" name="latSeg" id="latSeg" mask="99.99" [dropSpecialCharacters]="false" [(ngModel)]="latLong.grau.latitude.latSeg">
+                            <input class="multisteps-form__input form-control" value="${laatSeg}" type="text" #latSeg="ngModel" name="latSeg" id="latSeg" mask="99.99" [dropSpecialCharacters]="false" [(ngModel)]="latLong.grau.latitude.latSeg">
                           </div>
                           <b>"</b>
                         </div>
@@ -1956,17 +2017,17 @@ function latLong(input) {
                           </div>
                           <div class="col-3 col-sm-3 mb-4">
                             <label for="longGrau">Graus</label>
-                            <input class="multisteps-form__input form-control" type="text" name="longGrau" id="longGrau" mask="99">
+                            <input class="multisteps-form__input form-control" value="${loongGrau}" type="text" name="longGrau" id="longGrau" mask="99">
                           </div>
                           <b>º</b>
                           <div class="col-3 col-sm-3">
                             <label for="longMin">Minutos</label>
-                            <input class="multisteps-form__input form-control" type="text" #longMin="ngModel" name="longMin" id="longMin" mask="99" >
+                            <input class="multisteps-form__input form-control" value="${loongMin}" type="text" #longMin="ngModel" name="longMin" id="longMin" mask="99" >
                           </div>
                           <b>'</b>
                           <div class="col-3 col-sm-3">
                             <label for="longSeg">Segundos</label>
-                            <input class="multisteps-form__input form-control" type="text" #longSeg="ngModel" name="longSeg" id="longSeg" mask="99.99" [dropSpecialCharacters]="false" [(ngModel)]="latLong.grau.latitude.latSeg">
+                            <input class="multisteps-form__input form-control" value="${loongSeg}" type="text" #longSeg="ngModel" name="longSeg" id="longSeg" mask="99.99" [dropSpecialCharacters]="false" [(ngModel)]="latLong.grau.latitude.latSeg">
                           </div>
                           <b>"</b>
                         </div>
@@ -1981,12 +2042,12 @@ function grauToDecimal() {
   let latitude = null;
   let longitude = null;
 
-  const latGrau = parseInt(document.getElementById("latGrau").value);
-  const latMin = parseInt(document.getElementById("latMin").value);
-  const latSeg = parseInt(document.getElementById("latSeg").value);
-  const longGrau = parseInt(document.getElementById("longGrau").value);
-  const longMin = parseInt(document.getElementById("longMin").value);
-  const longSeg = parseInt(document.getElementById("longSeg").value);
+  const latGrau = Number(document.getElementById("latGrau").value);
+  const latMin = Number(document.getElementById("latMin").value);
+  const latSeg = Number(document.getElementById("latSeg").value);
+  const longGrau = Number(document.getElementById("longGrau").value);
+  const longMin = Number(document.getElementById("longMin").value);
+  const longSeg = Number(document.getElementById("longSeg").value);
 
   // Latitude
   if (!((latGrau === 0) && (latMin === 0) && (latSeg === 0))) {
@@ -2033,15 +2094,15 @@ function decimalToGrau(latitude, longitude) {
     // Segundos Latitude
     latSeg = ((latitudeDecimal * 3600) % 60).toFixed(2);
 
-    this.latLong.grau.latitude.latTipo = latTipo;
-    this.latLong.grau.latitude.latGrau = latGrau;
-    this.latLong.grau.latitude.latMin = latMin;
-    this.latLong.grau.latitude.latSeg = latSeg;
+    laatTipo = latTipo;
+    laatGrau = latGrau;
+    laatMin = latMin;
+    laatSeg = latSeg;
   } else {
-    this.latLong.grau.latitude.latTipo = '';
-    this.latLong.grau.latitude.latGrau = null;
-    this.latLong.grau.latitude.latMin = null;
-    this.latLong.grau.latitude.latSeg = null;
+    laatTipo = '';
+    laatGrau = null;
+    laatMin = null;
+    laatSeg = null;
   }
   if (longitude && !isNaN(longitude)) {
     // Grau Longitude
@@ -2051,14 +2112,16 @@ function decimalToGrau(latitude, longitude) {
     // Segundos Longitude
     longSeg = ((longitudeDecimal * 3600) % 60).toFixed(2);
 
-    this.latLong.grau.longitude.longTipo = longTipo;
-    this.latLong.grau.longitude.longGrau = longGrau;
-    this.latLong.grau.longitude.longMin = longMin;
-    this.latLong.grau.longitude.longSeg = longSeg;
+    loongTipo = longTipo;
+    loongGrau = longGrau;
+    loongMin = longMin;
+    loongSeg = longSeg;
   } else {
-    this.latLong.grau.longitude.longTipo = '';
-    this.latLong.grau.longitude.longGrau = null;
-    this.latLong.grau.longitude.longMin = null;
-    this.latLong.grau.longitude.longSeg = null;
+    loongTipo = '';
+    loongGrau = null;
+    loongMin = null;
+    loongSeg = null;
   }
+
+  return laatTipo, laatGrau, laatMin, laatSeg, loongTipo, loongGrau, loongMin, loongSeg
 }
