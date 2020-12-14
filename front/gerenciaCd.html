@@ -353,12 +353,14 @@
                                                     <div id="decimal" class="multisteps-form__content">
                                                         <div class="form-row mt-4">
                                                             <div class="col-12 col-sm-12 mt-4">
-                                                            <label for="latitudePonto">Latitude</label>
-                                                            <input class="multisteps-form__input form-control " type="text" name="latitudePonto" id="latitudePonto">
+                                                                <label for="latitudePonto">Latitude</label>
+                                                                <input class="multisteps-form__input form-control" onchange="checkLat()" type="text" name="latitudePonto" id="latitudePonto">
+                                                                <mensagemLat id="mensagemLat"></mensagemLat>
                                                             </div>
                                                             <div class="col-12 col-sm-12 mt-4">
-                                                            <label for="longitudePonto">Longitude</label>
-                                                            <input class="multisteps-form__input form-control " type="text" name="longitudePonto" id="longitudePonto">
+                                                                <label for="longitudePonto">Longitude</label>
+                                                                <input class="multisteps-form__input form-control" onchange="checkLong()" type="text" name="longitudePonto" id="longitudePonto">
+                                                                <mensagemLon id="mensagemLon"></mensagemLon>
                                                             </div>
                                                         </div>
                                                     </div>

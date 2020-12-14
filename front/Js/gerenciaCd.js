@@ -1940,22 +1940,25 @@ function latLong(input) {
     if(document.getElementById('grau')){
       document.getElementById('LatLong').removeChild(document.getElementById('grau'));
     }
-    
 
     $(document).ready(function(){
       $("field").append(`<div id="decimal" class="multisteps-form__content">
                           <div class="form-row mt-4">
                             <div class="col-12 col-sm-12 mt-4">
                               <label for="latitudePonto">Latitude</label>
-                              <input class="multisteps-form__input form-control " value="${laatitude}" type="text" name="latitudePonto" id="latitudePonto">
+                              <input class="multisteps-form__input form-control " value="${laatitude}" onchange="checkLat()" type="text" name="latitudePonto" id="latitudePonto">
+                              <mensagemLat id="mensagemLat"></mensagemLat>
                             </div>
                             <div class="col-12 col-sm-12 mt-4">
                               <label for="longitudePonto">Longitude</label>
-                              <input class="multisteps-form__input form-control " value="${loongitude}" type="text" name="longitudePonto" id="longitudePonto">
+                              <input class="multisteps-form__input form-control " value="${loongitude}" onchange="checkLong()" type="text" name="longitudePonto" id="longitudePonto">
+                              <mensagemLon id="mensagemLon"></mensagemLon>
                             </div>
                           </div>
                         </div>`)
     });
+    checkLat()
+    checkLong()
   }else{
 
     //Pega os valores dos campos de decimais e transforma em graus
@@ -1992,20 +1995,22 @@ function latLong(input) {
                           </div>
                           <div class="col-3 col-sm-3 mb-4">
                             <label for="latGrau">Graus</label>
-                            <input class="multisteps-form__input form-control" value="${laatGrau}" type="text" name="latGrau" id="latGrau" mask="99">
+                            <input class="multisteps-form__input form-control" onchange="checkGrauLat('grau')" value="${laatGrau}" type="text" name="latGrau" id="latGrau" mask="99">
                           </div>
                           <b>º</b>
                           <div class="col-3 col-sm-3">
                             <label for="latMin">Minutos</label>
-                            <input class="multisteps-form__input form-control" value="${laatMin}" type="text" #latMin="ngModel" name="latMin" id="latMin" mask="99" >
+                            <input class="multisteps-form__input form-control" onchange="checkGrauLat('min')" value="${laatMin}" type="text" #latMin="ngModel" name="latMin" id="latMin" mask="99" >
                           </div>
                           <b>'</b>
                           <div class="col-3 col-sm-3">
                             <label for="latSeg">Segundos</label>
-                            <input class="multisteps-form__input form-control" value="${laatSeg}" type="text" #latSeg="ngModel" name="latSeg" id="latSeg" mask="99.99" [dropSpecialCharacters]="false" [(ngModel)]="latLong.grau.latitude.latSeg">
+                            <input class="multisteps-form__input form-control" onchange="checkGrauLat('seg')" value="${laatSeg}" type="text" #latSeg="ngModel" name="latSeg" id="latSeg" mask="99.99" [dropSpecialCharacters]="false" [(ngModel)]="latLong.grau.latitude.latSeg">
                           </div>
                           <b>"</b>
                         </div>
+
+                        <grauLat id="grauLat"></grauLat>
 
                         <h1 class="mt-4">Longitude</h1>
                         <div class="form-row mt-4">
@@ -2017,20 +2022,22 @@ function latLong(input) {
                           </div>
                           <div class="col-3 col-sm-3 mb-4">
                             <label for="longGrau">Graus</label>
-                            <input class="multisteps-form__input form-control" value="${loongGrau}" type="text" name="longGrau" id="longGrau" mask="99">
+                            <input class="multisteps-form__input form-control" onchange="checkGrauLong('grau')" value="${loongGrau}" type="text" name="longGrau" id="longGrau" mask="99">
                           </div>
                           <b>º</b>
                           <div class="col-3 col-sm-3">
                             <label for="longMin">Minutos</label>
-                            <input class="multisteps-form__input form-control" value="${loongMin}" type="text" #longMin="ngModel" name="longMin" id="longMin" mask="99" >
+                            <input class="multisteps-form__input form-control" onchange="checkGrauLong('min')" value="${loongMin}" type="text" #longMin="ngModel" name="longMin" id="longMin" mask="99" >
                           </div>
                           <b>'</b>
                           <div class="col-3 col-sm-3">
                             <label for="longSeg">Segundos</label>
-                            <input class="multisteps-form__input form-control" value="${loongSeg}" type="text" #longSeg="ngModel" name="longSeg" id="longSeg" mask="99.99" [dropSpecialCharacters]="false" [(ngModel)]="latLong.grau.latitude.latSeg">
+                            <input class="multisteps-form__input form-control" onchange="checkGrauLong('seg')" value="${loongSeg}" type="text" #longSeg="ngModel" name="longSeg" id="longSeg" mask="99.99" [dropSpecialCharacters]="false" [(ngModel)]="latLong.grau.latitude.latSeg">
                           </div>
                           <b>"</b>
                         </div>
+
+                        <grauLong id="grauLong"></grauLong>
                       </div>`)
     });
   }
@@ -2124,4 +2131,129 @@ function decimalToGrau(latitude, longitude) {
   }
 
   return laatTipo, laatGrau, laatMin, laatSeg, loongTipo, loongGrau, loongMin, loongSeg
+}
+
+function checkLat() {
+  let lat
+  if(parseFloat(document.getElementById("latitudePonto").value) != null){
+    lat = parseFloat(document.getElementById("latitudePonto").value);
+  }
+  
+  console.log(lat)
+
+  if(lat < -34.000000 || lat > 6.000000){
+    if(document.getElementById('lat') == null){
+      $("mensagemLat").append(`<div id="lat" class="ml-1 mt-1 text-danger">A latitude deve estar entre -34.000000 e +6.000000.</div>`)
+    }
+  }else{
+    document.getElementById('mensagemLat').removeChild(document.getElementById('lat'));
+  }
+
+}
+
+function checkLong() {
+  let lon
+  if(parseFloat(document.getElementById("longitudePonto").value) != null){
+    lon = parseFloat(document.getElementById("longitudePonto").value);
+  }
+
+  if(lon < -75.000000 || lon > -32.000000){
+    if(document.getElementById('lon') == null){
+      $("mensagemLon").append(`<div id="lon" class="ml-1 mt-1 text-danger">A longitude deve estar entre -75.000000 e -32.000000</div>`)
+    }
+  }else{
+    document.getElementById('mensagemLon').removeChild(document.getElementById('lon'));
+  }
+}
+
+function checkGrauLat(campo) {
+  console.log(campo)
+
+  if(campo == "grau"){
+
+    // console.log(document.getElementById('latTipo').value)
+    
+    //Verifica se o Hemisfério é N ou S
+    if(document.getElementById('latTipo').value == "N"){
+      let latGrau = parseFloat(document.getElementById("latGrau").value);
+
+      if(latGrau>6){
+        if(document.getElementById('grausLat') == null){
+          $("grauLat").append(`<div id="grausLat" class="ml-1 mt-1 text-danger">O Grau deve estar entre Sul 34 e Norte 6.</div>`)
+        }
+      }else{
+        document.getElementById('grauLat').removeChild(document.getElementById('grausLat'));
+      }
+    }else{
+      let latGrau = parseFloat(document.getElementById("latGrau").value);
+
+      if(latGrau>34){
+        if(document.getElementById('grausLat') == null){
+          $("grauLat").append(`<div id="grausLat" class="ml-1 mt-1 text-danger">O Grau deve estar entre Sul 34 e Norte 6.</div>`)
+        }
+      }else{
+        document.getElementById('grauLat').removeChild(document.getElementById('grausLat'));
+      }
+    }
+  }
+  if(campo == "min"){
+    let latMin = parseFloat(document.getElementById("latMin").value);
+
+    if(latMin<0 || latMin>60){
+      if(document.getElementById('grausMin') == null){
+        $("grauLat").append(`<div id="grausMin" class="ml-1 mt-1 text-danger">O Minuto deve estar entre 0 e 60.</div>`)
+      }
+    }else{
+      document.getElementById('grauLat').removeChild(document.getElementById('grausMin'));
+    }
+  }
+  if(campo == "seg"){
+    let latSeg = parseFloat(document.getElementById("latSeg").value);
+
+    if(latSeg<0 || latSeg>60){
+      if(document.getElementById('grausSeg') == null){
+        $("grauLat").append(`<div id="grausSeg" class="ml-1 mt-1 text-danger">O Segundo deve estar entre 0 e 60.</div>`)
+      }
+    }else{
+      document.getElementById('grauLat').removeChild(document.getElementById('grausSeg'));
+    }
+  }
+}
+
+function checkGrauLong(campo) {
+  console.log(campo)
+
+  if(campo == "grau"){
+    let longGrau = parseFloat(document.getElementById("longGrau").value);
+
+    if(longGrau<32 || longGrau >75){
+      if(document.getElementById('grausLong') == null){
+        $("grauLong").append(`<div id="grausLong" class="ml-1 mt-1 text-danger">O Grau deve estar entre Oeste 32 e Oeste 75.</div>`)
+      }
+    }else{
+      document.getElementById('grauLong').removeChild(document.getElementById('grausLong'));
+    }
+  }
+  if(campo == "min"){
+    let longMin = parseFloat(document.getElementById("longMin").value);
+
+    if(longMin<0 || longMin>60){
+      if(document.getElementById('grausMin') == null){
+        $("grauLong").append(`<div id="grausMin" class="ml-1 mt-1 text-danger">O Minuto deve estar entre 0 e 60.</div>`)
+      }
+    }else{
+      document.getElementById('grauLong').removeChild(document.getElementById('grausMin'));
+    }
+  }
+  if(campo == "seg"){
+    let longSeg = parseFloat(document.getElementById("longSeg").value);
+
+    if(longSeg<0 || longSeg>60){
+      if(document.getElementById('grausSeg') == null){
+        $("grauLong").append(`<div id="grausSeg" class="ml-1 mt-1 text-danger">O Segundo deve estar entre 0 e 60.</div>`)
+      }
+    }else{
+      document.getElementById('grauLong').removeChild(document.getElementById('grausSeg'));
+    }
+  }
 }
