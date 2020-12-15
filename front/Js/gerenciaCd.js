@@ -2238,22 +2238,23 @@ function checkGrauLong(campo) {
     let longMin = parseFloat(document.getElementById("longMin").value);
 
     if(longMin<0 || longMin>60){
-      if(document.getElementById('grausMin') == null){
-        $("grauLong").append(`<div id="grausMin" class="ml-1 mt-1 text-danger">O Minuto deve estar entre 0 e 60.</div>`)
+      if(document.getElementById('grausMinu') == null){
+        $("grauLong").append(`<div id="grausMinu" class="ml-1 mt-1 text-danger">O Minuto deve estar entre 0 e 60.</div>`)
       }
     }else{
-      document.getElementById('grauLong').removeChild(document.getElementById('grausMin'));
+      document.getElementById('grauLong').removeChild(document.getElementById('grausMinu'));
     }
   }
   if(campo == "seg"){
     let longSeg = parseFloat(document.getElementById("longSeg").value);
 
     if(longSeg<0 || longSeg>60){
-      if(document.getElementById('grausSeg') == null){
-        $("grauLong").append(`<div id="grausSeg" class="ml-1 mt-1 text-danger">O Segundo deve estar entre 0 e 60.</div>`)
+      if(document.getElementById('grausSegun') == null){
+        $("grauLong").append(`<div id="grausSegun" class="ml-1 mt-1 text-danger">O Segundo deve estar entre 0 e 60.</div>`)
       }
     }else{
-      document.getElementById('grauLong').removeChild(document.getElementById('grausSeg'));
+      document.getElementById('grauLong').removeChild(document.getElementById('grausSegun'));
     }
   }
+  console.log(document.getElementById('grauLong'))
 }
