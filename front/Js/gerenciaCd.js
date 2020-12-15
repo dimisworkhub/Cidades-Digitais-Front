@@ -1538,114 +1538,118 @@ function novoPidPonto() {
     "nome": document.getElementById("nomePonto").value,
     "inep": document.getElementById("inepPonto").value,
   };
-
-  console.log(infoPid)
-  //transforma as informações em string para mandar
-  let corpo1 = JSON.stringify(infoPid);
-  //função fetch para mandar
-  fetch(servidor + 'read/pid', {
-    method: 'POST',
-    body: corpo1,
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-
-    //tratamento dos erros
-    if (response.status == 200 || response.status == 201) {
-      console.log('Pid inserido com sucesso!')
-      
-      setTimeout(function () {
-      
-        //função fetch para buscar o ultimo pid instalado
-        fetch(servidor + 'read/pid', {
-          method: 'GET',
-          headers: {
-            'Authorization': 'Bearer ' + meuToken
-          },
-        }).then(function (response) {
   
-          if (response.status == 200) {
+  //verifica se algum dos campos está inserido errado
+  if(document.getElementById("lat") || document.getElementById("lon") || document.getElementById("grauLat")?.textContent || document.getElementById("grauLong")?.textContent){
+    alert("Campo com valor inválido!")
+  }else{
   
-            //pegar o json que possui a tabela
-            response.json().then(function (json) {
+    console.log(infoPid)
+    //transforma as informações em string para mandar
+    let corpo1 = JSON.stringify(infoPid);
+    //função fetch para mandar
+    fetch(servidor + 'read/pid', {
+      method: 'POST',
+      body: corpo1,
+      headers: {
+        'Authorization': 'Bearer ' + meuToken
+      },
+    }).then(function (response) {
   
-              //ultimo cod_pid
-              for (i = 0; i < json.length; i++) {
-                ultimoPid = json[i].cod_pid;
-              }
-              console.log(ultimoPid)
-              
-              let infoPonto
-
-              if(document.getElementById('decimal')?.id == "decimal"){
-                infoPonto = {
-                  "cod_ponto": parseInt(document.getElementById("cod_pontoPonto").value),
-                  "cod_categoria": parseInt(document.getElementById("categoria").value),
-                  "cod_ibge": parseInt(meuCodigo),
-                  "cod_pid": parseInt(ultimoPid),
-                  "endereco": document.getElementById("enderecoPonto").value,
-                  "numero": document.getElementById("numeroPonto").value,
-                  "complemento": document.getElementById("complementoPonto").value,
-                  "bairro": document.getElementById("bairroPonto").value,
-                  "cep": document.getElementById("cepPonto").value,
-                  "latitude": parseFloat(document.getElementById("latitudePonto").value),
-                  "longitude": parseFloat(document.getElementById("longitudePonto").value),
+      //tratamento dos erros
+      if (response.status == 200 || response.status == 201) {
+        console.log('Pid inserido com sucesso!')
+        
+        setTimeout(function () {
+        
+          //função fetch para buscar o ultimo pid instalado
+          fetch(servidor + 'read/pid', {
+            method: 'GET',
+            headers: {
+              'Authorization': 'Bearer ' + meuToken
+            },
+          }).then(function (response) {
+    
+            if (response.status == 200) {
+    
+              //pegar o json que possui a tabela
+              response.json().then(function (json) {
+    
+                //ultimo cod_pid
+                for (i = 0; i < json.length; i++) {
+                  ultimoPid = json[i].cod_pid;
                 }
-              } else if(document.getElementById('grau').id == "grau"){
-
-                //Pega os valores dos campos de graus e transforma em decimal
-                grauToDecimal();
+                console.log(ultimoPid)
                 
-                infoPonto = {
-                  "cod_ponto": parseInt(document.getElementById("cod_pontoPonto").value),
-                  "cod_categoria": parseInt(document.getElementById("categoria").value),
-                  "cod_ibge": parseInt(meuCodigo),
-                  "cod_pid": parseInt(ultimoPid),
-                  "endereco": document.getElementById("enderecoPonto").value,
-                  "numero": document.getElementById("numeroPonto").value,
-                  "complemento": document.getElementById("complementoPonto").value,
-                  "bairro": document.getElementById("bairroPonto").value,
-                  "cep": document.getElementById("cepPonto").value,
-                  "latitude": laatitude,
-                  "longitude": loongitude
-                }
-
-              }
-            
-              console.log(infoPonto)
-              //transforma as informações em string para mandar
-              let corpo2 = JSON.stringify(infoPonto);
-              //função fetch para mandar
-              fetch(servidor + 'read/ponto', {
-                method: 'POST',
-                body: corpo2,
-                headers: {
-                  'Authorization': 'Bearer ' + meuToken
-                },
-              }).then(function (response) {
-            
-                //tratamento dos erros
-                if (response.status == 200 || response.status == 201) {
-                  alert('Ponto inserido com sucesso!')
-                  setTimeout(function () {
-                    location.reload()
-                  }, 2000);
-                } else {
-                  erros(response.status);
-                }
-              });
+                let infoPonto
   
-            });
-          } else {
-            erros(response.status);
-          }
-        });
-      }, 1000);
-    } else {
-      erros(response.status);
-    }
-  });
+                if(document.getElementById('decimal')?.id == "decimal"){
+                  infoPonto = {
+                    "cod_ponto": parseInt(document.getElementById("cod_pontoPonto").value),
+                    "cod_categoria": parseInt(document.getElementById("categoria").value),
+                    "cod_ibge": parseInt(meuCodigo),
+                    "cod_pid": parseInt(ultimoPid),
+                    "endereco": document.getElementById("enderecoPonto").value,
+                    "numero": document.getElementById("numeroPonto").value,
+                    "complemento": document.getElementById("complementoPonto").value,
+                    "bairro": document.getElementById("bairroPonto").value,
+                    "cep": document.getElementById("cepPonto").value,
+                    "latitude": parseFloat(document.getElementById("latitudePonto").value),
+                    "longitude": parseFloat(document.getElementById("longitudePonto").value),
+                  }
+                } else if(document.getElementById('grau').id == "grau"){
+  
+                  //Pega os valores dos campos de graus e transforma em decimal
+                  grauToDecimal();
+                  
+                  infoPonto = {
+                    "cod_ponto": parseInt(document.getElementById("cod_pontoPonto").value),
+                    "cod_categoria": parseInt(document.getElementById("categoria").value),
+                    "cod_ibge": parseInt(meuCodigo),
+                    "cod_pid": parseInt(ultimoPid),
+                    "endereco": document.getElementById("enderecoPonto").value,
+                    "numero": document.getElementById("numeroPonto").value,
+                    "complemento": document.getElementById("complementoPonto").value,
+                    "bairro": document.getElementById("bairroPonto").value,
+                    "cep": document.getElementById("cepPonto").value,
+                    "latitude": laatitude,
+                    "longitude": loongitude
+                  }
+                }
+                console.log(infoPonto)
+                //transforma as informações em string para mandar
+                let corpo2 = JSON.stringify(infoPonto);
+                //função fetch para mandar
+                fetch(servidor + 'read/ponto', {
+                  method: 'POST',
+                  body: corpo2,
+                  headers: {
+                    'Authorization': 'Bearer ' + meuToken
+                  },
+                }).then(function (response) {
+              
+                  //tratamento dos erros
+                  if (response.status == 200 || response.status == 201) {
+                    alert('Ponto inserido com sucesso!')
+                    setTimeout(function () {
+                      location.reload()
+                    }, 2000);
+                  } else {
+                    erros(response.status);
+                  }
+                });
+    
+              });
+            } else {
+              erros(response.status);
+            }
+          });
+        }, 1000);
+      } else {
+        erros(response.status);
+      }
+    });
+  }
 }
 
 function apagarPidPonto(cod_ponto, cod_categoria, cod_pid) {
@@ -1721,6 +1725,7 @@ function viaCep(){
 
 }
 
+//puxa a aba de edição, colocando todos os dados
 function edicaoPonto(ponto, categoria) {
   
   //fetch de ponto
@@ -1783,7 +1788,7 @@ function edicaoPonto(ponto, categoria) {
                   response.json().then(function (json) {
 
                     puxaCategoria(json.cod_categoria, json.descricao);
-                    
+
                     document.getElementById("botaoPonto").innerHTML = ` <button class='btn btn-primary' onclick='editarPidPonto(${Ponto}, ${pid}, ${categoria})' type='button'>Editar</button>`;
                   });
                 } else {
@@ -1795,19 +1800,6 @@ function edicaoPonto(ponto, categoria) {
             erros(response.status);
           }
         });
-        // let x = "";
-        // for (let i = 0; i < json.length; i++) {
-        //   x += "<option value='" + json[i].cod_assunto + "'>" + json[i].descricao + "</option>";
-
-        //   //para remoção de itens
-        //   valorRemovido[i] = 0;
-        // }
-
-        // document.getElementById("assunto").innerHTML = x;
-
-        
-
-        // getAssuntos(valor);
       });
     } else {
       erros(response.status);
@@ -1816,106 +1808,110 @@ function edicaoPonto(ponto, categoria) {
 
 }
 
+//função que de fato faz a edição
 function editarPidPonto(ponto, pid, categoria) {
-
-  let edicaoPonto 
-
-  if(document.getElementById("latitudePonto") && document.getElementById("longitudePonto")){
-    edicaoPonto = {
-      "cod_ponto": parseInt(document.getElementById("cod_pontoPonto").value),
-      "cod_categoria": parseInt(document.getElementById("categoria").value),
-      "cod_ibge": parseInt(meuCodigo),
-      "cod_pid": parseInt(pid),
-      "endereco": document.getElementById("enderecoPonto").value,
-      "numero": document.getElementById("numeroPonto").value,
-      "complemento": document.getElementById("complementoPonto").value,
-      "bairro": document.getElementById("bairroPonto").value,
-      "cep": document.getElementById("cepPonto").value,
-      "latitude": parseFloat(document.getElementById("latitudePonto").value),
-      "longitude": parseFloat(document.getElementById("longitudePonto").value),
-    };
+  //verifica se algum dos campos está inserido errado
+  if(document.getElementById("lat") || document.getElementById("lon") || document.getElementById("grauLat")?.textContent || document.getElementById("grauLong")?.textContent){
+    alert("Campo com valor inválido!")
   }else{
+    let edicaoPonto 
 
-    //Pega os valores dos campos de graus e transforma em decimal
-    grauToDecimal();
+    if(document.getElementById("latitudePonto") && document.getElementById("longitudePonto")){
+      edicaoPonto = {
+        "cod_ponto": parseInt(document.getElementById("cod_pontoPonto").value),
+        "cod_categoria": parseInt(document.getElementById("categoria").value),
+        "cod_ibge": parseInt(meuCodigo),
+        "cod_pid": parseInt(pid),
+        "endereco": document.getElementById("enderecoPonto").value,
+        "numero": document.getElementById("numeroPonto").value,
+        "complemento": document.getElementById("complementoPonto").value,
+        "bairro": document.getElementById("bairroPonto").value,
+        "cep": document.getElementById("cepPonto").value,
+        "latitude": parseFloat(document.getElementById("latitudePonto").value),
+        "longitude": parseFloat(document.getElementById("longitudePonto").value),
+      };
+    }else{
 
-    edicaoPonto = {
-      "cod_ponto": parseInt(document.getElementById("cod_pontoPonto").value),
-      "cod_categoria": parseInt(document.getElementById("categoria").value),
+      //Pega os valores dos campos de graus e transforma em decimal
+      grauToDecimal();
+
+      edicaoPonto = {
+        "cod_ponto": parseInt(document.getElementById("cod_pontoPonto").value),
+        "cod_categoria": parseInt(document.getElementById("categoria").value),
+        "cod_ibge": parseInt(meuCodigo),
+        "cod_pid": parseInt(pid),
+        "endereco": document.getElementById("enderecoPonto").value,
+        "numero": document.getElementById("numeroPonto").value,
+        "complemento": document.getElementById("complementoPonto").value,
+        "bairro": document.getElementById("bairroPonto").value,
+        "cep": document.getElementById("cepPonto").value,
+        "latitude": laatitude,
+        "longitude": loongitude,
+      };
+
+    }
+
+    let edicaoPid = {
       "cod_ibge": parseInt(meuCodigo),
-      "cod_pid": parseInt(pid),
-      "endereco": document.getElementById("enderecoPonto").value,
-      "numero": document.getElementById("numeroPonto").value,
-      "complemento": document.getElementById("complementoPonto").value,
-      "bairro": document.getElementById("bairroPonto").value,
-      "cep": document.getElementById("cepPonto").value,
-      "latitude": laatitude,
-      "longitude": loongitude,
+      "nome": document.getElementById("nomePonto").value,
+      "inep": document.getElementById("inepPonto").value,
     };
 
+    //transforma as informações do token em json
+    let corpo1 = JSON.stringify(edicaoPonto);
+    let corpo2 = JSON.stringify(edicaoPid);
+    
+    console.log(corpo2);
+    fetch(servidor + 'read/pid/' + pid, {
+      method: 'PUT',
+      body: corpo2,
+      headers: {
+        'Authorization': 'Bearer ' + meuToken
+      },
+    }).then(function (response) {
+      //checar o status do pedido
+      console.log(response.statusText);
+
+      //tratamento dos erros
+      if (response.status == 200 || response.status == 201) {
+
+        //pegar a data para enviar no editarUacom2
+        response.json().then(function (json) {
+          setTimeout(function () {
+            console.log(corpo1);
+            fetch(servidor + `read/ponto/${ponto}/${categoria}/${meuCodigo}`, {
+              method: 'PUT',
+              body: corpo1,
+              headers: {
+                'Authorization': 'Bearer ' + meuToken
+              },
+            }).then(function (response) {
+              //checar o status do pedido
+              console.log(response.statusText);
+    
+              //tratamento dos erros
+              if (response.status == 200 || response.status == 201) {
+    
+                //pegar a data para enviar no editarUacom2
+                response.json().then(function (json) {
+
+                  alert("Ponto editado com sucesso!")
+                  setTimeout(function () {
+                    location.reload()
+                  }, 1000);
+                });
+    
+              } else {
+                // erros(response.status);
+              }
+            });
+          }, 2000);
+        });
+      } else {
+        erros(response.status);
+      }
+    });
   }
-
-  let edicaoPid = {
-    "cod_ibge": parseInt(meuCodigo),
-    "nome": document.getElementById("nomePonto").value,
-    "inep": document.getElementById("inepPonto").value,
-  };
-
-  //transforma as informações do token em json
-  let corpo1 = JSON.stringify(edicaoPonto);
-  let corpo2 = JSON.stringify(edicaoPid);
-  
-  console.log(corpo2);
-  fetch(servidor + 'read/pid/' + pid, {
-    method: 'PUT',
-    body: corpo2,
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-    //checar o status do pedido
-    console.log(response.statusText);
-
-    //tratamento dos erros
-    if (response.status == 200 || response.status == 201) {
-
-      //pegar a data para enviar no editarUacom2
-      response.json().then(function (json) {
-        setTimeout(function () {
-          console.log(corpo1);
-          fetch(servidor + `read/ponto/${ponto}/${categoria}/${meuCodigo}`, {
-            method: 'PUT',
-            body: corpo1,
-            headers: {
-              'Authorization': 'Bearer ' + meuToken
-            },
-          }).then(function (response) {
-            //checar o status do pedido
-            console.log(response.statusText);
-  
-            //tratamento dos erros
-            if (response.status == 200 || response.status == 201) {
-  
-              //pegar a data para enviar no editarUacom2
-              response.json().then(function (json) {
-
-                alert("Ponto editado com sucesso!")
-                setTimeout(function () {
-                  location.reload()
-                }, 1000);
-              });
-  
-            } else {
-              // erros(response.status);
-            }
-          });
-        }, 2000);
-      });
-    } else {
-      erros(response.status);
-    }
-  });
-
 }
 
 
@@ -2256,5 +2252,4 @@ function checkGrauLong(campo) {
       document.getElementById('grauLong').removeChild(document.getElementById('grausSegun'));
     }
   }
-  console.log(document.getElementById('grauLong'))
 }
