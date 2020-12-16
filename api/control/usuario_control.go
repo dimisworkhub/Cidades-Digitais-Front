@@ -8,7 +8,6 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	"strings"
 
 	"Cidades-Digitais-Front/api/auth"
 	"Cidades-Digitais-Front/api/config"
@@ -59,11 +58,8 @@ func (server *Server) CreateUsuario(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//	newUsuario recebe o login a ser cadastrado
-	newUsuario := strings.ToLower(usuario.Login)
-
 	//	Verifica se o login ja esta em uso
-	if err = usuario.VerifyLogin(server.DB, newUsuario); err == nil {
+	if err = usuario.VerifyLogin(server.DB, usuario.Login); err == nil {
 		w.WriteHeader(http.StatusConflict)
 		w.Write([]byte(`{"Error": "Existent Login"}`))
 		return
