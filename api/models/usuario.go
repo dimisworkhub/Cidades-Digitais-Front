@@ -64,10 +64,22 @@ func (usuario *Usuario) BeforeSave() error {
 
 func (usuario *Usuario) VerifyLogin(db *gorm.DB, login string) error {
 
-	//	Verifica se o login existe no banco de dados
-	err := db.Debug().Model(usuario).Where("login = ?", login).Take(&usuario).Error
+	allUsuario := []Usuario{}
 
-	return err
+	//	Verifica se o login existe no banco de dados, no caso o banco nao eh case sensitive
+	//	Por isso pode ocorrer, por exemplo: Usuario, usuario
+	//	Iguais, porem diferentes
+	db.Debug().Model(&Usuario{}).Where("login = ?", login).Find(&allUsuario)
+
+	for _, data := range allUsuario {
+		// Compara se o dado informado pelo usuario eh exatamente igual ao dado presente no banco de dados
+		if data.Login == login {
+			err := db.Debug().Model(&Usuario{}).Where("cod_usuario = ?", data.CodUsuario).Take(&usuario).Error
+			return err
+		}
+	}
+
+	return fmt.Errorf(" ")
 }
 
 /*	=========================
@@ -80,12 +92,14 @@ func (usuario *Usuario) SignIn(db *gorm.DB, login, password string) (string, err
 	modulo := UsuarioModulo{}
 
 	//	Verificar se o login informado existe no banco de dados
-	if err := usuario.VerifyLogin(db, login); err != nil {
+	err := usuario.VerifyLogin(db, login)
+	if err != nil {
 		return "", err
 	}
 
 	//	Verifica se a senha informada eh compativel com a senha guardada no banco de dados
-	err := VerifyPassword(usuario.Senha, password)
+
+	err = VerifyPassword(usuario.Senha, password)
 	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
 		return "", err
 	}
@@ -101,7 +115,6 @@ func (usuario *Usuario) SignIn(db *gorm.DB, login, password string) (string, err
 
 		//	Armazena os cod_modulo associados ao usuario e armazena no array CodigoModulo
 		for rows.Next() {
-
 			err = rows.Scan(&modulo.CodModulo)
 			CodigoModulo = append(CodigoModulo, modulo.CodModulo)
 		}
