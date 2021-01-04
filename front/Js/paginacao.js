@@ -50,7 +50,7 @@ function paginasOrganizadas(json,comeco,fim){
   totalPaginas = Math.floor((json.length-1) / porPagina);
 
   //primeira pagina
-  let paginas = `<li id="anterior" class="page-item" ><a href="#" class="page-link" onclick="antes()">Anterior</a></li>`;
+  let paginas = `<li style="cursor:pointer" id="anterior" class="page-item" ><a onclick="antes() class="page-link"">Anterior</a></li>`;
 
   //escolha de pagina
   //projeto inacabado
@@ -149,7 +149,7 @@ function paginasOrganizadas(json,comeco,fim){
   }
 
   //proxima pagina
-  paginas += `<li id="proximo" class="page-item" ><a href="#" class="page-link" onclick="depois()">Próximo</a></li>`;
+  paginas += `<li style="cursor:pointer" id="proximo" class="page-item" ><a onclick="depois()" class="page-link">Próximo</a></li>`;
 
   document.getElementById("paginacao").innerHTML = paginas;
 
@@ -170,10 +170,7 @@ function paginasOrganizadas(json,comeco,fim){
 
 
 
-
-
 //sistema de filtragem:
-
 function filtro(json,linhaFiltrada){
 
   //variaveis:

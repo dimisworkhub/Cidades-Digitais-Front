@@ -1,24 +1,42 @@
 <!--
 
-  fazer a função para ajuste final da máscara
+  FOCO:
 
-  garantir q não é selecionado o mesmo assunto VV
+  fazer edição em administração possivel,
 
-  colocar seleção e remoçao de modulos dentro da parte de adição de agora (marcar o q ja tem)
+  ver problema de gerenciaUsuario, VV
 
-  concertar problemas em assuntos VV
+  tornar administração em um padrão (Tem q fazer um js de administração). VV
 
-  fazer edição em administração possivel
+  fazer o sistema de paginação para administração VV
 
-  ver problema de gerenciaUsuario
+  fazer os codigos dos valores fazerem parte do info
 
-  padronizar para adicionar, editar e concluir
+  concertar o usuario logado (daniel)
+
+  ver com alexandre como fazer o reload (daniel)
+
+  paginar empenho e fatura
+
+  remover parte que mostra autoincrement da parte de adicionar em administração
+
+
+
+  Não prioritário:
+
+  fazer a função para ajuste final da máscara (pontos para indicar mil/milhão/bilhão),
+
+  padronizar para adicionar, editar e concluir, alêm de Próximo quando necesário,
+
+  fazer o reload funcionar de forma dependente da resposta.
 
 -->
 
 <!--
+
   essa imagem foi util antes
   <img src="http://cidadesdigitais.c3sl.ufpr.br/wp-content/uploads/sites/6/2018/04/marca-01.png" class="img-responsive" style="width:50%;"/>
+  
 -->
 
 <!--
@@ -65,40 +83,4 @@
       });
     $('.selectonfocus').mask("00/00/0000", {selectOnFocus: true});
   });
--->
-
-<!--
-
-padrão do tratamento de todos os erros até agora: 
-
-if (response.status == 200) {
-window.location.replace("./entidade.html");
-} else if (response.status == 201) {
-alert("ALGO criado com sucesso");
-window.location.replace("./entidade.html");
-} else if (response.status == 204) {
-alert("Apagado com sucesso.");
-window.location.replace("./entidade.html");
-} else if (response.status == 400) {
-window.location.replace("./errors/400.html");
-} else if (response.status == 401) {
-window.location.replace("./errors/401.html");
-} else if (response.status == 403) {
-window.location.replace("./errors/403.html");
-} else if (response.status == 404) {
-window.location.replace("./errors/404.html");
-} else if (response.status == 409) {
-alert("Erro: ALGO já existente.");
-} else if (response.status == 412) {
-alert("Erro: Informação colocada é incorreta.");
-} else if (response.status == 422) {
-alert("Erro: ALGO ou senha inválidos.");
-} else if (response.status == 500) {
-window.location.replace("./errors/500.html");
-} else if (response.status == 504) {
-window.location.replace("./errors/504.html");
-} else {
-alert("ERRO DESCONHECIDO");
-}
-
 -->

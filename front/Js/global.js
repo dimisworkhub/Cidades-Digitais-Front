@@ -1,3 +1,4 @@
+//SEMPRE DEIXE GLOBAL ACIMA DO JS DA PAGINA
 
 //para definir o caminho do servidor (ou algo do tipo)
 let servidor = "http://localhost:8080/";

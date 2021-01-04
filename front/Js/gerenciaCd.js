@@ -489,8 +489,7 @@ function editarUacom2(valor) {
 
   }
 
-  //recarrega a pagina após 5 segundos (em milisegundos)
-  esperar(5000);
+  esperar(2000);
   location.reload();
 }
 
