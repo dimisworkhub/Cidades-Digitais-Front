@@ -8,14 +8,14 @@ let meuCodigo = localStorage.getItem("cod_usuario");
 let modulosUsuario = [];
 
 window.onload = function () {
-  // inserindo os valores no html
+  //inserindo os valores no html
   document.getElementById("cod_usuario").value = meuCodigo;
   document.getElementById("nome").value = localStorage.getItem("nome");
   document.getElementById("email").value = localStorage.getItem("email");
   document.getElementById("login").value = localStorage.getItem("login");
   document.getElementById("status").value = localStorage.getItem("status");
   document.getElementById("senha").value = localStorage.getItem("senha");
-  console.log(codigoLogado);
+  //console.log(codigoLogado);
 }
 
 function enviar() {
@@ -188,6 +188,7 @@ function adicionarModulo(){
           for(let j = 0; j < modulosUsuario.length; j++){
             if(json[i].cod_modulo == modulosUsuario[j].cod_modulo){
               document.getElementById("checkbox" + i).click();
+              controleDeClick[i] = false;
             }
           }
         }
@@ -253,29 +254,65 @@ function modulos(numCod) {
 
 function enviarModulo(){
 
-  let j = 0;
+  console.log("entrou aqui");
+
+  let j = 0,k = 0;
   let infoAdicionar = [];
   let infoDeletar = [];
 
   for (let i = 0; i < listaModulo.length; i++) {
 
-    if (valorModulo[i] != null && controleDeClick == true){
-      infoAdicionar[j] = {
-        "cod_usuario": parseFloat(meuCodigo),
-        "cod_modulo": parseFloat(valorModulo[i]),
+    if (valorModulo[i] != null){
+      if(controleDeClick[i] == true){
+        infoAdicionar[j] = {
+          "cod_usuario": parseFloat(meuCodigo),
+          "cod_modulo": parseFloat(valorModulo[i]),
+        }
+        j++;
       }
-      j++;
+    }
 
-      //transforma todas as informações do token em json
-      let corpoModulo = JSON.stringify(infoAdicionar);
-      console.log(corpoModulo);
-      
-      //função fetch para mandar
-      fetch(servidor + 'read/usuario/' + codigoLogado + '/modulo', {
-        method: 'POST',
-        body: corpoModulo,
+    else{
+      if(controleDeClick[i] == true){
+        infoDeletar[k] = {
+          "cod_usuario": parseFloat(meuCodigo),
+          "cod_modulo": parseFloat(listaModulo[i].cod_modulo),
+        }
+        k++;
+      }
+    }
+
+  }
+
+  //transforma todas as informações do token em json
+  let corpoModulo = JSON.stringify(infoAdicionar);
+  console.log(corpoModulo);
+  
+  //função fetch para mandar
+  fetch(servidor + 'read/usuario/' + codigoLogado + '/modulo', {
+    method: 'POST',
+    body: corpoModulo,
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //checar o status do pedido
+    console.log(response.statusText);
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+
+      //transforma as informações do token em json
+      let corpoDeletar = JSON.stringify(infoDeletar);
+      console.log(corpoDeletar);
+
+      //função fetch para deletar
+      fetch(servidor + 'read/usuario/' + codigoLogado + "/modulo", {
+        method: 'DELETE',
+        body: corpoDeletar,
         headers: {
-          'Authorization': 'Bearer ' + meuToken
+          'Authorization': 'Bearer ' + meuToken,
         },
       }).then(function (response) {
 
@@ -283,47 +320,19 @@ function enviarModulo(){
         console.log(response.statusText);
 
         //tratamento dos erros
-        if (response.status == 200 || response.status == 201) {
-          //alert("Módulos inseridos com sucesso");
+        if (response.status == 204) {
+          //alert("Apagado com sucesso.");
+          location.reload();
         } else {
           erros(response.status);
         }
       });
+
+      //alert("Módulos inseridos com sucesso");
+    } else {
+      erros(response.status);
     }
-
-    else{
-      if(controleDeClick == true){
-
-        //transforma as informações do token em json
-        let corpoDeletar = JSON.stringify(infoDeletar);
-        console.log(corpoDeletar);
-
-        //função fetch para deletar
-        fetch(servidor + 'read/usuario/' + codigoLogado + "/modulo", {
-          method: 'DELETE',
-          body:corpoDeletar,
-          headers: {
-            'Authorization': 'Bearer ' + meuToken,
-          },
-        }).then(function (response) {
-
-          //checar o status do pedido
-          console.log(response.statusText);
-
-          //tratamento dos erros
-          if (response.status == 204) {
-            //alert("Apagado com sucesso.");
-          } else {
-            erros(response.status);
-          }
-        });
-      }
-    }
-
-  }
-
-  //location.reload();
-
+  });
 }
 
 
@@ -357,12 +366,9 @@ function removerModulo(valorModulo) {
     //tratamento dos erros
     if (response.status == 204) {
       //alert("Apagado com sucesso.");
-      //location.reload();
+      location.reload();
     } else {
       erros(response.status);
     }
-    // return response.json().then(function (json) {
-    //   console.log(json);
-    // });
   });
 }
