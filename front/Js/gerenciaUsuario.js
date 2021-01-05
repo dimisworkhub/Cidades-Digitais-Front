@@ -253,15 +253,14 @@ function modulos(numCod) {
 }
 
 function enviarModulo(){
-
   console.log("entrou aqui");
-
+  
   let j = 0,k = 0;
   let infoAdicionar = [];
   let infoDeletar = [];
-
+  
   for (let i = 0; i < listaModulo.length; i++) {
-
+    
     if (valorModulo[i] != null){
       if(controleDeClick[i] == true){
         infoAdicionar[j] = {
@@ -271,7 +270,7 @@ function enviarModulo(){
         j++;
       }
     }
-
+    
     else{
       if(controleDeClick[i] == true){
         infoDeletar[k] = {
@@ -281,12 +280,13 @@ function enviarModulo(){
         k++;
       }
     }
-
+    
   }
-
+  
   //transforma todas as informações do token em json
   let corpoModulo = JSON.stringify(infoAdicionar);
   console.log(corpoModulo);
+  
   
   //função fetch para mandar
   fetch(servidor + 'read/usuario/' + codigoLogado + '/modulo', {
@@ -296,17 +296,17 @@ function enviarModulo(){
       'Authorization': 'Bearer ' + meuToken
     },
   }).then(function (response) {
-
+    
     //checar o status do pedido
     console.log(response.statusText);
-
+    
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
-
+      
       //transforma as informações do token em json
       let corpoDeletar = JSON.stringify(infoDeletar);
       console.log(corpoDeletar);
-
+      
       //função fetch para deletar
       fetch(servidor + 'read/usuario/' + codigoLogado + "/modulo", {
         method: 'DELETE',
@@ -315,24 +315,26 @@ function enviarModulo(){
           'Authorization': 'Bearer ' + meuToken,
         },
       }).then(function (response) {
-
+        
         //checar o status do pedido
         console.log(response.statusText);
-
+        
         //tratamento dos erros
         if (response.status == 204) {
-          //alert("Apagado com sucesso.");
-          location.reload();
-        } else {
-          erros(response.status);
-        }
-      });
-
-      //alert("Módulos inseridos com sucesso");
-    } else {
-      erros(response.status);
-    }
-  });
+          alert("Por favor aguarde. Esta operção pode levar alguns segundos.");
+            setTimeout(function () {
+              location.reload();
+            }, 15000);
+          } else {
+            erros(response.status);
+          }
+        });
+  
+        //alert("Módulos inseridos com sucesso");
+      } else {
+        erros(response.status);
+      }
+    });
 }
 
 
