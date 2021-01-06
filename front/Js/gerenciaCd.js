@@ -1383,6 +1383,7 @@ function apagarTelefone(cod_telefone) {
   });
 }
 
+
 //Ponto
 function ponto() {
 
@@ -1788,9 +1789,6 @@ function edicaoPonto(ponto, categoria) {
 
                     puxaCategoria(json.cod_categoria, json.descricao);
                     
-                    checkLat()
-                    checkLong()
-
                     document.getElementById("botaoPonto").innerHTML = ` <button class='btn btn-primary' onclick='editarPidPonto(${Ponto}, ${pid}, ${categoria})' type='button'>Editar</button>`;
                   });
                 } else {
@@ -2047,8 +2045,7 @@ function latLong(input) {
                         checkGrauLong("min")
                         checkGrauLong("seg")
                       }, 0500);
-      }
-    );
+    });
   }
 }
 
