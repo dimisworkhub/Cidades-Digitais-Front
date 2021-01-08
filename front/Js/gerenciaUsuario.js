@@ -144,10 +144,12 @@ function adicionarModulo(){
 
         let tabelaMod = (`<thead style="background: #4b5366; color:white; font-size:15px">
                 <tr>
-                <th style="width:5%"> <span class="custom-checkbox">
-                <input type="checkbox" id="selectAll" >
-                <label for="selectAll"></label>
-                </span></th>
+                <th style="width:5%"> 
+                  <span class="custom-checkbox">
+                  <input type="checkbox" id="selectAll" >
+                  <label for="selectAll"></label>
+                  </span>
+                </th>
                 <th style="width:5%" scope="col">Cód. Módulo</th>
                 <th style="width:5%" scope="col">Módulo</th>
                 <th style="width:5%" scope="col">Sub. Módulo</th>
@@ -163,7 +165,7 @@ function adicionarModulo(){
 
           tabelaMod += (`<tr> <td>
                 <span class="custom-checkbox">
-                <input class="checking" onclick="modulos(` + i + `)" type="checkbox" id="checkbox` + i + `" name="options[]" value="` + json[i]["cod_modulo"] + `">
+                <input class="checking"  type="checkbox" id="checkbox` + i + `" name="options[]" value="` + json[i]["cod_modulo"] + `">
                 <label for="checkbox` + i + `"></label>
                 </span>
                 </td>`);
@@ -260,81 +262,85 @@ function enviarModulo(){
   let infoDeletar = [];
   
   for (let i = 0; i < listaModulo.length; i++) {
-    
-    if (valorModulo[i] != null){
-      if(controleDeClick[i] == true){
+    if(document.getElementById("checkbox"+i).checked==true){
+      // console.log(document.getElementById("checkbox"+i))
         infoAdicionar[j] = {
           "cod_usuario": parseFloat(meuCodigo),
           "cod_modulo": parseFloat(valorModulo[i]),
         }
-        j++;
-      }
+        console.log(infoAdicionar[j])
+        j++
     }
     
     else{
-      if(controleDeClick[i] == true){
         infoDeletar[k] = {
           "cod_usuario": parseFloat(meuCodigo),
           "cod_modulo": parseFloat(listaModulo[i].cod_modulo),
         }
-        k++;
-      }
+        console.log(infoDeletar[k])
+        k++
     }
     
   }
+  // console.log(infoDeletar)
   
   //transforma todas as informações do token em json
   let corpoModulo = JSON.stringify(infoAdicionar);
   console.log(corpoModulo);
   
-  
-  //função fetch para mandar
-  fetch(servidor + 'read/usuario/' + codigoLogado + '/modulo', {
-    method: 'POST',
-    body: corpoModulo,
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
     
-    //checar o status do pedido
-    console.log(response.statusText);
+    //função fetch para mandar
+    fetch(servidor + 'read/usuario/' + codigoLogado + '/modulo', {
+      method: 'POST',
+      body: corpoModulo,
+      headers: {
+        'Authorization': 'Bearer ' + meuToken
+      },
+    }).then(function (response) {
+      
+      //checar o status do pedido
+      console.log(response.statusText);
+      
+      //tratamento dos erros
+      if (response.status == 200 || response.status == 201) {
     
-    //tratamento dos erros
-    if (response.status == 200 || response.status == 201) {
-      
-      //transforma as informações do token em json
-      let corpoDeletar = JSON.stringify(infoDeletar);
-      console.log(corpoDeletar);
-      
-      //função fetch para deletar
-      fetch(servidor + 'read/usuario/' + codigoLogado + "/modulo", {
-        method: 'DELETE',
-        body: corpoDeletar,
-        headers: {
-          'Authorization': 'Bearer ' + meuToken,
-        },
-      }).then(function (response) {
-        
-        //checar o status do pedido
-        console.log(response.statusText);
-        
-        //tratamento dos erros
-        if (response.status == 204) {
-          alert("Por favor aguarde. Esta operção pode levar alguns segundos.");
-            setTimeout(function () {
-              location.reload();
-            }, 15000);
-          } else {
-            erros(response.status);
-          }
-        });
-  
-        //alert("Módulos inseridos com sucesso");
       } else {
         erros(response.status);
       }
     });
+  
+
+  //transforma as informações do token em json
+  let corpoDeletar = JSON.stringify(infoDeletar);
+
+  console.log(corpoDeletar)
+
+  if(infoDeletar.length > 0){
+
+    //função fetch para deletar
+    fetch(servidor + 'read/usuario/' + codigoLogado + "/modulo", {
+      method: 'DELETE',
+      body: corpoDeletar,
+      headers: {
+        'Authorization': 'Bearer ' + meuToken,
+      },
+    }).then(function (response) {
+      
+      //checar o status do pedido
+      console.log(response.status);
+      
+      //tratamento dos erros
+      if (response.status == 204) {
+        alert("Por favor aguarde. Esta operação pode levar alguns segundos.");
+          // setTimeout(function () {
+            // location.reload();
+          // }, 5000);
+        } else {
+          erros(response.status);
+        }
+    });
+  }
+  
 }
 
 
