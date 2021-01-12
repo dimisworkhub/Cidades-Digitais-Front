@@ -165,7 +165,7 @@ function adicionarModulo(){
 
           tabelaMod += (`<tr> <td>
                 <span class="custom-checkbox">
-                <input class="checking"  type="checkbox" id="checkbox` + i + `" name="options[]" value="` + json[i]["cod_modulo"] + `">
+                <input class="checking" onclick="modulos(` + i + `)" type="checkbox" id="checkbox` + i + `" name="options[]" value="` + json[i]["cod_modulo"] + `">
                 <label for="checkbox` + i + `"></label>
                 </span>
                 </td>`);
@@ -255,39 +255,117 @@ function modulos(numCod) {
 }
 
 function enviarModulo(){
-  console.log("entrou aqui");
   
-  let j = 0,k = 0;
+  let cooldown =0, j = 0,k = 0, l = 0,m = 0;
+  let infoAdicionarIndividual = [];
+  let infoDeletarIndividual = [];
   let infoAdicionar = [];
   let infoDeletar = [];
   
   for (let i = 0; i < listaModulo.length; i++) {
-    if(document.getElementById("checkbox"+i).checked==true){
-      // console.log(document.getElementById("checkbox"+i))
-        infoAdicionar[j] = {
+
+    if (valorModulo[i] != null){
+      if(controleDeClick[i] == true){
+        infoAdicionarIndividual[j] = {
           "cod_usuario": parseFloat(meuCodigo),
           "cod_modulo": parseFloat(valorModulo[i]),
         }
-        console.log(infoAdicionar[j])
-        j++
+        j++;
+      }else if(document.getElementById("checkbox"+i).checked==true){
+        // console.log(document.getElementById("checkbox"+i))
+        infoAdicionar[l] = {
+          "cod_usuario": parseFloat(meuCodigo),
+          "cod_modulo": parseFloat(valorModulo[i]),
+        }
+        l++
+      } 
+    }
+    else if(controleDeClick[i] == true){
+      infoDeletarIndividual[k] = {
+        "cod_usuario": parseFloat(meuCodigo),
+        "cod_modulo": parseFloat(listaModulo[i].cod_modulo),
+      }
+      k++;
     }
     
     else{
-        infoDeletar[k] = {
+        infoDeletar[m] = {
           "cod_usuario": parseFloat(meuCodigo),
           "cod_modulo": parseFloat(listaModulo[i].cod_modulo),
         }
-        console.log(infoDeletar[k])
-        k++
+        m++
     }
     
   }
-  // console.log(infoDeletar)
   
   //transforma todas as informações do token em json
-  let corpoModulo = JSON.stringify(infoAdicionar);
-  console.log(corpoModulo);
+  let corpoModuloIndividual = JSON.stringify(infoAdicionarIndividual);
   
+  if(infoAdicionarIndividual.length>0){
+    console.log(infoAdicionarIndividual);
+    // cooldown = infoAdicionarIndividual.length
+    
+    //função fetch para mandar
+    fetch(servidor + 'read/usuario/' + codigoLogado + '/modulo', {
+      method: 'POST',
+      body: corpoModuloIndividual,
+      headers: {
+        'Authorization': 'Bearer ' + meuToken
+      },
+    }).then(function (response) {
+      
+      //checar o status do pedido
+      console.log(response.statusText);
+      
+      //tratamento dos erros
+      if (response.status == 200 || response.status == 201) {
+        
+      } else {
+        erros(response.status);
+      }
+    });
+  
+  }
+
+  //transforma as informações do token em json
+  let corpoDeletarIndividual = JSON.stringify(infoDeletarIndividual);
+  
+  if(infoDeletarIndividual.length>0){
+    console.log(infoDeletarIndividual)
+    cooldown = infoDeletarIndividual.length
+
+    //função fetch para deletar
+    fetch(servidor + 'read/usuario/' + codigoLogado + "/modulo", {
+      method: 'DELETE',
+      body: corpoDeletarIndividual,
+      headers: {
+        'Authorization': 'Bearer ' + meuToken,
+      },
+    }).then(function (response) {
+      
+      //checar o status do pedido
+      console.log(response.status);
+      
+      //tratamento dos erros
+      if (response.status == 204) {
+        
+        } else {
+          erros(response.status);
+        }
+    });
+  }
+
+  //transforma todas as informações do token em json
+  let corpoModulo = JSON.stringify(infoAdicionar);
+  
+  if(infoAdicionar.length>0){
+    console.log(infoAdicionar.length);
+
+    if(infoAdicionar.length == 80){
+      cooldown = infoAdicionar.length
+    }else{
+      cooldown = infoAdicionar.length - 80
+    }
     
     //função fetch para mandar
     fetch(servidor + 'read/usuario/' + codigoLogado + '/modulo', {
@@ -303,19 +381,20 @@ function enviarModulo(){
       
       //tratamento dos erros
       if (response.status == 200 || response.status == 201) {
-    
+
       } else {
         erros(response.status);
       }
     });
   
+  }
 
   //transforma as informações do token em json
   let corpoDeletar = JSON.stringify(infoDeletar);
-
-  console.log(corpoDeletar)
-
-  if(infoDeletar.length > 0){
+  
+  if(infoDeletar.length>0){
+    console.log(infoDeletar.length)
+    cooldown = infoDeletar.length
 
     //função fetch para deletar
     fetch(servidor + 'read/usuario/' + codigoLogado + "/modulo", {
@@ -331,16 +410,21 @@ function enviarModulo(){
       
       //tratamento dos erros
       if (response.status == 204) {
-        alert("Por favor aguarde. Esta operação pode levar alguns segundos.");
-          // setTimeout(function () {
-            // location.reload();
-          // }, 5000);
+          
         } else {
           erros(response.status);
         }
     });
   }
-  
+  console.log(cooldown)
+  if(cooldown<10){
+    alert(`Por favor aguarde. Esta operação pode levar ${-(cooldown)} segundos.`);
+  }else{
+    alert(`Por favor aguarde. Esta operação pode levar ${cooldown/10} segundos.`);
+  }
+  setTimeout(function () {
+    location.reload();
+  }, cooldown * 100);
 }
 
 
@@ -374,7 +458,7 @@ function removerModulo(valorModulo) {
     //tratamento dos erros
     if (response.status == 204) {
       //alert("Apagado com sucesso.");
-      location.reload();
+      // location.reload();
     } else {
       erros(response.status);
     }
