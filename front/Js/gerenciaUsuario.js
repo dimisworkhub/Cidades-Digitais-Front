@@ -61,7 +61,9 @@ function enviar() {
 
 //para visualizar os modulos
 function usuarioModulo(){
-  document.getElementById("editar").innerHTML = (`<button class="btn btn-success" data-toggle="modal" onclick="adicionarModulo()" data-target="#adicionarModulo">Adicionar Modulos</button>`);
+  document.getElementById("editar").innerHTML = (`<button onclick="location.reload();" class="btn btn-success" >Salvar Alterações</button>
+                                                  <button class="btn btn-success" data-toggle="modal" onclick="adicionarModulo()" data-target="#adicionarModulo">Adicionar Modulos</button>`);
+  document.getElementById("editar2").innerHTML = (`<button onclick="location.reload();" class="btn btn-success" >Salvar Alterações</button>`);
   //função fetch para mandar
   fetch(servidor + 'read/usuario/' + meuCodigo + "/modulo", {
     method: 'GET',
@@ -88,13 +90,13 @@ function usuarioModulo(){
             <th style="width:20%" scope="col">Categoria 2</th>
             <th style="width:20%" scope="col">Categoria 3</th>
             <th style="width:25%" scope="col">Descrição</th>
-            <th style="width:5%" scope="col">Edição</th>
+            <th style="width:5%" scope="col">Remover</th>
             </tr>
             </thead>`);
-        tabela += (`<tbody>`);
+        tabela += (`<tbody id="modulares">`);
 
         for (let i = 0; i < modulosUsuario.length; i++) {
-          tabela += (`</td> <td>`);
+          tabela += (`<tr id="modular${i}"><td>`);
           tabela += modulosUsuario[i]["cod_modulo"];
           tabela += (`</td> <td>`);
           tabela += modulosUsuario[i]["categoria_1"];
@@ -438,6 +440,8 @@ function removerModulo(valorModulo) {
     "cod_usuario": parseInt(modulosUsuario[valorModulo].cod_usuario),
     "cod_modulo": parseInt(modulosUsuario[valorModulo].cod_modulo),
   }
+
+  document.getElementById('modulares').removeChild(document.getElementById('modular'+valorModulo));
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
