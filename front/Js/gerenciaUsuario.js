@@ -420,9 +420,9 @@ function enviarModulo(){
   }
   console.log(cooldown)
   if(cooldown<10){
-    alert(`Por favor aguarde. Esta operação pode levar ${-(cooldown)} segundos.`);
+    alert(`Por favor aguarde. Esta operação pode levar em média ${-(cooldown)} segundos.`);
   }else{
-    alert(`Por favor aguarde. Esta operação pode levar ${cooldown/10} segundos.`);
+    alert(`Por favor aguarde. Esta operação pode levar em média ${cooldown/10} segundos.`);
   }
   setTimeout(function () {
     location.reload();
