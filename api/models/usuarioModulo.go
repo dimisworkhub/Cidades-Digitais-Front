@@ -22,7 +22,7 @@ type UsuarioModulo struct {
 func (usuarioModulo *UsuarioModulo) SaveUsuarioModulo(db *gorm.DB) (*UsuarioModulo, error) {
 
 	//	Adiciona um novo elemento no banco de dados
-	err := db.Debug().Create(&usuarioModulo).Error
+	err := db.Create(&usuarioModulo).Error
 	if err != nil {
 		return &UsuarioModulo{}, err
 	}
@@ -57,7 +57,7 @@ func (usuarioModulo *UsuarioModulo) FindAllUsuarioModulo(db *gorm.DB, codUsuario
 func (usuarioModulo *UsuarioModulo) DeleteUsuarioModulo(db *gorm.DB, codUsuario, codModulo uint32) error {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
-	db = db.Debug().Model(&UsuarioModulo{}).Where("cod_usuario = ? AND cod_modulo = ?", codUsuario, codModulo).Take(&UsuarioModulo{}).Delete(&UsuarioModulo{})
+	db = db.Debug().Where("cod_usuario = ? AND cod_modulo = ?", codUsuario, codModulo).Delete(&UsuarioModulo{})
 
 	return db.Error
 }
