@@ -299,7 +299,7 @@ function enviarModulo(){
     }
     
   }
-  
+  console.log(infoAdicionar)
   //transforma todas as informações do token em json
   let corpoModuloIndividual = JSON.stringify(infoAdicionarIndividual);
   

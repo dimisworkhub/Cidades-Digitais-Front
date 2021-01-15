@@ -333,15 +333,16 @@ function enviarModulo(){
             //checar o status do pedido
             console.log(response.statusText);
             
+            console.log(response)
             //tratamento dos erros
             if (response.status == 200 || response.status == 201) {
-      
             } else {
               erros(response.status);
             }
           });
         
         }
+        cooldown = cooldown + 80;
         console.log(cooldown)
         if(cooldown<10){
           alert(`Por favor aguarde. Esta operação pode levar em média ${-(cooldown)} segundos.`);
@@ -349,7 +350,7 @@ function enviarModulo(){
           alert(`Por favor aguarde. Esta operação pode levar em média ${cooldown/10} segundos.`);
         }
         setTimeout(function () {
-          location.reload();
+          // location.reload();
         }, cooldown * 100);
 
       });
