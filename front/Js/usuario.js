@@ -1,3 +1,6 @@
+//esconde o gif de loading para os processos entrarem em ação
+$('#loading').hide();
+
 //Fazer Tabela
 let listaModulo = [];
 
@@ -333,21 +336,26 @@ function enviarModulo(){
             //checar o status do pedido
             console.log(response.statusText);
             
+            console.log(response)
             //tratamento dos erros
             if (response.status == 200 || response.status == 201) {
-      
             } else {
               erros(response.status);
             }
           });
         
         }
+        cooldown = cooldown + 80;
         console.log(cooldown)
         if(cooldown<10){
           alert(`Por favor aguarde. Esta operação pode levar em média ${-(cooldown)} segundos.`);
         }else{
           alert(`Por favor aguarde. Esta operação pode levar em média ${cooldown/10} segundos.`);
         }
+        
+        //Ativa o loading enquanto a pagina não der o reload
+        $('#loading').show();
+
         setTimeout(function () {
           location.reload();
         }, cooldown * 100);

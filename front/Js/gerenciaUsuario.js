@@ -1,3 +1,6 @@
+//esconde o gif de loading para os processos entrarem em ação
+$('#loading').hide();
+
 //pega o valor do usuario logado
 let codigoLogado = localStorage.getItem("codigoLogado");
 
@@ -299,7 +302,7 @@ function enviarModulo(){
     }
     
   }
-  
+  console.log(infoAdicionar)
   //transforma todas as informações do token em json
   let corpoModuloIndividual = JSON.stringify(infoAdicionarIndividual);
   
@@ -424,6 +427,10 @@ function enviarModulo(){
   }else{
     alert(`Por favor aguarde. Esta operação pode levar em média ${cooldown/10} segundos.`);
   }
+
+  //Ativa o loading enquanto a pagina não der o reload
+  $('#loading').show();
+
   setTimeout(function () {
     location.reload();
   }, cooldown * 100);
