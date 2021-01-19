@@ -348,3 +348,20 @@ table.table .avatar {
     box-shadow: none;
     background: #ddd;
 }
+#loading {
+    background: 
+        /* bottom, image */
+        url('../img/loading.gif') no-repeat center center,
+        /* top, transparent black, faked with gradient */ 
+        linear-gradient( 
+            rgba(202, 202, 202, 0.5),
+            rgb(202, 202, 202, 0.5) 
+        );
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 9999999;
+    
+}

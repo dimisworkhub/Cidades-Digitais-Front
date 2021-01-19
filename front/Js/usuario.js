@@ -1,3 +1,6 @@
+//esconde o gif de loading para os processos entrarem em ação
+$('#loading').hide();
+
 //Fazer Tabela
 let listaModulo = [];
 
@@ -349,8 +352,12 @@ function enviarModulo(){
         }else{
           alert(`Por favor aguarde. Esta operação pode levar em média ${cooldown/10} segundos.`);
         }
+        
+        //Ativa o loading enquanto a pagina não der o reload
+        $('#loading').show();
+
         setTimeout(function () {
-          // location.reload();
+          location.reload();
         }, cooldown * 100);
 
       });
