@@ -4,7 +4,7 @@ document.write(`
 		<div class="container-fluid">
 			<header class="cd-header"><!--Barra Menu-->
 				<div id="cd-logo">
-					<a onclick="logoff()"><img src="img/cd-logo.svg" alt="Logo"></a>
+					<a data-bs-toggle="tooltip" data-bs-html="true" title="Logout" onclick="logoff()"><img src="img/logoff.png" width="35px" height="40px" alt="Logo"></a>
 				</div>
 				<a class="cd-menu-trigger" href="#main-nav">Menu<span></span></a>
 			</header>
