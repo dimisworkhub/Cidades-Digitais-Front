@@ -345,7 +345,7 @@ function enviarModulo(){
           });
         
         }
-        // cooldown = cooldown + 80;
+        
         console.log(cooldown)
         if(cooldown<10){
           alert(`Por favor aguarde. Esta operação pode levar em média ${-(cooldown)} segundos.`);
