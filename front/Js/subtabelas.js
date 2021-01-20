@@ -12,16 +12,12 @@ function previsaoSub(valorCodigo) {
   listaFinal = [];
 
   document.getElementById("editar").innerHTML = (`<br>`);
-
-  //para limpar os campos da subtabela
-  if(document.getElementById("editar2").childNodes == "NodeList[div.clearfix]"){
-    document.getElementById("editar2").removeChild((`<div class="clearfix">
-    <div class="hint-text" id="mostrando"></div>
-    <ul class="pagination" id="paginacao"></ul>
-    </div>`));
-  }
   
   document.getElementById("editar2").innerHTML = (`<br>`);
+
+  if(document.getElementById("mostrando") != null){
+    document.getElementById("mostrando").style.visibility = "hidden";
+  }
 
   //função fetch para chamar os itens de previsão da tabela
   fetch(servidor + 'read/previsaoempenho', {
@@ -108,6 +104,8 @@ function empenhoSub(valorCodigo) {
   <ul class="pagination" id="paginacao"></ul>
   </div>`);
 
+  document.getElementById("mostrando").style.visibility = "visible";
+
   if (valorCodigo == '1') {
     caminhoFinalPaginacao = 'read/empenhocodprevisaoempenho/' + meuCodigo;
   } else {
@@ -126,6 +124,8 @@ function faturaSub(valorCodigo) {
   <div class="hint-text" id="mostrando"></div>
   <ul class="pagination" id="paginacao"></ul>
   </div>`);
+
+  document.getElementById("mostrando").style.visibility = "visible";
 
   if (valorCodigo == '1') {
     caminhoFinalPaginacao = 'read/fatura/' + meuCodigo;
@@ -182,7 +182,7 @@ function paginacao(){
             <th style="width:25%" scope="col">Data</th>
             </tr>
             </thead>`);
-        } else {
+        } else if (caminhoFinalPaginacao == 'read/fatura' || caminhoFinalPaginacao == 'read/fatura/' + meuCodigo) {
           tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
             <tr>
             <th style="width:20%" scope="col">Código de Fatura</th>
@@ -190,6 +190,8 @@ function paginacao(){
             <th style="width:30%" scope="col">Data</th>
             </tr>
             </thead>`);
+        } else {
+          console.log("ERRO em paginação da subtabela");
         }
         tabela += (`<tbody>`);
 

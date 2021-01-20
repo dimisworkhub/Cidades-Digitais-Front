@@ -2,6 +2,7 @@
 let resultadoClasse;
 let resultadoNatureza;
 let resultadoMunicipio;
+let resultadoTipoItem;
 
 let codAdmin = localStorage.getItem("administracao");
 
@@ -24,11 +25,7 @@ window.onload = function () {
   //console.log(codAdmin);
 }
 
-
-
 //FUNÇÕES DE EDIÇÃO ESCRITAS DE FORMA A USAREM OS PROPRIOS CAMINHOS COMO PARTE DO PROCESSO DE CHAMADA
-
-
 
 function selecionaAdmin(meuAdmin){
   if(meuAdmin == 1){
@@ -53,6 +50,7 @@ function selecionaAdmin(meuAdmin){
   }
   else if(meuAdmin == 5){
     selectClasse();
+    selectTipoItem();
     selectNatureza();
     visItem();
     document.getElementById("titulo1").innerHTML = "Tabela Itens";
@@ -348,13 +346,38 @@ function selectClasse() {
     }
   });
 }
+function selectTipoItem() {
+  fetch(servidor + 'read/tipoitem', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      response.json().then(function (json) {
+        for (let i = 0; i < json.length; i++) {
+          resultadoTipoItem += "<option value=" + json[i]["cod_tipo_item"] + ">" + json[i]["descricao"] + "</option>";
+        }
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
 function addItem() {
   let formulario = divInicio;
   formulario += (`<label for="cod_item">Código do Item</label>`);
   formulario += (`<input class="multisteps-form__input form-control inteiros" name="addcod_item" id="addcod_item"></input>`);
   formulario += divMeio;
   formulario += (`<label for="cod_tipo_item">Código do Tipo de Item</label>`);
-  formulario += (`<input class="multisteps-form__input form-control inteiros" name="cod_tipo_item" id="addcod_tipo_item"></input>`);
+  formulario += (`<select class="multisteps-form__input form-control inteiros" name="cod_tipo_item" id="addcod_tipo_item">`);
+  
+  formulario += resultadoTipoItem;
+
+  formulario += (`</select>`);
+
   formulario += divMeio;
   formulario += (`<label for="cod_natureza_despesa">Código da Natureza</label>`);
   formulario += (`<select class="multisteps-form__input form-control inteiros" name="cod_natureza_despesa" id="addcod_natureza_despesa" maxlength="45">`);
@@ -455,10 +478,10 @@ function envioModulo() {
 function visModulo() {
   caminho = "modulo";
   titulo = `<th style="width:20%" scope="col">Código de Modulo</th>
-  <th style="width:10%" scope="col">Categoria 1</th>
-  <th style="width:10%" scope="col">Categoria 2</th>
-  <th style="width:10%" scope="col">Categoria 3</th>
-  <th style="width:45%" scope="col">Descrição</th>`;
+  <th style="width:15%" scope="col">Categoria 1</th>
+  <th style="width:15%" scope="col">Categoria 2</th>
+  <th style="width:15%" scope="col">Categoria 3</th>
+  <th style="width:30%" scope="col">Descrição</th>`;
   estrutura = ["cod_modulo", "categoria_1", "categoria_2", "categoria_3", "descricao"];
   paginacao();
 }
@@ -800,11 +823,20 @@ function paginacao() {
       //pegar o json que possui a tabela
       response.json().then(function (json) {
 
-        let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
-        <tr>` + titulo + `
-        <th style="width:5%" scope="col">Editar</th>
-        </tr>
-        </thead>`);
+        let tabela = "";
+        if(codAdmin == 6){
+          tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
+          <tr>` + titulo + `
+          </tr>
+          </thead>`);
+        }
+        else{
+          tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
+          <tr>` + titulo + `
+          <th style="width:5%" scope="col">Editar</th>
+          </tr>
+          </thead>`);
+        }
         tabela += (`<tbody>`);
 
         //sistema de filtragem:
@@ -821,20 +853,16 @@ function paginacao() {
           tabela += (`<tr>`);
 
           for (j = 0; j < estrutura.length; j++) {
-            if(codAdmin < 4 || codAdmin == 11){
-
-              //para pegar o ultimo código
-              codigoSelecionado = (filtrado[i][estrutura[j]] + 1);
-
-            }
             tabela += (`<td id="` + estrutura[j] + `">`);
             tabela += filtrado[i][estrutura[j]];
             tabela += (`</td>`);
           }
 
+          if(codAdmin != 6){
           tabela += (`<td> <span class="d-flex">
           <button id="botaoEdicao" onclick="edit` + caminho + `(` + i + `)" class="btn btn-success"><i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i></button>
           </span> </td> </tr>`);
+          }
         }
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
