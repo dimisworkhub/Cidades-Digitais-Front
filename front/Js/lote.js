@@ -16,7 +16,7 @@ function paginacao() {
     //console.log(response)
     //tratamento dos erros
     if (response.status == 200) {
-      console.log(response.statusText);
+      //console.log(response.statusText);
       //pegar o json que possui a tabela
       response.json().then(function (json) {
 

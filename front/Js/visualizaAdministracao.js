@@ -1,15 +1,13 @@
 //captura valores para os "selects" futuros
 let resultadoClasse;
 let resultadoNatureza;
-let resultadoPrefeitos;
+let resultadoMunicipio;
 
 let codAdmin = localStorage.getItem("administracao");
 
-let codigoSelecionado;
-
-//para colocar no meio de estruturas HTML e dividi-las
+//para colocar no meio de estruturas HTML e organiza-las para o módulo
 let divInicio = '<div class="col-12 col-sm-12 mt-4">';
-let divInterno = '</div><div class="col-12 col-sm-12 mt-4">';
+let divMeio = '</div><div class="col-12 col-sm-12 mt-4">';
 let divFim = '</div>';
 
 //estrutura para fazer o processo funcionar
@@ -21,9 +19,14 @@ let estrutura =[];
 let paraEdicao;
 
 window.onload = function () {
+  mascara();
   selecionaAdmin(codAdmin);
   //console.log(codAdmin);
 }
+
+
+
+//FUNÇÕES DE EDIÇÃO ESCRITAS DE FORMA A USAREM OS PROPRIOS CAMINHOS COMO PARTE DO PROCESSO DE CHAMADA
 
 
 
@@ -150,24 +153,18 @@ function adicionaAdmin(meuAdmin){
 //informaçãoes para assunto
 function addAssunto() {
   let formulario = divInicio;
-  formulario += (`<label for="cod_assunto">Código do Assunto</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="cod_assunto" id="cod_assunto" value=""></input>`);
-  formulario += divInterno;
   formulario += (`<label for="descricao">Descrição</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="45" value=""></input>`);
+  formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="adddescricao" maxlength="45" value=""></textarea>`);
   formulario += divFim;
   document.getElementById("modalAdicao").innerHTML = formulario;
 
   let botao = (`<button class="btn btn-primary multi-button ml-auto" type="button" onclick="envioAssunto()" title="Adicionar">Adicionar</button>`);
   document.getElementById("botaoEnvio").innerHTML = botao;
 
-  document.getElementById("cod_assunto").innerHTML = codigoSelecionado;
-  document.getElementById("cod_assunto").disabled = true;
 }
 function envioAssunto() {
   let info = {
-    "cod_assunto": codigoSelecionado,
-    "descricao": document.getElementById("descricao").value,
+    "descricao": document.getElementById("adddescricao").value,
   };
   enviar("assunto",info,'POST');
 }
@@ -189,23 +186,17 @@ function editassunto(valor){
 //informaçãoes para categoria
 function addCategoria() {
   let formulario = divInicio;
-  formulario += (`<label for="cod_categoria">Código de Categoria</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="cod_categoria" id="cod_categoria" value=""></input>`);
   formulario += (`<label for="descricao">Descrição</label>`);
-  formulario += divInterno;
-  formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="45"></textarea>`);
+  formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="adddescricao" maxlength="45"></textarea>`);
   formulario += divFim;
   document.getElementById("modalAdicao").innerHTML = formulario;
-
-  document.getElementById("cod_categoria").value = codigoSelecionado;
-  document.getElementById("cod_categoria").disabled = true;
 
   let botao = (`<button class="btn btn-primary multi-button ml-auto" type="button" onclick="envioCategoria()" title="Adicionar">Adicionar</button>`);
   document.getElementById("botaoEnvio").innerHTML = botao;
 }
 function envioCategoria() {
   let info = {
-    "descricao": document.getElementById("descricao").value,
+    "descricao": document.getElementById("adddescricao").value,
   };
   enviar("categoria",info,'POST');
 }
@@ -227,24 +218,21 @@ function editcategoria(valor){
 //informaçãoes para classe de empenho
 function addClasseEmpenho() {
   let formulario = divInicio
-  formulario += (`<label for="cod_classe_empenho">Código de Classe de Empenho</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="cod_classe_empenho" id="cod_classe_empenho" value=""></input>`);
-  formulario += divInterno;
+  formulario += (`<label for="cod_classe_empenho">Código da Classe de Empenho</label>`);
+  formulario += (`<input class="multisteps-form__input form-control inteiros" name="cod_classe_empenho" id="addcod_classe_empenho"></input>`);
+  formulario += divMeio;
   formulario += (`<label for="descricao">Descrição</label>`);
-  formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="100"></textarea>`);
+  formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="adddescricao" maxlength="100"></textarea>`);
   formulario += divFim;
   document.getElementById("modalAdicao").innerHTML = formulario;
-  
-  document.getElementById("cod_classe_empenho").value = codigoSelecionado;
-  document.getElementById("cod_classe_empenho").disabled = true;
 
   let botao = (`<button class="btn btn-primary multi-button ml-auto" type="button" onclick="envioClasseEmpenho()" title="Adicionar">Adicionar</button>`);
   document.getElementById("botaoEnvio").innerHTML = botao;
 }
 function envioClasseEmpenho() {
   let info = {
-    "cod_classe_empenho": parseInt(document.getElementById("cod_classe_empenho").value),
-    "descricao": document.getElementById("descricao").value,
+    "cod_classe_empenho": parseInt(document.getElementById("addcod_classe_empenho").value),
+    "descricao": document.getElementById("adddescricao").value,
   };
   enviar("classeempenho",info,'POST');
 }
@@ -252,7 +240,7 @@ function visClasseEmpenho() {
   caminho = "classeempenho";
   titulo = `<th style="width:20%" scope="col">Código de Classe de Empenho</th>
   <th style="width:75%" scope="col">Descrição</th>`;
-  etrutura = ["cod_classe_empenho", "descricao"];
+  estrutura = ["cod_classe_empenho", "descricao"];
   paginacao();
 }
 function editclasseempenho(valor){
@@ -266,39 +254,33 @@ function editclasseempenho(valor){
 //informaçãoes para etapas
 function addEtapa() {
   let formulario = divInicio;
-  formulario += (`<label for="cod_etapa">Código de Etapa</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="cod_etapa" id="cod_etapa" value=""></input>`);
-  formulario += divInterno;
   formulario += (`<label for="descricao">Descrição</label>`);
-  formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="45"></textarea>`);
-  formulario += divInterno;
+  formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="adddescricao" maxlength="45"></textarea>`);
+  formulario += divMeio;
   formulario += (`<label for="duracao">Duração</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="duracao" id="duracao"></input>`);
-  formulario += divInterno;
+  formulario += (`<input class="multisteps-form__input form-control inteiros" name="duracao" id="addduracao"></input>`);
+  formulario += divMeio;
   formulario += (`<label for="depende">Depende</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="depende" id="depende"></input>`);
-  formulario += divInterno;
+  formulario += (`<input class="multisteps-form__input form-control inteiros" name="depende" id="adddepende"></input>`);
+  formulario += divMeio;
   formulario += (`<label for="delay">Delay</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="delay" id="delay"></input>`);
-  formulario += divInterno;
+  formulario += (`<input class="multisteps-form__input form-control inteiros" name="delay" id="adddelay"></input>`);
+  formulario += divMeio;
   formulario += (`<label for="setor_resp">Setor Responsável</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="setor_resp" id="setor_resp" maxlength="45"></input>`);
+  formulario += (`<input class="multisteps-form__input form-control" name="setor_resp" id="addsetor_resp" maxlength="45"></input>`);
   formulario += divFim;
   document.getElementById("modalAdicao").innerHTML = formulario;
-  
-  document.getElementById("cod_etapa").value = codigoSelecionado;
-  document.getElementById("cod_etapa").disabled = true;
 
   let botao = (`<button class="btn btn-primary multi-button ml-auto" type="button" onclick="envioEtapa()" title="Adicionar">Adicionar</button>`);
   document.getElementById("botaoEnvio").innerHTML = botao;
 }
 function envioEtapa() {
   let info = {
-    "descricao": document.getElementById("descricao").value,
-    "duracao": parseInt(document.getElementById("duracao").value),
-    "depende": parseInt(document.getElementById("depende").value),
-    "delay": parseInt(document.getElementById("delay").value),
-    "setor_resp": document.getElementById("setor_resp").value,
+    "descricao": document.getElementById("adddescricao").value,
+    "duracao": parseInt(document.getElementById("addduracao").value),
+    "depende": parseInt(document.getElementById("adddepende").value),
+    "delay": parseInt(document.getElementById("adddelay").value),
+    "setor_resp": document.getElementById("addsetor_resp").value,
   };
   enviar("etapa",info,'POST');
 }
@@ -369,34 +351,34 @@ function selectClasse() {
 function addItem() {
   let formulario = divInicio;
   formulario += (`<label for="cod_item">Código do Item</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="cod_item" id="cod_item"></input>`);
-  formulario += divInterno;
+  formulario += (`<input class="multisteps-form__input form-control inteiros" name="addcod_item" id="addcod_item"></input>`);
+  formulario += divMeio;
   formulario += (`<label for="cod_tipo_item">Código do Tipo de Item</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="cod_tipo_item" id="cod_tipo_item"></input>`);
-  formulario += divInterno;
-  formulario += (`<label for="cod_natureza_despeza">Código da Natureza</label>`);
-  formulario += (`<select class="multisteps-form__input form-control" name="cod_natureza_despeza" id="cod_natureza_despeza" maxlength="45">`);
+  formulario += (`<input class="multisteps-form__input form-control inteiros" name="cod_tipo_item" id="addcod_tipo_item"></input>`);
+  formulario += divMeio;
+  formulario += (`<label for="cod_natureza_despesa">Código da Natureza</label>`);
+  formulario += (`<select class="multisteps-form__input form-control inteiros" name="cod_natureza_despesa" id="addcod_natureza_despesa" maxlength="45">`);
 
   formulario += resultadoNatureza;
 
   formulario += (`</select>`);
   
-  formulario += divInterno;
+  formulario += divMeio;
 
   formulario += (`<label for="cod_classe_empenho">Código da Classe</label>`);
-  formulario += (`<select class="multisteps-form__input form-control" name="cod_classe_empenho" id="cod_classe_empenho" maxlength="45">`);
+  formulario += (`<select class="multisteps-form__input form-control inteiros" name="cod_classe_empenho" id="addcod_classe_empenho" maxlength="45">`);
 
   formulario += resultadoClasse;
 
   formulario += (`</select>`);
   
-  formulario += divInterno;
+  formulario += divMeio;
 
   formulario += (`<label for="descricao">Descrição</label>`);
-  formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="100"></textarea>`);
-  formulario += divInterno;
+  formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="adddescricao" maxlength="100"></textarea>`);
+  formulario += divMeio;
   formulario += (`<label for="unidade">Unidade</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="unidade" id="unidade" maxlength="45"></input>`);
+  formulario += (`<input class="multisteps-form__input form-control" name="unidade" id="addunidade" maxlength="45"></input>`);
   formulario += divFim;
   document.getElementById("modalAdicao").innerHTML = formulario;
 
@@ -405,12 +387,12 @@ function addItem() {
 }
 function envioItem() {
   let info = {
-    "cod_item": parseInt(document.getElementById("cod_item").value),
-    "cod_tipo_item": parseInt(document.getElementById("cod_tipo_item").value),
-    "cod_natureza_despeza": parseInt(document.getElementById("cod_natureza_despeza").value),
-    "cod_classe_empenho": parseInt(document.getElementById("cod_classe_empenho").value),
-    "descricao": document.getElementById("descricao").value,
-    "unidade": document.getElementById("unidade").value,
+    "cod_item": parseInt(document.getElementById("addcod_item").value),
+    "cod_tipo_item": parseInt(document.getElementById("addcod_tipo_item").value),
+    "cod_natureza_despesa": parseInt(document.getElementById("addcod_natureza_despesa").value),
+    "cod_classe_empenho": parseInt(document.getElementById("addcod_classe_empenho").value),
+    "descricao": document.getElementById("adddescricao").value,
+    "unidade": document.getElementById("addunidade").value,
   };
   enviar("itens",info,'POST');
 }
@@ -418,17 +400,17 @@ function visItem() {
   caminho = "itens";
   titulo = `<th style="width:10%" scope="col">Código do Item</th>
   <th style="width:10%" scope="col">Código do Tipo de Item</th>
-  <th style="width:10%" scope="col">Código da Natureza</th>
-  <th style="width:10%" scope="col">Código da Classe</th>
+  <th style="width:10%" scope="col">Natureza de Despeza</th>
+  <th style="width:10%" scope="col">Classe de Empenho</th>
   <th style="width:45%" scope="col">Descrição</th>
   <th style="width:10%" scope="col">Unidade</th>`;
   estrutura = ["cod_item", "cod_tipo_item", "cod_natureza_despesa", "cod_classe_empenho", "descricao", "unidade"];
   paginacao();
 }
-function edititem(valor){
+function edititens(valor){
   localStorage.setItem("cod_item", paraEdicao[valor].cod_item);
   localStorage.setItem("cod_tipo_item", paraEdicao[valor].cod_tipo_item);
-  localStorage.setItem("cod_natureza_despeza", paraEdicao[valor].cod_natureza_despeza);
+  localStorage.setItem("cod_natureza_despesa", paraEdicao[valor].cod_natureza_despesa);
   localStorage.setItem("cod_classe_empenho", paraEdicao[valor].cod_classe_empenho);
   localStorage.setItem("descricao", paraEdicao[valor].descricao);
   localStorage.setItem("unidade", paraEdicao[valor].unidade);
@@ -441,19 +423,19 @@ function edititem(valor){
 function addModulo() {
   let formulario = divInicio;
   formulario += (`<label for="cod_modulo">Código do Módulo</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="cod_modulo" id="cod_modulo"></input>`);
-  formulario += divInterno;
+  formulario += (`<input class="multisteps-form__input form-control" name="cod_modulo" id="addcod_modulo"></input>`);
+  formulario += divMeio;
   formulario += (`<label for="categoria_1">Categoria 1</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="categoria_1" id="categoria_1" maxlength="45"></input>`);
-  formulario += divInterno;
+  formulario += (`<input class="multisteps-form__input form-control" name="categoria_1" id="addcategoria_1" maxlength="45"></input>`);
+  formulario += divMeio;
   formulario += (`<label for="categoria_2">Categoria 2</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="categoria_2" id="categoria_2" maxlength="45"></input>`);
-  formulario += divInterno;
+  formulario += (`<input class="multisteps-form__input form-control" name="categoria_2" id="addcategoria_2" maxlength="45"></input>`);
+  formulario += divMeio;
   formulario += (`<label for="categoria_3">Categoria 3</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="categoria_3" id="categoria_3" maxlength="45"></input>`);
-  formulario += divInterno;
+  formulario += (`<input class="multisteps-form__input form-control" name="categoria_3" id="addcategoria_3" maxlength="45"></input>`);
+  formulario += divMeio;
   formulario += (`<label for="descricao">Descrição</label>`);
-  formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="200"></textarea>`);
+  formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="adddescricao" maxlength="200"></textarea>`);
   formulario += divFim;
   document.getElementById("modalAdicao").innerHTML = formulario;
 
@@ -462,11 +444,11 @@ function addModulo() {
 }
 function envioModulo() {
   let info = {
-    "cod_modulo": parseInt(document.getElementById("cod_modulo").value),
-    "categoria_1": document.getElementById("categoria_1").value,
-    "categoria_2": document.getElementById("categoria_2").value,
-    "categoria_3": document.getElementById("categoria_3").value,
-    "descricao": document.getElementById("descricao").value,
+    "cod_modulo": parseInt(document.getElementById("addcod_modulo").value),
+    "categoria_1": document.getElementById("addcategoria_1").value,
+    "categoria_2": document.getElementById("addcategoria_2").value,
+    "categoria_3": document.getElementById("addcategoria_3").value,
+    "descricao": document.getElementById("adddescricao").value,
   };
   enviar("modulo",info,'POST');
 }
@@ -481,11 +463,12 @@ function visModulo() {
   paginacao();
 }
 function editmodulo(valor){
-  localStorage.setItem("cod_assunto", paraEdicao[valor].cod_assunto);
+  localStorage.setItem("cod_modulo", paraEdicao[valor].cod_modulo);
+  localStorage.setItem("categoria_1", paraEdicao[valor].categoria_1);
+  localStorage.setItem("categoria_2", paraEdicao[valor].categoria_2);
+  localStorage.setItem("categoria_3", paraEdicao[valor].categoria_3);
   localStorage.setItem("descricao", paraEdicao[valor].descricao);
   window.location.href = "./gerenciaAdministracao.html";
-  localStorage.setItem("descricao", paraEdicao[valor].descricao);
-  window.location.href = "./gerenciaAdministracao.html";  
 }
 
 
@@ -494,46 +477,46 @@ function editmodulo(valor){
 function addMunicipio() {
   let formulario = divInicio;
   formulario += (`<label for="cod_ibge">Código do IBGE</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="cod_ibge" id="cod_ibge"></input>`);
-  formulario += divInterno;
+  formulario += (`<input class="multisteps-form__input form-control" name="cod_ibge" id="addcod_ibge"></input>`);
+  formulario += divMeio;
   formulario += (`<label for="descricao_municipio">Nome do Município</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="nome_municipio" id="nome_municipio" maxlength="50"></input>`);
-  formulario += divInterno;
+  formulario += (`<input class="multisteps-form__input form-control" name="nome_municipio" id="addnome_municipio" maxlength="50"></input>`);
+  formulario += divMeio;
   formulario += (`<label for="populacao">População</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="populacao" id="populacao"></input>`);
-  formulario += divInterno;
+  formulario += (`<input class="multisteps-form__input form-control" name="populacao" id="addpopulacao"></input>`);
+  formulario += divMeio;
   formulario += (`<label for="uf">UF</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="uf" id="uf" maxlength="2"></input>`);
-  formulario += divInterno;
+  formulario += (`<input class="multisteps-form__input form-control" name="uf" id="adduf" maxlength="2"></input>`);
+  formulario += divMeio;
   formulario += (`<label for="regiao">Região</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="regiao" id="regiao" maxlength="15"></input>`);
-  formulario += divInterno;
+  formulario += (`<input class="multisteps-form__input form-control" name="regiao" id="addregiao" maxlength="15"></input>`);
+  formulario += divMeio;
   formulario += (`<label for="cnpj">CNPJ</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="cnpj" id="cnpj" maxlength="14"></input>`);
-  formulario += divInterno;
+  formulario += (`<input class="multisteps-form__input form-control" name="cnpj" id="addcnpj" maxlength="14"></input>`);
+  formulario += divMeio;
   formulario += (`<label for="dist_capital">Capital Distrital</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="dist_capital" id="dist_capital"></input>`);
-  formulario += divInterno;
+  formulario += (`<input class="multisteps-form__input form-control" name="dist_capital" id="adddist_capital"></input>`);
+  formulario += divMeio;
   formulario += (`<label for="endereco">Endereço</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="endereco" id="endereco" maxlength="45"></input>`);
-  formulario += divInterno;
+  formulario += (`<input class="multisteps-form__input form-control" name="endereco" id="addendereco" maxlength="45"></input>`);
+  formulario += divMeio;
   formulario += (`<label for="numero">Número</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="numero" id="numero" maxlength="10"></input>`);
-  formulario += divInterno;
+  formulario += (`<input class="multisteps-form__input form-control" name="numero" id="addnumero" maxlength="10"></input>`);
+  formulario += divMeio;
   formulario += (`<label for="complemento">Complemento</label>`);
-  formulario += (`<textarea class="multisteps-form__input form-control" name="complemento" id="complemento" maxlength="250"></textarea>`);
-  formulario += divInterno;
+  formulario += (`<textarea class="multisteps-form__input form-control" name="complemento" id="addcomplemento" maxlength="250"></textarea>`);
+  formulario += divMeio;
   formulario += (`<label for="bairro">Bairro</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="bairro" id="bairro" maxlength="45"></input>`);
-  formulario += divInterno;
+  formulario += (`<input class="multisteps-form__input form-control" name="bairro" id="addbairro" maxlength="45"></input>`);
+  formulario += divMeio;
   formulario += (`<label for="idhm">IDHM</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="idhm" id="idhm"></input>`);
-  formulario += divInterno;
+  formulario += (`<input class="multisteps-form__input form-control" name="idhm" id="addidhm"></input>`);
+  formulario += divMeio;
   formulario += (`<label for="latitude">Latitude</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="latitude" id="latitude"></input>`);
-  formulario += divInterno;
+  formulario += (`<input class="multisteps-form__input form-control" name="latitude" id="addlatitude"></input>`);
+  formulario += divMeio;
   formulario += (`<label for="longitude">Longitude</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="longitude" id="longitude"></input>`);
+  formulario += (`<input class="multisteps-form__input form-control" name="longitude" id="addlongitude"></input>`);
   formulario += divFim;
   document.getElementById("modalAdicao").innerHTML = formulario;
 
@@ -542,20 +525,20 @@ function addMunicipio() {
 }
 function envioMunicipio() {
   let info = {
-    "cod_ibge": document.getElementById("cod_ibge").value,
-    "nome_municipio": parseInt(document.getElementById("nome_municipio").value),
-    "populacao": parseInt(document.getElementById("populacao").value),
-    "uf": parseInt(document.getElementById("uf").value),
-    "regiao": parseInt(document.getElementById("regiao").value),
-    "cnpj": parseInt(document.getElementById("cnpj").value),
-    "dist_capital": parseInt(document.getElementById("dist_capital").value),
-    "endereco": parseInt(document.getElementById("endereco").value),
-    "numero": parseInt(document.getElementById("numero").value),
-    "complemento": parseInt(document.getElementById("complemento").value),
-    "bairro": document.getElementById("bairro").value,
-    "idhm": document.getElementById("idhm").value,
-    "latitude": document.getElementById("latitude").value,
-    "longitude": document.getElementById("longitude").value,
+    "cod_ibge": parseInt(document.getElementById("addcod_ibge").value),
+    "nome_municipio": document.getElementById("addnome_municipio").value,
+    "populacao": parseInt(document.getElementById("addpopulacao").value),
+    "uf": document.getElementById("adduf").value,
+    "regiao": document.getElementById("addregiao").value,
+    "cnpj": document.getElementById("addcnpj").value,
+    "dist_capital": parseInt(document.getElementById("adddist_capital").value),
+    "endereco": document.getElementById("addendereco").value,
+    "numero": document.getElementById("addnumero").value,
+    "complemento": document.getElementById("addcomplemento").value,
+    "bairro": document.getElementById("addbairro").value,
+    "idhm": parseFloat(document.getElementById("addidhm").value),
+    "latitude": parseFloat(document.getElementById("addlatitude").value),
+    "longitude": parseFloat(document.getElementById("addlongitude").value),
   };
   enviar("municipio",info,'POST');
 }
@@ -579,10 +562,20 @@ function visMunicipio() {
   paginacao();
 }
 function editmunicipio(valor){
-  localStorage.setItem("cod_assunto", paraEdicao[valor].cod_assunto);
-  localStorage.setItem("descricao", paraEdicao[valor].descricao);
-  window.location.href = "./gerenciaAdministracao.html";
-  localStorage.setItem("descricao", paraEdicao[valor].descricao);
+  localStorage.setItem("cod_ibge", paraEdicao[valor].cod_ibge);
+  localStorage.setItem("nome_municipio", paraEdicao[valor].nome_municipio);
+  localStorage.setItem("populacao", paraEdicao[valor].populacao);
+  localStorage.setItem("uf", paraEdicao[valor].uf);
+  localStorage.setItem("regiao", paraEdicao[valor].regiao);
+  localStorage.setItem("cnpj", paraEdicao[valor].cnpj);
+  localStorage.setItem("dist_capital", paraEdicao[valor].dist_capital);
+  localStorage.setItem("endereco", paraEdicao[valor].endereco);
+  localStorage.setItem("numero", paraEdicao[valor].numero);
+  localStorage.setItem("complemento", paraEdicao[valor].complemento);
+  localStorage.setItem("bairro", paraEdicao[valor].bairro);
+  localStorage.setItem("idhm", paraEdicao[valor].idhm);
+  localStorage.setItem("latitude", paraEdicao[valor].latitude);
+  localStorage.setItem("longitude", paraEdicao[valor].longitude);
   window.location.href = "./gerenciaAdministracao.html";
 }
 
@@ -592,10 +585,10 @@ function editmunicipio(valor){
 function addNaturezaDespesa() {
   let formulario = divInicio;
   formulario += (`<label for="cod_natureza_despesa">Código de Natureza de Despesa</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="cod_natureza_despesa" id="cod_natureza_despesa"></input>`);
-  formulario += divInterno;
+  formulario += (`<input class="multisteps-form__input form-control" name="cod_natureza_despesa" id="addcod_natureza_despesa"></input>`);
+  formulario += divMeio;
   formulario += (`<label for="descricao">Descrição</label>`);
-  formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="100"></textarea>`);
+  formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="adddescricao" maxlength="100"></textarea>`);
   formulario += divFim;
   document.getElementById("modalAdicao").innerHTML = formulario;
 
@@ -604,8 +597,8 @@ function addNaturezaDespesa() {
 }
 function envioNaturezaDespesa() {
   let info = {
-    "cod_natureza_despesa": parseInt(document.getElementById("cod_natureza_despesa").value),
-    "descricao": document.getElementById("descricao").value,
+    "cod_natureza_despesa": parseInt(document.getElementById("addcod_natureza_despesa").value),
+    "descricao": document.getElementById("adddescricao").value,
   };
   enviar("naturezadespesa",info,'POST');
 }
@@ -617,11 +610,9 @@ function visNaturezaDespesa() {
   paginacao();
 }
 function editnaturezadespesa(valor){
-  localStorage.setItem("cod_assunto", paraEdicao[valor].cod_assunto);
+  localStorage.setItem("cod_natureza_despesa", paraEdicao[valor].cod_natureza_despesa);
   localStorage.setItem("descricao", paraEdicao[valor].descricao);
   window.location.href = "./gerenciaAdministracao.html";
-  localStorage.setItem("descricao", paraEdicao[valor].descricao);
-  window.location.href = "./gerenciaAdministracao.html";  
 }
 
 
@@ -639,7 +630,7 @@ function selectMunicipio() {
     if (response.status == 200) {
       response.json().then(function (json) {
         for (let i = 0; i < json.length; i++) {
-          resultadoPrefeitos += "<option>" + json[i]["cod_ibge"] + "</option>";
+          resultadoMunicipio += "<option value='" + json[i]["cod_ibge"] + "'>" + json[i]["nome_municipio"] + "</option>";
         }
       });
     } else {
@@ -650,31 +641,31 @@ function selectMunicipio() {
 function addPrefeito() {
   let formulario = divInicio;
   formulario += (`<label for="cod_prefeito">Código do Prefeito</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="cod_prefeito" id="cod_prefeito"></input>`);
-  formulario += divInterno;
+  formulario += (`<input class="multisteps-form__input form-control" name="cod_prefeito" id="addcod_prefeito"></input>`);
+  formulario += divMeio;
   formulario += (`<label for="cod_ibge">Código do IBGE</label>`);
-  formulario += (`<select class="multisteps-form__select form-control" name="cod_ibge" id="cod_ibge" maxlength="7">`);
+  formulario += (`<select class="multisteps-form__select form-control" name="cod_ibge" id="addcod_ibge" maxlength="7">`);
 
-  formulario += resultadoPrefeitos;
+  formulario += resultadoMunicipio;
 
   formulario += (`</select>`);
   
-  formulario += divInterno;
+  formulario += divMeio;
 
   formulario += (`<label for="nome">Nome</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="nome" id="nome" maxlength="45"></input>`);
-  formulario += divInterno;
+  formulario += (`<input class="multisteps-form__input form-control" name="nome" id="addnome" maxlength="45"></input>`);
+  formulario += divMeio;
   formulario += (`<label for="cpf">CPF</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="cpf" id="cpf" maxlength="11"></input>`);
-  formulario += divInterno;
+  formulario += (`<input class="multisteps-form__input form-control" name="cpf" id="addcpf" maxlength="11"></input>`);
+  formulario += divMeio;
   formulario += (`<label for="rg">RG</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="rg" id="rg" maxlength="20"></input>`);
-  formulario += divInterno;
+  formulario += (`<input class="multisteps-form__input form-control" name="rg" id="addrg" maxlength="20"></input>`);
+  formulario += divMeio;
   formulario += (`<label for="partido">Partido</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="partido" id="partido" maxlength="45"></input>`);
-  formulario += divInterno;
+  formulario += (`<input class="multisteps-form__input form-control" name="partido" id="addpartido" maxlength="45"></input>`);
+  formulario += divMeio;
   formulario += (`<label for="exercicio">Exercício</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="exercicio" id="exercicio" maxlength="45"></input>`);
+  formulario += (`<input class="multisteps-form__input form-control" name="exercicio" id="addexercicio" maxlength="45"></input>`);
   formulario += divFim;
   document.getElementById("modalAdicao").innerHTML = formulario;
 
@@ -683,12 +674,12 @@ function addPrefeito() {
 }
 function envioPrefeitos() {
   let info = {
-    "cod_ibge": parseInt(document.getElementById("cod_ibge").value),
-    "nome": document.getElementById("nome").value,
-    "cpf": document.getElementById("cpf").value,
-    "rg": document.getElementById("rg").value,
-    "partido": document.getElementById("partido").value,
-    "exercicio": document.getElementById("exercicio").value,
+    "cod_ibge": parseInt(document.getElementById("addcod_ibge").value),
+    "nome": document.getElementById("addnome").value,
+    "cpf": document.getElementById("addcpf").value,
+    "rg": document.getElementById("addrg").value,
+    "partido": document.getElementById("addpartido").value,
+    "exercicio": document.getElementById("addexercicio").value,
   };
   enviar("prefeitos",info,'POST');
 }
@@ -719,11 +710,11 @@ function editprefeitos(valor){
 //informaçãoes para Tipo de item
 function addTipoItem() {
   let formulario = divInicio;
-  formulario += (`<label for="cod_tipo_item">Código do Tipo de Item</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="cod_tipo_item" id="cod_tipo_item" maxlength="100"></input>`);
-  formulario += divInterno;
-  formulario += (`<label for="descricao">Descrição</label>`);
-  formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="100"></textarea>`);
+  formulario += (`<label for="cod_tipo_item">Código do Tipo de Item:</label>`);
+  formulario += (`<input class="multisteps-form__input form-control inteiros" name="cod_tipo_item" id="addcod_tipo_item"></input>`);
+  formulario += divMeio;
+  formulario += (`<label for="descricao">Descrição:</label>`);
+  formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="adddescricao" maxlength="100"></textarea>`);
   formulario += divFim;
   document.getElementById("modalAdicao").innerHTML = formulario;
 
@@ -732,8 +723,8 @@ function addTipoItem() {
 }
 function envioTipoItem() {
   let info = {
-    "cod_tipo_item": parseInt(document.getElementById("cod_tipo_item").value),
-    "descricao": document.getElementById("descricao").value,
+    "cod_tipo_item": parseInt(document.getElementById("addcod_tipo_item").value),
+    "descricao": document.getElementById("adddescricao").value,
   };
   enviar("tipoitem",info,'POST');
 }
@@ -748,8 +739,6 @@ function edittipoitem(valor){
   localStorage.setItem("cod_tipo_item", paraEdicao[valor].cod_tipo_item);
   localStorage.setItem("descricao", paraEdicao[valor].descricao);
   window.location.href = "./gerenciaAdministracao.html";
-  localStorage.setItem("descricao", paraEdicao[valor].descricao);
-  window.location.href = "./gerenciaAdministracao.html";  
 }
 
 
@@ -757,11 +746,8 @@ function edittipoitem(valor){
 //informaçãoes para Tipologia
 function addTipologia() {
   let formulario = divInicio;
-  formulario += (`<label for="cod_tipologia">Código de Tipologia</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="cod_tipologia" id="cod_tipologia" value="">` + codigoSelecionado + `</input>`);
-  formulario += divInterno;
   formulario += (`<label for="descricao">Descrição</label>`);
-  formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="45"></textarea>`);
+  formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="adddescricao" maxlength="45"></textarea>`);
   formulario += divFim;
   document.getElementById("modalAdicao").innerHTML = formulario;
 
@@ -770,7 +756,7 @@ function addTipologia() {
 }
 function envioTipologia() {
   let info = {
-    "descricao": document.getElementById("descricao").value,
+    "descricao": document.getElementById("adddescricao").value,
   };
   enviar("tipologia",info,'POST');
 }
@@ -785,12 +771,11 @@ function edittipologia(valor){
   localStorage.setItem("cod_tipologia", paraEdicao[valor].cod_tipologia);
   localStorage.setItem("descricao", paraEdicao[valor].descricao);
   window.location.href = "./gerenciaAdministracao.html";
-  localStorage.setItem("descricao", paraEdicao[valor].descricao);
-  window.location.href = "./gerenciaAdministracao.html";  
 }
 
 
 
+//sistema para todas as tabelas
 function paginacao() {
 
   porPagina = document.getElementById("quantos").value;
@@ -864,9 +849,9 @@ function paginacao() {
 
 
 
-function enviar(caminho,info,metodo) {
+function enviar(caminho,conteudo,metodo) {
   //transforma as informações do token em json
-  let corpo = JSON.stringify(info);
+  let corpo = JSON.stringify(conteudo);
   //função fetch para enviar
   fetch(servidor + 'read/' + caminho, {
     method: metodo,
@@ -881,10 +866,10 @@ function enviar(caminho,info,metodo) {
 
     //tratamento dos erros
     if (response.status == 200 || response.status == 201 || response.status == 202) {
-      response.json().then(function (json) {
-        //console.log(json);
-      });
-      //location.reload();
+      // response.json().then(function (json) {
+      //   console.log(json);
+      // });
+      location.reload();
     } else {
       erros(response.status);
     }

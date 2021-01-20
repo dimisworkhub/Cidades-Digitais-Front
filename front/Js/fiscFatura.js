@@ -157,18 +157,15 @@ function enabler() {
 
 function enviar() {
 
+  let data = document.getElementById("dt_nf").value;
+
   //  JSON usado para mandar as informações no fetch
   let info = {
-    "num_nf": "",
-    "cod_ibge": "",
-    "dt_nf": "",
+    "num_nf": parseInt(document.getElementById("num_nf").value),
+    "cod_ibge": parseInt(document.getElementById("cod_ibge").value),
+    "dt_nf": mascaraData(data),
   };
 
-  data = document.getElementById("dt_nf").value;
-
-  info.num_nf = parseInt(document.getElementById("num_nf").value);
-  info.cod_ibge = parseInt(document.getElementById("cod_ibge").value);
-  info.dt_nf = mascaraData(data);
 
   //transforma as informações em string para mandar
   let corpo = JSON.stringify(info);

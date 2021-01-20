@@ -104,8 +104,7 @@ function mascaraData(data){
     dataFinal = null;
 
     return dataFinal;
-  }
-  else{
+  }else{
 
     //utiliza split
     let dataSeparada = data.split("/");
