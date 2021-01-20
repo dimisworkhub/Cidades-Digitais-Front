@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/jinzhu/gorm"
 )
@@ -11,12 +12,14 @@ import (
 =========================	*/
 
 type Itens struct {
-	CodItem            uint32 `gorm:"primary_key;not null" json:"cod_item"`
-	CodTipoItem        uint32 `gorm:"primary_key;foreign_key:CodTipoItem;not null" json:"cod_tipo_item"`
-	CodNaturezaDespesa uint32 `gorm:"foreign_key:CodNaturezaDespesa;not null" json:"cod_natureza_despesa"`
-	CodClasseEmpenho   uint32 `gorm:"foreign_key:CodClasseEmpenho;not null" json:"cod_classe_empenho"`
-	Descricao          string `gorm:"default:null" json:"descricao"`
-	Unidade            string `gorm:"default:null" json:"unidade"`
+	CodItem                  uint32 `gorm:"primary_key;not null" json:"cod_item"`
+	CodTipoItem              uint32 `gorm:"primary_key;foreign_key:CodTipoItem;not null" json:"cod_tipo_item"`
+	CodNaturezaDespesa       uint32 `gorm:"foreign_key:CodNaturezaDespesa;not null" json:"cod_natureza_despesa"`
+	CodClasseEmpenho         uint32 `gorm:"foreign_key:CodClasseEmpenho;not null" json:"cod_classe_empenho"`
+	Descricao                string `gorm:"default:null" json:"descricao"`
+	DescricaoNaturezaDespesa string `gorm:"default:null" json:"descricao_natureza_despesa"`
+	DescricaoClasseEmpenho   string `gorm:"default:null" json:"descricao_classe_empenho"`
+	Unidade                  string `gorm:"default:null" json:"unidade"`
 }
 
 /*  =========================
@@ -58,7 +61,14 @@ func (itens *Itens) FindAllItens(db *gorm.DB) (*[]Itens, error) {
 	allItens := []Itens{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&Itens{}).Find(&allItens).Error
+	err := db.Debug().Table("itens").
+		Select("itens.*, natureza_despesa.descricao AS descricao_natureza_despesa, classe_empenho.descricao AS descricao_classe_empenho").
+		Joins("INNER JOIN natureza_despesa ON natureza_despesa.cod_natureza_despesa = itens.cod_natureza_despesa").
+		Joins("INNER JOIN classe_empenho ON classe_empenho.cod_classe_empenho = itens.cod_classe_empenho").
+		Scan(&allItens).Error
+
+	fmt.Println(allItens[0])
+
 	if err != nil {
 		return &[]Itens{}, err
 	}
