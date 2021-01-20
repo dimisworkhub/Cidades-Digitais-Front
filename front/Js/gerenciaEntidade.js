@@ -1,12 +1,6 @@
 //pega o CNPJ escolhido anteriormente
 let meuCNPJ = localStorage.getItem("cnpj");
-let meuNome = localStorage.getItem("nome");
-let meuEndereco = localStorage.getItem("endereco");
-let meuNumero = localStorage.getItem("numero");
-let meuBairro = localStorage.getItem("bairro");
-let meuCep = localStorage.getItem("cep");
-let meuMunicipio = localStorage.getItem("nome_municipio");
-let meuObs = localStorage.getItem("observacao");
+
 let cidades = [];
 
 
@@ -85,30 +79,15 @@ function enviar() {
 
   //estrutura para o JSON usado no fetch
   let info = {
-    "nome": "",
-    "endereco": "",
-    "numero": "",
-    "bairro": "",
-    "cep": "",
-    "nome_municipio": "",
-    "observacao": "",
+    "nome": document.getElementById("nome").value,
+    "endereco": document.getElementById("endereco").value,
+    "numero":  document.getElementById("numero").value,
+    "bairro": document.getElementById("bairro").value,
+    "cep": document.getElementById("cep").value,
+    "uf": document.getElementById("uf").value,
+    "nome_municipio": document.getElementById("nome_municipio").value,
+    "observacao": document.getElementById("observacao").value,
   };
-
-  let a = document.getElementById("nome").value;
-  let b = document.getElementById("endereco").value;
-  let c = document.getElementById("numero").value;
-  let d = document.getElementById("bairro").value;
-  let e = document.getElementById("cep").value;
-  let f = document.getElementById("nome_municipio").value;
-  let g = document.getElementById("observacao").value;
-
-  info.nome = a.value;
-  info.endereco = b.value;
-  info.numero = c.value;
-  info.bairro = d.value;
-  info.cep = e.value;
-  info.nome_municipio = f.value;
-  info.observacao = g.value;
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);

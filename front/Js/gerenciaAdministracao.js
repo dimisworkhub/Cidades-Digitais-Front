@@ -2,6 +2,7 @@
 let resultadoClasse = "";
 let resultadoNatureza = "";
 let resultadoMunicipio = "";
+let resultadoTipoItem = "";
 
 let codAdmin = localStorage.getItem("administracao");
 
@@ -32,8 +33,6 @@ function selecionaAdmin(meuAdmin){
   }
   else if(meuAdmin == 5){
     selectClasse();
-    selectNatureza();
-    edititem();
     document.getElementById("titulo1").innerHTML = "Editar Itens";
     document.getElementById("titulo2").innerHTML = "Editar Itens";
   }
@@ -54,7 +53,6 @@ function selecionaAdmin(meuAdmin){
   }
   else if(meuAdmin == 9){
     selectMunicipio();
-    editprefeito();
     document.getElementById("titulo1").innerHTML = "Editar Prefeito";
     document.getElementById("titulo2").innerHTML = "Editar Prefeito";
   }
@@ -92,12 +90,10 @@ function editassunto(){
   
   editassunto2();
 }
-
 function editassunto2(){
   //separado por questões de criação
   document.getElementById("descricao").value = localStorage.getItem("descricao");
 }
-
 function enviarassunto(){
   let info = {
     "descricao": document.getElementById("descricao").value,
@@ -224,26 +220,7 @@ function enviaretapa(){
 
 
 //informaçãoes para itens
-function selectNatureza() {
-  fetch(servidor + 'read/naturezadespesa', {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
 
-    //tratamento dos erros
-    if (response.status == 200) {
-      response.json().then(function (json) {
-        for (let i = 0; i < json.length; i++) {
-          resultadoNatureza += "<option value=" + json[i]["cod_natureza_despesa"] + ">" + json[i]["descricao"] + "</option>";
-        }
-      });
-    } else {
-      erros(response.status);
-    }
-  });
-}
 function selectClasse() {
   fetch(servidor + 'read/classeempenho', {
     method: 'GET',
@@ -258,6 +235,49 @@ function selectClasse() {
         for (let i = 0; i < json.length; i++) {
           resultadoClasse += "<option value=" + json[i]["cod_classe_empenho"] + ">" + json[i]["descricao"] + "</option>";
         }
+        selectTipoItem();
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+function selectTipoItem() {
+  fetch(servidor + 'read/tipoitem', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      response.json().then(function (json) {
+        for (let i = 0; i < json.length; i++) {
+          resultadoTipoItem += "<option value=" + json[i]["cod_tipo_item"] + ">" + json[i]["descricao"] + "</option>";
+        }
+        selectNatureza();
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+function selectNatureza() {
+  fetch(servidor + 'read/naturezadespesa', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      response.json().then(function (json) {
+        for (let i = 0; i < json.length; i++) {
+          resultadoNatureza += "<option value=" + json[i]["cod_natureza_despesa"] + ">" + json[i]["descricao"] + "</option>";
+        }
+        edititem();
       });
     } else {
       erros(response.status);
@@ -266,8 +286,10 @@ function selectClasse() {
 }
 function edititem(){
   let campos =`<div class="form-group col-md-4">
-  <label for="cod_tipo_item">Código do Tipo de Item:</label>
-  <input class="form-control" id="cod_tipo_item"></input>
+  <label for="cod_tipo_item">Tipo de Item:</label>
+  <select class="form-control" id="cod_tipo_item">
+  ` + resultadoTipoItem + `
+  </select>
   </div>
 
   <div class="form-group col-md-4">
@@ -316,13 +338,13 @@ function edititem2(){
 function enviaritem(){
   let info = {
     "cod_item": parseInt(localStorage.getItem("cod_item")),
-    "cod_tipo_item": document.getElementById("cod_tipo_item").value,
+    "cod_tipo_item": parseInt(document.getElementById("cod_tipo_item").value),
     "cod_natureza_despesa": parseInt(document.getElementById("cod_natureza_despesa").value),
     "cod_classe_empenho": parseInt(document.getElementById("cod_classe_empenho").value),
-    "descricao": parseInt(document.getElementById("descricao").value),
+    "descricao": document.getElementById("descricao").value,
     "unidade": document.getElementById("unidade").value,
   };
-  enviar("itens/" + localStorage.getItem("cod_tipo_item"),info);
+  enviar("itens/" + localStorage.getItem("cod_item") + "/" + localStorage.getItem("cod_tipo_item"),info);
 }
 
 
@@ -377,7 +399,30 @@ function enviarmodulo(){
   //pega o usuario logado
   let userLogado = localStorage.getItem("logado");
 
-  enviar("usuario/" + userLogado + "/modulo/" + localStorage.getItem("cod_modulo"),info);
+  //processo para pegar o código do usuário logado
+  fetch(servidor + 'read/usuario', {
+    method: "GET",
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+    if (response.status == 200 || response.status == 201 || response.status == 202) {
+      response.json().then(function (json) {
+
+        let codigoDoUsuario;
+
+        for(let i=0;i<json.lenght;i++){
+          if(json[i]["nome"] == userLogado){
+            codigoDoUsuario = json[i]["cod_usuario"];
+          }
+        }
+
+        enviar("usuario/" + codigoDoUsuario + "/modulo/" + localStorage.getItem("cod_modulo"),info);
+      });
+    } else {
+      erros(response.status);
+    }
+  });
 }
 
 
@@ -541,6 +586,7 @@ function selectMunicipio() {
         for (let i = 0; i < json.length; i++) {
           resultadoMunicipio += "<option value='" + json[i]["cod_ibge"] + "'>" + json[i]["nome_municipio"] + "</option>";
         }
+        editprefeito();
       });
     } else {
       erros(response.status);
@@ -601,14 +647,14 @@ function editprefeito2(){
 function enviarprefeito(){
   let info = {
     "cod_prefeito": parseInt(localStorage.getItem("cod_prefeito")),
-    "cod_ibge": document.getElementById("cod_ibge").value,
-    "nome": parseInt(document.getElementById("nome").value),
-    "cpf": parseInt(document.getElementById("cpf").value),
-    "rg": parseInt(document.getElementById("rg").value),
-    "partido": parseInt(document.getElementById("partido").value),
-    "exercicio": parseInt(document.getElementById("exercicio").value),
+    "cod_ibge": parseInt(document.getElementById("cod_ibge").value),
+    "nome": document.getElementById("nome").value,
+    "cpf": document.getElementById("cpf").value,
+    "rg": document.getElementById("rg").value,
+    "partido": document.getElementById("partido").value,
+    "exercicio": document.getElementById("exercicio").value,
   };
-  enviar("prefeito/" + localStorage.getItem("cod_prefeito"),info);
+  enviar("prefeitos/" + localStorage.getItem("cod_prefeito"),info);
 }
 
 
@@ -695,7 +741,7 @@ function enviar(caminho,conteudo) {
       // });
       window.location.href = "./visualizaAdministracao.html";
     } else {
-      erros(response.status);
+      //erros(response.status);
     }
   });
 }

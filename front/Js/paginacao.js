@@ -38,14 +38,6 @@ function paginasOrganizadas(json,comeco,fim){
   //checar o json
   //console.log(json);
 
-  //mostra quanto do total aparece na tela
-  document.getElementById("mostrando").innerHTML = "Mostrando " + (comeco + 1) + " a " + fim + " de " + json.length;
-  if (porPagina > json.length - comeco) {
-    document.getElementById("mostrando").innerHTML = "Mostrando " + (comeco + 1) + " a " + json.length + " de " + json.length;
-  }
-
-
-
   //organizador de paginação
   totalPaginas = Math.floor((json.length-1) / porPagina);
 
@@ -55,6 +47,12 @@ function paginasOrganizadas(json,comeco,fim){
   //escolha de pagina
   //projeto inacabado
   //paginas += `<input id="selectPagina" placeholder="Pagina"></input><button type="button" class="btn btn-primary" onclick="selecionarPagina()"><i class="fa fa-search"></i></button>`;
+
+  //mostra quanto do total aparece na tela
+  document.getElementById("mostrando").innerHTML = "Mostrando " + (comeco + 1) + " a " + fim + " de " + json.length;
+  if (porPagina > json.length - comeco) {
+    document.getElementById("mostrando").innerHTML = "Mostrando " + (comeco + 1) + " a " + json.length + " de " + json.length;
+  }
 
   //apenas aciona se precisar de paginação
   if (json.length > porPagina) {
