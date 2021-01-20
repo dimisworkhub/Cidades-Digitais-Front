@@ -17,6 +17,8 @@ let userCriado,
 
 function paginacao() {
 
+  console.log(userLogado);
+
   porPagina = document.getElementById("quantos").value;
   let comeco = contador * porPagina;
   let fim = (contador + 1) * porPagina;
@@ -277,9 +279,8 @@ function enviarModulo(){
   let infoAdicionar = [];
 
   //função fetch para mandar
-  fetch(servidor + 'read/usuario/' + userLogado + '/modulo', {
-    method: 'POST',
-    body: infoModulo,
+  fetch(servidor + 'read/usuario', {
+    method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
     },

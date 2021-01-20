@@ -64,9 +64,9 @@ function enviar() {
 
 //para visualizar os modulos
 function usuarioModulo(){
-  document.getElementById("editar").innerHTML = (`<button onclick="location.reload();" class="btn btn-success" >Salvar Alterações</button>
+  document.getElementById("editar").innerHTML = (`<button onclick="location.reload();" class="btn btn-success" >Atualizar Itens</button>
                                                   <button class="btn btn-success" data-toggle="modal" onclick="adicionarModulo()" data-target="#adicionarModulo">Adicionar Modulos</button>`);
-  document.getElementById("editar2").innerHTML = (`<button onclick="location.reload();" class="btn btn-success" >Salvar Alterações</button>`);
+  document.getElementById("editar2").innerHTML = (`<button onclick="location.reload();" class="btn btn-success" >Atualizar Itens</button>`);
   //função fetch para mandar
   fetch(servidor + 'read/usuario/' + meuCodigo + "/modulo", {
     method: 'GET',
