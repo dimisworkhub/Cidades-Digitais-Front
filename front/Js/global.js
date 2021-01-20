@@ -21,7 +21,7 @@ function erros(value) {
 	} else if (value == 412) {
 		alert("Erro: Informação colocada é incorreta ou improcessável.");
 	} else if (value == 422) {
-		alert("Erro: Usuário ou senha incorretos.");
+		alert("Erro: Valor(es) colocado(s) incorreto(s).");
 	} else if (value == 500) {
 		window.location.href = "./errors/500.html";
 	} else if (value == 504) {

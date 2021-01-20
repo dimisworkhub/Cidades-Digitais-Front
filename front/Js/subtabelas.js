@@ -1,10 +1,26 @@
 //variavel usada nas subtabelas:
 let listaFinal = [];
 
+//filtro de subtabelas pelo codigo escolhido (1 para previsao, 2 para lote, 3 para cidades digitais)
+//empenho possui o codigo especial 0, que indica que está vindo da tabela itens de fatura
+let caminhoFinalPaginacao;
+
 //tabela pra previsão de empenho:
 function previsaoSub(valorCodigo) {
 
+  listaFinal = null;
+  listaFinal = [];
+
   document.getElementById("editar").innerHTML = (`<br>`);
+
+  //para limpar os campos da subtabela
+  if(document.getElementById("editar2").childNodes == "NodeList[div.clearfix]"){
+    document.getElementById("editar2").removeChild((`<div class="clearfix">
+    <div class="hint-text" id="mostrando"></div>
+    <ul class="pagination" id="paginacao"></ul>
+    </div>`));
+  }
+  
   document.getElementById("editar2").innerHTML = (`<br>`);
 
   //função fetch para chamar os itens de previsão da tabela
@@ -87,20 +103,51 @@ function previsaoSub(valorCodigo) {
 function empenhoSub(valorCodigo) {
 
   document.getElementById("editar").innerHTML = (`<br>`);
-  document.getElementById("editar2").innerHTML = (`<br>`);
-
-  //filtro de subtabelas pelo codigo escolhido (1 para previsao, 2 para lote, 3 para cidades digitais)
-  //empenho possui o codigo especial 0, que indica que está vindo da tabela itens de fatura
-  let caminhoEmpenho;
+  document.getElementById("editar2").innerHTML = (`<div class="clearfix">
+  <div class="hint-text" id="mostrando"></div>
+  <ul class="pagination" id="paginacao"></ul>
+  </div>`);
 
   if (valorCodigo == '1') {
-    caminhoEmpenho = 'read/empenhocodprevisaoempenho/' + meuCodigo;
+    caminhoFinalPaginacao = 'read/empenhocodprevisaoempenho/' + meuCodigo;
   } else {
-    caminhoEmpenho = 'read/empenho';
+    caminhoFinalPaginacao = 'read/empenho';
   }
 
+  paginacao();
+
+}
+
+//tabela pra fatura:
+function faturaSub(valorCodigo) {
+
+  document.getElementById("editar").innerHTML = (`<br>`);
+  document.getElementById("editar2").innerHTML = (`<div class="clearfix">
+  <div class="hint-text" id="mostrando"></div>
+  <ul class="pagination" id="paginacao"></ul>
+  </div>`);
+
+  if (valorCodigo == '1') {
+    caminhoFinalPaginacao = 'read/fatura/' + meuCodigo;
+  } else {
+    caminhoFinalPaginacao = 'read/fatura';
+  }
+
+  paginacao();
+
+}
+
+function paginacao(){
+
+  listaFinal = null;
+  listaFinal = [];
+
+  porPagina = 50;
+  let comeco = contador * porPagina;
+  let fim = (contador + 1) * porPagina;
+
   //função fetch para chamar os itens de empenho da tabela
-  fetch(servidor + caminhoEmpenho, {
+  fetch(servidor + caminhoFinalPaginacao, {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -116,7 +163,7 @@ function empenhoSub(valorCodigo) {
         //console.log(json);
 
         let tabela = "";
-        if (valorCodigo == '1') {
+        if (caminhoFinalPaginacao == 'read/empenhocodprevisaoempenho/' + meuCodigo) {
           tabela += (`<thead style="background: #4b5366; color:white; font-size:15px">
             <tr>
             <th style="width:50%" scope="col">Código de Empenho</th>
@@ -126,7 +173,7 @@ function empenhoSub(valorCodigo) {
         }
 
         //caso não seja em previsão
-        else if (valorCodigo == '2' || valorCodigo == '3') {
+        else if (caminhoFinalPaginacao == 'read/empenho') {
           tabela += (`<thead style="background: #4b5366; color:white; font-size:15px">
             <tr>
             <th style="width:20%" scope="col">Código de Empenho</th>
@@ -135,30 +182,38 @@ function empenhoSub(valorCodigo) {
             <th style="width:25%" scope="col">Data</th>
             </tr>
             </thead>`);
+        } else {
+          tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
+            <tr>
+            <th style="width:20%" scope="col">Código de Fatura</th>
+            <th style="width:50%" scope="col">Município</th>
+            <th style="width:30%" scope="col">Data</th>
+            </tr>
+            </thead>`);
         }
         tabela += (`<tbody>`);
 
         let j = 0;
         for (let i = 0; i < json.length; i++) {
 
-          if (valorCodigo == '1') {
+          if (caminhoFinalPaginacao == 'read/empenhocodprevisaoempenho/' + meuCodigo) {
             if (meuCodigo == json[i]["cod_previsao_empenho"]) {
               listaFinal[j] = json[i];
               j++;
             }
-          } else if (valorCodigo == '2') {
-            if (meuCodigo == json[i]["cod_lote"]) {
-              listaFinal[j] = json[i];
-              j++;
-            }
-          } else if (valorCodigo == '3') {
-            if (meuLote == json[i]["cod_lote"]) {
+          } 
+
+          else if(caminhoFinalPaginacao == 'read/empenho'){
+            if (meuCodigo == json[i]["cod_lote"] || (meuLote == json[i]["cod_lote"] && meuCodigo != json[i]["cod_lote"])) {
               listaFinal[j] = json[i];
               j++;
             }
           }
+          else if(caminhoFinalPaginacao == 'read/fatura' || caminhoFinalPaginacao == 'read/fatura/' + meuCodigo){
+            listaFinal[i] = json[i];
+          }
 
-          //else if feito assim para pegar o valor do i na tabela normal
+          //if feito assim para pegar o valor do i na tabela normal (apenas caso seja utilizado o link)
           else if (json[i]["cod_empenho"] == listaItem[valorUsado]["cod_empenho"]) {
             localStorage.setItem("id_empenho", json[i].id_empenho);
             localStorage.setItem("cod_empenho", json[i].cod_empenho);
@@ -172,112 +227,61 @@ function empenhoSub(valorCodigo) {
           }
         }
 
-        for (i = 0; i < listaFinal.length; i++) {
+        for (i = comeco; i < fim && i < listaFinal.length; i++) {
           //captura itens para tabela
-          tabela += (`<tr style="cursor:pointer" id="linha` + i + `" onmouseover="sublinhar(` + i + "," + json.length + `)" onclick="redirecionar(` + i + "," + "'empenho'" + `)">`);
-          tabela += (`<td>`);
-          tabela += listaFinal[i]["cod_empenho"];
-          tabela += (`</td>`);
 
-          //caso não seja em previsão
-          if (valorCodigo == '2' || valorCodigo == '3') {
+          //caso seja empenho
+          if(caminhoFinalPaginacao == 'read/empenhocodprevisaoempenho/' + meuCodigo || caminhoFinalPaginacao == 'read/empenho'){
+            tabela += (`<tr style="cursor:pointer" id="linha` + i + `" onmouseover="sublinhar(` + i + "," + json.length + `)" onclick="redirecionar(` + i + "," + "'empenho'" + `)">`);
             tabela += (`<td>`);
-            tabela += listaFinal[i]["cod_natureza_despesa"] + " - " + listaFinal[i]["descricao"];
+            tabela += listaFinal[i]["cod_empenho"];
             tabela += (`</td>`);
-            tabela += (`<td>`);
-            if (listaFinal[i]["tipo"] == "o") {
-              tabela += "Original";
-            } else {
-              tabela += "Reajuste";
+
+            //caso não seja em previsão
+            if (caminhoFinalPaginacao != 'read/empenhocodprevisaoempenho/' + meuCodigo) {
+              tabela += (`<td>`);
+              tabela += listaFinal[i]["cod_natureza_despesa"] + " - " + listaFinal[i]["descricao"];
+              tabela += (`</td>`);
+              tabela += (`<td>`);
+              if (listaFinal[i]["tipo"] == "o") {
+                tabela += "Original";
+              } else {
+                tabela += "Reajuste";
+              }
+              tabela += (`</td>`);
             }
+
+            tabela += (`<td class="data">`);
+
+            mascara();
+
+            tabela += arrumaData(listaFinal[i]["data"]);
             tabela += (`</td>`);
+            tabela += (`</tr>`);
           }
 
-          tabela += (`<td class="data">`);
+          //caso seja fatura
+          else{
+            //tabela para fatura
+            tabela += (`<tr style="cursor:pointer" id="linha` + i + `" onmouseover="sublinhar(` + i + "," + json.length + `)" onclick="redirecionar(` + i + "," + "'fatura'" + `)">`);
+            tabela += (`<td>`);
+            tabela += listaFinal[i]["num_nf"];
+            tabela += (`</td><td>`);
+            tabela += listaFinal[i]["nome_municipio"] + " - " + listaFinal[i]["uf"] + " - " + listaFinal[i]["cod_ibge"];
 
-          mascara();
+            tabela += (`</td><td class="data">`);
 
-          tabela += arrumaData(listaFinal[i]["data"]);
-          tabela += (`</td>`);
-          tabela += (`</tr>`);
+            mascara();
+
+            tabela += arrumaData(listaFinal[i]["dt_nf"]);
+            tabela += (`</td>`);
+
+            tabela += (`</tr>`);
+          }
         }
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
-      });
-    } else {
-      erros(response.status);
-    }
-  });
-}
-
-//tabela pra fatura:
-function faturaSub(valorCodigo) {
-
-  document.getElementById("editar").innerHTML = (`<br>`);
-  document.getElementById("editar2").innerHTML = (`<br>`);
-
-  //filtro de subtabelas pelo codigo escolhido (1 para empenho, 2 para CD)
-  let caminhoFatura;
-
-  if (valorCodigo == '1') {
-    caminhoFatura = 'read/fatura/' + meuCodigo;
-  }
-
-  //caso não seja em empenho
-  else if (valorCodigo == '2') {
-    caminhoFatura = 'read/fatura';
-  }
-
-  //função fetch para chamar os itens de previsão da tabela
-  fetch(servidor + caminhoFatura, {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-
-    //tratamento dos erros
-    if (response.status == 200) {
-
-      //pegar o json que possui a tabela
-      response.json().then(function (json) {
-
-        //console.log(json);
-
-        let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
-          <tr>
-          <th style="width:20%" scope="col">Código de Fatura</th>
-          <th style="width:50%" scope="col">Município</th>
-          <th style="width:30%" scope="col">Data</th>
-          </tr>
-          </thead>`);
-        tabela += (`<tbody>`);
-
-        let j = 0;
-        for (let i = 0; i < json.length; i++) {
-          listaFinal[j] = json[i];
-          j++;
-        }
-
-        for (i = 0; i < listaFinal.length; i++) {
-          //captura itens para tabela
-          tabela += (`<tr style="cursor:pointer" id="linha` + i + `" onmouseover="sublinhar(` + i + "," + json.length + `)" onclick="redirecionar(` + i + "," + "'fatura'" + `)">`);
-          tabela += (`<td>`);
-          tabela += listaFinal[i]["num_nf"];
-          tabela += (`</td><td>`);
-          tabela += listaFinal[i]["nome_municipio"] + " - " + listaFinal[i]["uf"] + " - " + listaFinal[i]["cod_ibge"];
-
-          tabela += (`</td><td class="data">`);
-
-          mascara();
-
-          tabela += arrumaData(listaFinal[i]["data"]);
-          tabela += (`</td>`);
-
-          tabela += (`</tr>`);
-        }
-        tabela += (`</tbody>`);
-        document.getElementById("tabela").innerHTML = tabela;
+        paginasOrganizadas(listaFinal,comeco,fim);
       });
     } else {
       erros(response.status);
@@ -287,6 +291,9 @@ function faturaSub(valorCodigo) {
 
 //tabela pra pagamento:
 function pagamentoSub(valorCodigo) {
+
+  listaFinal = null;
+  listaFinal = [];
 
   document.getElementById("editar").innerHTML = (`<br>`);
   document.getElementById("editar2").innerHTML = (`<br>`);
@@ -443,6 +450,11 @@ let caminhoFinal;
 
 function itensLote() {
 
+  listaFinal = null;
+  listaFinal = [];
+
+  document.getElementById("tabela").innerHTML = "";
+
   //cria o botão para editar
   document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarItemLote()" class="btn btn-success">Salvar Alterações</button>`);
   document.getElementById("editar2").innerHTML = (`<button id="editar" onclick="editarItemLote()" class="btn btn-success">Salvar Alterações</button>`);
@@ -549,6 +561,11 @@ function editarItemLote() {
 //CD Itens
 
 function itensCD() {
+
+  listaFinal = null;
+  listaFinal = [];
+
+  document.getElementById("tabela").innerHTML = "";
 
   //cria o botão para editar
   document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarItemCD()" class="btn btn-success">Salvar Alterações em Itens</button>`);
@@ -669,6 +686,9 @@ function editarItemCD() {
 let meuEmpenho = [];
 
 function itensFiscalizacao(caminho) {
+
+  listaFinal = null;
+  listaFinal = [];
 
   if (caminho == "itensfatura") {
     //cria o botão para editar

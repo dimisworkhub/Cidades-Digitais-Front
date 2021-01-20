@@ -33,7 +33,7 @@ function pagina(valor) {
 
 
 //função que organiza o sistema com paginas
-function paginasOrganizadas(json,comeco,fim){
+function paginasOrganizadas(json,comeco,fim){ 
 
   //checar o json
   //console.log(json);
@@ -50,7 +50,7 @@ function paginasOrganizadas(json,comeco,fim){
   totalPaginas = Math.floor((json.length-1) / porPagina);
 
   //primeira pagina
-  let paginas = `<li style="cursor:pointer" id="anterior" class="page-item" ><a onclick="antes() class="page-link"">Anterior</a></li>`;
+  let paginas = `<li style="cursor:pointer" id="anterior" class="page-item"><a onclick="antes()" class="page-link">Anterior</a></li>`;
 
   //escolha de pagina
   //projeto inacabado
@@ -149,11 +149,9 @@ function paginasOrganizadas(json,comeco,fim){
   }
 
   //proxima pagina
-  paginas += `<li style="cursor:pointer" id="proximo" class="page-item" ><a onclick="depois()" class="page-link">Próximo</a></li>`;
+  paginas += `<li style="cursor:pointer" id="proximo" class="page-item"><a onclick="depois()" class="page-link">Próximo</a></li>`;
 
   document.getElementById("paginacao").innerHTML = paginas;
-
-
 
   //limite das paginas
   if (contador > 0) {

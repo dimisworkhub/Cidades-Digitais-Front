@@ -42,22 +42,8 @@
                         </div>
                         <!--Table header-->
                         <form enctype='application/json'>
-                            <div class="form-row" style=" padding: 30px;">
-
-                                <!-- parte onde eu vou editar para aceitar varios valores -->
-
-                                <div class="form-group col-md-2">
-                                    <label for="cod_usuario">Código do Usuário:</label>
-                                    <input type="number" class="form-control" id="cod_usuario" readonly>
-                                </div>
-
-                                <div style="width:100%; text-align: center;">
-                                    <div class="col-sm-6">
-                                        <button style="background-color:#3a3a3a" type="button" class="btn btn-primary" onclick="salvarEdicao()">Concluir</button>
-                                    </div>
-                                </div>
-
-                            </div>
+                            <!-- Local onde são colocados os campos que estão no .js -->
+                            <div class="form-row" style=" padding: 30px;" id="campos"></div>
                         </form>
 
                     </div>
@@ -75,6 +61,7 @@
 </body>
 
 <script src="./Js/global.js"></script>
+<script src="./Js/mask.js"></script>
 <script src="./Js/gerenciaAdministracao.js"></script>
 <script src="./Js/multi.js"></script>
 <script src="./Js/main.js"></script> <!-- Resource jQuery -->
