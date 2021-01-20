@@ -17,7 +17,7 @@ import (
 	FUNCAO CRIAR TOKEN AO REALIZAR LOGIN
 =========================  */
 
-func CreateToken(userID uint32, userMod []uint32) (string, error) {
+func CreateToken(userID uint32, userName string, userMod []uint32) (string, error) {
 
 	//	Cria um mapa de informações sobre o user
 	claims := jwt.MapClaims{}
@@ -27,6 +27,9 @@ func CreateToken(userID uint32, userMod []uint32) (string, error) {
 
 	//	id do usuario
 	claims["userID"] = userID
+
+	//	nome do usuario
+	claims["userName"] = userName
 
 	//	Modulos do usuario
 	claims["userMod"] = userMod
@@ -70,7 +73,7 @@ func TokenValid(r *http.Request) error {
 }
 
 /*  =========================
-	FUNCAO RETIRAR O TOKEN O TOKEN DA URI
+	FUNCAO RETIRAR O TOKEN DA URI
 =========================  */
 
 func ExtractToken(r *http.Request) string {
