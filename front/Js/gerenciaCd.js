@@ -1383,6 +1383,7 @@ function apagarTelefone(cod_telefone) {
   });
 }
 
+
 //Ponto
 function ponto() {
 
@@ -1537,113 +1538,118 @@ function novoPidPonto() {
     "nome": document.getElementById("nomePonto").value,
     "inep": document.getElementById("inepPonto").value,
   };
-
-  console.log(infoPid)
-  //transforma as informações em string para mandar
-  let corpo1 = JSON.stringify(infoPid);
-  //função fetch para mandar
-  fetch(servidor + 'read/pid', {
-    method: 'POST',
-    body: corpo1,
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-
-    //tratamento dos erros
-    if (response.status == 200 || response.status == 201) {
-      console.log('Pid inserido com sucesso!')
-      
-      setTimeout(function () {
-      
-        //função fetch para buscar o ultimo pid instalado
-        fetch(servidor + 'read/pid', {
-          method: 'GET',
-          headers: {
-            'Authorization': 'Bearer ' + meuToken
-          },
-        }).then(function (response) {
   
-          if (response.status == 200) {
+  //verifica se algum dos campos está inserido errado
+  if(document.getElementById("lat") || document.getElementById("lon") || document.getElementById("grauLat")?.textContent || document.getElementById("grauLong")?.textContent){
+    alert("Campo com valor inválido!")
+  }else{
   
-            //pegar o json que possui a tabela
-            response.json().then(function (json) {
+    console.log(infoPid)
+    //transforma as informações em string para mandar
+    let corpo1 = JSON.stringify(infoPid);
+    //função fetch para mandar
+    fetch(servidor + 'read/pid', {
+      method: 'POST',
+      body: corpo1,
+      headers: {
+        'Authorization': 'Bearer ' + meuToken
+      },
+    }).then(function (response) {
   
-              //ultimo cod_pid
-              for (i = 0; i < json.length; i++) {
-                ultimoPid = json[i].cod_pid;
-              }
-              console.log(ultimoPid)
-              
-              let infoPonto
-              if(document.getElementById('grau').id == "grau"){
-
-                //Pega os valores dos campos de graus e transforma em decimal
-                grauToDecimal();
+      //tratamento dos erros
+      if (response.status == 200 || response.status == 201) {
+        console.log('Pid inserido com sucesso!')
+        
+        setTimeout(function () {
+        
+          //função fetch para buscar o ultimo pid instalado
+          fetch(servidor + 'read/pid', {
+            method: 'GET',
+            headers: {
+              'Authorization': 'Bearer ' + meuToken
+            },
+          }).then(function (response) {
+    
+            if (response.status == 200) {
+    
+              //pegar o json que possui a tabela
+              response.json().then(function (json) {
+    
+                //ultimo cod_pid
+                for (i = 0; i < json.length; i++) {
+                  ultimoPid = json[i].cod_pid;
+                }
+                console.log(ultimoPid)
                 
-                infoPonto = {
-                  "cod_ponto": parseInt(document.getElementById("cod_pontoPonto").value),
-                  "cod_categoria": parseInt(document.getElementById("categoria").value),
-                  "cod_ibge": parseInt(meuCodigo),
-                  "cod_pid": parseInt(ultimoPid),
-                  "endereco": document.getElementById("enderecoPonto").value,
-                  "numero": document.getElementById("numeroPonto").value,
-                  "complemento": document.getElementById("complementoPonto").value,
-                  "bairro": document.getElementById("bairroPonto").value,
-                  "cep": document.getElementById("cepPonto").value,
-                  "latitude": laatitude,
-                  "longitude": loongitude
-                }
-
-              }else if(document.getElementById('decimal').id == "decimal"){
-                infoPonto = {
-                  "cod_ponto": parseInt(document.getElementById("cod_pontoPonto").value),
-                  "cod_categoria": parseInt(document.getElementById("categoria").value),
-                  "cod_ibge": parseInt(meuCodigo),
-                  "cod_pid": parseInt(ultimoPid),
-                  "endereco": document.getElementById("enderecoPonto").value,
-                  "numero": document.getElementById("numeroPonto").value,
-                  "complemento": document.getElementById("complementoPonto").value,
-                  "bairro": document.getElementById("bairroPonto").value,
-                  "cep": document.getElementById("cepPonto").value,
-                  "latitude": parseFloat(document.getElementById("latitudePonto").value),
-                  "longitude": parseFloat(document.getElementById("longitudePonto").value),
-                }
-              }
-            
-              console.log(infoPonto)
-              //transforma as informações em string para mandar
-              let corpo2 = JSON.stringify(infoPonto);
-              //função fetch para mandar
-              fetch(servidor + 'read/ponto', {
-                method: 'POST',
-                body: corpo2,
-                headers: {
-                  'Authorization': 'Bearer ' + meuToken
-                },
-              }).then(function (response) {
-            
-                //tratamento dos erros
-                if (response.status == 200 || response.status == 201) {
-                  alert('Ponto inserido com sucesso!')
-                  setTimeout(function () {
-                    location.reload()
-                  }, 2000);
-                } else {
-                  erros(response.status);
-                }
-              });
+                let infoPonto
   
-            });
-          } else {
-            erros(response.status);
-          }
-        });
-      }, 1000);
-    } else {
-      erros(response.status);
-    }
-  });
+                if(document.getElementById('decimal')?.id == "decimal"){
+                  infoPonto = {
+                    "cod_ponto": parseInt(document.getElementById("cod_pontoPonto").value),
+                    "cod_categoria": parseInt(document.getElementById("categoria").value),
+                    "cod_ibge": parseInt(meuCodigo),
+                    "cod_pid": parseInt(ultimoPid),
+                    "endereco": document.getElementById("enderecoPonto").value,
+                    "numero": document.getElementById("numeroPonto").value,
+                    "complemento": document.getElementById("complementoPonto").value,
+                    "bairro": document.getElementById("bairroPonto").value,
+                    "cep": document.getElementById("cepPonto").value,
+                    "latitude": parseFloat(document.getElementById("latitudePonto").value),
+                    "longitude": parseFloat(document.getElementById("longitudePonto").value),
+                  }
+                } else if(document.getElementById('grau').id == "grau"){
+  
+                  //Pega os valores dos campos de graus e transforma em decimal
+                  grauToDecimal();
+                  
+                  infoPonto = {
+                    "cod_ponto": parseInt(document.getElementById("cod_pontoPonto").value),
+                    "cod_categoria": parseInt(document.getElementById("categoria").value),
+                    "cod_ibge": parseInt(meuCodigo),
+                    "cod_pid": parseInt(ultimoPid),
+                    "endereco": document.getElementById("enderecoPonto").value,
+                    "numero": document.getElementById("numeroPonto").value,
+                    "complemento": document.getElementById("complementoPonto").value,
+                    "bairro": document.getElementById("bairroPonto").value,
+                    "cep": document.getElementById("cepPonto").value,
+                    "latitude": laatitude,
+                    "longitude": loongitude
+                  }
+                }
+                console.log(infoPonto)
+                //transforma as informações em string para mandar
+                let corpo2 = JSON.stringify(infoPonto);
+                //função fetch para mandar
+                fetch(servidor + 'read/ponto', {
+                  method: 'POST',
+                  body: corpo2,
+                  headers: {
+                    'Authorization': 'Bearer ' + meuToken
+                  },
+                }).then(function (response) {
+              
+                  //tratamento dos erros
+                  if (response.status == 200 || response.status == 201) {
+                    alert('Ponto inserido com sucesso!')
+                    setTimeout(function () {
+                      location.reload()
+                    }, 2000);
+                  } else {
+                    erros(response.status);
+                  }
+                });
+    
+              });
+            } else {
+              erros(response.status);
+            }
+          });
+        }, 1000);
+      } else {
+        erros(response.status);
+      }
+    });
+  }
 }
 
 function apagarPidPonto(cod_ponto, cod_categoria, cod_pid) {
@@ -1719,6 +1725,7 @@ function viaCep(){
 
 }
 
+//puxa a aba de edição, colocando todos os dados
 function edicaoPonto(ponto, categoria) {
   
   //fetch de ponto
@@ -1793,19 +1800,6 @@ function edicaoPonto(ponto, categoria) {
             erros(response.status);
           }
         });
-        // let x = "";
-        // for (let i = 0; i < json.length; i++) {
-        //   x += "<option value='" + json[i].cod_assunto + "'>" + json[i].descricao + "</option>";
-
-        //   //para remoção de itens
-        //   valorRemovido[i] = 0;
-        // }
-
-        // document.getElementById("assunto").innerHTML = x;
-
-        
-
-        // getAssuntos(valor);
       });
     } else {
       erros(response.status);
@@ -1814,85 +1808,131 @@ function edicaoPonto(ponto, categoria) {
 
 }
 
+//função que de fato faz a edição
 function editarPidPonto(ponto, pid, categoria) {
+  //verifica se algum dos campos está inserido errado
+  if(document.getElementById("lat") || document.getElementById("lon") || document.getElementById("grauLat")?.textContent || document.getElementById("grauLong")?.textContent){
+    alert("Campo com valor inválido!")
+  }else{
+    let edicaoPonto 
 
-  let edicaoPonto = {
-    "cod_ponto": parseInt(document.getElementById("cod_pontoPonto").value),
-    "cod_categoria": parseInt(document.getElementById("categoria").value),
-    "cod_ibge": parseInt(meuCodigo),
-    "cod_pid": parseInt(pid),
-    "endereco": document.getElementById("enderecoPonto").value,
-    "numero": document.getElementById("numeroPonto").value,
-    "complemento": document.getElementById("complementoPonto").value,
-    "bairro": document.getElementById("bairroPonto").value,
-    "cep": document.getElementById("cepPonto").value,
-    "latitude": parseFloat(document.getElementById("latitude").value),
-    "longitude": parseFloat(document.getElementById("longitude").value),
-  };
+    if(document.getElementById("latitudePonto") && document.getElementById("longitudePonto")){
+      edicaoPonto = {
+        "cod_ponto": parseInt(document.getElementById("cod_pontoPonto").value),
+        "cod_categoria": parseInt(document.getElementById("categoria").value),
+        "cod_ibge": parseInt(meuCodigo),
+        "cod_pid": parseInt(pid),
+        "endereco": document.getElementById("enderecoPonto").value,
+        "numero": document.getElementById("numeroPonto").value,
+        "complemento": document.getElementById("complementoPonto").value,
+        "bairro": document.getElementById("bairroPonto").value,
+        "cep": document.getElementById("cepPonto").value,
+        "latitude": parseFloat(document.getElementById("latitudePonto").value),
+        "longitude": parseFloat(document.getElementById("longitudePonto").value),
+      };
+    }else{
 
-  let edicaoPid = {
-    "cod_ibge": parseInt(meuCodigo),
-    "nome": document.getElementById("nomePonto").value,
-    "inep": document.getElementById("inepPonto").value,
-  };
+      //Pega os valores dos campos de graus e transforma em decimal
+      grauToDecimal();
 
-  //transforma as informações do token em json
-  let corpo1 = JSON.stringify(edicaoPonto);
-  let corpo2 = JSON.stringify(edicaoPid);
-  
-  console.log(corpo2);
-  fetch(servidor + 'read/pid/' + pid, {
-    method: 'PUT',
-    body: corpo2,
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-    //checar o status do pedido
-    console.log(response.statusText);
+      edicaoPonto = {
+        "cod_ponto": parseInt(document.getElementById("cod_pontoPonto").value),
+        "cod_categoria": parseInt(document.getElementById("categoria").value),
+        "cod_ibge": parseInt(meuCodigo),
+        "cod_pid": parseInt(pid),
+        "endereco": document.getElementById("enderecoPonto").value,
+        "numero": document.getElementById("numeroPonto").value,
+        "complemento": document.getElementById("complementoPonto").value,
+        "bairro": document.getElementById("bairroPonto").value,
+        "cep": document.getElementById("cepPonto").value,
+        "latitude": laatitude,
+        "longitude": loongitude,
+      };
 
-    //tratamento dos erros
-    if (response.status == 200 || response.status == 201) {
-
-      //pegar a data para enviar no editarUacom2
-      response.json().then(function (json) {
-        setTimeout(function () {
-          console.log(corpo1);
-          fetch(servidor + `read/ponto/${ponto}/${categoria}/${meuCodigo}`, {
-            method: 'PUT',
-            body: corpo1,
-            headers: {
-              'Authorization': 'Bearer ' + meuToken
-            },
-          }).then(function (response) {
-            //checar o status do pedido
-            console.log(response.statusText);
-  
-            //tratamento dos erros
-            if (response.status == 200 || response.status == 201) {
-  
-              //pegar a data para enviar no editarUacom2
-              response.json().then(function (json) {
-                setTimeout(function () {
-                  location.reload()
-                }, 1000);
-              });
-  
-            } else {
-              // erros(response.status);
-            }
-          });
-        }, 2000);
-      });
-    } else {
-      erros(response.status);
     }
-  });
 
+    let edicaoPid = {
+      "cod_ibge": parseInt(meuCodigo),
+      "nome": document.getElementById("nomePonto").value,
+      "inep": document.getElementById("inepPonto").value,
+    };
+
+    //transforma as informações do token em json
+    let corpo1 = JSON.stringify(edicaoPonto);
+    let corpo2 = JSON.stringify(edicaoPid);
+    
+    console.log(corpo2);
+    fetch(servidor + 'read/pid/' + pid, {
+      method: 'PUT',
+      body: corpo2,
+      headers: {
+        'Authorization': 'Bearer ' + meuToken
+      },
+    }).then(function (response) {
+      //checar o status do pedido
+      console.log(response.statusText);
+
+      //tratamento dos erros
+      if (response.status == 200 || response.status == 201) {
+
+        //pegar a data para enviar no editarUacom2
+        response.json().then(function (json) {
+          setTimeout(function () {
+            console.log(corpo1);
+            fetch(servidor + `read/ponto/${ponto}/${categoria}/${meuCodigo}`, {
+              method: 'PUT',
+              body: corpo1,
+              headers: {
+                'Authorization': 'Bearer ' + meuToken
+              },
+            }).then(function (response) {
+              //checar o status do pedido
+              console.log(response.statusText);
+    
+              //tratamento dos erros
+              if (response.status == 200 || response.status == 201) {
+    
+                //pegar a data para enviar no editarUacom2
+                response.json().then(function (json) {
+
+                  alert("Ponto editado com sucesso!")
+                  setTimeout(function () {
+                    location.reload()
+                  }, 1000);
+                });
+    
+              } else {
+                // erros(response.status);
+              }
+            });
+          }, 2000);
+        });
+      } else {
+        erros(response.status);
+      }
+    });
+  }
 }
 
+
+function puxaLatTipo(laatTipo) {
+  if(laatTipo){
+    return `<option value="${laatTipo}">${laatTipo}</option>`
+  }
+}
 function latLong(input) {
+
   if(parseInt(input) == 1){
+    //Pega os valores dos campos de graus e transforma em decimal
+    grauToDecimal();
+
+    console.log(laatitude,loongitude)
+    
+    if( isNaN(laatitude) && isNaN(loongitude)){
+      laatitude = ''
+      loongitude = ''
+    }
+    
     if(document.getElementById('grau')){
       document.getElementById('LatLong').removeChild(document.getElementById('grau'));
     }
@@ -1902,19 +1942,39 @@ function latLong(input) {
                           <div class="form-row mt-4">
                             <div class="col-12 col-sm-12 mt-4">
                               <label for="latitudePonto">Latitude</label>
-                              <input class="multisteps-form__input form-control " type="text" name="latitudePonto" id="latitudePonto">
+                              <input class="multisteps-form__input form-control " value="${laatitude}" onchange="checkLat()" type="text" name="latitudePonto" id="latitudePonto">
+                              <mensagemLat id="mensagemLat"></mensagemLat>
                             </div>
                             <div class="col-12 col-sm-12 mt-4">
                               <label for="longitudePonto">Longitude</label>
-                              <input class="multisteps-form__input form-control " type="text" name="longitudePonto" id="longitudePonto">
+                              <input class="multisteps-form__input form-control " value="${loongitude}" onchange="checkLong()" type="text" name="longitudePonto" id="longitudePonto">
+                              <mensagemLon id="mensagemLon"></mensagemLon>
                             </div>
                           </div>
                         </div>`)
     });
+    checkLat()
+    checkLong()
   }else{
+
+    //Pega os valores dos campos de decimais e transforma em graus
+    decimalToGrau(parseFloat(document.getElementById("latitudePonto").value), parseFloat(document.getElementById("longitudePonto").value))
+
+    console.log( laatTipo, laatGrau, laatMin, laatSeg, loongTipo, loongGrau, loongMin, loongSeg)
+
+    if( laatGrau == null && laatMin == null && laatSeg == null && loongGrau == null && loongMin == null && loongSeg == null){
+      laatGrau = ''
+      laatMin = ''
+      laatSeg = ''
+      loongGrau = ''
+      loongMin = ''
+      loongSeg = ''
+    }
+
     if(document.getElementById('decimal')){
       document.getElementById('LatLong').removeChild(document.getElementById('decimal'));
     }
+
 
     $(document).ready(function(){
       $("field").append(`
@@ -1924,26 +1984,29 @@ function latLong(input) {
                           <div class="col-2 col-sm-2 ">
                             <label for="latTipo">Hemisfério</label>
                             <select class="multisteps-form__input form-control latTipo" name="latTipo" id="latTipo">
+                              ${puxaLatTipo(laatTipo)}
                               <option value="N">N</option>
                               <option value="S">S</option>
                             </select>
                           </div>
                           <div class="col-3 col-sm-3 mb-4">
                             <label for="latGrau">Graus</label>
-                            <input class="multisteps-form__input form-control" type="text" name="latGrau" id="latGrau" mask="99">
+                            <input class="multisteps-form__input form-control" onchange="checkGrauLat('grau')" value="${laatGrau}" type="text" name="latGrau" id="latGrau" mask="99">
                           </div>
                           <b>º</b>
                           <div class="col-3 col-sm-3">
                             <label for="latMin">Minutos</label>
-                            <input class="multisteps-form__input form-control" type="text" #latMin="ngModel" name="latMin" id="latMin" mask="99" >
+                            <input class="multisteps-form__input form-control" onchange="checkGrauLat('min')" value="${laatMin}" type="text" #latMin="ngModel" name="latMin" id="latMin" mask="99" >
                           </div>
                           <b>'</b>
                           <div class="col-3 col-sm-3">
                             <label for="latSeg">Segundos</label>
-                            <input class="multisteps-form__input form-control" type="text" #latSeg="ngModel" name="latSeg" id="latSeg" mask="99.99" [dropSpecialCharacters]="false" [(ngModel)]="latLong.grau.latitude.latSeg">
+                            <input class="multisteps-form__input form-control" onchange="checkGrauLat('seg')" value="${laatSeg}" type="text" #latSeg="ngModel" name="latSeg" id="latSeg" mask="99.99" [dropSpecialCharacters]="false" [(ngModel)]="latLong.grau.latitude.latSeg">
                           </div>
                           <b>"</b>
                         </div>
+
+                        <grauLat id="grauLat"></grauLat>
 
                         <h1 class="mt-4">Longitude</h1>
                         <div class="form-row mt-4">
@@ -1955,21 +2018,33 @@ function latLong(input) {
                           </div>
                           <div class="col-3 col-sm-3 mb-4">
                             <label for="longGrau">Graus</label>
-                            <input class="multisteps-form__input form-control" type="text" name="longGrau" id="longGrau" mask="99">
+                            <input class="multisteps-form__input form-control" onchange="checkGrauLong('grau')" value="${loongGrau}" type="text" name="longGrau" id="longGrau" mask="99">
                           </div>
                           <b>º</b>
                           <div class="col-3 col-sm-3">
                             <label for="longMin">Minutos</label>
-                            <input class="multisteps-form__input form-control" type="text" #longMin="ngModel" name="longMin" id="longMin" mask="99" >
+                            <input class="multisteps-form__input form-control" onchange="checkGrauLong('min')" value="${loongMin}" type="text" #longMin="ngModel" name="longMin" id="longMin" mask="99" >
                           </div>
                           <b>'</b>
                           <div class="col-3 col-sm-3">
                             <label for="longSeg">Segundos</label>
-                            <input class="multisteps-form__input form-control" type="text" #longSeg="ngModel" name="longSeg" id="longSeg" mask="99.99" [dropSpecialCharacters]="false" [(ngModel)]="latLong.grau.latitude.latSeg">
+                            <input class="multisteps-form__input form-control" onchange="checkGrauLong('seg')" value="${loongSeg}" type="text" #longSeg="ngModel" name="longSeg" id="longSeg" mask="99.99" [dropSpecialCharacters]="false" [(ngModel)]="latLong.grau.latitude.latSeg">
                           </div>
                           <b>"</b>
                         </div>
+
+                        <grauLong id="grauLong"></grauLong>
                       </div>`)
+                      setTimeout(function () {
+                        checkGrauLat("grau")
+                        checkGrauLat("min")
+                        checkGrauLat("seg")
+                      }, 0400);
+                      setTimeout(function () {
+                        checkGrauLong("grau")
+                        checkGrauLong("min")
+                        checkGrauLong("seg")
+                      }, 0500);
     });
   }
 }
@@ -1980,12 +2055,12 @@ function grauToDecimal() {
   let latitude = null;
   let longitude = null;
 
-  const latGrau = parseInt(document.getElementById("latGrau").value);
-  const latMin = parseInt(document.getElementById("latMin").value);
-  const latSeg = parseInt(document.getElementById("latSeg").value);
-  const longGrau = parseInt(document.getElementById("longGrau").value);
-  const longMin = parseInt(document.getElementById("longMin").value);
-  const longSeg = parseInt(document.getElementById("longSeg").value);
+  const latGrau = Number(document.getElementById("latGrau").value);
+  const latMin = Number(document.getElementById("latMin").value);
+  const latSeg = Number(document.getElementById("latSeg").value);
+  const longGrau = Number(document.getElementById("longGrau").value);
+  const longMin = Number(document.getElementById("longMin").value);
+  const longSeg = Number(document.getElementById("longSeg").value);
 
   // Latitude
   if (!((latGrau === 0) && (latMin === 0) && (latSeg === 0))) {
@@ -2032,15 +2107,15 @@ function decimalToGrau(latitude, longitude) {
     // Segundos Latitude
     latSeg = ((latitudeDecimal * 3600) % 60).toFixed(2);
 
-    this.latLong.grau.latitude.latTipo = latTipo;
-    this.latLong.grau.latitude.latGrau = latGrau;
-    this.latLong.grau.latitude.latMin = latMin;
-    this.latLong.grau.latitude.latSeg = latSeg;
+    laatTipo = latTipo;
+    laatGrau = latGrau;
+    laatMin = latMin;
+    laatSeg = latSeg;
   } else {
-    this.latLong.grau.latitude.latTipo = '';
-    this.latLong.grau.latitude.latGrau = null;
-    this.latLong.grau.latitude.latMin = null;
-    this.latLong.grau.latitude.latSeg = null;
+    laatTipo = '';
+    laatGrau = null;
+    laatMin = null;
+    laatSeg = null;
   }
   if (longitude && !isNaN(longitude)) {
     // Grau Longitude
@@ -2050,14 +2125,141 @@ function decimalToGrau(latitude, longitude) {
     // Segundos Longitude
     longSeg = ((longitudeDecimal * 3600) % 60).toFixed(2);
 
-    this.latLong.grau.longitude.longTipo = longTipo;
-    this.latLong.grau.longitude.longGrau = longGrau;
-    this.latLong.grau.longitude.longMin = longMin;
-    this.latLong.grau.longitude.longSeg = longSeg;
+    loongTipo = longTipo;
+    loongGrau = longGrau;
+    loongMin = longMin;
+    loongSeg = longSeg;
   } else {
-    this.latLong.grau.longitude.longTipo = '';
-    this.latLong.grau.longitude.longGrau = null;
-    this.latLong.grau.longitude.longMin = null;
-    this.latLong.grau.longitude.longSeg = null;
+    loongTipo = '';
+    loongGrau = null;
+    loongMin = null;
+    loongSeg = null;
+  }
+
+  return laatTipo, laatGrau, laatMin, laatSeg, loongTipo, loongGrau, loongMin, loongSeg
+}
+
+function checkLat() {
+  let lat
+  if(parseFloat(document.getElementById("latitudePonto").value) != null){
+    lat = parseFloat(document.getElementById("latitudePonto").value);
+  }
+  
+  console.log(lat)
+
+  if(lat < -34.000000 || lat > 6.000000){
+    if(document.getElementById('lat') == null){
+      $("mensagemLat").append(`<div id="lat" class="ml-1 mt-1 text-danger">A latitude deve estar entre -34.000000 e +6.000000.</div>`)
+    }
+  }else{
+    document.getElementById('mensagemLat').removeChild(document.getElementById('lat'));
+  }
+
+}
+
+function checkLong() {
+  let lon
+  if(parseFloat(document.getElementById("longitudePonto").value) != null){
+    lon = parseFloat(document.getElementById("longitudePonto").value);
+  }
+
+  if(lon < -75.000000 || lon > -32.000000){
+    if(document.getElementById('lon') == null){
+      $("mensagemLon").append(`<div id="lon" class="ml-1 mt-1 text-danger">A longitude deve estar entre -75.000000 e -32.000000</div>`)
+    }
+  }else{
+    document.getElementById('mensagemLon').removeChild(document.getElementById('lon'));
+  }
+}
+
+function checkGrauLat(campo) {
+  console.log(campo)
+
+  if(campo == "grau"){
+
+    // console.log(document.getElementById('latTipo').value)
+    
+    //Verifica se o Hemisfério é N ou S
+    if(document.getElementById('latTipo').value == "N"){
+      let latGrau = parseFloat(document.getElementById("latGrau").value);
+
+      if(latGrau>6){
+        if(document.getElementById('grausLat') == null){
+          $("grauLat").append(`<div id="grausLat" class="ml-1 mt-1 text-danger">O Grau deve estar entre Sul 34 e Norte 6.</div>`)
+        }
+      }else{
+        document.getElementById('grauLat').removeChild(document.getElementById('grausLat'));
+      }
+    }else{
+      let latGrau = parseFloat(document.getElementById("latGrau").value);
+
+      if(latGrau>34){
+        if(document.getElementById('grausLat') == null){
+          $("grauLat").append(`<div id="grausLat" class="ml-1 mt-1 text-danger">O Grau deve estar entre Sul 34 e Norte 6.</div>`)
+        }
+      }else{
+        document.getElementById('grauLat').removeChild(document.getElementById('grausLat'));
+      }
+    }
+  }
+  if(campo == "min"){
+    let latMin = parseFloat(document.getElementById("latMin").value);
+
+    if(latMin<0 || latMin>60){
+      if(document.getElementById('grausMin') == null){
+        $("grauLat").append(`<div id="grausMin" class="ml-1 mt-1 text-danger">O Minuto deve estar entre 0 e 60.</div>`)
+      }
+    }else{
+      document.getElementById('grauLat').removeChild(document.getElementById('grausMin'));
+    }
+  }
+  if(campo == "seg"){
+    let latSeg = parseFloat(document.getElementById("latSeg").value);
+
+    if(latSeg<0 || latSeg>60){
+      if(document.getElementById('grausSeg') == null){
+        $("grauLat").append(`<div id="grausSeg" class="ml-1 mt-1 text-danger">O Segundo deve estar entre 0 e 60.</div>`)
+      }
+    }else{
+      document.getElementById('grauLat').removeChild(document.getElementById('grausSeg'));
+    }
+  }
+}
+
+function checkGrauLong(campo) {
+  console.log(campo)
+
+  if(campo == "grau"){
+    let longGrau = parseFloat(document.getElementById("longGrau").value);
+
+    if(longGrau<32 || longGrau >75){
+      if(document.getElementById('grausLong') == null){
+        $("grauLong").append(`<div id="grausLong" class="ml-1 mt-1 text-danger">O Grau deve estar entre Oeste 32 e Oeste 75.</div>`)
+      }
+    }else{
+      document.getElementById('grauLong').removeChild(document.getElementById('grausLong'));
+    }
+  }
+  if(campo == "min"){
+    let longMin = parseFloat(document.getElementById("longMin").value);
+
+    if(longMin<0 || longMin>60){
+      if(document.getElementById('grausMinu') == null){
+        $("grauLong").append(`<div id="grausMinu" class="ml-1 mt-1 text-danger">O Minuto deve estar entre 0 e 60.</div>`)
+      }
+    }else{
+      document.getElementById('grauLong').removeChild(document.getElementById('grausMinu'));
+    }
+  }
+  if(campo == "seg"){
+    let longSeg = parseFloat(document.getElementById("longSeg").value);
+
+    if(longSeg<0 || longSeg>60){
+      if(document.getElementById('grausSegun') == null){
+        $("grauLong").append(`<div id="grausSegun" class="ml-1 mt-1 text-danger">O Segundo deve estar entre 0 e 60.</div>`)
+      }
+    }else{
+      document.getElementById('grauLong').removeChild(document.getElementById('grausSegun'));
+    }
   }
 }

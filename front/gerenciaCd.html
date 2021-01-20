@@ -169,11 +169,11 @@
                                                     </div>
                                                 <div class="col-12 col-sm-12 mt-4">
                                                     <input class="multisteps-form__input form-control " type="text" placeholder="Função"
-                                                        name="funcao" id="funcao">
+                                                        name="funcao" id="funcao" maxlength="45">
                                                 </div>
                                                 <div class="col-12 col-sm-12 mt-4">
                                                     <input class="multisteps-form__input form-control " type="email" placeholder="E-mail"
-                                                        name="email" id="email">
+                                                        name="email" id="email" maxlength="100"> 
                                                 </div>
                                             </div>
 
@@ -274,98 +274,105 @@
     </div>
 
     <!-- Modal Ponto -->
-        <div id="adicionarPonto" class="modal fade">
-           <div class="modal-dialog">
-            <div class="modal-content">
+    <div id="adicionarPonto" class="modal fade">
+        <div class="modal-dialog">
+         <div class="modal-content">
 
-                <div class="modal-header">
-                    <h4 class="modal-title">Adicionar Ponto</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                </div>
-                <div class="modal-body" style="padding-bottom: 3rem;">
-                    <div class="multisteps-form">
-                        <!--Barra de Progresso-->
-                        <div class="row">
-                            <div class="col-12 col-lg-12 ml-auto mr-auto mb-4">
-                                <div class="multisteps-form__progress">
-                                    <button class="multisteps-form__progress-btn js-active" type="button"
-                                        title="Cd Info">Informações do Ponto</button>
-                                </div>
-                            </div>
-                        </div>
-                        <!--Formularios-->
-                        <div class="row">
-                            <div class="col-12 col-lg-12 m-auto">
-                                <form class="multisteps-form__form needs-validation" style="height: 800px;">
-                                    <!--Formulario 1 -->
-                                    <div class="multisteps-form__panel shadow p-4 rounded bg-white js-active"
-                                        data-animation="scaleIn">
-                                        <h3 class="multisteps-form__title">Informações do Ponto</h3>
+             <div class="modal-header">
+                 <h4 class="modal-title">Adicionar Ponto</h4>
+                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+             </div>
+             <div class="modal-body" style="padding-bottom: 3rem;">
+                 <div class="multisteps-form">
+                     <!--Barra de Progresso-->
+                     <div class="row">
+                         <div class="col-12 col-lg-12 ml-auto mr-auto mb-4">
+                             <div class="multisteps-form__progress">
+                                 <button class="multisteps-form__progress-btn js-active" type="button"
+                                     title="Cd Info">Informações do Ponto</button>
+                             </div>
+                         </div>
+                     </div>
+                     <!--Formularios-->
+                     <div class="row">
+                         <div class="col-12 col-lg-12 m-auto">
+                             <form class="multisteps-form__form needs-validation" style="height: 900px;">
+                                 <!--Formulario 1 -->
+                                 <div class="multisteps-form__panel shadow p-4 rounded bg-white js-active"
+                                     data-animation="scaleIn">
+                                     <h3 class="multisteps-form__title">Informações do Ponto</h3>
 
-                                        <div class="multisteps-form__content">
-                                            <div class="form-row mt-4">
-                                                <div class="col-6 col-sm-6 mt-4">
-                                                    <input class="multisteps-form__input form-control " type="number" placeholder="Código do Ponto"
-                                                        name="cod_pontoPonto" id="cod_pontoPonto"  maxlength="11">
-                                                </div>
-                                                <div class="col-6 col-sm-6 mt-4">
-                                                    <select class="multisteps-form__input form-control categoria" name="categoria" id="categoria">
-                                                        <option>Categoria</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-6 col-sm-6 mt-4">
-                                                    <input class="multisteps-form__input form-control " type="text" placeholder="Nome"
-                                                        name="nomePonto" id="nomePonto"  maxlength="50">
-                                                </div>
-                                                <div class="col-6 col-sm-6 mt-4">
-                                                    <input class="multisteps-form__input form-control " type="text" placeholder="INEP"
-                                                        name="inepPonto" id="inepPonto">
-                                                </div>
-                                                <div class="col-4 col-sm-4 mt-4">
-                                                    <input class="multisteps-form__input form-control " type="text" placeholder="CEP"
-                                                        name="cepPonto" id="cepPonto" onchange="viaCep();" maxlength="8">
-                                                </div>
-                                                <div class="col-8 col-sm-8 mt-4">
-                                                    <input class="multisteps-form__input form-control " type="text" placeholder="Endereco"
-                                                        name="enderecoPonto" id="enderecoPonto">
-                                                </div>
-                                                <div class="col-12 col-sm-12 mt-4">
-                                                    <input class="multisteps-form__input form-control " type="text" placeholder="Bairro"
-                                                        name="bairroPonto" id="bairroPonto">
-                                                </div>
-                                                <div class="col-6 col-sm-6 mt-4">
-                                                    <input class="multisteps-form__input form-control " type="text" placeholder="Número"
-                                                        name="numeroPonto" id="numeroPonto">
-                                                </div>
-                                                <div class="col-6 col-sm-6 mt-4">
-                                                    <input class="multisteps-form__input form-control " type="text" placeholder="Complemento"
-                                                        name="complementoPonto" id="complementoPonto">
-                                                </div>
-                                                <div class="col-1 col-sm-1 mt-4">
-                                                    <label for="radio_1">Decimal</label>
-                                                    <input class="multisteps-form__input form-control" type="radio" name="radio" id="radio_1" onchange="latLong(1);">
-                                                </div>
-                                                <div class="col-1 col-sm-1 mt-4 ml-4">
-                                                    <label for="radio_2">Grau</label>
-                                                    <input class="multisteps-form__input form-control" type="radio" name="radio" id="radio_2" onchange="latLong(2);">
-                                                </div>
-                                                <field id="LatLong"></field>
-                                                <!-- <div class="col-12 col-sm-12 mt-4">
-                                                    <input class="multisteps-form__input form-control " type="text" placeholder="Latitude"
-                                                        name="latitudePonto" id="latitudePonto">
-                                                </div>
-                                                <div class="col-12 col-sm-12 mt-4">
-                                                    <input class="multisteps-form__input form-control " type="text" placeholder="Longitude"
-                                                        name="longitudePonto" id="longitudePonto">
-                                                </div> -->
-                                            </div>
+                                     <div class="multisteps-form__content">
+                                         <div class="form-row mt-4">
+                                             <div class="col-6 col-sm-6 mt-4">
+                                                 <input class="multisteps-form__input form-control " type="number" placeholder="Código do Ponto"
+                                                     name="cod_pontoPonto" id="cod_pontoPonto"  maxlength="11">
+                                             </div>
+                                             <div class="col-6 col-sm-6 mt-4">
+                                                 <select class="multisteps-form__input form-control categoria" name="categoria" id="categoria">
+                                                     <option>Categoria</option>
+                                                 </select>
+                                             </div>
+                                             <div class="col-6 col-sm-6 mt-4">
+                                                 <input class="multisteps-form__input form-control " type="text" placeholder="Nome"
+                                                     name="nomePonto" id="nomePonto" maxlength="255">
+                                             </div>
+                                             <div class="col-6 col-sm-6 mt-4">
+                                                 <input class="multisteps-form__input form-control " type="text" placeholder="INEP"
+                                                     name="inepPonto" id="inepPonto" maxlength="15">
+                                             </div>
+                                             <div class="col-4 col-sm-4 mt-4">
+                                                 <input class="multisteps-form__input form-control " type="text" placeholder="CEP"
+                                                     name="cepPonto" id="cepPonto" onchange="viaCep();" maxlength="8">
+                                             </div>
+                                             <div class="col-8 col-sm-8 mt-4">
+                                                 <input class="multisteps-form__input form-control " type="text" placeholder="Endereco"
+                                                     name="enderecoPonto" id="enderecoPonto" maxlength="255">
+                                             </div>
+                                             <div class="col-12 col-sm-12 mt-4">
+                                                 <input class="multisteps-form__input form-control " type="text" placeholder="Bairro"
+                                                     name="bairroPonto" id="bairroPonto" maxlength="100">
+                                             </div>
+                                             <div class="col-6 col-sm-6 mt-4">
+                                                 <input class="multisteps-form__input form-control " type="text" placeholder="Número"
+                                                     name="numeroPonto" id="numeroPonto" maxlength="45">
+                                             </div>
+                                             <div class="col-6 col-sm-6 mt-4">
+                                                 <textarea class="multisteps-form__input form-control " type="text" placeholder="Complemento"
+                                                     name="complementoPonto" id="complementoPonto" maxlength="1000"></textarea>
+                                             </div>
+                                             <div class="col-1 col-sm-1 mt-4">
+                                                 <label for="radio_1">Decimal</label>
+                                                 <input class="multisteps-form__input form-control" type="radio" name="radio" id="radio_1" checked onchange="latLong(1);">
+                                             </div>
+                                             <div class="col-1 col-sm-1 mt-4 ml-4">
+                                                 <label for="radio_2">Grau</label>
+                                                 <input class="multisteps-form__input form-control" type="radio" name="radio" id="radio_2" onchange="latLong(2);">
+                                             </div>
+                                             <field id="LatLong">
+                                                 <div id="decimal" class="multisteps-form__content">
+                                                     <div class="form-row mt-4">
+                                                         <div class="col-12 col-sm-12 mt-4">
+                                                             <label for="latitudePonto">Latitude</label>
+                                                             <input class="multisteps-form__input form-control" onchange="checkLat()" type="text" name="latitudePonto" id="latitudePonto">
+                                                             <mensagemLat id="mensagemLat"></mensagemLat>
+                                                         </div>
+                                                         <div class="col-12 col-sm-12 mt-4">
+                                                             <label for="longitudePonto">Longitude</label>
+                                                             <input class="multisteps-form__input form-control" onchange="checkLong()" type="text" name="longitudePonto" id="longitudePonto">
+                                                             <mensagemLon id="mensagemLon"></mensagemLon>
+                                                         </div>
+                                                     </div>
+                                                 </div>
+                                             </field>
+                                         </div>
 
                                             <div class="button-row d-flex mt-4">
                                                 <div class="button-row d-flex mt-4" id="botaoPonto"></div>
                                             </div>
                                         </div>
                                     </div>
-                                 </form>
+                                </form>
                             </div>
                         </div>
                     </div>

@@ -1,8 +1,14 @@
+//esconde o gif de loading para os processos entrarem em ação
+$('#loading').hide();
+
 //Fazer Tabela
 let listaModulo = [];
 
 //pega o usuario logado
 let userLogado = localStorage.getItem("logado");
+
+//pega o valor do usuario logado
+let codigoLogado = localStorage.getItem("codigoLogado");
 
 //organizar os modulos
 let userCriado,
@@ -264,22 +270,11 @@ function enviar() {
   });
 }
 
-function enviarModulo() {
-
-  let i, j = 0;
-  let modulo = [];
-  for (i = 0; i < listaModulo.length; i++) {
-    if (valorModulo[i] != null) {
-      modulo[j] = {
-        "cod_usuario": parseFloat(userCriado),
-        "cod_modulo": parseFloat(valorModulo[i])
-      }
-      j++;
-    }
-  }
-
-  //transforma as informações do token em json
-  let infoModulo = JSON.stringify(modulo);
+function enviarModulo(){
+  
+  let cooldown =0, l = 0;
+  let meuCodigo = 0;
+  let infoAdicionar = [];
 
   //função fetch para mandar
   fetch(servidor + 'read/usuario/' + userLogado + '/modulo', {
@@ -289,14 +284,82 @@ function enviarModulo() {
       'Authorization': 'Bearer ' + meuToken
     },
   }).then(function (response) {
-
-    //checar o status do pedido
-    //console.log(response);
-
     //tratamento dos erros
-    if (response.status == 200 || response.status == 201) {
-      alert("Módulos inseridos com sucesso");
-      location.reload();
+    if (response.status == 200) {
+
+      //console.log(response.statusText);
+
+      //pegar o json que possui a tabela
+      response.json().then(function (json) {
+
+        for (let i = 0; i < json.length; i++) {
+          meuCodigo = json[i].cod_usuario
+        }
+
+        for (let i = 0; i < listaModulo.length; i++) {
+
+          if(document.getElementById("checkbox"+i).checked==true){
+            // console.log(document.getElementById("checkbox"+i))
+            infoAdicionar[l] = {
+              "cod_usuario": parseFloat(meuCodigo),
+              "cod_modulo": parseFloat(valorModulo[i]),
+            }
+            l++
+          } 
+          
+        }
+        
+        //transforma todas as informações do token em json
+        let corpoModulo = JSON.stringify(infoAdicionar);
+        
+        if(infoAdicionar.length>0){
+          console.log(infoAdicionar.length);
+      
+          if(infoAdicionar.length == 80){
+            cooldown = infoAdicionar.length
+          }else if(infoAdicionar.length< 80){
+            cooldown = infoAdicionar.length
+          }else{
+            cooldown = infoAdicionar.length - 80
+          }
+          
+          //função fetch para mandar
+          fetch(servidor + 'read/usuario/' + codigoLogado + '/modulo', {
+            method: 'POST',
+            body: corpoModulo,
+            headers: {
+              'Authorization': 'Bearer ' + meuToken
+            },
+          }).then(function (response) {
+            
+            //checar o status do pedido
+            console.log(response.statusText);
+            
+            console.log(response)
+            //tratamento dos erros
+            if (response.status == 200 || response.status == 201) {
+            } else {
+              erros(response.status);
+            }
+          });
+        
+        }
+        
+        console.log(cooldown)
+        if(cooldown<10){
+          alert(`Por favor aguarde. Esta operação pode levar em média ${-(cooldown)} segundos.`);
+        }else{
+          alert(`Por favor aguarde. Esta operação pode levar em média ${cooldown/10} segundos.`);
+        }
+        
+        //Ativa o loading enquanto a pagina não der o reload
+        $('#loading').show();
+
+        setTimeout(function () {
+          location.reload();
+        }, cooldown * 100);
+
+      });
     } else {
       erros(response.status);
     }
