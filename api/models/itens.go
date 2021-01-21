@@ -2,7 +2,6 @@ package models
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/jinzhu/gorm"
 )
@@ -66,8 +65,6 @@ func (itens *Itens) FindAllItens(db *gorm.DB) (*[]Itens, error) {
 		Joins("INNER JOIN natureza_despesa ON natureza_despesa.cod_natureza_despesa = itens.cod_natureza_despesa").
 		Joins("INNER JOIN classe_empenho ON classe_empenho.cod_classe_empenho = itens.cod_classe_empenho").
 		Scan(&allItens).Error
-
-	fmt.Println(allItens[0])
 
 	if err != nil {
 		return &[]Itens{}, err
