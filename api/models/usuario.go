@@ -123,7 +123,7 @@ func (usuario *Usuario) SignIn(db *gorm.DB, login, password string) (string, err
 		fmt.Printf("eu so codmod: %v", CodigoModulo)
 
 		//	Cria e retorna o token criado
-		return auth.CreateToken(usuario.CodUsuario, usuario.Nome, CodigoModulo)
+		return auth.CreateToken(usuario.CodUsuario, CodigoModulo)
 
 	} else {
 		//	Caso o usuario nao tenha permissao de acesso
