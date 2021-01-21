@@ -26,6 +26,9 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//EDITA O USUARIO {cod_usuario}
 	r.HandleFunc(config.USER_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateUsuario))).Methods(http.MethodPut)
 
+	//	LISTA USUARIO POR ID {cod_usuario}
+	r.HandleFunc(config.USER_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetUsuarioByID))).Methods(http.MethodGet)
+
 	//ROTA DE LOGIN
 	r.HandleFunc(config.USER_PATH_LOGIN, middlewares.SetMiddleJSON(s.Login)).Methods(http.MethodPost)
 
@@ -44,6 +47,15 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 
 	//	LISTA MODULO
 	r.HandleFunc(config.MODULO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllModulo))).Methods(http.MethodGet)
+
+	//	EDITA MODULO {cod_modulo}
+	r.HandleFunc(config.MODULO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateModulo))).Methods(http.MethodPut)
+
+	//	LISTA MODULO POR ID {cod_modulo}
+	r.HandleFunc(config.MODULO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetModuloByID))).Methods(http.MethodGet)
+
+	//	APAGA MODULO {cod_modulo}
+	r.HandleFunc(config.MODULO_ID_PATH, middlewares.SetMiddleAuth(s.DeleteModulo)).Methods(http.MethodDelete)
 
 	/*	=========================
 		ROTAS EM USUARIO MODULO
@@ -93,7 +105,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	EDITA CONTATO (cod_contato)
 	r.HandleFunc(config.CONTATO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateContato))).Methods(http.MethodPut)
 
-	//	APAGA LOTE (cod_contato)
+	//	APAGA CONTATO (cod_contato)
 	r.HandleFunc(config.CONTATO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteContato))).Methods(http.MethodDelete)
 
 	/*	=========================
