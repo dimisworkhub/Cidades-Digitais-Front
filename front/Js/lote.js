@@ -1,7 +1,7 @@
 //capturar chave primaria
 let jsonFinal = [];
 
-function lote() {
+function paginacao() {
   porPagina = document.getElementById("quantos").value;
   let comeco = contador * porPagina;
   let fim = (contador + 1) * porPagina;
@@ -115,7 +115,7 @@ function pegarCNPJ() {
         }
         
         document.getElementById("cnpj").innerHTML = x;
-        lote();
+        paginacao();
       });
     } else {
       erros(response.status);
