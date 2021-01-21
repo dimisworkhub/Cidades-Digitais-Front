@@ -27,6 +27,7 @@ const (
 
 const (
 	MODULO_PATH          = "/read/modulo"
+	MODULO_ID_PATH       = "/read/modulo/{cod_modulo}"
 	MODULO_USERLIST_PATH = "/read/usuario/{cod_usuario}/modulo"
 )
 
