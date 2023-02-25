@@ -10,6 +10,7 @@ require (
 	github.com/joho/godotenv v1.3.0
 	github.com/leodido/go-urn v1.2.0 // indirect
 	github.com/rs/cors v1.7.0
-	golang.org/x/crypto v0.0.0-20201016220609-9e8e0b390897
+	golang.org/x/crypto v0.1.0
+	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/go-playground/validator.v9 v9.31.0
 )
